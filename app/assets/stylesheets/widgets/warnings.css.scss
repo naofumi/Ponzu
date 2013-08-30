@@ -1,0 +1,13 @@
+@import "../kamishibai/ks_settings";
+
+.warnings {
+	border: solid 2px $warning-color;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px;
+	font-size: $smaller-font-size;
+	font-weight: bold;
+	color: $warning-color;
+	margin-bottom: 10px;
+}

@@ -1,0 +1,29 @@
+= ks_element :id => "kamishibai_and_turbolinks",
+             :data => { :title => "Kamishibai and Turbolinks",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Kamishibai and Turbolinks
+
+      Turbolinks is the default for Rails 4.0. It is similar to Kamishibai in that
+      it loads pages without reloading the DOM, javascript and CSS. On the other hand,
+      Turbolinks uses pushState exclusively and is therefore orthogonal to Kamishibai, which
+      uses onHashChange.
+
+      Although we haven't yet tested it, we expect Kamishibai to work well together with
+      Turbolinks.
+
+      # Benefits of Kamishibai over Turbolinks
+
+      1.  Kamishibai supports offline viewing with a single bootloader page (in AppCache). 
+          Turbolinks has no support for similar stuff.
+      2.  Kamishibai works with the stock Android browser on Android 4.0. Turbolinks
+          falls back to normal HTTP requests.
+      3.  Kamishibai has transitions.
+
+      # Benefits of Turbolinks over Kamishibai
+
+      1.  Turbolinks does not require you to rewrite your Rails code. You code as if you
+          were writing a regular Rails web app, and you get faster links for free.
+

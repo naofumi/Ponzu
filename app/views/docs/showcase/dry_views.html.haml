@@ -1,0 +1,87 @@
+= ks_element :id => "dry_views",
+             :data => { :title => "Extreme DRY views",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Extreme DRY views
+
+      ## We have to reduce cache size
+
+      In Kamishibai, we cache HTML fragments on the browser which will allow only 
+      a limited amount of storage. If we can reduce the size of the HTML fragments
+      or reuse them, we can fit more content in the cache. This directly affects the
+      viewing experience offline.
+
+      ## A lot of content is redundant
+
+      For example, in MBSJ2012, we provided a list of related presentations on Presentation#show.
+      We also list presentations on User#show. A list of presentations also appears on
+      each Session#show page and on the search results. In most cases, the HTML for each 
+      presentation listed is identical. To minimize the cache size, we want to reuse this.
+
+      Furthermore, when we analyzed the size of the generated HTML, we found that the HTML for
+      each set of presentation title, author list and institution list was close to 1,000 characters. This is almost the same as the size of the abstract itself (if in Japanese). This means 
+      that the bulk of a Presentation#show page is not the abstract (which is the main content
+      for a Presentation#show page), but rather the list of related presentations. If we could
+      remove the list of presentations, in many cases we would be able to reduce the response
+      size to a fraction of the original.
+
+      First of all, we have to make sure that we can actually use the exact same HTML.
+
+      In Basecamp Next, 37signals used caching to the max. In the section "Thou shall share a cache between pages", they describe how they reused the exact same HTML in as many locations
+      as possible, changing the appearance (often hiding elements) with CSS.
+
+      This is an idea we will persue. We think that in the vast majority of cases, this will work.
+      We might even be able to go to the extreme and use the HTML in Presentation#show directly
+      in each list of presenations. This means that we will warm the cache when we list
+      presentations, and that when we click on a presentation to look at the details, the
+      details (the abstract text) will already be in local storage.
+
+      ## Kamishibai placeholders are the way to go
+
+      If you create an empty `div` tag with a `data-ajax` attribute, Kamishibai will automatically
+      send a request to the URL in `data-ajax`. It will then use the response to populate the tag.
+
+      We can use this to implement extreme DRY views.
+
+      Instead of generating the HTML for a list of presentations, we will simply create placeholders
+      with URLs to each Presentation#show action. Kamishibai will send an Ajax request of each
+      URL and insert the responses accordingly.
+
+      For long lists, this will be tens of requests. However, since each response is stored in
+      the cache (and since we can use long expiry dates because the content changes rarely),
+      subsequent lists will generate fewer requests and instead go to the database.
+
+      Furthermore, Presentation#show and User#show requests were pretty slow on the server side when the lists where long because generating the `author_list` was quite CPU intensive. With the placeholder approach, each single request will be very fast.
+
+      In terms of responsiveness, it is very likely that responsiveness will actually improve.
+
+      ## Benefits of Extreme DRY views
+
+      ### Server caches can be more efficient
+
+      Since most web pages are rather complex and we have authentication etc., we mostly use [fragment caching](http://guides.rubyonrails.org/caching_with_rails.html#fragment-caching) in our Rails apps. However, fragment caching requires going through the Rails stack and into the Controllers and Views. Although the benefit of fragment caching is substantial, it is not the
+      fastest of caches.
+
+      Rails provides simpler caching mechanisms that don't go through the whole Rails stack. [Page caching](http://guides.rubyonrails.org/caching_with_rails.html#page-caching) generates static
+      pages that can be served directly from Nginx or Apache, without touching our Unicorns. [Action caching](http://guides.rubyonrails.org/caching_with_rails.html#action-caching) runs the before filters so that you can do authentication and stuff.
+
+      By segmenting the views into small fragments, we can separate portions that can be served sufficiently with page caching from those that require more complex fragment caching. For example, presentation headings can be served via page caching whereas abstract text can be served via action caching (because abstracts are restricted to participants). For the like buttons, etc. we will use either no caching, or fragment caching. This is huge because the majority of the Extreme DRY views that we have to generate are actually presentation headers (we show them in lists everywhere).
+
+      Additionally, since each fragment is small, it will have limited scope and will depend on only a small number of objects. Therefore, it is less likely to get busted.
+
+      ### Client caches can be more efficient
+
+      As described above. We can use the limited local storage space more efficiently, which is a great boost.
+
+      ## Issues and concerns
+
+      This placeholder approach requires a lot of requests. For long lists, there will be several tens of HTTP requests generated. This can potentially be very slow.
+
+      It will be slow in the following if;
+
+      1. **The server is slow to return the responses:** Rails can sometimes be slow 
+         to return responses. However as described above, small fragments allow us to have more efficient caches. If designed well, the server load could actually be lower.
+      2. **The network latency is high:** Network latency for mobile networks can be pretty high. If the requests are run in serial fashion, this will significantly slow down the web app. However, current browsers can manage 4-6 simultaneous connections. Although we need to test more, I suspect the issue to be relatively minor.
+      3. **The browser is slow at compositing the fragments:** Initial tests on the iPad2 were pretty fast. Low-end Android phone might have an issue, which we will investigate later.

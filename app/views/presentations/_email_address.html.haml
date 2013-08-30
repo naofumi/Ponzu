@@ -1,0 +1,8 @@
+- if can?(:view_abstract, Presentation) && @presentation.corresponding_email
+  - submission = @presentation.submission
+  %div(class="email_address" style="float:right;font-size: 12px")
+    %span(style="font-size: 16px; font-weight:bold;color: #b30d3e") @ 
+    = mail_to submission.corresponding_email, nil, 
+              :encode => 'hex', 
+              :subject => "Re: JSDB2013 #{@presentation.number}: #{submission.title}",
+              :body => "Dear #{submission.presenting_author.name},\nInquiry about MBSJ #{@presentation.number}: #{submission.title}\n\n\n\nSincerely,\n#{current_user.name}"

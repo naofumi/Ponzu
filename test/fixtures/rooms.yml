@@ -1,0 +1,12 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+generic_room:
+  jp_name: generic_room_jp
+  en_name: generic_room_en
+  conference: generic_conference
+
+
+room_for_different_conference:
+  jp_name: generic_room_jp
+  en_name: generic_room_en
+  conference: another_conference

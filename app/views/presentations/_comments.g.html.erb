@@ -1,0 +1,19 @@
+<h3>COMMENTS</h3>
+<% @presentation.comments.each do |c| %>
+  <% is_author = @presentation.authors.include?(c.user) %>
+  <div class="comment <%= is_author ? 'author' : '' %>">
+    <strong><%= link_to c.user.name, c.user %>さん<%= is_author ? ' (著者)' : '' %><br />
+    <%= c.created_at.strftime('%Y-%m-%d %H:%M')%></strong><br />
+    <%= auto_link c.text %>
+    <br /><%= san %>
+  </div>
+<% end %>
+<% if current_user %>
+  <%= form_for Comment.new(:user_id => current_user.id, 
+                           :presentation_id => @presentation.id) do |f| %>
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :presentation_id %>
+    <%= f.text_area :text, :rows => nil, :cols => nil, :style => "width:100%"%>
+    <%= f.submit "コメントを送信" %>
+  <% end %>
+<% end %>

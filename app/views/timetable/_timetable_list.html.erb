@@ -1,0 +1,33 @@
+<% width_per_hour = 60.0 %>
+
+<div class="panel">
+  <h2><%= t('dashboard.orals', :date => l(@show_date, :format => :month_day)) %>
+</div>
+<div class="panel">
+  <ul>
+    <% @sessions.each_with_index do |session, session_index| %>
+      <% color_tag = session_index.modulo(12) %>
+      <% likes_in_session = @likes.select{|l| l.presentation.session_id == session.id} %>
+      <% session_duration = (session.ends_at - session.starts_at) %>
+      <% session_width = session_duration / (60 * 60) * width_per_hour %>
+      <li>
+        <%= link_to ksp(session) do %>
+          <%= content_tag(:div, :class => "color_#{color_tag}", :style => "width: #{session_width}px;border-radius: 5px;position:relative;height: 10px;margin-bottom: 5px") do %>
+            <% likes_in_session.each do |l| %>
+              <% style_string = "position:absolute; left: #{(l.presentation.starts_at - session.starts_at)/(60.0 * 60.0) * width_per_hour}px;bottom:0px;width:10px;height:10px" %>
+              <%= content_tag('div', nil, 
+                              :style => "#{style_string};",
+                              :class => "presentation_highlight #{l.scheduled ? "scheduled" : ""}") %>
+            <% end %>
+          <% end %>
+          <span class="time">
+            <%= session.starts_at.strftime('%H:%M') %>-<%= session.ends_at.strftime('%H:%M') %> <%= session.room.name %>
+          </span><br />
+          <span class="title">
+            <%= session.title %>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

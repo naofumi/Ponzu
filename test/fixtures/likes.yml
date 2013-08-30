@@ -1,0 +1,30 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  presentation: generic_presentation
+  user: generic_user
+  type: Like::Like
+
+two:
+  presentation_id: 1
+  user_id: 1
+
+owned_by_user:
+  presentation: generic_presentation
+  user: generic_user
+  type: Like::Like
+  
+scheduled_by_user:
+  presentation: scheduled_presentation
+  user: generic_user
+  type: Like::Schedule
+
+like_from_different_conference:
+  presentation: presentation_from_other_conference
+  user: generic_user
+  type: Like::Like
+
+scheduled_from_different_conference:
+  presentation: scheduled_presentation_from_other_conference
+  user: generic_user
+  type: Like::Schedule

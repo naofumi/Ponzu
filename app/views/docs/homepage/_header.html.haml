@@ -1,0 +1,12 @@
+#header.panel
+  %div{style: "float:right"}
+    = link_to "Clear webSQL", "#", 
+      :onclick => "KSSqlCache.clear();alert('webSQL cache cleared');return false;"
+    |
+    = link_to "Clear localStorage", "#", 
+      :onclick => "localStorage.clear();alert('localStorage cleared');return false;"
+    |
+    = link_to "Clear sessionStorage", "#", 
+      :onclick => "sessionStorage.clear();alert('sessionStorage cleared');return false;"
+  Homepage ideas
+  %div{style: "clear:both"}

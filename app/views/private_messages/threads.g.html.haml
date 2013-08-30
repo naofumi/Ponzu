@@ -1,0 +1,12 @@
+%h1 Private messages
+- unless @threads.empty?
+  - @threads.each do |thr|
+    = link_to ksp(conversation_private_messages_path(:with => thr.partner.id, 
+                                         :receipts => thr.unread_receipt_ids)) do
+      - if thr.unread_count > 0
+        %span.count.red (#{thr.unread_count})
+      %span= thr.partner.name
+      %div= l(thr.newest_message_at, :format => :month_day_time)
+      = hr
+- else
+  No private messages yet.

@@ -1,0 +1,93 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+generic_submission:
+  en_title: generic_submission_en_title
+  jp_title: generic_submission_jp_title
+  main_author_id: 1
+  jp_abstract: generic_submission_jp_abstract
+  en_abstract: generic_submission_en_abstract
+  presenting_author_id: 1
+  submission_number: generic_submission_submission_number
+  disclose_at: 2013-01-16 15:24:20
+  keywords: '<%= %w(keyword_1 keyword_2).to_json %>'
+  conference: generic_conference
+
+generic_submission_2:
+  en_title: generic_submission_2_en_title
+  jp_title: generic_submission_2_jp_title
+  main_author_id: 1
+  jp_abstract: generic_submission_2_jp_abstract
+  en_abstract: generic_submission_2_en_abstract
+  presenting_author_id: 1
+  submission_number: generic_submission_2_submission_number
+  disclose_at: 2013-01-16 15:24:20
+  keywords: '<%= %w(keyword_1 keyword_2).to_json %>'
+  conference: generic_conference
+
+
+submission_with_en_title_with_jp_title:
+  en_title: generic_submission_en_title
+  jp_title: generic_submission_jp_title
+  conference: generic_conference
+
+submission_with_en_title_no_jp_title:
+  en_title: generic_submission_en_title
+  conference: generic_conference
+
+submission_no_en_title_with_jp_title:
+  jp_title: generic_submission_jp_title
+  conference: generic_conference
+
+submission_with_en_abstract_with_jp_abstract:
+  jp_abstract: generic_submission_jp_abstract
+  en_abstract: generic_submission_en_abstract
+  conference: generic_conference
+
+submission_with_en_abstract_no_jp_abstract:
+  en_abstract: generic_submission_en_abstract
+  conference: generic_conference
+
+submission_no_en_abstract_with_jp_abstract:
+  jp_abstract: generic_submission_jp_abstract
+  conference: generic_conference
+
+# for whitelisting
+wl_1:
+  submission_number: wl_1
+  en_title: wl_1
+
+wl_2:
+  submission_number: wl_2
+  en_title: wl_2
+
+wl_3:
+  submission_number: wl_3
+  en_title: wl_3
+
+wl_4:
+  submission_number: wl_4
+  en_title: wl_4
+
+wl_5:
+  submission_number: wl_5
+  en_title: wl_5
+
+wl_6:
+  submission_number: wl_6
+  en_title: wl_6
+
+wl_7:
+  submission_number: wl_7
+  en_title: wl_7
+
+# For multi-conference
+another_conference_submission:
+  en_title: another_conference_submission_en_title
+  jp_title: another_conference_submission_jp_title
+  jp_abstract: another_conference_submission_jp_abstract
+  en_abstract: another_conference_submission_en_abstract
+  submission_number: another_conference_submission_submission_number
+  disclose_at: 2013-01-16 15:24:20
+  keywords: '<%= %w(keyword_1 keyword_2).to_json %>'
+  conference: another_conference
+

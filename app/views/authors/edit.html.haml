@@ -1,0 +1,46 @@
+= ponzu_frame do
+
+  %h1 Editing author
+  :markdown
+    ### Usage
+    Use this view to confirm Nayose of Authors and to reassociate
+    Authorships if necessary.
+
+    To split an Author into two people, first locate the second Author
+    by searching, or create a new Author. Display browser windows of
+    both Authors, side-by-side. Then drag-and-drop Authorships to re-associate
+    them.
+
+    To merge two Authors into one, display the two Authors and move the
+    Authorships towards the Author that you want to keep. After moving them
+    all, delete the other Author.
+  %fieldset
+    %legend Author basic information
+    %table{:style => "width: 100%"}
+      %tr
+        %td{:style => "width: 50%"}
+          = render 'form'
+
+          = link_to 'Show', ksp(@author)
+          |
+          = link_to 'Authors list', ksp(authors_path)
+          |
+          = link_to 'delete', author_path(@author), :method => :delete, :remote => true, :confirm => "Are you sure?"
+        %td
+          
+  %fieldset
+    %legend All Affiliations
+    - @author.unique_authorship_name_and_affiliation_combos.each do |combo|
+      %div= combo
+  %fieldset
+    %legend All Logins (Users)
+    - @author.users.each do |u|
+      = link_to "#{u.en_name} (#{u.jp_name}): #{u.en_affiliation} (#{u.jp_affiliation})", ksp(u)
+  %fieldset
+    %legend All Authorships
+    = render :partial => "authorships", :object => @author.authorships
+    .dropbox{:style => "border: dotted 1px #666",
+             :data => {:action => replace_author_path(@author),
+                       :method => 'post',
+                       :'ks-insert-response' => 'true'}}
+      Drop Submissions here to re-associate Author-Submissions

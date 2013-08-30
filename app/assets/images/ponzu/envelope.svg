@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.1//EN'
+  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg height="55pt" version="1.1" viewBox="113 203 82 55" width="82pt" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:date>2013-07-04 02:23Z</dc:date>
+    <!-- Produced by OmniGraffle Professional 5.4.3 -->
+  </metadata>
+  <defs>
+    <style type="text/css">
+      <![CDATA[
+      .mail_icon {
+        stroke: #AA5B5E;
+      } ]]>
+    </style>
+  </defs>
+  <g fill="none" fill-opacity="1" stroke="none" stroke-dasharray="none" stroke-opacity="1" class="mail_icon">
+    <title>envelope</title>
+    <g>
+      <title>layer</title>
+      <rect fill="white" height="50" width="75" x="116" y="206"/>
+      <rect height="50" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" width="75" x="116" y="206"/>
+      <path d="M 116 206 L 149.7861 235.54595 C 152.047845 237.52384 155.423855 237.52384 157.6856 235.54595 L 191 206.4125"  stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

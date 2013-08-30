@@ -1,0 +1,16 @@
+= ponzu_frame :id => ["search_results", encoded_query, "type", params[:type], "page", params[:page]],
+              :title_args => {:query => params[:query]} do
+  .panel
+    .search_result_search_field
+      = render :partial => "layouts/search_box"
+    %div
+      - if params[:query].blank?
+        .panel
+          = t('please_enter_search_term')
+      - elsif @presentations.results.empty? && @users.results.empty?
+        .panel
+          = "No results for '#{params[:query]}'"
+      - else
+        = render :partial => "users_results"
+        = render :partial => "presentations_results"
+    = render :partial => 'layouts/biokaimono'

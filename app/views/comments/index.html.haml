@@ -1,0 +1,21 @@
+= ponzu_frame do
+  %h1 Listing comments
+
+  %table
+    %tr
+      %th Presentation
+      %th Text
+      %th User
+      %th
+      %th
+      %th
+    - @comments.each do |comment|
+      %tr
+        %td= comment.presentation_id
+        %td= comment.text
+        %td= comment.user_id
+        %td= link_to 'Show', ksp(comment)
+        %td= link_to 'Edit', ksp(edit_comment_path(comment))
+        %td= link_to 'Destroy', comment, confirm: 'Are you sure?', method: :delete
+  %br/
+  = link_to 'New Comment', ksp(new_comment_path)

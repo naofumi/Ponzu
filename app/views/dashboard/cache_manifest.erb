@@ -1,0 +1,139 @@
+CACHE MANIFEST
+# In production, we version the manifest by time.
+# We currently have one version per day.
+# Version: <%= (Rails.env == "production" || true) ? File.dirname(__FILE__) : Time.now %>
+# iPhone does not respect the version. Must manually request reload.
+# <%= render :partial => "manifest_version_snippet" %>
+
+CACHE:
+<%= asset_path('d/application.js') %>
+<%= asset_path('d/application.css') %>
+<% [
+      :galapagos_qr, 
+      :mbsj_logo, 
+      :reply_arrow, 
+      :japan_flag, 
+      :globe_icon_dark_blue,
+      :clock, 
+      :yellow_clock,
+      :logo_for_black,
+      :pdficon_large,
+      :right_red,
+      :left_red,
+      :'twitter-bird-white-on-blue',
+      :f_logo,
+      :envelope,
+      :poster_map_cut_smaller,
+      :star,
+      :like,
+      :convention_1,
+      :convention_2,
+      :convention_3,
+      :convention_4,
+      :convention_5,
+      :messe_1,
+      :help,
+      :mbsj_transparent_81_50,
+      :mbsj_bg_ss,
+      :magnifying_glass,
+      :beta,
+      :mbsj_big_trans_logo_fat_white,
+      :angle,
+      :white_angle
+    ].each do |name| %>
+<%= asset_path("#{name}.png") %>
+<% end %>
+<% [
+      'LinkedIn_IN_Icon_55px.jpg',
+      'researchmap130.gif',
+      'bayside_place.jpg'
+    ].each do |name| %>
+<%= asset_path("#{name}") %>
+<% end %>
+
+# TODO:
+# Load in Timetables, poster maps, session pages and other rather static stuff
+# Expiry dates for these elements will then be meaningless.
+# We also change Kamishibai so that it can extract the body tag
+# on receiving a full HTML page response, or we should change the server
+# so that it will do layout => false for all types of requests unless galapagos.
+# The benefits of doing this is that we can preload pages without
+# writing Javascript. We should preload all timetables, postermaps,
+# session lists, meet_up base pages
+<% [:ja, :en].each do |locale| %>
+  <%= root_path(:locale => locale) %>
+  
+  <% ["2012-12-11", "2012-12-12", "2012-12-13", "2012-12-14"].each do |id| %>
+    <%= timetable_path(:locale => locale, :id => id) %>
+  <% end %>
+  
+  <% [1, 2, 3, 4].each do |id| %>
+    <%= poster_session_path(:locale => locale, :id => id) %>
+  <% end %>
+<% end %>
+
+<% unless Rails.env == "production" || Rails.env == "staging" %>
+<% [
+      "d/application.css",
+      "common/poster_sessions.css",
+      "common/colors.css",
+      "kamishibai/kamishibai.css",
+      "common/timetable.css",
+      "kamishibai/ks_layout.css",
+      "d/comments.css",
+      "d/authorships.css",
+      "d/chairs.css",
+      "d/global_messages.css",
+      "d/dashboard.css",
+      "d/likes.css",
+      "d/meet_up_comments.css",
+      "d/meet_ups.css",
+      "d/pages.css",
+      "d/participations.css",
+      "d/presentation_groups.css",
+      "d/presentations.css",
+      "d/private_messages.css",
+      "d/registrants.css",
+      "d/rooms.css",
+      "d/schedule.css",
+      "d/sessions.css",
+      "d/static.css",
+      "d/umin_rows.css",
+      "d/user_sessions.css",
+      "d/users.css",
+      "kamishibai/kamishibai.js",
+      "kamishibai/kamishibai_event_listeners.js",
+      "d/application.js",
+      "kamishibai/ks_ajax.js",
+      "kamishibai/ks_app.js",
+      "kamishibai/ks_benchmark.js",
+      "kamishibai/ks_cache.js",
+      "kamishibai/ks_compositor.js",
+      "kamishibai/ks_controller.js",
+      "kamishibai/ks_effect.js",
+      "kamishibai/ks_history.js",
+      "kamishibai/ks_log.js",
+      "kamishibai/ks_scroll_memory.js",
+      "kamishibai/ks_support.js",
+      "kamishibai/ks_transition_selector.js",
+      "kamishibai/ks_url.js",
+      "kamishibai/ks_validator.js",
+      "kamishibai/lscache.js",
+      "kamishibai/rails.js",
+      "common/user_sessions.js",
+      "d/dashboard.js",
+      "d/presentations.js",
+      "d/timetable.js",
+      "d/users.js"
+    ].each do |name| %>
+<%= asset_path("#{name}?body=1") %>
+<% end %>
+<% end %>
+
+NETWORK:
+*
+http://*
+https://*
+
+FALLBACK:
+

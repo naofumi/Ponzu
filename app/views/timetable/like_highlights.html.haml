@@ -1,0 +1,4 @@
+= ks_element :id => ["like_highlights", params[:id]] do
+  - @likes.each do |l|
+    = render :partial => 'timetable/presentation_highlight', 
+             :locals => {:presentation => l.presentation, :like => l}

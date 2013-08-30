@@ -1,0 +1,23 @@
+= ponzu_frame :data => {:title => "MBSJ2013: My talks"} do
+  .panel
+    %h1= t ".title"
+  - if @author
+    - if !@author.receipts.unread.empty? 
+      .panel_title Notifications
+      .panel.paneled_list
+        - @author.receipts.unread.each do |r|
+          - m = r.message
+          - p = m.sender.presentation
+          - if m.sender.kind_of? Comment
+            = link_to ksp(p), :onclick => mark_read([r]) do
+              = t ".notifications.comment_added", :number => p.number
+    .panel_title= t ".panel_titles.my_presentations"
+    .panel.paneled_list
+      - @presentations.each do |p|
+        = link_to ksp(presentation_path(p)) do
+          = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                            :class => "presentation",
+                            :data => {:ajax => heading_presentation_path(p.id)}
+  - else
+    .panel
+      != t(".messages.no_presentations")

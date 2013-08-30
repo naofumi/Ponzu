@@ -1,0 +1,65 @@
+<%= ks_element :id => "ipad_first",
+               :data => {
+                   :title => "iPad First Design",
+                   :container => "ipadish_content",
+                   :"container-ajax" => docs_path(:page => "showcase/layout")
+                } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+# Design for iPad first
+
+Our idea is to design for the iPad first. There are many reasons why we chose to 
+do so.
+
+## Usability at conferences
+
+## Usability in the editing and proofing process
+
+## iPad-oriented design works well for desktops too
+
+Our observation while designing the MBSJ2012 website is that iPad-oriented web
+design works very well for PCs also. I might even say that a well done
+iPad design overcomes years of stagnation in PC web design.
+
+### PC web design is optimized for slow load times
+
+The Internet used to be really slow. So slow that it was called "the World Wide Wait"
+not so long ago. PC web design is a legacy from that era.
+
+Compared to mobile and desktop applications, PC web design has some stark differences;
+
+1.  PC web design contains a huge amount of chrome. A lot of that is navigation.
+2.  PC web design encourages jumping through pages (moving back with breadcrumbs). 
+    Mobile apps encourage stepwise navigation (moving back by pushing the back button
+    multiple times).
+3.  PC web design (and app design) uses a large number of small buttons. Mobile
+    apps use large buttons.
+4.  PC web design basically discourages you from flipping though pages and tries to
+    give you as much information as possible on a single page. Although progressive
+    disclosure is widely praised in general, usage on PC web design is much rarer than
+    on mobile apps. Mobile apps on the other hand depend on progressive disclosure. As
+    such, page flipping is encouraged on mobile and the experience is very gratifying.
+
+We think that these differences are mainly due to the fact that PC websites were
+historically slow (and some are still slow today). We think that with technologies
+like PJAX, TurboLinks and Kamishibai which vastly increase page loading times,
+it makes sense to rethink legacy PC design and make it more iPad-like.
+
+We believe that an iPad app, despite having a smaller screen, is actually more 
+useable than PC web designs. We think that through Javascript libraries like 
+Kamishibai, PC web designs will benefit from the same smoothness and speed that
+iPad applications enjoy, and iPad like interface designs will prevail.
+
+## Key points in designing for iPad
+
+1.  The location of controls should be predictable.
+2.  Changing pages should be smooth.
+3.  "Back" should be extra quick and smooth.
+4.  Less or almost no chrome.
+5.  Design "slim" websites. Don't let widescreen PC devices lure you to the evil side.
+    iPad portrait mode (768px) is the place to be.
+
+MARKDOWN
+%>
+  </div>
+<% end %>

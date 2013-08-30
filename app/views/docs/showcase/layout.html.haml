@@ -1,0 +1,11 @@
+= ks_hidden_page(:id => "showcase", 
+                   :class => %w(program fluid_multicolumn), 
+                   :data => { :title => "Showcase" }) do
+  %div
+    = render :partial => 'header'
+    #ipadish.body
+      = ks_ajax_placeholder :id => "ipadish_left",
+                            :class => "left_column",
+                            :data => { :ajax => docs_path(:page => "showcase/left_navigation")}
+      #ipadish_content.two_column_content
+      %div{style: "clear:both"}

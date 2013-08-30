@@ -1,0 +1,13 @@
+<span class="schedule_controls" id="schedule_controls_<%= l.id %>">
+  <% if l.kind_of? Like::Schedule %>
+    <%= form_for l, :url => unschedulize_like_path(l) do |f| %>
+      <%= hidden_field_tag :_method, 'put' %>
+      <%= image_tag('clock.png', :style => "height: 20px") %><%= f.submit "My スケジュールから外す" %>
+    <% end %>
+  <% else %>
+    <%= form_for l, :url => schedulize_like_path(l) do |f| %>
+      <%= hidden_field_tag :_method, 'put' %>
+      <%= f.submit "My スケジュールに入れる" %>
+    <% end %>
+  <% end %>
+</span>

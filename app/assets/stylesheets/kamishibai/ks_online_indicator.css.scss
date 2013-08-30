@@ -1,0 +1,24 @@
+@import "ks_settings";
+
+#status {
+  font-size: 10px;
+  font-weight: bold;
+  position:absolute; 
+  color: #FFF;
+  top: 0;
+  left: 0;
+  text-align: center;
+  z-index: -1;
+  width: 100%;
+  .online {
+    display: none;
+  }
+  .offline {
+    display: block;
+    background-color: transparentize(#F00, 0.6);
+  }
+  .network-unstable {
+    display: block;
+    background-color: transparentize(#F00, 0.6);    
+  }
+}

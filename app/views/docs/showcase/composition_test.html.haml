@@ -1,0 +1,48 @@
+= ks_element :id => "composition_test",
+             :data => { :title => "Fragment composition",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Kamishibai compositor tests
+
+      ## Loading a fragment with `ks_ajax_placeholder`
+
+      The following element was loaded with `ks_ajax_placeholder` from
+      `"docs/showcase/composition_ajax"`
+    = ks_ajax_placeholder :id => "ajax_placeholder_test",
+                          :data => {:ajax => docs_path("showcase/composition_ajax")}
+
+    :markdown
+      The following element was a `ks_placeholder` and was populated from
+      `"docs/showcase/composition_ajax"` when the previous `ks_ajax_placeholder`
+      received its response.
+    = ks_placeholder :id => "placeholder_test"
+
+    :markdown
+      The following element originally did not have a background color, but 
+      `"docs/showcase/composition_ajax"` contained `ks_modify_elements` to
+      set the class `highlight` so it now should be be a highlight color.
+    #should_turn_yellow
+      This element didn't have a class but 
+      %code "docs/showcase/composition_ajax"
+      modified it so that it should have a highlight background color now.
+
+    :markdown
+      The following element did not have any inline style, but 
+      `"docs/showcase/composition_ajax"` contained a `script` tag
+      with JavaScript to set the style to `"background-color:orange"`
+      so it should now be orange.
+    #should_turn_orange
+      This element originally had no inline style but 
+      %code "docs/showcase/composition_ajax"
+      modified it through the following Javascript in a `script` tag 
+      so it should now be orange.
+      %pre
+        %code
+          :preserve
+            (function() {
+              var e = document.getElementById('should_turn_orange');
+              e.style.backgroundColor = 'orange';
+            })();
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="ie ie8" lang="en" <%= manifest_attribute %>>
+<![endif]-->
+<!--[if IE 9]>
+<html class="ie ie9" lang="en" <%= manifest_attribute %>>
+<![endif]-->
+<!--[if !(IE 8) | !(IE 9)  ]><!-->
+<html lang="en" <%= manifest_attribute %>>
+<!--<![endif]-->
+<!-- lang="en" for hypenation purposes http://www.w3.org/TR/css3-text/#hyphenation -->
+<head>
+  <title><%= conference_module %></title>
+  <%= stylesheet_link_tag "#{conference_tag}/application", :media => "all" %>
+  <%= javascript_include_tag "ponzu/application" %>
+  <!--[if IE 9]>
+    <%= javascript_include_tag "ie9/application" %>
+  <![endif]-->
+  <!--[if IE 8]>
+    <%= javascript_include_tag "ie9/application" %>
+    <%= javascript_include_tag "ie8/application" %>
+  <![endif]-->
+  <%= csrf_meta_tags %>
+  <!-- Viewport tag taken from http://snippet-editor.com/2010/08/viewport-equal-1024.html -->
+  <!-- Fixed provides the best viewing experience IMHO -->
+  <meta name="viewport" content="width=device-width, maximum-scale=2.0 minimum-scale=0.7" />
+
+  <!-- For per user cache management -->
+  <meta content="<%= current_user.id if current_user %>" name="user_id">
+  <%= default_kamishibai_hash_tag "#!_/dashboard" unless @ignore_default_kamishibai_hash_tag %>
+
+  <!-- specifying :type in the favicon link causes page load stalling on WebKit nightly -->
+  <%= favicon_link_tag "/assets/#{conference_tag}/favicon.ico", :type => nil %>
+  <% ["144x144", "114x114", "72x72", nil].each do |size_string| %>
+    <%= tag :link, :href => asset_path("#{conference_tag}/apple-touch-icons/" + ["apple-touch-icon", size_string].compact.join('-') + ".png"),
+            :rel => "apple-touch-icon", :sizes => size_string %>
+  <% end %>
+</head>
+<body>
+  <%= yield %>
+  <!-- We always put out-of-page elements at behind the yield so that we
+       can yank out the whole body and have basically the same results as
+       an AJAX request -->
+  <div class="notice"><%= flash[:notice] %></div>
+  <div class="error"><%= flash[:error] %></div>
+</body>
+</html>

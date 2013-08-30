@@ -1,0 +1,19 @@
+= ponzu_frame :title_args => {:name => @user.name} do
+  .users.panel
+    %h1
+      %span.jp_name= @user.jp_name
+      %span.en_name= @user.en_name
+    %p
+      %span= @user.affiliation
+
+  - if current_user
+    .panel
+      = link_to t('users.send_message_to', :name => @user.name), 
+                ksp(new_private_message_path(:to_id => @user)),
+                :class => "send_message_button"
+
+    .panel_title links
+    .panel
+      = render :partial => "users/links", :locals => {:users => [@user]}
+
+  = render :partial => 'layouts/biokaimono'

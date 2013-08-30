@@ -1,0 +1,35 @@
+@import "../kamishibai/ks_settings";
+
+// http://jsfiddle.net/Wexcode/E8uHf/546/
+.search_box {
+  .button.search {
+    float: right;
+  }
+  .field_box {
+    padding: 0 5px 0 0;
+    overflow: hidden;
+  }
+  .field_box input {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: $label-font-size;
+    border-radius: 5px;
+    padding: 3px;
+  }
+}
+
+.search_hit_text {
+  font-size: $smaller_font_size;
+  border: solid 1px $very_light_gray;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.user_type {
+  margin-left: 15px;
+  font-size: $smaller_font_size;
+  font-weight: bold;
+  color: $light_gray;
+}

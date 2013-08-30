@@ -1,0 +1,183 @@
+// Kamishibai JS Framework
+// Copyright Naofumi Kagami, 2012-2013
+// 
+// Kamishibai is a Javascript framework that composites HTML responses
+// from the server, combining them into the DOM and caching them locally.
+function onDomReady(callback) {
+  // kamishibai.js must be loaded first because it implements this #onDomReady function
+  // that is used throughout kamishibai applications.
+  // 
+  // http://stackoverflow.com/questions/1795089/need-help-with-jquery-to-javascript/1795167#1795167
+  // Note that we cannot control when each onDomReady callback will be fired.
+  // To ensure that everything is ready before Kamishibai does its thing,
+  // we should use kamishibai#beforeInitialize(callback).
+  // For exampe, we set the event handlers with kamishibai#beforeInitialize(callback).
+
+  // Mozilla, Opera, Webkit 
+  if ( document.addEventListener ) {
+    document.addEventListener( "DOMContentLoaded", function(){
+      document.removeEventListener( "DOMContentLoaded", arguments.callee, false);
+      callback();
+    }, false );
+  // If IE event model is used
+  } else if ( document.attachEvent ) {
+    // ensure firing before onload
+    document.attachEvent("onreadystatechange", function(){
+      if ( document.readyState === "complete" ) {
+        document.detachEvent( "onreadystatechange", arguments.callee );
+        callback();
+      }
+    });
+  }
+}
+
+window.kamishibai = new Kamishibai();
+
+onDomReady(function(){
+  <% unless Rails.env.production? || Rails.env.development_nayose? || Rails.env.staging? %>
+    KSBaseResourceValidator.validate();
+    kamishibai.config.validateAjax = false;
+  <% end %>
+  kamishibai.initialize();
+})
+
+function Kamishibai() {
+  var self = this;
+  this.config = {};
+
+  var dynamicCachePollerId = null;
+  var dynamicCachePollerOn = false; // TODO: Disable during development
+  var dynamicCachePollerInterval = 60 * 60 * 1000; // milliseconds
+  var beforeInitializeCallbackQueue = [];
+  // var defaultCacheExpiry = 1000;
+  window.kamishibaiInitialized = false;
+
+  this.cacheVersion = "20121214-01";
+
+  // We should redesign initialization and implement an
+  // initialization queue so that we can add to the queue
+  // directly from each class, without having to hard-code
+  // inside the Kamishibai.initialize() method.
+  this.initialize = function(){
+    processOnInitializeCallbackQueue();
+    if (!window.kamishibaiInitialized) {
+      console.log('First load initialization');
+      kss.addEventListener(window, 'hashchange', function(event){
+        // This scrollTo cancels the automatic scroll that
+        // happens on popState (and which we cannot cancel).
+        // Ideally, we should set this to the previous scroll
+        // position and do it only on Kamishibai.
+        //
+        // Currently testing to see if we really need this.
+        //
+        // var previousUrl = KSHistory.latestId();
+        // if (previousUrl) {
+        //   alert('scrollToInHashChangeEvent')
+        //   var scrollMemory = KSScrollMemory.get(previousUrl)  
+        //   scrollTo(scrollMemory.scrollX, scrollMemory.scrollY);
+        // }
+        
+        console.log('hashchange event received');
+        self.changePageByHash(true);
+        event.preventDefault();
+        event.stopPropagation();
+      });
+      // lscache.setBucket(KSApp.user_id() + "-" + KSCookie.get('device') + "-"  + KSCookie.get('locale') + "-");
+      // KSSqlCache.setBucket(KSApp.user_id() + "-" + KSCookie.get('device') + "-"  + KSCookie.get('locale') + "-");
+      self.changePageByHash(true); // Set animation true even for page reloads
+      self.initializeDynamicCachePolling();
+      KSSortable.initialize();
+      window.kamishibaiInitialized = true;
+    } else {
+      alert('kamishibai was initialized twice!!');
+    }
+  }
+
+  this.beforeInitialize = function(callback){
+    beforeInitializeCallbackQueue.push(callback);
+  }
+
+  function processOnInitializeCallbackQueue(){
+    for (var i = 0; i < beforeInitializeCallbackQueue.length; i++) {
+      beforeInitializeCallbackQueue[i]();
+    };
+  }
+
+  // Switch to the page as specified by the hash in window.location.
+  this.changePageByHash = function(animate){
+    if (!setHashIfBlank()) {
+      KSController.handleHashChange();
+    };
+  }
+
+  // This is used to send requests in the background.
+  this.initializeDynamicCachePolling = function(){
+    if (!dynamicCachePollerId && dynamicCachePollerOn) {
+      setTimeout(function(){
+        console.log('dynamic content refresh on load');
+        downloadDynamicContent();
+      }, 10000); // download 10 seconds after reload
+      dynamicCachePollerId = setInterval(function(){
+        console.log('downloading dynamic content via polling');
+        downloadDynamicContent();
+      }, dynamicCachePollerInterval); // milliseconds
+    }
+  };
+
+  function downloadDynamicContent(){
+    if (KSApp.user_id()) {
+      KSCache.batchLoad(document.location.pathname + '/sessions/batch_request_liked_sessions')
+      KSCache.batchLoad(document.location.pathname + '/presentations/batch_request_likes')
+      KSCache.batchLoad(document.location.pathname + '/dashboard/batch_request_pages')      
+    }
+  };
+
+  function setHashIfBlank(){
+    var defaultPage, defaultHash;
+    if (isHashBlank()) {
+      defaultPage = document.querySelectorAll('[data-default]')[0];
+      if (defaultPage) {
+        defaultHash = "#!" + defaultPage.id;
+      } else {
+        defaultHashMetaTag = document.getElementsByName('default_kamishibai_hash');
+        defaultHash = defaultHashMetaTag[0] && defaultHashMetaTag[0].content;
+      }
+      if (defaultHash) {
+        console.log('rewriting location.hash to #!' + defaultHash + ' because it was blank.');
+        location.hash = defaultHash;        
+        return true;      
+      } else {
+        return false;
+      }
+    }
+  }
+
+  function isHashBlank() {
+    return (location.hash == "#!" || 
+            location.hash == "#!/" || 
+            location.hash.slice(0,2) != '#!')
+  }
+
+  // Called from changePageByHash()
+  // Show the page specified by the current location.href,
+  // loading resources from the resourceUrl if necessary.
+  // function showPageForCurrentLocation(animate){
+  // 	console.log('showPageForCurrentLocation ' + location.href + ' with animation: ' + (animate ? 'true' : 'false'));
+  //   var targetState = KSUrl.parseHref(location.href);
+  //   var id = targetState.pageId;
+  //   var resourceUrl = targetState.resourceUrl;
+
+  //   if (id && !resourceUrl) {
+  //     // If only the pageId is provided, we just show it.
+  //     if (id) console.log('will show page for id ' + id);
+  //     if (id) KSController.showPageForId(id, animate);
+  //   } else if (id && resourceUrl) {
+  //     // If both the resourceUrl and pageId are provided,
+  //     // we find or load the pages from the resourceUrl and move
+  //     // to the pageId.
+  //     KSController.showElementForResourceUrl(resourceUrl, animate, id);
+  //   } else if (!id && resourceUrl) {
+  //   	KSController.showElementForResourceUrl(resourceUrl, animate);
+  //   }
+  // }
+}

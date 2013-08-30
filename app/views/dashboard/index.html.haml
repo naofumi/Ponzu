@@ -1,0 +1,33 @@
+- cache ["v4.2", current_conference, "dashboard", Time.zone.now.strftime("%Y%m%d"), !!current_user, can?(:manage, :all), can?(:likes_report, Like)] do
+  = ponzu_frame :id => "dashboard" do
+    #splash
+      %h1
+        = t('dashboard.conference_title').html_safe
+    .panel
+      = render :partial => "button_grid", 
+          :locals => {:types => current_conference.icons_as_sym('top_icons')}
+    .panel_title= t('dashboard.panel_titles.sessions')
+    .responsive.panel
+      = render :partial => "button_grid", 
+          :locals => {:types => current_conference.icons_as_sym('session_icons')}
+    .panel_title= t('dashboard.panel_titles.my_info')
+    .responsive.panel
+      = render :partial => "button_grid", 
+          :locals => {:types => current_conference.icons_as_sym('my_info_icons')}
+    .panel_title= t('dashboard.panel_titles.other')
+    .responsive.panel
+      = render :partial => "button_grid", 
+          :locals => {:types => current_conference.icons_as_sym('other_icons')}
+
+    - if can? :likes_report, Like
+      .panel_title= t('dashboard.panel_titles.reports')
+      .responsive.panel
+        = render :partial => "button_grid",
+            :locals => {:types => current_conference.icons_as_sym('report_icons')}
+
+    - if can? :manage, :all
+      .panel_title= t('dashboard.panel_titles.admin')
+      .responsive.panel
+        = render :partial => "button_grid", 
+            :locals => {:types => current_conference.icons_as_sym('admin_icons')}
+      = render :partial => "admin_links"

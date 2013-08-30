@@ -1,0 +1,15 @@
+= ponzu_frame do
+  .panel
+    %h1= t('.title')
+    .panel.paneled_list
+      - unless @threads.empty?
+        - @threads.each do |thr|
+          = link_to ksp(conversation_private_messages_path(:with => thr.partner.id)),
+                    :onclick => mark_read(thr.unread_receipt_ids) do
+            - if thr.unread_count > 0
+              .count.red #{thr.unread_count}
+            .time= l(thr.newest_message_at, :format => :month_day_time)
+            .name= thr.partner.name
+            .excerpt= truncate(thr.newest_message.body.to_s, :length => 100)
+      - else
+        = t('.messages.no_messages')

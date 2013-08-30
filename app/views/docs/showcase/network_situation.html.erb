@@ -1,0 +1,48 @@
+<%= ks_element :id => "network_situation",
+               :data => {
+                   :title => "Network situation",
+                   :container => "ipadish_content",
+                   :"container-ajax" => docs_path(:page => "showcase/layout")
+                } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+
+# The network situation at conferences
+
+The network situation at conferences is not great. There is a good reason why 
+native apps are popular. Setting up reliable WiFi costs a lot.
+
+Since our system has to have access to the Internet, regardless of whether we
+use a web app or a native app, we have to consider how to handle this.
+
+## What will attendees bring to conferences
+
+Depending on what attendees will bring to conferences, we can provide the following 
+solutions.
+
+### Smartphones, Keitai
+
+Smartphones have 4G or LTE connections. In the majority of cases, we think that 
+this would be sufficient.
+
+### Tablets
+
+Althought there will be people who bring their own WiFi routers, in general, tablets
+will rely on the WiFi network. Since the connection will be flakey, we have to
+provide better offline support. Our goal is to provide OK performance when the
+conference has only mediocre WiFi. 
+
+### PC
+
+PCs will not be used in the poster halls. They will be used in the hallways and inside
+the rooms. If MBSJ2011 is any indication, medicore WiFi with installed instruments will
+be sufficient.
+
+# Thoughts about video streaming
+
+Unless there is a lot of investment in the WiFi infrastructure, this is simply a dream.
+
+MARKDOWN
+%>
+  </div>
+<% end %>

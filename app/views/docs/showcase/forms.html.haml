@@ -1,0 +1,61 @@
+= ks_element :id => "forms",
+             :data => { :title => "Form handling in Kamishibai",
+                        :container => "ipadish_content",
+                        :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Form handling in Kamishibai
+      
+      We have tried to make form management as painless as possible in Kamishibai. We try to follow the Rails approach. Markup for forms looks like the following;
+
+          <form accept-charset="UTF-8" action="/docs/tests/forms" data-ks-insert-response="" data-remote="true" method="post">
+            <input id="test_text" name="test_text" type="text">
+            <input name="commit" type="submit" value="Save changes">
+          </form>
+
+      There are a few things to note.
+
+      1. The action points to a regular URL and not a Kamishibai formatted URL with hashbangs. This is obvious when you think about it because hash fragments won't be sent to the server.
+      2. As with regular Rails (rails_ujs), we use `data-remote` to specify that this form should be handled by the rails.ujs javascript library. This means that the form will be sent via AJAX.
+      3. The only Kamishibai-ish difference is the `data-ks-insert-response` attribute. This tells Kamishibai that you will insert the response into the DOM using Kamishibai insertion rules. Kamishibai allows you to handle AJAX responses without writing a line of Javascript. This is contrary to Rails 3 where the developer is expected to write an event handler for the 'ajax::success' event. If you want to write your own Javascript, Kamishibai will fire the 'ajaxSuccess', 'ajaxError' and 'ajaxComplete' events.
+
+      ## Handling Ajax POST requests
+
+      ### Handle with fragment updates
+
+      For non-Ajax POST requests, the way to handle them is to redirect on success.
+
+      For Ajax POST requests, the most common way in Rails is to do partial updates. This means that regardless of success or failure, we sent an HTML fragment. The fragment may be similar to the #show action, or it may be similar to the #edit action, depending on whether the request was successful or not. Either way, it's a fragment update.
+
+      ### Redirecting from the server
+
+      In non-Ajax Rails, the default way to handle a successful POST or PUT request is to redirect to GET. For example, the `create` action in the scaffold looks like the following;
+
+          def create
+            @authorship = Authorship.new(params[:authorship])
+
+            respond_to do |format|
+              if @authorship.save
+                format.html { redirect_to @authorship, notice: 'Authorship was successfully created.' }
+                format.json { render json: @authorship, status: :created, location: @authorship }
+              else
+                format.html { render action: "new" }
+                format.json { render json: @authorship.errors, status: :unprocessable_entity }
+              end
+            end
+          end
+
+      The reason Rails does it is due to the [double-submit problem](http://www.codeproject.com/Tips/433399/PRG-Pattern-Post-Redirect-Get). The issue is that if you don't redirect (you remain on the result of a POST request), the browser `reload` button will resubmit that POST. This will not happen in Ajax because a browser reload will not trigger another POST.
+
+      Although Kamishibai **is** Ajax all the way and we don't really need to do a redirect, we allow for non-Ajax like behaviour.
+
+      Instead of `redirect_to`, we currently use;
+
+          format.js { render :js => "kss.redirect('#{ksp(@meet_up)}')" }
+
+      Instead of `render` on error, we currently use;
+
+          format.js { render :js => "KSApp.notify('An error has occured');" }
+
+      We are currently investingating ways to make the redirecting, etc. easier.
+

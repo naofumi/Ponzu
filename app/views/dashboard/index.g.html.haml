@@ -1,0 +1,13 @@
+%p{:align => 'center'}
+  = render :partial => 'users/controls.g'
+- [:welcome, :search, :floor_plan, :login].each do |type|
+  = grid_button type
+%h2 Sessions
+- [:oral_sessions_list, :poster_sessions_list, :yoruzemi].each do |type|
+  = grid_button type
+%h2 My info
+- [:my_presentations, :my_likes, :my_schedule, :private_messages].each do |type|
+  = grid_button type
+%h2 Settings
+- [:settings].each do |type|
+  = grid_button type

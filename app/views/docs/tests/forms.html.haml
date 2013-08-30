@@ -1,0 +1,18 @@
+= ks_element :id => "forms_test",
+             :data => { :title => "Forms test",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    %h1 Forms Test
+    %h2 Regular form test with remote and ks-insert-response
+    = form_tag "/docs/tests/forms", 
+                      :remote => true, 
+                      :data => {"ks-insert-response" => ""} do
+      = text_field_tag :test_text
+      = submit_tag
+    %p Enter text and submit the form. You should see your text in the following sentence.
+    = "Recieved post data '#{params[:test_text]}'"
+    %h2 Remote link test
+    = link_to "remote Ajax", "/docs/tests/remote_link_response", :remote => true, :method => :post, :data => {"ks-insert-response" => ""}
+    %p Click on the link above. You should get the contents of "remote_link_response" in the box below.
+    #remote_link_response{:style => "border: solid 1px green"}

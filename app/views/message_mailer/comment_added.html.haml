@@ -1,0 +1,19 @@
+!!! 5
+%head
+  %meta(content="text/html; charset=UTF-8" http-equiv="Content-Type")/
+  %body
+    %h3
+      = t('message_mailer.comment_added.header', 
+          :number => @obj.presentation.number,
+          :namespace => @conference.tag)
+      %br/
+      "#{sanitize @obj.presentation.title}".
+    %blockquote
+      = sanitize @obj.text
+    %p
+      = t('message_mailer.comment_added.view_web', 
+          :link => ksp_and_galapagos_email_links(presentation_path(@obj.presentation)),
+          :namespace => @conference.tag)
+    %p
+      = mail_footer
+    

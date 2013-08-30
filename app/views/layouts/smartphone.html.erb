@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html <%= manifest_attribute %>>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,  user-scalable=yes, maximum-scale=2, minimum-scale=0.7">
+
+  <!-- user-scalable=no required for fixed positioning -->
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> -->
+  <%= stylesheet_link_tag "s/application", :media => "all" %>
+  <script>
+    window.startTime = new Date();
+  </script>
+  <%= javascript_include_tag "s/application" %>
+  <script>
+    window.endTime = new Date();
+  </script>
+  <%= csrf_meta_tags %>
+
+  <!-- For per user cache management -->
+  <meta content="<%= current_user.id if current_user %>" name="user_id">
+  <%= default_kamishibai_hash_tag "#!dashboard" %>
+  <title></title>
+</head>
+<body>
+
+  <%= yield %>
+
+  <!-- We always put out-of-page elements at behind the yield so that we
+       can yank out the whole body and have basically the same results as
+       an AJAX request -->
+  <div class="notice"><%= flash[:notice] %></div>
+  <div class="error"><%= flash[:error] %></div>
+
+</body>
+</html>

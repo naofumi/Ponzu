@@ -1,0 +1,5 @@
+= ponzu_frame :data => {:title => "JSDB2013: Scheduled presentations"} do
+  = render :partial => "my", :locals => {:likes => @schedules,
+                                         :link_method => :my_schedule_like_path,
+                                         :title => t('.title'),
+                                         :empty_message => t('.messages.no_schedules')}

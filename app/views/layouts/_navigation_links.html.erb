@@ -1,0 +1,13 @@
+<div id="navigation_links" class="radio_button_set">
+  <% controller_class = controller.class.to_s %>
+  <%= link_to I18n.t('header.home_page'), "#!global_messages", 
+          :class => [selected_if_menu(:home), 'ks_tab'] %>
+  <%= link_to I18n.t('header.oral_sessions'), ksp(timetable_path('2012-12-14')), 
+          :class => [selected_if_menu(:sessions), 'ks_tab', 'session_menu'] %>
+  <%= link_to I18n.t('header.poster_sessions'), ksp(poster_session_path(4)), 
+          :class => [selected_if_menu(:posters), 'ks_tab'] %>
+  <%= link_to I18n.t('header.meet_ups'), ksp(meet_ups_path(:date => '2012-12-14')), 
+          :class => [selected_if_menu(:meet_ups), 'ks_tab'] %>
+  <%#= link_to I18n.t('header.exhibition'), "http://mbsj2012exhibitor.castle104.com/", 
+          :class => [] %>
+</div>

@@ -1,0 +1,13 @@
+/ Deprecated
+= ks_element :id => "poster_sessions", 
+             :data => {:position => "20",
+                       :container => "ponzu_frame",
+                       :"container-ajax" => static_path(:page => "ponzu_frame")} do
+  .sub_navigation_links.radio_button_set
+    - [11, 12, 13, 14].each do |day|
+      = link_to t('dashboard.date_tab', :day => day), 
+                ksp(poster_session_path("#{day - 10}")), 
+                :class => ['ks_tab', "poster_session_#{day - 10}_menu"]
+  %div{:style => "clear:both"}
+  #content
+    #poster_sessions_container{:style => "position:relative;"}

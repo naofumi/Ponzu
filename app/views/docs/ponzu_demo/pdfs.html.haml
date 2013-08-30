@@ -1,0 +1,28 @@
+- cache ["v1", "pdfs"] do
+  = ponzu_frame do
+    .panel
+      / = image_tag 'jsdb2013/takashi_matsuzaki.jpg', 
+      /             :style => "float:left;margin: 0 10px 10px 0;border: solid 0px #FFF;box-shadow: 1px 1px 4px #666"
+      %h1
+        = image_tag "ponzu/pdficon_72.png", :style => "vertical-align: middle"
+        = "Download PDFs"
+
+    .panel_title Program
+    .panel
+      = render :partial => "dashboard/button_grid", 
+          :locals => {:types => [:pdf_with_abstract]}
+    .panel_title Each Session (50 - 400KB)
+    .pdf_list
+      - sessions = []
+      - {"Plenary Lectures" => '^PL', "Luncheon Seminars" => '^L[0-9]', "Symposium" => '^S[0-9]', 
+         "Oral Presentations" => '^OP', "Flash Talks" => '^FT', "Satellite Symposium" => '^SS', 
+         "Poster Presentations" => '^P[0-9]', "Late Breaking Abstracts" => '^LBA', 
+         "Satellite Workshop" => '^SW', "Technical Workshop" => '^TW'}.each do |name, regex|
+        .panel_title= name
+        .paneled_list.panel
+          - sessions = Session.where(%Q(number REGEXP '#{regex}')).order(:number).all
+          - sessions.each do |s|
+            = link_to download_pdf_session_path(s), :style => "overflow: hidden" do
+              = image_tag("ponzu/pdficon_large.png", :style => "float:left; margin-right: 10px")
+              %span.number= s.number
+              = s.title

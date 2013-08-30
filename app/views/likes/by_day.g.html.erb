@@ -1,0 +1,12 @@
+<h2>マイ・スケジュール</h2>
+<% ["2012-12-11", "2012-12-12", "2012-12-13", "2012-12-14"].each do |date| %>
+  <div>
+    <span class="pink">■</span> <%= link_to l(Time.parse(date), :format => :month_day), my_schedule_likes_path(:date => date)  %>
+  </div>
+<% end %>
+<h2>いいね！</h2>
+<% ["2012-12-11", "2012-12-12", "2012-12-13", "2012-12-14"].each do |date| %>
+	<div>
+		<span class="pink">■</span> <%= link_to l(Time.parse(date), :format => :month_day), my_likes_path(:date => date)  %>
+	</div>
+<% end %>

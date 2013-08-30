@@ -1,0 +1,28 @@
+@import "../kamishibai/ks_settings";
+
+#pdf_links {
+  #pdf_list {
+    float:right;
+    width: 0px;
+    overflow: hidden;
+    height: 32px;
+    -webkit-transition: all 1s ease 0;
+    > div {
+      width: 300px;
+      padding: 0 0 0 20px;
+      height: 100%;
+    }
+    &.show {
+      width: 300px;
+    }
+  }
+  > a {
+    display: block;
+    float: right;
+    img {
+      height: 32px;
+      width: 32px;
+      vertical-align:bottom;
+    }
+  }  
+}

@@ -1,0 +1,4 @@
+<% if Rails.env.production? %>
+var console = {};
+console.log = function(){};
+<% end %>

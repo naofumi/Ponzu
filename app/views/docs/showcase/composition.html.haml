@@ -1,0 +1,304 @@
+= ks_element :id => "composition",
+             :data => { :title => "Fragment composition",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Fragment composition
+
+      An essential feature of Kamishibai is the ability to act as a compositor, combining
+      together multiple HTML fragments into a single HTML document.
+
+      Composition requires that each HTML fragment has to be inserted at a specific location.
+      With libraries like Turbolinks which doesn't deal with composition, 
+      the HTML fragment is always to `body` element. With PJAX, the location has to be coded
+      in Javascript (and it still is very difficult to deal with). In comparison,
+      Kamishibai offers very sophisticated and simple to use methods for composition.
+
+      ## API
+
+      You can control how Kamishiba composits HTML fragments with the following API.
+      Rules are tested in the order shown.
+
+      ### Setting a common `id`
+
+      If the Kamishiba fragment has an `id` that is identical to an element currently 
+      available in the DOM, then the innerHTML of the Kamishibai fragment replaces 
+      the contents of the pre-existing element.
+
+      ### Setting a `container`
+
+      If the Kamishibai fragment has a `data-container` attribute, then this fragment is
+      inserted into the element which has an `id` corresponding to this value. Containers
+      do not allow multiple children, so if the container currently has a child, it is
+      removed after the transition effect finishes.
+
+      If a container element does not yet exist in the DOM at the time the Kamishiba fragment
+      is loaded, then Kamishibai looks up the `data-container-ajax` attribute on the
+      fragment. If it is available, then Kamishibai sends an Ajax `GET` request to its value
+      to load the container.
+
+      ### Creating a placeholder
+
+      If an element has a `data-ajax` attribute and the contents are empty,
+      then Kamishibai will send an Ajax request to this URL. If the Ajax response contains
+      an element with the same `id` as the original element, then the compositor will
+      replace the contents.
+
+      ### Setting `class="page"`
+
+      If the fragment has a `page` class, then it will be treated as a page that replaces
+      the whole `body`.
+
+      ### Just changing some attributes with `data-attributes-only`
+
+      Sometimes all that we want to do is to change a few attributes on pre-existing DOM elements.
+      For example, we might want to add a star to a presentation that we `liked` without 
+      having to render the whole presentation again. This would typically involve adding a class
+      to the presentation element.
+
+      In this case, we can send a Kamishibai fragment with a `data-add-class` attribute. Then
+      Kamishibai will find a pre-exisiting element with the same `id` and add the specified
+      class to it. Since adding a class is all that we want to do and we don't want to replace
+      the contents of the element, we also specify `data-attributes-only`.
+
+      We can also use `data-remove-class` and `data-toggle-class`. We can also delete an
+      element by sending an element with the `id` of the target and the `data-remove` attribute
+      set (this is counter-intuitive, I know).
+
+      For example, in the like button for MBSJ2012, we have the following code.
+      (ERB is escaped because it mucks up rendering)
+
+          <%# if current_user_likes_this(presentation) %>
+            <div id="session_details_presentation_<%#= presentation.id %>" data-add-class="liked" data-attributes-only></div>
+          <%# else %>
+            <div id="session_details_presentation_<%#= presentation.id %>" data-remove-class="liked" data-attributes-only></div>
+          <%# end %>
+
+      If we were using HAML, the code would look like this.
+      (HAML is escaped because it mucks up rendering)
+
+          \- if current_user_likes_this(presentation)
+            \#session_details_presentation_\#{presentation.id} {data: {"add-class": "liked",
+                                                                     "attributes-only": true}}
+          \- else
+            \#session_details_presentation_\#{presentation.id} {data: {"remove-class": "liked",
+                                                                     "attributes-only": true}}
+
+      ### JavaScript as a last resort
+
+      If the Kamishibai compositor doesn't provide the functions that you are looking for,
+      you can write JavaScript directly in the Ajax response.
+
+      There are two ways to do this.
+
+      The first is to send a pure JavaScript response with a text/javascript mime type. You 
+      can do this using the following syntax in your controllers.
+
+          respond_to do |format|
+            format.js {render :js => "[the javascript that you want to send]"}
+          end
+
+      For more complex JavaScript, you could render a view with a '.js' extention.
+
+      The other way to send JavaScript, especially if you want to use it in combination with
+      the Kamishibai compositor, is to embed JavaScript in the otherwise HTML response. You
+      would want to do this if you want to use the Kamishibai compositor for the simple
+      tasks, and only need to add a dash of JavaScript for a few complex updates.
+
+      To do this, simply embed a `script` tag in the response at the top level. 
+      The Kamishibai compositor looks for `script` tags in the top level and inserts the
+      code at the end of the `head` tag, which will trigger the JavaScript to be evaluated.
+      The code will be run "in-sequence" while each Kamishibai fragment is being inserted
+      into the DOM. If you want the JavaScript to run prior to inserting Kamishibai fragments,
+      place the `script` tag at the top of the response body. If you want to run it after
+      all Kamishibai fragments have been insereted, then place the `script` tag at the end.
+
+      The `script` tag is part of the Ajax response and hence will be stored in the 
+      browser cache, together with the rest of the code.
+
+      ### Future directions
+
+      Although the `data-attributes-only` approach works and the syntax can be cleaned up
+      using Rails helper methods, you do get the feeling that you are abusing HTML.
+      Generating DOM elements simply to convey attribute information doesn't feel right.
+
+      We are considering the following ways to work around this problem.
+
+      1.  Send JavaScript inside `script` tags to update the elements. This is closer
+          to how prototype-rails (RJS) used to do it and so it is more familiar and
+          easier to accepts. However, the idea of sending JavaScript inside the Ajax
+          response is still unsettling to some people.
+      2.  Send JSON. JSON cannot be placed inside the DOM so it would normally live
+          inside a `script` tag if it needs to co-exist with the other Kamishibai
+          response elements. Therefore, it really is no different from sending Javascript.
+          It feels a bit better though.
+
+      Since there aren't any immediate issues now, I probably will leave it as is for the
+      time being.
+
+      We might have more concrete ideas when we apply Kamishibai to other frameworks
+      and are unable to use HAML and Rails helpers, and have to work more directly 
+      with the raw stuff.
+
+      ## Rails helpers
+
+      Using attributes to convey intent to the Kamishibai compositor is generally terse and 
+      relatively simple to understand. However, it is much nicer to have Ruby helper methods.
+      We strongly recommend that you use the helpers.
+
+      ### `ks_page(options, &block)`
+
+      This creates a Kamishibai page (an fragment that takes up the whole page). Use this
+      as a simple alternative to regular HTML page loads in the first iteration of making
+      you website Kamishibai-optimized. You can think about partial page uploads later.
+
+      Furthermore, since smartphone interfaces will generally not use partial updates, this
+      will be the predominant Kamishibai fragment type on smartphones.
+
+          ks_element :id => "composition",
+                     :data => {:title => "Fragment composition",
+                               :container => "ipadish_content",
+                               :"container-ajax" => docs_path(:page => "showcase/layout") } do
+            [page code here]
+          end
+
+      ### `ks_hidden_page(options, &block)`
+
+      This creates Kamishibai pages that are initially hidden. We use these on multipage documents
+      and pages that provide frameworks (containers, etc.) and are not the initial direct targets
+      of the URL.
+
+      ### `ks_ajax_placeholder(options)`
+
+      A placeholder element that loads content via Ajax. The options must include `data-ajax`.
+      We use this to load navigation panes, etc. Use containers when the element to load will
+      be a toElement (targeted by the URL). Other elements that are loaded in the background
+      so to speak should be loaded with placeholders.
+
+      We also use this to load social_boxes.
+
+      ### `ks_placeholder(options)`
+
+      A placeholder element that passively loads content when an Ajax response includes
+      an element with the same `id`. We use these to load up like_boxes. like_boxes are 
+      included in the response for social_boxes (the social_box triggers the Ajax request).
+
+      ### `ks_element(options, &block)`
+
+      The base Kamishibai element generator. It automatically sets the `data-expiry` attribute
+      depending on the @expiry instance variable (which is usually set with the 
+      `set_kamishibai_expiry` class method inside the controller).
+
+      We use this method directly when we want to return a Kamishibai fragment inside an
+      Ajax response.
+
+      Since the `id` element is very important in Kamishibai, we make it easy to generate 
+      long unique ids from an array. You can do 
+
+          :id => ["presentation", presentation.id, "edit"]
+
+      instead of 
+
+          :id => "presentation_\#{presentation.id}_edit"
+
+      ### `ks_modify_elements(options = {})`
+
+      This provides a nicer syntax for modifing pre-existing elements with the `data-attributes-only`,
+      `data-add-class`, `data-remove` type attributes.
+
+          ks_modify_elements "left_navigation" => {add_class: "selected"},
+                             ["menu", 4] =>  {remove_class: "selected"},
+                             ["bookmark", 5] => :remove
+
+      You can even use a block type syntax for more complex logic.
+
+          ks_modify_elements do |document|
+            document["left_navigation"][:add_class] = "selected"
+            document[["menu", 4]] = {remove_class: "selected"}
+            document["bookmark"] = :remove
+          end
+
+
+      ## Why use fragment composition?
+
+      Fragment composition provides significant benefits over rewriting the whole `body` (as in TurboLinks) in the following situations.
+
+      1.  **We want to manage the HTML in chunks to improve code reuse:** Code reuse tends to be
+          more about sharing code between PC and smartphone website rather than sharing code 
+          within the same device.
+      2.  **We want to separate static content from user content:** For example, we may want to 
+          have a like button attached to a presentation abstract. The contents of the presentation
+          will almost never change so we want to cache that in the browser with a long expiration
+          date. The contents are also independent of the user so we want to keep that in memcached.
+          On the other hand, the contents of the like button will change with user and will need
+          to be updated each time the use `likes` the presentation. Therefore the like button
+          should either not be cached, or cached with a short expiry time (it also should be subject
+          to manual expiration when the presetation is `liked`). To achieve this, the like
+          button should be on a different fragment.
+
+      The second reason is very important because it is central to improving the offline viewing
+      experience. It also enables more aggressive use of caching on the server-side, thus improving
+      response times and reducing server load dramatically.
+
+      ## How similar things are done in Rails
+
+      Fragment composition is not a new concept. The original idea behind Ajax before client side
+      MVC and JSON updates was to send fragments of HTML to be inserted into the DOM, without 
+      reloading the whole page. Rails used to contain RJS (Ruby JavaScript: can still be
+      included as a gem) which made it easy to send Javascript inside an Ajax response. RJS
+      allowed you to describe the most common DOM manipulation tasks in Ruby instead of having to
+      write JavaScript.
+
+      RJS (prototype-rails) provided functions like the following;
+
+      `replace_html`, `replace`, `hide`, `show`, `insert_html`, `visual_effect`, `remove`,
+      `toggle`, `alert`, `redirect_to`, `reload`
+
+      With Rails 3, Rails does not include RJS by default and instead encourages the use of UJS 
+      (unobtrusive JavaScript). The common pattern with UJS is to write JavaScript that fires when
+      an Ajax response is received. This JavaScript is used to update the DOM with the contents of
+      the Ajax response. In my experience, the UJS approach is confusing. You have to write separate
+      JavaScript code for every Ajax response that you expect in addition to the controller code
+      that generates the Ajax response. It is also more complicated to write code that updates
+      several independent DOM elements in a single response.
+
+      The RJS approach, although scorned upon by purists who don't like putting executable code into
+      the Ajax responses, was much easier to code. The update code was fully contained in 
+      the controller response, and we didn't have to write separate JavaScript code to do the
+      insertions. We could easily update multiple elements or do anything we liked really,
+      because the response was JavaScript.
+
+      The Kamishibai approach is to do the most common fragment composition tasks using information
+      inside attributes instead of sending JavaScript. The Kamishibai library reads these attributes and
+      composites the fragments appropriately. For example, if an `id` attribute is present, then
+      Kamishibai will replace the contents of a pre-existing element with the same `id`. If
+      a `data-container` attribute is present, then Kamishibai will place the contents as a child of
+      the container.
+
+      The benefit of the Kamishibai approach as compared to RJS is that Kamishibai can be more
+      intellegent about how the composition is performed. With RJS, you have to specify the composition
+      task with no knowledge about the current state of the DOM. For example, if you want to 
+      switch between an append and a replace based on whether an element with the same id is
+      already present, you have to write JavaScript inside the controller that interrogates the DOM.
+      This can get quite big. With Kamishibai, all that logic is already available inside the
+      Kamishibai library. All you have to do is to specify some attributes.
+
+      ## Notes on Pagination and Caching
+
+      Pagination can be an issue with compositing. If we use Ajax-type pagination (load all pages into same
+      DOM) and we load a lot of pages, then a nesting style architecture isn't really good. Furthermore,
+      whereas we use the `data-ajax` attribute so that the loaded element can tell us where to find its container,
+      we don't need that for pagination. We can easily deduce what the other page URLs should be.
+
+      For example, suppose we are on http://some.host/#!_/some/path?query=keyword 
+
+      If we get a lot of hits, then we need pagination. On each page request, we don't want to change the URL because
+      the resource is really the same and we don't want to pollute the browser history. To manage this
+      we have to do either of the following;
+
+      1. On each page load, we rewrite the cache for "/some/path?query=keyword" and add the new pages.
+      2. We don't rewrite the cache. However, whenever we request "http://some.host/#!_/some/path?query=keyword",
+         we automatically search the cache for any other pages, and add them if necessary.
+
+         

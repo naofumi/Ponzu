@@ -1,0 +1,18 @@
+.panel.paneled_list.poster_list
+  - @sessions.each_with_index do |session, session_index|
+    - presentations = session.presentations
+    = link_to ksp(session) do
+      - color_tag = session_index.modulo(12)
+
+      %div{:id => "poster_range_#{session.id}", :style => "word-break:break-all;"}
+        %span{:class => ["color_f_#{color_tag}", "poster_range", "session_#{session.id}"]}
+          = Array.new(presentations.size).map{|i| "●"}.join('').html_safe
+      %span.time
+        = "#{session.starts_at.strftime('%H:%M')}-#{session.ends_at.strftime('%H:%M')}"
+        = session.room.name
+        = "#{presentations.first.number} - #{presentations.last.number}"
+      %br/
+      %span.title
+        = session.title
+
+= ks_ajax_placeholder :id => "poster_list_highlights", "data-ajax" => list_highlights_poster_session_path(params[:id])

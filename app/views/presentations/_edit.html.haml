@@ -1,0 +1,21 @@
+= form_for presentation, :remote => true, 
+           :html => {:data => {:"ks-insert-response" => "true"}} do |f|
+  = "#{presentation.position.to_i + 1} ⇅"
+  = f.text_field :number
+  = f.label :type
+  = f.select :type, Presentation.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true
+
+
+  = f.label :date
+  = f.datetime_select :starts_at
+  = presentation.respond_to?(:duration) && presentation.duration ? "#{(presentation.duration/60).to_i} min." : "-"
+  = f.check_box :cancel
+  = f.label :cancel
+  = f.submit
+  = link_to "[delete]", 
+            presentation_path(presentation), 
+            :remote => true, 
+            :method => :delete, 
+            :data => {:ks_insert_response => 'true'},
+            :confirm => "Deleting will remove from Session but the Submission will remain."
+%div= link_to presentation.title, ksp(:edit_submission_path, presentation.submission)

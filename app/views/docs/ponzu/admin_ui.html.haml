@@ -1,0 +1,84 @@
+= ks_element :id => "admin_ui",
+             :data => { :title => "Admin UI",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Admin UI
+
+      First we have to understand the tasks. We assume tasks for Castle104 and collaborators.
+
+      1. Change Submission information.
+      2. Change Authorship information. May require drag & drop.
+      2. Assign Presentations to Sessions.
+      2. Change Presentation information.
+      3. Reorder Presentations.
+      3. Change Session information.
+      4. Change User information on behalf of user (change password).
+      5. Change Nayose. Assign User objects to Author objects.
+      6. Auditing using the papertrail gem.
+
+      ## Change Submission and Authorship
+
+      This will be necessary for the following situations.
+
+      1. A name of an author was mistaken.
+      2. A new revision of the abstract is available.
+
+      We don't allow changing of Author or Authorship names for non-super Admin users. This is because the name change might affect Nayose in an adverse way. Specifically, we don't want
+      to allow non-super Admin users to be able to do anything Nayose related. If a name is
+      changed, then it might result in a Nayose for very different names.
+
+      For example, if we had Author "Charlie Brown" who was associated with the User "Charlie Brown", then this User would have access to all "like" information on presentations authored by "Charlie Brown". If however, an name on an Authorship was changed from "Charlie Brown" to "Lucy", then "Charlie Brown" would have access to "like" information on a Presentation that he normally would not be able to see. To get things to normal, in addition to changing the name on the Authorship to "Lucy", we would also have to point the Author associated with that Authorship to "Lucy". There may be many people with the name "Lucy", and hence this becomes a Nayose problem.
+
+      Instead, non-super Admin users will be able to remove Authorships and create new Authorships.
+      They will also be able to create new Authors who will not yet be associated to Users.
+      The associated Authors will be graylisted and candidates for the next round of Nayose.
+
+      Non-super Admin users can also change `is_presenting_author` and `affiliation` attributes on Authorships.
+
+      We will also assign owners (User) to Submission objects. Owners can edit Submission objects
+      in much the same way as Editors can.
+
+      1. DONE: Change basic information of Submissions. Submission number, titles, abstracts, disclose at dates.
+      2. DONE: Edit institutions
+      3. DONE: Authorship basic changes. Change name, add is-presenting-author flag, and affiliations.
+      4. TODO: Reassign an Author to this Authorship.
+
+      ## Assign Presentations to Sessions and change Presentation info.
+
+      Session organizers will be able to do this. Admin users will also do this on behalf of
+      the organizers.
+
+      1. TODO: Search a Submission.
+      2. DONE: Associate that Submission with a Session, thereby creating a Presentation join object.
+      3. DONE: Set the order and the start / end time of that Presentation.
+      4. DONE: Confirm the durations of each presentation
+      4. DONE: Remove Presentations as is necessary.
+      5. DONE: Change the Session title, time, description.
+
+      ## Change passwords
+
+      1. An Password changer user should be able to change passwords.
+
+      ## Perform Nayose
+
+      Nayose involves the following jobs.
+
+      1. Rake: Whitelisting/blacklisting of algorithm generated Authorship-Author connections.
+      2. TODO: Merging and splitting of Author objects.
+      3. DONE: Reassigning Authorships to Authors.
+      4. Rake: Confirming the computer generated preliminary linkage of User and Author objects.
+
+      For whitelisting/blacklisting and confirmations, we use confirmation optimized interfaces. Confirmation will be performed by people with "Nayose checker" roles. The actual merging/splitting and reassignment will be performed by Admins.
+
+      # Roles
+
+      We need the following roles.
+
+      1. Super user (Admin)
+      2. Editor: Can change Session, Submission and Presentations. Cannot change Authorships except for `presenting_author` and `affiliations`. Can remove and create Authorships. Cannot edit Author objects in any way.
+      3. Password changer: This role can change passwords. This is the only thing they can do. They can only change passwords for regular participants though, not for any elevated users.
+      4. Nayose checker: Whitelists and blacklists Nayose results. Can white/blacklist Author objects. Nayose checkers don't modify the actual Authorships. This is left to Super users.
+      5. Organizer: Can change Sessions and Presentations. Cannot change Submissions.
+      6. Participant: Regular participant. Can edit User. Cannot edit anything. If they are the owner of a Submission, then they can edit the contents.

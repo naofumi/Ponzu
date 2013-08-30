@@ -1,0 +1,129 @@
+<% self.extend PonzuHelper %>
+<%= scss_color_palette %>
+@import "../kamishibai/ks_settings";
+
+.message_warning {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  width: 100%;
+  margin: 0 auto;
+  border: solid 1px #BBB;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+/*    font-weight: bold;*/
+  strong {
+    font-size: 14px;
+    color: $mbsj_pink;      
+  }
+  p {
+    padding: 0;
+    margin: 5px 0;
+    font-size: 13px;
+  }
+}
+
+.send_message_button {
+  background-image: image-url('ponzu/envelope.svg');
+  background-position: left;
+  background-size: 35px 23px;
+  background-repeat: none;
+  display: block;
+  background-repeat: no-repeat;
+  min-height: 23px;
+  line-height: 23px;
+  padding-left: 42px;
+}
+
+$message_grad_top: #FFF;
+$message_grad_mid: #F9F4E6;
+$message_grad_bot: #EFD7A7;
+$message_sent_grad_top:#FFF;
+$message_sent_grad_mid:#F8E8DF;
+$message_sent_grad_bot:#E9B196;
+.messages_box {
+  /*margin-left: 250px;*/
+  position: relative;
+}
+.profile_link {
+  font-size: $smaller-font-size;
+}
+.message_thread {
+  .messages_list {
+    margin: 0 15px;
+  }
+  .message {
+    max-width: 250px;
+    float: left;
+    border: solid 1px $message_grad_bot;
+    border-radius: 10px;
+    padding: 5px;
+    position: relative;
+    margin-bottom: 20px;
+    background-image: $message_grad_mid;
+    background-image: -webkit-linear-gradient(top, $message_grad_top 0%, $message_grad_mid 25%, $message_grad_bot 100%);
+    background-image: -moz-linear-gradient(top, $message_grad_top 0%, $message_grad_mid 25%, $message_grad_bot 100%);
+    background-image: -o-linear-gradient(top, $message_grad_top 0%, $message_grad_mid 25%, $message_grad_bot 100%);
+    background-image: -ms-linear-gradient(top, $message_grad_top 0%, $message_grad_mid 25%, $message_grad_bot 100%);
+    background-image: linear-gradient(top, $message_grad_top 0%, $message_grad_mid 25%, $message_grad_bot 100%);
+
+    &.mine {
+      float: right;
+      text-align: right;
+
+      background-image: $message_sent_grad_mid;
+      background-image: -webkit-linear-gradient(top, $message_sent_grad_top 0%, $message_sent_grad_mid 25%, $message_sent_grad_bot 100%);
+      background-image: -moz-linear-gradient(top, $message_sent_grad_top 0%, $message_sent_grad_mid 25%, $message_sent_grad_bot 100%);
+      background-image: -o-linear-gradient(top, $message_sent_grad_top 0%, $message_sent_grad_mid 25%, $message_sent_grad_bot 100%);
+      background-image: -ms-linear-gradient(top, $message_sent_grad_top 0%, $message_sent_grad_mid 25%, $message_sent_grad_bot 100%);
+      background-image: linear-gradient(top, $message_sent_grad_top 0%, $message_sent_grad_mid 25%, $message_sent_grad_bot 100%);
+    }
+    /* http://ascii.jp/elem/000/000/596/596174/index-2.html */
+    &.sent:after {
+      content: "";
+      position:absolute;
+      bottom: -30px;
+      right: 5px;
+      width: 0;
+      height: 0;
+      border-width: 15px;
+      border-style: solid;
+      border-color: $message_sent_grad_bot transparent transparent transparent;
+    }
+    &.received:after {
+      content: "";
+      position:absolute;
+      bottom: -30px;
+      left: 5px;
+      width: 0;
+      height: 0;
+      border-width: 15px;
+      border-style: solid;
+      border-color: $message_grad_bot transparent transparent transparent;
+    }
+
+    .from_to {
+      font-size: smaller;
+    }
+    p {
+      margin: 0.2em 0;
+    }
+  }
+  .you {
+    color: $very_light_gray;
+    float:right;
+    font-weight:bold;
+  }
+  .him_her {
+    color: $very_light_gray;
+    float:left;
+    font-weight:bold;
+  }
+  textarea {
+    border-radius: 5px;
+    border: solid 1px $very_light_gray;
+    background-color: #FFF;
+    font-size: 14px;
+  }
+}

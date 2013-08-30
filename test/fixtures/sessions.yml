@@ -1,0 +1,67 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+# For presentation_test.rb
+# Deprecated
+author_affiliation_parsing_session:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: author_affiliation_parsing_session
+  en_title: author_affiliation_parsing_session_en
+  jp_title: author_affiliation_parsing_session_jp
+  conference: generic_conference
+
+generic_session:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: generic_session_number
+  en_title: generic_session_en_title
+  jp_title: generic_session_jp_title
+  room: generic_room
+  conference: generic_conference
+  type: Session::Workshop
+
+generic_poster_session:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: generic_session_number
+  en_title: generic_session_en_title
+  jp_title: generic_session_jp_title
+  room: generic_room
+  conference: generic_conference
+  type: Session::Poster
+
+session_on_2011_12_14:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: session_on_2011_12_14_number
+  en_title: session_on_2011_12_14_en_title
+  jp_title: session_on_2011_12_14_jp_title
+  conference: generic_conference
+
+session_for_ordering:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: session_for_ordering
+  en_title: session_for_ordering_en_title
+  jp_title: session_for_ordering_jp_title
+  conference: generic_conference
+
+session_on_different_conference:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: generic_session_number
+  en_title: generic_session_en_title
+  jp_title: generic_session_jp_title
+  room: generic_room
+  conference: another_conference
+  type: Session::Workshop
+
+poster_session_on_different_conference:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: generic_session_number
+  en_title: generic_session_en_title
+  jp_title: generic_session_jp_title
+  room: generic_room
+  conference: another_conference
+  type: Session::Poster

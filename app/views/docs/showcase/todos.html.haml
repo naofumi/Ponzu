@@ -1,0 +1,70 @@
+= ks_element :id => "todos",
+             :data => { :title => "ToDos",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      ## Development ToDos
+
+      The high-order bid is to be ready to accept JDS data on March 1st.
+      To do this, we should have system with MBSJ2012 working and ready
+      by late February. This should have the new icon based look.
+
+      * Fix CSS
+      * Refactor the models
+      * Create widget helpers to make it easier to create a standardized design
+      * Think about using `touch` events on iPad and iPhone
+      * Move away from Mailboxer as our messaging system
+      * Switch towards icon based, iPhone app like navigation.
+      * Get everything working on MBSJ2012 data for iPhone and Safari.
+      * ~~localStorage + webSQL hybrid approach~~
+      * ~~Preliminary study of templating systems~~
+      * ~~Move towards unified URLs~~
+      * ~~Implement batch uploads~~
+      * ~~Refactor the views with HAML (this should help clear things up)~~
+      * ~~Find way to separate static content from user content~~
+      * ~~Improve the Kamishibai compositor so its easier to separate static content~~
+
+      ## Development priorities
+
+      1. Clean up cache API
+        * We will use the current prefix strategy for the time being. This means that data will be stored separately per user and language. This is not ideal for multi-user; we should seperate user-specific data (likes, etc.) and common data (abstracts, etc.). We will deal with this in the future.
+        * We want a clean and simple API that we can easily transfer to IndexedDB.
+        * We want the same API implemented for localStorage. For small conferences, localStorage might be sufficient. However, a localStorage solution will probably not be good for batch downloading and the complication is probably not worth it.
+        * LRU (least-recently-updated) support is necessary for localStorage. However for webSQL, we have enough space to fit a lot of stuff so I expect it to be necessary. If we must implement it, we can use [QUOTA_ERR](http://www.w3.org/TR/webdatabase/#errors-and-exceptions).
+        * Sometimes, users might decline the request to use a large WebSQL database. In these cases, we should fallback to localStorage (no alert message for Safari/Chrome).
+      2. Databases that we will support
+        * We will support WebSQL primarily and additionally support IndexedDB. All mobile devices support either.
+        * If these are unavailable, we will support localStorage. This should be necessary only on old PC browsers however. It is safe to provide only limited support. No batch download.
+      3. Database UI considerations
+        * If we request a 50M WebSQL database, a dialog will pop-up before any page is shown. Furthermore, if we decline, the site doesn't work (we can change this with error handling). This is not good from a UI standpoint.
+        * The first request should not pop-up an alert. Even if it does, we should be able to ignore it. This is how localStorage works.
+        * For WebSQL devices, we can start with a 5MB database. Then the first access will not pop up a dialog. Dialogs will pop-up when we exceed 5MB (a request of 10MB will pop-up). The problem implementing an LRU scheme is that this dialog will pop-up before we can catch a quota exceeded error. Therefore, we can't use this for invisible LRU. Furthermore, the transaction will fail regardless of whether the user accepted the database upgrade or not. Therefore, we really need to set the size up to 50M at the beginning.
+        * Since we can't really use a WebSQL 5MB database effectively (because we can't implement LRU), we'll have to use localStorage at 5MB.
+        * The idea would be that we start with localStorage only, and saving the pages that the
+        user browsed. We use LRU-scheme.
+        * When the user decided that they want to download the database, then and only then will we create the WebSQL database with 50MB of storage. (We can't detect whether a WebSQL DB is available or not, so we'll have to set a flag in localStorage).
+        * If the WebSQL database is available. We will use that for all caching. Otherwise, we will fallback to localStorage. When a WebSQL database is created, we transfer all lscache entries to WebSQL.
+      4. Final scheme is as follows;
+        1. On initial load, we use localStorage page caching.
+        2. WebSQL page caching is turned on explicitly by the user when they request a download and they accept 50MB storage.
+        3. localStorage will only be used for history caching. We will never batch load into localStorage.
+        4. Once WebSQL caching is turned on, you can't turn it off (and their's no need to unless the database isn't big enough).
+        5. The end result is
+          1. New visitors will not be bugged by the request for storage expansion.
+          2. History caching will be used even if the user does not expand storage. This improves response time.
+          3. When the user decides to cache everything locally, they explicitly push "download program for local viewing" button. Since they know they need storage, the 50MB storage dialog will feel natural. If they decide they don't want to do that, they can revert to localStorage cache.
+
+      ## Sales & Marketing ToDos
+
+      * Create a website demonstrating our wares, especially offline usage.
+        This will become necessary when the MBSJ2012 site is taken down.
+      * ~~Send invoice for MBSJ2012~~
+      * ~~Send out quote for 発生生物学会~~
+      * ~~Poke Nikkei BP 橋本さん in January~~
+
+      ## StartUp ToDos
+
+      * Fix finances
+      * Send out rent request for KSP
+

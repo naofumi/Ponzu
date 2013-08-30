@@ -1,0 +1,290 @@
+/*
+ * This file contains the base kamishibai layout
+ *
+*/
+
+@import "ks_settings";
+
+html {
+  background-color: $background;
+}
+
+body {
+  font-family: Helvetica, Arial, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
+  font-size: $reading-font-size;
+  color: $default-text-color;
+}
+
+.sliding_container > [data-container] {
+  position: absolute;
+  // background: $two-column-content-background;
+  min-width: 100%;
+}
+
+#ponzu_frame {
+  padding-top: $header_height;
+}
+
+.panel, .paneled_list {
+  min-height: 20px;
+  background-color: rgba(255,255,255, 1);
+  margin: 10px;
+  border: solid 1px #AAA;
+  border-radius: 5px;
+  padding: 10px 30px;
+  .panel {
+    margin: 10px 0;
+  }
+}
+
+.panel_title {
+  font-size:$smaller-font-size;
+  font-weight:bold;
+  color: #444;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.bar_title {
+  font-size:$smaller-font-size;
+  font-weight:bold;
+  color: #444;
+  text-align: center;
+  background-color: #999;  
+  color: #FFF;
+}
+
+.highlight {
+  background-color: #FF0
+}
+
+pre {
+  overflow: auto;
+}
+
+#header {
+  position: fixed;
+  top: 0;
+  z-index:500;
+  background-image: #e3e3e0;
+  background-image: -webkit-linear-gradient($header_gradient);
+  background-image: -moz-linear-gradient($header_gradient);
+  background-image: -o-linear-gradient($header_gradient);
+  background-image: -ms-linear-gradient($header_gradient);
+  background-image: linear-gradient($header_gradient);
+  box-shadow: 0px 0px 3px 0px #BBB inset;
+  border-bottom: $header_bottom_border solid #888;
+  height: $header_height;
+  width: 100%;
+  .top_menu {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+  }
+  .top_menu > ul {
+    bottom: 3px;
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
+      color: $top_menu_color;   
+      font-weight: bold;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      &:first-child {
+        left: 10px;
+      }
+      &:last-child {
+        left: auto;
+        right: 10px;
+      }
+      a, a:visited {
+        color: inherit;
+        text-decoration: none;
+        margin-left: 30px;
+        &:first-child {
+          margin-left: 0;
+        }
+        display: inline-block;
+        height:$header_icon_height;
+        background-size: contain;
+        background-repeat: no-repeat;
+        &.grid_icon {
+          width: 40px;
+          background-image: image-url('ponzu/grid.svg');
+        }
+        &.home_icon {
+          width: 53px;
+          background-image: image-url('ponzu/home.svg');
+        }
+        &.search_icon {
+          width: 40px;
+          background-image: image-url('ponzu/magnifying_glass.svg');
+        }
+      }
+      a:active, a:hover {
+        &.grid_icon {
+          background-image: image-url('ponzu/grid_active.svg')
+        }
+        &.home_icon {
+          background-image: image-url('ponzu/home_active.svg')
+        }
+        &.search_icon {
+          background-image: image-url('ponzu/magnifying_glass_active.svg');
+        }
+      }
+      &.selected {
+        border-radius: 8px;
+        background-color: $top_menu_selected_bg;
+        box-shadow: 1px 1px 0 0 #888 inset;
+      }
+      // img {
+        // height:$header_icon_height;
+        // vertical-align: bottom;
+      // }
+    }
+  }
+}
+
+.test_results {
+  .success {
+    background-color: green;
+  }
+  .fail {
+    background-color: red;  
+  }
+}
+
+.pagination_buttons {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.pagination_buttons a {
+  display: inline-block;
+  background-color: #FFF;
+  border-radius: 5px;
+  padding: 5px;
+  &.forward {
+    padding-right: 20px;
+    background-image: url('<%= asset_path('angle.png') %>');
+    background-position: 97% center;
+    background-repeat: no-repeat;
+  }
+  &.back {
+    padding-left: 20px;
+    background-image: url('<%= asset_path('angle_reverse.png') %>');
+    background-position: 3% center;
+    background-repeat: no-repeat;
+  }
+}
+
+.fluid_multicolumn {
+  .header {
+    height: $header_height;
+  }
+  .body {
+    margin: 0;
+    margin-top: $header_height;
+    /* iPad width 768px */
+    min-width: 746px;
+    height: 100%;
+  }
+
+  // http://nicolasgallagher.com/multiple-backgrounds-and-borders-with-css2/
+  // Two columns, equal hight with pseudo-elements
+  // Set background of .two_column_content
+  .body::after {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: $left-column-width;
+    background: $two-column-content-background;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0, .3), rgba(0,0,0, 0));
+    background-size: 3px;
+    background-repeat: repeat-y;
+  }
+  // Set background of .left_column
+  .body::before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $left-column-background;
+  };
+
+  .left_column {
+    width: $left-column-width;
+    float: left;
+    min-height: 300px;
+  }
+
+  .two_column_content {
+    h3 {
+      margin-top: 0;
+      // padding: 0;
+    }
+    height: 100%;
+    margin: 0;
+    margin-left: $left-column-width;
+    min-height: 300px;
+    position: relative;
+    > [data-container] {
+      position: absolute;
+      // background: $two-column-content-background;
+      width: 100%;
+    }
+  }
+
+  .middle_column {
+    width: 228px;
+    float: left;
+    margin: 0px;
+    margin-left: 10px;
+    min-height: 300px;
+  }
+
+  .three_column_content {
+    h3 {
+      margin-top: 0;
+      // padding: 0;
+    }
+    margin: 0;
+    margin-left: 520px;
+    min-height: 300px;
+  }
+
+}
+
+.notice, .error {
+  position: fixed;
+  z-index: 5100;
+  top: 0px;
+  left: 50%;
+
+  display:none;
+  text-align:center;
+  padding: 10px;
+  margin: 0;
+  margin-left: -150px;
+  width: 300px;
+  min-height: 30px;
+  color: #333;
+  font-weight: bold;
+  box-shadow: 3px 3px 5px 1px rgba(0,0,0,0.4);
+  border-top:none;
+  background-color: rgba(255,255,102,0.9);
+}
+
+.error {
+  background-color: rgba(255, 102, 102,0.9);  
+}

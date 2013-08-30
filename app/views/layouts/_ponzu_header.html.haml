@@ -1,0 +1,23 @@
+/ The top navigation is for shortcuts. Don't rely on users finding this element.
+/ It's a way to get back, and mostly useful on full-screen type pages.
+#header
+  .top_menu
+    %ul
+      %li
+        = link_to "", ksp(:dashboard_index_path), :class => "home_icon"
+        = link_to "", "#", :onclick => "KSOverlay.toggle();return false;", :class => "grid_icon"
+      %li= link_to "", ksp(:search_index_path), :class => "search_icon"
+  #status
+  #logo
+  %div{style: "clear:both"}
+  :javascript
+    KSOnlineIndicator.showOnlineStatus();
+
+#overlay{:onclick => "Javascript:KSOverlay.hide();"}
+  .shade
+    .grid.buttons.autoclose_overlay
+      - buttons = current_conference.icons_as_sym('overlay_icons')
+      - buttons.push(:clear_cache) if can? :clear, Kamishibai::Cache
+      - buttons.each do |type|
+        %div
+          = grid_button type

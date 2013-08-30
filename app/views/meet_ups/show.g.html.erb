@@ -1,0 +1,57 @@
+<h2><%= @meet_up.title %></h2>
+<% if @meet_up.participate? current_user %>
+  あなたははこの夜ゼミに参加予定です。
+  <%= form_for @meet_up, :url => participate_meet_up_path(@meet_up) do |f| %>
+    <%= hidden_field_tag :_method, 'put' %>
+    <%= f.hidden_field :id %>
+    <%= f.submit "参加をキャンセルする" %>
+  <% end %>
+<% else %>
+  <%= form_for @meet_up, :url => participate_meet_up_path(@meet_up) do |f| %>
+    <%= hidden_field_tag :_method, 'put' %>
+    <%= f.hidden_field :id %>
+    <%= f.submit "ここをクリックすると参加できます" %>
+  <% end %>
+<% end %>
+  <div class="controls">
+    <%= link_to '[編集する]', edit_meet_up_path(@meet_up) if current_user == @meet_up.owner %> 
+  </div>
+<div>
+<span class="pink">■</span> 開始／集合時刻<br />
+<%= @meet_up.starts_at ? @meet_up.starts_at.strftime('%m月%d日 %p %l:%M') : '未定'%>
+</div>
+<div>
+<span class="pink">■</span> 店／集合場所<br />
+<%= @meet_up.venue %> &nbsp;&nbsp;<%= !@meet_up.venue_url.blank? ? link_to("[リンク]", @meet_up.venue_url) : 
+                         @meet_up.venue_url%>
+</div>
+<div>
+<span class="pink">■</span> 幹事<br />
+<%= link_to @meet_up.owner.name, ksp(user_path(@meet_up.owner))%>
+</div>
+<div>
+<span class="pink">■</span> 幹事連絡先<br />
+<%= @meet_up.owner_phone %>
+</div>
+
+<span class="pink">■</span> 説明<br />
+<%= @meet_up.description %><br />
+<span class="pink">■</span> 参加予定者<br />
+<%= @meet_up.participants.map{|p|
+      link_to p.name, p
+    }.join(', ').html_safe %><br />
+<span class="pink">■</span> コメント<br />
+<% @meet_up.meet_up_comments.each do |c| %>
+  <div class="comment">
+    <%= c.created_at.strftime('%m-%d %p%l:%M') %>&nbsp;&nbsp;
+    <%= link_to c.user.name, user_path(c.user), :style => "color:inherit" %><br />
+    <%= c.content %>
+  </div>
+<% end %>
+<h3>新しいコメントを追加</h3>
+<%= form_for(MeetUpComment.new(:meet_up_id => @meet_up.id)) do |f| %>
+  <%= f.hidden_field :meet_up_id %>
+  <%= f.text_area :content, :cols => nil, :rows => nil %>
+  <%= f.submit "コメントを投稿する"%>
+<% end %>
+</div>

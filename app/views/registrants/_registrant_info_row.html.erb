@@ -1,0 +1,8 @@
+<tr class="<%= registrant.user && registrant.user.registrant_whitelist_status %>" id="registration_list_registrant_<%= registrant.id %>">
+  <td><%= link_to registrant.registration_id, toggle_activation_whitelist_registrant_path(registrant), :remote => true, :method => :put, :style => "display:block;height: 50px;width: 100%;padding: 15px 0", :accesskey => "k" %></td>
+  <td><%= registrant.first_name %> <%= registrant.middle_name %> <%= registrant.last_name %><br /><%= registrant.phon_first_name %> <%= registrant.phon_middle_name %> <%= registrant.phon_last_name %></td>
+  <td><%= registrant.affiliation %><br />
+      <%= link_to 'Show Registrant', registrant %> | <%= link_to 'Show User', registrant.user if registrant.user %><br />
+      <%= registrant.registration_id %> | <%= registrant.password %>
+  </td>
+</tr>

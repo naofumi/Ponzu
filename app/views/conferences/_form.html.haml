@@ -1,0 +1,56 @@
+= form_for @conference, :remote => true, :data => {:ks_insert_response => true} do |f|
+  = render :partial => "layouts/error_messages", :locals => {:target => @conference}
+
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name
+  .field
+    = f.label :module_name
+    %br/
+    = f.text_field :module_name
+  .field
+    = f.label :tag
+    %br/
+    = f.text_field :tag
+  .field
+    = f.label :subdomain
+    %br/
+    = f.text_field :subdomain
+  - ['time_table', 'presentation/poster', 'meet_up'].each do |type|
+    .field
+      = label_tag :type, "#{type}"
+      %br/
+      - 5.times do |i|
+        = text_field_tag "conference[dates][#{type}][]", 
+                         @conference.dates && @conference.dates[type] && @conference.dates[type][i],
+                         :style => "width: 100px"
+  - ['top_icons', 'session_icons', 'my_info_icons', 'other_icons', 'report_icons', 'admin_icons', 'overlay_icons'].each do |type|
+    .field
+      = label_tag :type, "#{type}"
+      %br/
+      - 12.times do |i|
+        = text_field_tag "conference[icons][#{type}][]", 
+                         @conference.icons && @conference.icons[type] && @conference.icons[type][i],
+                         :style => "width: 20%"
+  .field
+    = f.label :conference_home_page_url
+    %br/
+    = f.text_field :conference_home_page_url
+  .field
+    = f.label :support_email
+    %br/
+    = f.text_field :support_email
+  .field
+    = f.label :send_all_emails_to
+    %br/
+    = f.text_field :send_all_emails_to
+    %br/
+    (space delimited list. If set, all emails will be sent to these addresses only.
+    Use until we are ready to send real users emails)
+  .field
+    = f.label :ks_cache_version
+    = f.text_field :ks_cache_version
+
+  .actions
+    = f.submit

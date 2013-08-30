@@ -1,0 +1,31 @@
+- compacted_folder_name = "network_quarter_size_2"
+- thumbnail_folder_name = "network_thumbnails_2"
+- if File.exists? File.expand_path("public/system/#{compacted_folder_name}/#{@presentation.number}.png", Rails.root)
+  %h3= t('presentations.network_diagram').upcase
+  %div
+    %div(style="float:left;")
+      = link_to "/system/#{compacted_folder_name}/#{@presentation.number}.png", 
+                :style => "border: #888 solid 1px;margin:0 15px 15px 0;display:block" do
+        = image_tag("/system/#{thumbnail_folder_name}/#{@presentation.number}.png")
+        %br/
+      = link_to image_tag("dbcls_logo.png"), "http://dbcls.rois.ac.jp", :target => "_blank"
+    - if I18n.locale == :ja
+      %p
+        左のネットワーク図は、すべての要旨に対して日本語テキストマイニングの手法を用い、生命科学分野専門用語のキーワード抽出を行ってそれらの関連性に基づいて近い要旨を線で結び可視化したものです。
+      %p
+        筆頭著者の名前が各要旨のラベルとなっております。
+      %p
+        詳しくは実際に解析してくれた<a target=_blank href="http://g86.dbcls.jp/">DBCLSの学生アルバイトさん</a>の作業ブログ（<a target=_blank href="http://d.hatena.ne.jp/tabris2012/">tabris2012の不定期日記</a>、<a target=_blank href="http://d.hatena.ne.jp/gackel/">鳴いて血を吐く時鳥</a>）を参照して下さい。
+      %p
+        サムネイル図をクリックすると拡大できます。
+    - else
+      %p
+        The network diagram shown left is a visualization of closely related presentation abstracts.
+        Japanese text-mining was applied to every presentation. Life-science related keywords were extracted and similar abstracts were connected. 
+      %p
+        Each abstract is labeled with the presentation number and the first author's name.
+      %p
+        For more information, please refer to the blogs of the <a target=_blank href="http://g86.dbcls.jp/">DBCLS</a> students who performed the analyses.（<a target=_blank href="http://d.hatena.ne.jp/tabris2012/">tabris2012の不定期日記</a>、<a target=_blank href="http://d.hatena.ne.jp/gackel/">鳴いて血を吐く時鳥</a>）
+      %p
+        Click on the thumbnail for a larger view.
+    %div(style="clear:both")

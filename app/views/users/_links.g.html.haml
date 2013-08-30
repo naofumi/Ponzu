@@ -1,0 +1,21 @@
+%h2 Private message
+= link_to t('users.send_message_to', :name => users.first.name), 
+            ksp(new_private_message_path(:to_id => users))
+%h2 links
+%div
+  - if !(tw_links = consolidated_links(users, :twitter_id, :twitter_url)).blank?
+    %div
+      Twitter: 
+      = tw_links
+  - if !(fb_links = consolidated_links(users, :facebook_url, :facebook_url)).blank?
+    %div
+      Facebook: 
+      = fb_links
+  - if !(ln_links = consolidated_links(users, :linkedin_id, :linkedin_url)).blank?
+    %div
+      LinkedIn: 
+      = ln_links
+  - if !(rrm_links = consolidated_links(users, :read_research_map_id, :read_research_map_id)).blank?
+    %div
+      Read & ResearchMap: 
+      = rrm_links

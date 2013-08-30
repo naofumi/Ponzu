@@ -1,0 +1,14 @@
+= ponzu_frame do
+  %p
+    %b Presentation:
+    = @comment.presentation_id
+  %p
+    %b Text:
+    = @comment.text
+  %p
+    %b User:
+    = @comment.user_id
+
+  = link_to 'Edit', ksp(edit_comment_path(@comment))
+  |
+  = link_to 'Back', ksp(comments_path)

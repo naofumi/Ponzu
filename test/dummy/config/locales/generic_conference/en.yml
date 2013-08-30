@@ -1,0 +1,23 @@
+en:
+  generic_conference:
+    test_translation: "Generic Conference Test Translation"
+  test_translation: "Test Translation"
+  test_translation_no_namespace_only: "Test Translation no Namespace only"
+  message_mailer:
+    footer: "Sent from the Ponzu Conference Information System for Demo."
+    private_message:
+      subject: "Demo: Message from %{name}"
+    presentation_modified:
+      subject: "Demo: Presentation %{number} modified"
+    comment_added:
+      subject: "Demo: New comment on presentation %{number}"
+  titles:
+    prefix: "Ponzu demo: "
+  users:
+    presentations: "Presentations at PonzuDemo2013"
+  user_settings:
+    default_password: "The default password will be sent via email from the secretariat."
+  presentations:
+    other_by_authors: "other presentations by the authors at PonzuDemo2013"
+  dashboard:
+    conference_title: "2030 Annual Meeting for the Ponzu Demo"

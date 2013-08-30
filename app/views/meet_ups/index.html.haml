@@ -1,0 +1,36 @@
+= ponzu_frame :id => ["meet_ups", to_date_string(@show_date)],
+              :title_args => {:date => to_date_string(@show_date)} do
+  .panel
+    .button-group
+      - current_conference.dates_for('meet_up').each do |day|
+        = link_to l(day, :format => :month_day), 
+                      ksp(meet_ups_path(:date => to_date_string(day))), 
+                      :class => ['button', ('primary' if @show_date == day)]
+  .panel
+    = image_tag("#{conference_tag}/help.png", :style => "margin: 0 10px 10px 0;float:left;height:30px")
+    %p
+      = t('meet_ups.about_yorusemi')
+      %div
+        = link_to t('meet_ups.more'), "#", 
+                  :onclick => "kss.toggle(document.getElementById('about_more'));return false;"
+    %ol#about_more{:style => "display:none"}
+      = t('meet_ups.about_more').html_safe
+    = link_to t('meet_ups.lets_make_a_new_yorusemi'), ksp(new_meet_up_path), :class => "big button icon add"
+  = ks_will_paginate
+  - if @meet_ups.all.empty?
+    = t('meet_ups.empty_message')
+  - else
+    .panel_title= t('meet_ups.panel_titles.list_of_yoruzemi')
+    .panel.paneled_list.meet_ups
+      - @meet_ups.each do |meet_up|
+        = link_to ksp(url_for(meet_up)), 
+                  :class => ['entry', (meet_up.participate?(current_user) ? "participate" : nil)].compact.join(' ') do
+          %div
+            .left
+              = l(meet_up.starts_at, :format => :month_day_time)
+            .right
+              = t('meet_ups.fields.organizer')
+              = meet_up.owner.name
+          %div= meet_up.title
+          %p
+            = meet_up.description

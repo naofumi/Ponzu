@@ -1,0 +1,156 @@
+<%= ks_page :id => "root_page",
+            :data => {:title => "root"},
+            :class => "test_results fail",
+            :style => "display:none" do %>
+	<h3>Default page Test Error</h3>
+	<p>If you see this page, there has been an error in default page detection at KSController#defaultPage</p>
+<% end %>
+
+<%= ks_page :id => "default",
+            :data => {:default => "",
+                      :title => "Test start"},
+            :style => "display:none" do %>
+<!-- <div id="default" class="page" data-default style="display:none"> -->
+  <div id="default_header" class="panel test_results">
+    <div class="success">
+    	<h3>Default page Test Success!</h3>
+      <h4>What this tested</h4>
+      <p>
+        Kamishibai can contain multiple pages within a single HTML document. If the hash contains a Id segment, then the page corresponding to that Id will be shown. If the Id segment is not provided, then Kamishibai will look for a 'data-default' attribute in any of the pages. The first page with that attribute will be shown. If none have it, then the first page will be shown. If there is no hash in the href (which should only happen on first load), then the contents of the `meta` tag with `name=default_kamishibai_hash` will be used.
+      </p>
+      <p>
+        The current test ensures that the page with 'data-default' will be shown.
+      </p>
+    </div>
+  </div>
+
+  <div id="sub_element_with_data_ajax_loaded_message" class="panel test_results">
+    <div class="fail">
+      <h3>Error!</h3>
+      <p>If you see this element, it is likely that the Ajax request for "/ks_tests_id_transition_sub_element_with_data_ajax" was not fired. This Ajax request should be requested automatically by the element #id_transition_sub_element_with_data_ajax because it has a data-ajax attribute.</p>  
+      <p><b>TODO: </b> We want automatic loading to work even for higher level elements.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Links to tests</h3>
+  	<ul>
+      <li>
+        <%= link_to "Go back to testing home (If things don't work, try going back here.)",
+                    ks_test_home_path %>
+      <li>Transitions within a multi-page document
+        <ul>
+          <li><%= link_to "Page transition with Id", 
+                  ksp([nil, "id_transition_target"]) %></li>
+      		<!-- <li><a href="#!id_transition_target">Page transition with Id</a></li> -->
+          <li>
+            <%= link_to "Transition of sub-element onto current page.", 
+                        ksp([nil, "id_transition_sub_element"]) %></li>
+          <li>
+            <%= link_to "Transition to sub-element on different page should load the whole of that page.", ksp([nil, "id_sub_element_on_different_page"]) %>
+            </li>
+        </ul>
+      </li>
+      <li>Transitions with Ajax loading
+        <ul>
+          <li>
+            <%= link_to "Page transition with Ajax loading of page.",
+                        ksp(:docs_path, :page => "ks_tests_ajax_target") %>
+          </li>
+          <li>
+            <%= link_to "Ajax loading of sub-element onto current page using the resource URL in the hash.", ksp(docs_path(:page => "ks_tests_ajax_sub_element")) %>
+          </li>
+          <li>
+            <a href="#!id_transition_sub_element_with_data_ajax">Ajax loading of sub-element onto current page using the 'data-ajax' attribute on a pre-existing element. (pre-existing element is empty so should autoload)</a>
+          </li>
+        </ul>
+      </li>
+      <li>Kamishibai markup error detection
+        <ul>
+          <li><a href="/ks_tests/ks_tests_malformed">Page transition to a malformed page (should get alerts about ids not being set).</a></li>
+          <li><a href="#!_/ks_tests/ks_tests_malformed_ajax">Reload to a malformed page (should get alerts complaining about too many visible pages).</a></li>
+        </ul>
+      </li>
+      <li>Cache management</li>
+      <li>
+        <%= link_to "Full-page Layout and animation tests", ksp(:docs_path, :page => "ks_tests_full_page_animations") %>
+        <ul>
+          <li>Slide</li>
+          <li>Slide with scrolling</li>
+          <li>Pop</li>
+          <li>Vertical Rotate</li>
+        </ul>
+      </li>
+      <li>iPadish layout example
+        <ul>
+          <li>Slide</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Sub element test area</h3>
+    <div id="sub_element_test_area">
+      <div id="sub_element_one" data-container="sub_element_test_area">
+        <h4>Before Test</h4>
+      </div>
+      <div id="id_transition_sub_element" data-container="sub_element_test_area" style="display:none">
+        <div class="test_results panel">
+          <h3>Sub element test succeeded!</h3>
+          <h4>What this tested</h4>
+          <p>Kamishibai can load sub-elements (fragments) of pages. All that you have to do is to target the id of the sub-element in the href hash. Kamishibai will work out what pages have to be removed to show the new toElement (the fromElements) and do the appropriate animations.</p>
+          <ul>
+            <li>Now do a reload to see if we end up on the same page</li>
+            <li><%= link_to "Go back to home for other tests", ks_test_home_path %></li>
+          </ul>
+        </div>
+      </div>
+      <div id="id_transition_sub_element_with_data_ajax" data-ajax="<%= docs_path(:page => "/ks_tests_id_transition_sub_element_with_data_ajax") %>" data-container="sub_element_test_area" style="display:none">
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Notes about testing</h3>
+    <p>This page is both a test page and a documentation page. Click the following links and read the instructions on each page to understand what Kamishibai is supposed to be doing and whether the results were what we expected. By looking at the HTML, CSS source, you can also understand how to write code that achieves the same results.</p>
+    <p>Kamishibai does not come with automated unit tests. Instead, we use this page to easily conduct manual tests. The test pages make it easy to test on a wide variety of platforms and browsers with zero set-up so anybody with a browser and an editor can run the tests.</p>
+    <p>Kamishibai tries to validate its own markup. Historically, browsers do not complain about invalid HTML and CSS and try to improvise. This tradition has been carried into application frameworks like jQuery Mobile. However, we think that this hurts productivity. Kamishibai will try to validate markup and complain about ambiguous stuff. Tests for this are provided in "Kamishibai markup error detection".</p>
+  </div>
+
+<!-- </div> -->
+<% end %>
+
+<%= ks_page :id => "id_transition_target",
+            :data => {:title => "id_transition_target"},
+            :style => "display:none" do %>
+  <div class="panel test_results">
+    <div class="success">
+      <h3>Great! "Page transition with Id" was successful!</h3>
+      <h4>What this tested</h4>
+      <p>In a multi-page DOM document, Kamishibai can transition to a different page by specifying the id of the target page in the href hash.</p>
+      <ul>
+        <li>Confirm that the href.hash == "#!id_transition_target"</li>
+        <li>Reload and confirm that we come back here.</li>
+        <li>Go back to <%= link_to "home", ks_test_home_path %> and continue with the other tests.</li>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<%= ks_page :id => "different_page",
+            :style => "display:none",
+            :data => {:title => "different_page"} do %>
+  <div class="panel test_results">
+    <h3>Target to a sub-element on a different page should cause loading of that whole page was successfull</h3>
+    <h4>What this tested</h4>
+    With Kamishibai, you can even set the href hash to the ID of a sub-element that is not currently displayed. Kamishibai will figure out what ancestor elements you have to show to display the targeted sub-element and will draw them out accordingly. It will calculate the minimun hierarchy level necessary, so that Kamishibai will not draw more than that is absolutely necessary.
+    <ul>
+      <li>Check the hash. It should be "#!id_sub_element_on_different_page" which is the id of the following panel. By telling Kamishibai to show that sub-element, Kamishibai understands that it has to show the whole page, and does the appropriate transition.</li>
+      <li>Reload to confirm that we come to the same page.</li>
+      <li>Continue testing at <%= link_to "home", ksp(:ks_test_home_path) %>.</li>
+    </ul>
+  </div>
+  <div class="panel" id="id_sub_element_on_different_page">
+    <h3>This is the target on the hash</h3>
+  </div>
+<% end %>

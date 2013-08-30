@@ -1,0 +1,31 @@
+<script>
+  lscache.flush();
+</script>
+
+<div class="page" style="display:none">
+  <h3>Page with no ID</h3>
+</div>
+
+<div id="root_page" class="page" data-default>
+  <h3>Non default pages should have display:none</h3>
+  <p></p>
+</div>
+
+<div id="default" class="page" data-default>
+  <div id="default_header" class="panel test_results">
+    <h3>Malformed page test</h3>
+    <h4>What this tested</h4>
+    <p>Kamishibai tries to identify problems with markup.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Notes about malformed base resource page validation</h3>
+    <p>Kamishibai requires correct tags to function. The consequences of incorrect tags is complex and difficult to predict and debug. We therefore think that it is essential to have a validator to prevent common issues.</p>
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>For the baseResource page, there must be a single page with data-default.</li>
+      <li>The page with data-default should be visible. All other pages should be explicitly set to style="display:none".</li>
+      <li>All pages must have a unique ID assigned.</li>
+    </ul>
+  </div>
+</div>

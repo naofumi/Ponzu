@@ -1,0 +1,21 @@
+<div class="page"  data-title="registrant check" id="registrant_check_<%= @registrant.id %>">
+  <div class="panel registrants_list">
+    <table>
+      <%= render :partial => "registrant_info_row", :locals => {:registrant => @registrant} %>
+      <tr style="background-color: #FFF">
+        <td></td>
+        <td colspan="2"><%= @registrant.user.unique_umin_name_and_affiliation_combos.map{|s| "<p>#{s}</p>"}.join("\n").html_safe if @registrant.user %></td>
+      </tr>
+    </table>
+  </div>
+
+  <%= link_to "PREVIOUS", ksp(Registrant.where("registration_id < ?", @registrant.registration_id).order("registration_id DESC").limit(1).first), :accesskey => "j" %>
+  <%= link_to "NEXT", ksp(Registrant.where("registration_id > ?", @registrant.registration_id).order(:registration_id).limit(1).first), :accesskey => "l" %>
+
+  <%= link_to 'Edit', edit_registrant_path(@registrant) %> |
+  <%= link_to 'New User From This Registrant', 
+              new_user_path(:jp_name => [@registrant.first_name, @registrant.middle_name, @registrant.last_name].join(' ').gsub(/[ 　]+/, ' '),
+                            :login => @registrant.registration_id
+              ) %> |
+  <%= link_to 'Back', registrants_path %>
+</div>

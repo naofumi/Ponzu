@@ -1,0 +1,26 @@
+= form_for(@meet_up) do |f|
+  = render :partial => "layouts/error_messages", :locals => {:target => @meet_up}
+  %h2= "Summary"
+  %h3= t('meet_ups.fields.title')
+  = f.text_field :title
+  %h3= t('meet_ups.fields.description')
+  = f.text_area :description
+  %h2= "Start/Assembly time"
+  = t('meet_ups.fields.event_day')
+  = render :partial => 'day_radio_buttons', 
+                 :locals => {:f => f, :dates => current_conference.dates_for('meet_up')}
+  = t('meet_ups.fields.event_starts_at')
+  %div{:class => "#{error_indicator(@meet_up, :starts_at)}"}
+    = f.select :starts_at_hour, (17..23).to_a.map{|h| [h,h]}
+    \: 
+    = f.select :starts_at_minute, ['00', '15', '30', '45'].map{|m| [m,m]}
+  %h2= "Bar/Assembly place"
+  = "Place: "
+  = f.text_field :venue
+  %h2= t('meet_ups.fields.link')
+  = t('meet_ups.fields.link_to_venue')
+  = f.text_field :venue_url
+  %h2= t('meet_ups.fields.organizer_contact')
+  = t('meet_ups.fields.organizer_contact')
+  = f.text_field :owner_phone
+  = f.submit submit_message

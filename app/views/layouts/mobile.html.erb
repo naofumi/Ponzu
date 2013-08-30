@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- user-scalable=no required for fixed positioning -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <%= stylesheet_link_tag    "m/application", :media => "all" %>
+  <script>
+    window.startTime = new Date();
+  </script>
+  <%= javascript_include_tag "m/application" %>
+  <script>
+    window.endTime = new Date();
+  </script>
+  <%= csrf_meta_tags %>
+  <title></title>
+</head>
+<body>
+  <div class="toolbar main_toolbar">
+    <h1 id="pageTitle"></h1>
+    <a id="backButton" class="button backButton" href="#"></a>
+    <a class="button" href="#searchForm">Search</a>
+  </div>
+
+  <div class="toolbar" id="toolbar_background">
+    <!-- Backdrop for the toolbar. For smoother transition. -->
+    &nbsp;
+  </div>
+
+  <div class="toolbar search_toolbar">
+   <h1 id="pageTitle">Howdy Do</h1>
+  　<a class="button leftButton" href="#searchForm">Search</a>
+         <!-- <a id="backButton" class="button" href="#"></a> -->
+  </div>
+
+  <%= yield %>
+
+  <%= render :partial => "m/dashboard/search", :locals => {:dialog => true} %>
+</body>
+</html>

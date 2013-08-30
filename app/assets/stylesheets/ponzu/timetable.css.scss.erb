@@ -1,0 +1,106 @@
+<% self.extend PonzuHelper %>
+<%= scss_color_palette %>
+@import "../kamishibai/ks_settings";
+
+.no_scroll {
+  overflow: hidden;
+}
+
+#timetables_container {
+  margin-top: 50px;
+}
+
+.timetable.panel {  
+  height: 1000px;
+  color: $text;
+  margin-top: 50px;
+  position: relative;
+  div#entries {
+    a.session {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-b;
+      -moz-box-sizing: border-box;
+      color: $link;
+      display: block;
+      position: absolute;
+      overflow: hidden;
+      box-shadow: 0px 0px 5px rgba(0,0,0, 0.3);
+      line-height: 12px;
+      // padding doesn't work well with
+      // overflow:hidden; and the right
+      // and bottom lose padding.
+      // We use border instead for the
+      // padding effect.
+      // padding: 0 3px;
+      border: solid 5px transparent;
+      border-radius: 10px;
+      .time {
+        font-size: $smallest-font-size;
+        white-space: nowrap;
+        color: $mbsj_pink;
+      }
+      .title {
+        font-size: $even-smaller-font-size;
+        color: $link;
+      }
+      &.selected {
+      }
+      text-decoration: none;
+    }
+  }
+  .header {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-b;
+    -moz-box-sizing: border-box;
+    position: absolute;
+    overflow:hidden;
+    border: solid 1px $very_light_gray;
+    border-radius: 5px;
+    text-align: center;
+    padding-top:5px;
+    color: $light_gray;
+  }
+  .row {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-b;
+    -moz-box-sizing: border-box;
+    border-bottom: dotted 1px $very_light_gray;
+/*    &.dark {*/
+/*      background: url('/assets/black_opacity_50.png');*/
+/*    }*/
+    .room {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-b;
+      -moz-box-sizing: border-box;
+      overflow:hidden;
+      width: 50px;
+      border-right: solid 1px $very_light_gray;
+      text-align: center;
+      font-size: $even-smaller-font-size;
+      padding-top: 30px;
+      color: $light_gray;
+    }
+  }
+  .now_cursor {
+    position: absolute;
+    background: rgba(255,255,0,0.5);
+    box-shadow: 1px 0px 2px #999;
+    width: 2px;
+    z-index: 300;
+  }
+}
+
+.presentation_highlight {
+  position:absolute;
+  background-color: rgba(255,128,0,0.8);
+  border-radius: 6px;
+  border: solid 2px rgba(255,255,255,0.8);
+  height: 10px;
+  z-index:10;
+  &.scheduled {
+    background-color: rgba(196,36,79,0.8);
+  }
+}
+
+
+

@@ -1,0 +1,8 @@
+<tr class="<%= row_color %>">
+  <td>
+    OK!: <%= check_box_tag 'registrant_ok[]', registrant.id, true %><br />
+    NG!: <%= check_box_tag 'registrant_ng[]', registrant.id, false %>
+  </td>
+  <td><%= registrant.first_name %> <%= registrant.middle_name %> <%= registrant.last_name %><br /><%= registrant.phon_first_name %> <%= registrant.phon_middle_name %> <%= registrant.phon_last_name %></td>
+  <td><%= registrant.affiliation %> <%= link_to registrant.registration_id, registrant, :target => "_blank" %></td>
+</tr>

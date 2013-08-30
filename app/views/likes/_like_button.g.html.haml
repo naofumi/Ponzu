@@ -1,0 +1,46 @@
+- like_count = presentation.likes.size
+%div{:id => "like_button_#{presentation.id}", :class => "like"}
+  %span.social_controls
+    - if like = like_for_current_user_and_presentation(presentation)
+      - if !like.kind_of?(Like::Schedule)
+        = render :partial => 'dashboard/schedule_controls.g', 
+                :locals => {:l => like}
+        = form_for like_for_current_user_and_presentation(presentation) do |f|
+          = hidden_field_tag :_method, 'delete'
+          = f.hidden_field :id
+          = f.submit t('likes.unlike')
+      - else
+        = render :partial => 'dashboard/schedule_controls.g', 
+                :locals => {:l => like}
+    - else
+      = form_for presentation.likes.build do |f|
+        = f.hidden_field :presentation_id
+        = f.submit t('likes.like')
+      .prompt_message
+        (
+        = t('likes.like_is_required_to_schedulize')
+        )
+  
+  %span.social_stats
+    - if like_count > 0
+      = image_tag('ponzu/like.png', 
+                  :title => "いいね！を押すと、応援メッセージになります。またあなたのスケジュールに登録されます。")
+    - if current_user && like_count > 0
+      - if current_user_likes_this(presentation)
+        You
+        - if like_count > 1
+          and
+          = link_to "#{pluralize (like_count - 1), "other"}", 
+                  likes_presentation_path(presentation.id, 
+                  :user => current_user.id)
+          
+        - else 
+          
+      - else
+        = link_to "#{pluralize like_count, "person"}", 
+                  likes_presentation_path(presentation.id, 
+                  :user => current_user.id)
+      liked this.
+  .likes
+    - if presentation.authors.include?(current_user)
+      = render :partial => 'presentations/likes', :locals => {:presentation => presentation}

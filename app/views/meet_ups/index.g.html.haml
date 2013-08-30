@@ -1,0 +1,22 @@
+%h1 Yoruzemi #{l(@show_date, :format => :month_day)}
+%p
+  = t('meet_ups.about_yorusemi')
+%h2 Create a new Yoruzemi
+= link_to t('meet_ups.lets_make_a_new_yorusemi'), ksp(new_meet_up_path)
+%h2 List of Yoruzemi
+= ks_will_paginate
+- if @meet_ups.all.empty?
+  = t('meet_ups.empty_message')
+- else
+  - @meet_ups.each do |meet_up|
+    %div
+      .left
+        = content_tag(:span, "★", :style => "color: #ffe109") if meet_up.participate?(current_user)
+        = l(meet_up.starts_at, :format => :month_day_time)
+      .right
+        = t('meet_ups.fields.organizer')
+        = meet_up.owner.name
+    %div= link_to meet_up.title, meet_up, :class => ['entry']
+    %p
+      = meet_up.description
+    = hr

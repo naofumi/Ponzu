@@ -1,0 +1,14 @@
+- is_author = c.user.author && @presentation.authors.include?(c.user.author)
+%div{:id => "comment_#{c.id}", 
+     :class => ["comment", "#{is_author ? 'author' : ''}"],
+     :"data-container" => "presentation_#{@presentation.id}_comments"}
+  .comment_header
+    .time_box
+      = l(c.created_at, :format => :month_day_time)
+    = link_to(c.user.name, ksp(user_path(c.user)))
+    = (is_author ? content_tag(:span, t('presentations.author')) : '')
+  %div
+    = auto_link c.text
+    .close_box
+      - if c.user == current_user
+        = link_to "[#{t('presentations.delete_comment')}]", c, :method => :delete, :remote => true, :confirm => "Are you sure you want to delete this comment?", :data => {'ks-insert-response' => ""}

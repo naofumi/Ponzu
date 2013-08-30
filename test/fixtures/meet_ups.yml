@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+generic_meet_up:
+  starts_at: 2012-05-21 14:07:28
+  venue: generic_venue
+  venue_url: http://generic.com
+  description: "Generic meet up"
+  meet_at: "Meet here generic"
+  owner: generic_user
+  title: "Title for generic meet up"
+  interest: "For people interested in generics"
+  venue_phone: "12-345-6789"
+  owner_phone: "02-345-6789"
+  conference: generic_conference
+
+meet_up_for_other_conference:
+  starts_at: 2012-05-21 14:07:28
+  venue: generic_venue
+  venue_url: http://generic.com
+  description: "Generic meet up"
+  meet_at: "Meet here generic"
+  owner: generic_user
+  title: "Title for generic meet up"
+  interest: "For people interested in generics"
+  venue_phone: "12-345-6789"
+  owner_phone: "02-345-6789"
+  conference: another_conference

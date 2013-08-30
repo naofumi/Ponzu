@@ -1,0 +1,8 @@
+<div class="search_box">
+  <%= form_tag search_index_path, :method => :get, :'data-ks_get_form' => "", :class => 'search_form' do %>
+    <%= button_tag t('cancel'), :class => "cancel", :type => :button, :name => 'cancel' %>
+    <div class="fields">
+      <%= search_field_tag :query, params[:query], :placeholder => t('search_field') %>
+    </div>
+  <% end %>
+</div>

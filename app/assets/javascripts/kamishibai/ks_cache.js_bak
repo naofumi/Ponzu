@@ -1,0 +1,385 @@
+// Manages the cache and the network, automatically switching to cache
+// if the network is unstable.
+//
+// All network requests should use functions in this object to ensure
+// that a cache fallback is available.
+//
+// Summary of how it works 2012-12-09
+//
+// * No forceReload: Whether we actually send an Ajax request, or we
+//   read from cache is totally at the descretion of KSCache and
+//   cannot be overridden. You can't force a reload. The best you
+//   can do is to invalidate the cache, setting the expiry date to now.
+//   Then #cachedAjax will request from the server.
+// * If the cache is valid, serve it immediately, without question.
+// * Deleting items and making space available is totally LRU based.
+// * Pages that are relatively static should be set with long expiry times.
+// * Pages that are dynamic should be set with short expiry times.
+// * Sometimes, expired pages will be kept while valid pages will be purged.
+//   This can happed if there is a page that has not been visited in a long
+//   while, but had a long expiry time. I think that it is OK to purge
+//   this and leave the invalid but frequently used value.
+// * You can use different timeout times based on whether a cached value (expired) is
+//   available or not. Usually, you would like to provide the user with
+//   stale data if you can, and you don't want the user to have to wait the
+//   whole timeout time to do this. On the other hand, if you don't have anything
+//   in the cache, and you have no other choice but to wait the whole timeout,
+//   then you should use a long timeout time.
+window.KSCache = function(){
+	var networkTestInterval = 120; // seconds
+	var defaultCacheExpiry = 0; // seconds. 0 means that we won't cache
+  var defaultTimeoutForBatchAjax = 30000; // ms
+
+  // Returns the object that we should
+  // use for caching.
+  // Either lscache or KSSqlCache, based on whether a WebSQL cache is ready
+  // or not.
+  function pageCache(){
+    if (KSSqlCache.supported()) {
+      KSSqlCache.setBucket(KSApp.user_id() + "-" + KSCookie.get('device') + "-"  + KSCookie.get('locale') + "-");
+      return KSSqlCache
+    } else {
+      lscache.setBucket(KSApp.user_id() + "-" + KSCookie.get('device') + "-"  + KSCookie.get('locale') + "-");
+      return lscache
+    }
+  }
+
+	// Wrapper for Ajax which retrieves from localStorage instead
+	// of sending an Ajax call, if the method is get and the resource is cached.
+	//
+  // Deprecated;
+	// If options.forceReload is set or
+	// the cache has expired (or not set), we attempt an Ajax.
+	//
+  // We used to force an Ajax request if forceReload was set.
+  // We don't do this now. We defer reload decisions to the cache.
+  // Hence if a non-expired cache value exists, we use that.
+  // If we want to force reload, then we should expire the cache to 
+  // do that.
+  //
+  // TODO: completely remove forceReload stuff from the code.
+  //
+	// Regardless of settings, we will use the cache if the network
+	// is unstable. 
+	function cachedAjax(options){
+	  var url = options.url = normalizedUrl(options.url);
+	  delete options.forceReload; // We keep this for legacy reasons.
+
+    pageCache().get(url, function(value, hasExpired){
+      var cachedValue = value;
+      var cacheHasExpired = hasExpired;
+      var networkIsStable = !isNetworkUnstable();
+      // If options.timeoutIntervalIfExpiredCacheFound is set and we have
+      // an expired cache entry, we change the timeout to that
+      // value.
+      // This enables us to serve an expired cache without waiting
+      // for the whole timeout interval.
+      if (options.timeoutIntervalIfExpiredCacheFound) {
+        if (cachedValue && cacheHasExpired) {
+          options.timeout = options.timeoutIntervalIfExpiredCacheFound;
+        }
+        delete options.timeoutIfCached;
+      }
+
+      // We wrap the original success callback so that
+      // we send 'cachedAjaxSuccess' event on success.
+      var originalSuccessCallback = options.success;
+      var newSuccessCallback;
+      newSuccessCallback = function(data, textStatus, xhr){
+        if (typeof(originalSuccessCallback) === 'function') 
+          originalSuccessCallback(data, textStatus, xhr);
+        kss.sendEvent('cachedAjaxSuccess', options.callbackContext, 
+                    {data: data, ajaxOptions: options});
+
+      }
+      options.success = newSuccessCallback;
+
+      if (!options.method || options.method.toUpperCase() != "GET") {
+        // Attempt Ajax if non-GET
+        KSAjax.ajax(options);
+      } else if ((cacheHasExpired || cachedValue === null) && networkIsStable) {
+        // Attempt Ajax if network is stable and the cache has expired.
+        if (cachedValue === null) {
+          console.log('cache miss for ' + url)
+        } else if (cacheHasExpired) {
+          console.log('cache expired for ' + url)
+        }
+        attemptAjaxAndCacheResults(options, cachedValue);
+      } else {
+        // If the network was unstable on a previous attempt, then we
+        // don't attempt to refresh, even if the cache is old.
+        console.log('cache hit for ' + url);
+        KSApp.debug('cache hit for ' + url);
+        // Run the success callback with cached data
+        if (options.success)
+          options.success(cachedValue, 'success');
+      }
+    })
+
+	  // var cachedValue = lscache.getDeferringExpiry(url),
+	  //     cacheHasExpired = lscache.hasCacheExpired(url);
+	  // var networkIsStable = !isNetworkUnstable();
+
+   //  // If options.timeoutIntervalIfExpiredCacheFound is set and we have
+   //  // an expired cache entry, we change the timeout to that
+   //  // value.
+   //  // This enables us to serve an expired cache without waiting
+   //  // for the whole timeout interval.
+   //  if (options.timeoutIntervalIfExpiredCacheFound) {
+   //    if (cachedValue && cacheHasExpired) {
+   //      options.timeout = options.timeoutIntervalIfExpiredCacheFound;
+   //    }
+   //    delete options.timeoutIfCached;
+   //  }
+
+   //  if (!options.method || options.method.toUpperCase() != "GET") {
+   //    KSAjax.ajax(options);
+	  // } else if ((cacheHasExpired || cachedValue === null) && networkIsStable) {
+	  //   if (cachedValue === null) {
+   //      console.log('cache miss for ' + url)
+   //    } else if (cacheHasExpired) {
+   //      console.log('cache expired for ' + url)
+   //    }
+	  //   attemptAjaxAndCacheResults(options, cachedValue);
+	  // } else {
+   //    console.log('cache hit for ' + url);
+   //    KSApp.debug('cache hit for ' + url);
+	  // 	// Run the success callback with cached data
+   //    if (options.success)
+  	//     options.success(cachedValue, 'success');
+	  // }
+	}
+
+  // function batchLoad(resourceUrl){
+  //   var keysInCache = lscache.allKeys();
+  //   var queries = [];
+  //   var queryString = "";
+  //   for (var i = 0; i < keysInCache.length; i++) {
+  //     queries.push("exclude_paths[]=" + encodeURIComponent(keysInCache[i]));
+  //   };
+  //   queryString = queries.join('&');
+  //   KSAjax.ajax({
+  //     url: resourceUrl,
+  //     timeout: defaultTimeoutForBatchAjax,
+  //     method: 'post',
+  //     data: queryString,
+  //     success: function(data, textStatus, xhr){
+  //       parsedData = JSON.parse(data)
+  //       for (var url in parsedData) {
+  //         var theData = parsedData[url];
+  //         cacheExpiry = getExpiryDate(theData) || defaultCacheExpiry;
+  //         console.log('store ' + url + ' from batchLoad from ' + resourceUrl)
+  //         lscache.set(url, theData, cacheExpiry);
+  //       }
+  //     }
+  //   })
+  // }
+
+  // Simple batch load without exclusion
+  // Refactor based on http://stackoverflow.com/questions/1609637/is-it-possible-to-insert-multiple-rows-at-a-time-in-an-sqlite-database
+  // and http://stackoverflow.com/questions/1711631/how-do-i-improve-the-performance-of-sqlite
+  // Without optimizations, it's a bit too slow.
+  // iPad2 was something like 20 rows per second.
+  function simpleBatchLoad(resourceUrl){
+    var queryString = "";
+    var progress_bar = document.getElementById('progress_bar');
+    progress_bar.textContent = "Downloading...";
+    KSAjax.ajax({
+      url: resourceUrl,
+      timeout: defaultTimeoutForBatchAjax,
+      method: 'post',
+      data: queryString,
+      success: function(data, textStatus, xhr){
+        progress_bar.textContent = "Download Complete!";
+        var count = 1;
+        var totalCount = 0;
+        parsedData = JSON.parse(data)
+        for (var url in parsedData) {
+          var theData = parsedData[url];
+          cacheExpiry = getExpiryDate(theData) || defaultCacheExpiry;
+          console.log('store ' + url + ' from batchLoad from ' + resourceUrl)
+          pageCache().set(url, theData, cacheExpiry, function(){
+            if (count < totalCount) {
+              progress_bar.textContent = "updating DB: " + count;
+            } else {
+              progress_bar.textContent = "update finished: " + count;
+              // Update the database version number here.
+            }
+            count++;
+          });
+          totalCount++;
+        }
+      }
+    })    
+  }
+
+  // Due to differences in url encoding methods, " "(space) can
+  // be either '+' or '%20'.
+  // We normalize this so that the cache entries will have the
+  // same keys. This encoding is how Rails does it, so it should
+  // match any links, etc.
+  function normalizedUrl(url) {
+    if (url) {
+      return url.replace(/%20/g, '+')      
+    } else {
+      return url
+    }
+  }
+
+	function getExpiryDate(data) {
+		var match = data.match(/data-expiry\s*=\s*['"]?(\d*)['"]?/);
+		if (match && match[1]) {
+			return parseInt(match[1], 10);
+		} else {
+			return null;
+		}
+	}
+
+	// Attempt an Ajax.
+	// Called from #cachedAjax.
+	// If the connection timesout, then
+	// use the fallbackValue for the Ajax body
+	// and execute the options.success callback.
+	function attemptAjaxAndCacheResults(options, fallbackValue) {
+	  var url = options.url,
+	      cacheExpiry;
+	  delete options.expires;
+	  var originalSuccess = options.success,
+	      originalComplete = options.complete;
+
+	  console.log("attemptAjaxAndCacheResults for " + url);
+
+	  options.success = function(data, textStatus, xhr) {
+      console.log('ajax success for ' + url);
+	  	cacheExpiry = options.expires || getExpiryDate(data) || defaultCacheExpiry;
+      if (cacheExpiry) {
+        pageCache().set(url, data, cacheExpiry);
+        // lscache.set(url, data, cacheExpiry); // 
+        console.log('store key: ' + url + ' into cache with expiry: ' + cacheExpiry + ' seconds');        
+      } else {
+        console.log('will not store: ' + url + ' into cache');
+      }
+      // This stuff should be set in KSAjax
+	    // setNetworkSuccess();
+	    // options.networkSuccess(data, textStatus, xhr);
+	    return originalSuccess && originalSuccess(data, textStatus, xhr);
+	  }
+	  options.complete = function(xhr, textStatus) {
+	    if(textStatus == "timeout") {
+	      if (fallbackValue) {
+	        KSApp.notify('Network timed out. Display cached value.');
+	        console.log('Network timed out. Display cached value.');
+	        originalSuccess(fallbackValue, 'success');
+	      } else {
+	        KSApp.notify('Network timed out. Cannot display URL: ' + url);
+	        console.log('Network timed out. Cannot display URL: ' + url);
+          var error_page = "<div id='error_msg' data-ks_loaded class='page'>" + 
+                          textStatus + "</div>";
+          originalSuccess(error_page, textStatus);
+	      }
+	      setNetworkFailed();
+	    }
+	    return originalComplete && originalComplete(xhr, textStatus);
+	  }
+    options.error = function(xhr, textStatus) {
+      if (fallbackValue) {
+        KSApp.errors(textStatus + ' error. Display previous page.');
+        console.log(textStatus + ' error. Display previous page.');
+        originalSuccess(fallbackValue, 'success');
+      } else {
+        KSApp.errors(textStatus + ' error. Cannot display URL: ' + url);
+        console.log(textStatus + ' error. Cannot display URL: ' + url);
+        originalSuccess(error_page(xhr, url), textStatus);
+      }
+      // Although it's not necessarily the network's fault, we assume it is.
+      setNetworkFailed();
+      return false;
+    }
+	  console.log('send ajax for ' + url);
+	  KSAjax.ajax(options);
+	}
+
+  function error_page(xhr, url) {
+    var bodyInner = KSDom.extractBodyTag(xhr.responseText);
+    return "<div id='error_msg' data-ks_loaded class='page' data-title='" + xhr.statusText + "'>" + 
+            bodyInner + "</div>";
+  }
+
+	// Set the networkUnstable flag to true
+	function setNetworkFailed() {
+	  console.log('send KSNetworkStatus.timedOut = true');
+	  // lscache.set('networkUnstable', true, networkTestInterval);
+    // lscache.set('networkUnstable', true, networkTestInterval);
+    KSNetworkStatus.timedOut();
+	}
+
+	// Set the networkUnstable flag to false
+	function setNetworkSuccess() {
+	  console.log('send KSNetworkStatus.timedOut = false');
+	  // lscache.set('networkUnstable', false, networkTestInterval);
+    // lscache.set('networkUnstable', false, networkTestInterval);
+    KSNetworkStatus.succeeded();
+	}
+
+	// Returns true if network was unstable on last attempt.
+	// Resets after networkTestInterval (minutes).
+	// We use lscache expiry to reset the flag after networkTestInterval.
+	function isNetworkUnstable() {
+	  // lscache.get('networkUnstable') ? true : false;
+    KSNetworkStatus.unstable();
+	}
+
+
+  // Invalidates the keys in localStorage
+  // The keys are a space delimited list of lscache keys (the resouceUrls).
+  // The keys will match anywhere in the lscache key. The idea
+  // is to be permissive in cache invalidation (we allow situations
+  // where we invalidate more than necessary) because cache invalidation
+  // is hard.
+  //
+  // If we want to specifically anchor the keys to the end of a path, we can use 
+  // "(?:\\&|\\?|$)" at the end of the string.
+  function invalidateCache(keysString) {
+  	if (!keysString) return;  	
+
+    var keys = keysString.split(' ');
+    for (var i = 0; i < keys.length; i++) {
+    	keys[i] = kss.escapeForRegExp(KSUrl.toNormalizedPath(keys[i]));
+    };
+
+    var regexpString = "(?:" + keys.join('|') + ")(?:\\&|\\?|$)";
+    var invalidationRegex = new RegExp(regexpString);
+    console.log('will invalidate with Regexp ' + invalidationRegex.toString());
+
+    lscache.invalidateKeysByRegex(invalidationRegex);
+    KSSqlCache.invalidateKeysByRegex(invalidationRegex);
+  }
+
+  // Set up the event listeners
+  kamishibai.beforeInitialize(function(){
+    // They also handle cache invalidation for links or forms with
+    // 'data-invalidates-keys'
+    kss.addEventListener(document, 'click', function(event){
+      var target = event.target && kss.closestByTagName(event.target, 'a', true);
+      if (target && target.hasAttribute('data-invalidates-keys')) {
+        var invalidateKeysString = target.getAttribute('data-invalidates-keys');
+        KSCache.invalidateCache(invalidateKeysString);
+      }
+    })
+
+    kss.addEventListener(document, 'submit', function(event){
+      var target = event.target && kss.closestByTagName(event.target, 'form', true);
+      if (target && target.hasAttribute('data-invalidates-keys')) {
+        var invalidateKeysString = target.getAttribute('data-invalidates-keys');
+        KSCache.invalidateCache(invalidateKeysString);
+      }
+    })
+  });
+
+	return {
+		invalidateCache: invalidateCache,
+		cachedAjax: cachedAjax,
+    batchLoad: batchLoad,
+    simpleBatchLoad: simpleBatchLoad
+	}
+}();

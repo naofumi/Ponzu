@@ -1,0 +1,71 @@
+<%= ks_element :id => "supported_browsers",
+               :data => {
+                 :title => "MBSJ: Supported Browsers",
+                 :container => "ipadish_content",
+                 :position => 90
+               } do %>
+  <div class="panel">
+    <!--[if IE 9]>
+      <div style="color:#d80048">
+        You are using Microsoft Internet Explorer 9. Despite our best efforts, the user experience on this browser is not as good as the "Recommended!" ones. If possible, we strongly suggest that you use a "Recommended!" browser.
+      </div>
+    <![endif]-->
+    <!--[if IE 8]>
+      <div style="color:#d80048">
+        You are using Microsoft Internet Explorer . Despite our best efforts, the user experience on this browser is severely suboptimal in terms of speed and aesthetics. If possible, we strongly suggest that you use a "Recommended!" browser.
+      </div>
+    <![endif]-->
+    <h2>Supported Browsers</h2>
+    <p>
+      This online program system uses cutting-edge web technologies which are often unavailable on older browsers. As a result, we have decided not to support any that are unsupported by their own creators. To have the best possible user experience, please use one of our "Recommended!" browsers.
+    </p>
+    <table class="supported_browsers">
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">Recommended!</span> Apple Safari, Google Chrome, Mozilla Firefox, Microsoft Internet Explorer 10</h3>
+          <ol>
+            <li>Superior aesthetics</li>
+            <li>Animations</li>
+            <li>Partial offline viewing</li>
+            <li>Even Windows XP users can run the latest versions of Google Chrome and Mozilla Firefox</li>
+            <li>Mac users: Safari is pre-installed on Macs, <%= link_to "Chrome for Mac" %>, <%= link_to "Firefox for Mac" %></li>
+            <li>Windows users: IE 10 is pre-installed on Windows 8, <%= link_to "IE10 for Windows 10 (preview release)", "http://windows.microsoft.com/en-US/internet-explorer/downloads/ie-10/worldwide-languages"%>, <%= link_to "Chrome for Windows" %>, <%= link_to "Firefox for Windows" %></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">Supported</span> Microsoft Internet Explorer 9</h3>
+          <ol>
+            <li>Average aesthetics</li>
+            <li>No animations</li>
+            <li>Partial offline viewing, but inferior to Recommended browsers</li>
+            <li>Runs on Windows Vista and Windows 7: <%= link_to "Internet Explorer 9"%></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">Border-line supported</span> Microsoft Internet Explorer 8</h3>
+          <ol>
+            <li>Inferior aesthetics</li>
+            <li>No animations</li>
+            <li>Partial offline viewing, but inferior to Recommended browsers</li>
+            <li>Slow</li>
+            <li>Runs on Windows 7 and Windows XP: <%= link_to "Internet Explorer 8"%></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">Simplified support</span> Microsoft Internet Explorer 6, 7, Firefox 3.6</h3>
+          <ol>
+            <li>These browsers will be automaticall redirected to our simplified web site. This is the same site that is intended for feature-phones (iMode etc.) .</li>
+          </ol>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+  <%= render :partial => 'layouts/biokaimono' %>
+<% end %>

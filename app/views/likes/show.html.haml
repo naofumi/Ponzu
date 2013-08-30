@@ -1,0 +1,10 @@
+= ponzu_frame do
+  %p 
+    %b Presentation:
+    = @like.presentation_id
+  %p
+    %b User:
+    = @like.user_id 
+  = link_to 'Edit', ksp(edit_like_path(@like))
+  |
+  = link_to 'Back', ksp(likes_path)

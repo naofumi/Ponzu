@@ -1,0 +1,34 @@
+= ks_element :id => "jquery",
+             :data => { :title => "Approach to jQuery",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Thoughts on jQuery
+
+      My thinking is that we should steer away from jQuery as much as possible.
+
+      There are multiple reasons for this.
+
+      1.  Modern browsers have much better JavaScript support and many utility functions
+          are provided natively. For example, we don't need jQuery `map` functions anymore
+          since they are provided natively.
+      2.  jQuery is big. Although this is rarely an issue with desktop browsers, rendering and
+          compiling the jQuery library alone can take something like 100ms. This is not acceptable.
+      3.  A lot of jQuery is actually support for legacy browsers. We don't need that baggage.
+      4.  The jQuery library is bloated with lots of legacy functions. I'm always confused the
+          multiple ways of attaching an event to an object, for example.
+      5.  CoffeeScript solves a lot of the verbosity issues with plain JavaScript. There is no
+          need to use jQuery for syntax brevity anymore.
+
+      On the other hand, jQuery is required for a lot of the nice libraries that we want to use.
+      This is very important when we want to do rapid prototyping. It is less of an issue for
+      the conference browsing system because we don't need complex UI widgets and we can focus
+      more time in developing the UI.
+
+      # In conclusion
+
+      1.  We will use jQuery only for the Ponzu Authoring UI. We won't use it for the conference
+          browsing UI. This also means that we won't use jQuery on the smartphone interface.
+      2.  For the Ponzu Authoring UI, we will focus on rapid development tools. We will use 
+          libraries like jQuery UI and/or Twitter Bootstrap.

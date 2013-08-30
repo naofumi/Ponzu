@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html <%= @manifest %>>
+<head>
+  <title>Documentations</title>
+  <%= stylesheet_link_tag    "ks_tests/application", :media => "all" %>
+  <%= javascript_include_tag "ks_tests/application" %>
+  <%#= csrf_meta_tags %>
+  <%= default_kamishibai_hash_tag ksp(:docs_path, :page => "showcase/introduction") %>
+  <!-- The following viewport meta is for the iPad. The 'width=device-width'
+       probably doesn't mean much. The initial-scale means that initial rendering
+       will be scaled 1:1 in pixels. Since the iPad has a 768px x 1024px screen,
+       in portrait mode, the screen will be rendered as if the browser viewport
+       width was 768px in portrait and 1024px in landscape.
+       In general, 1:1 in pixels seems to be the sharpest and similar in readability
+       to a PC screen. Some people might want to zoom in so we allow a maximum-scale
+       of 1.2. However, we don't want to allow zooming to high magnifications like 2.0
+       because then it screws when we show dialog boxes.
+       
+       Since the iPhone has a screen size of 320px x 480px, this scale will not be 
+       very good because users won't be able to see dialog boxes in a single screen. 
+       We could potentially allow smaller scales, but then readability won't be 
+       good. It makes much more sense to invest in a jQuery mobile site.
+       
+       As for 7 inch Android tablets, we basically don't care.
+   -->
+  <meta name="viewport" content="width=device-width, minimum-scale=0.5, maximum-scale=1.2" />
+</head>
+<body>
+  <p class="notice" style="position:fixed;background-color: yellow;"><%= flash[:notice] %></p>
+  <p class="error" style="position:fixed;background-color: yellow;"><%= flash[:error] %></p>
+  <%= yield %>
+</body>
+</html>

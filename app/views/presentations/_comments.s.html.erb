@@ -1,0 +1,25 @@
+<div id="comments">
+  <% if current_user %>
+    <h3>COMMENTS</h3>
+    <% @presentation.comments.each do |c| %>
+      <% is_author = @presentation.authors.include?(c.user) %>
+      <div class="comment <%= is_author ? 'author' : '' %>">
+        <strong><%= link_to c.user.name, ksp(user_path(c.user)) %>さん<%= is_author ? ' (著者)' : '' %> 
+        <%= c.created_at.strftime('%Y-%m-%d %H:%M')%></strong><br />
+        <%= auto_link(c.text) %>
+      </div>
+    <% end %>
+    <%= form_for Comment.new(:user_id => current_user.id, :presentation_id => @presentation.id), :remote => true,
+                  :html => {
+                    :'data-ks-insert-response' => '',
+                    'data-invalidates-keys' => invalidated_paths(@presentation)
+                  } do |f| %>
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :presentation_id %>
+      <%= f.text_area :text,
+                      :placeholder => "コメントをここに書いてください。", 
+                      :cols => nil, :rows => nil, :style => "width: 100%;" %>
+      <%= f.submit "コメントを送信",  :style => "width: 100%", :class => "grayButton" %>
+    <% end %>
+  <% end %>
+</div>

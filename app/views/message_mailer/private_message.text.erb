@@ -1,0 +1,9 @@
+<%= t('message_mailer.private_message.header', :namespace => @conference.tag) %>
+
+<%= sanitize @body %>
+
+<%= t('message_mailer.private_message.view_web', 
+    :link => ksp_and_galapagos_email_links(conversation_private_messages_path(:with => @obj)),
+    :namespace => @conference.tag) %>
+    
+<%= mail_footer %>

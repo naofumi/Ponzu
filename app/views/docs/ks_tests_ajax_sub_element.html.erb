@@ -1,0 +1,17 @@
+<%= ks_element :id => "ajax_sub_element",
+              :data => {
+              	:title => "ajax_sub_element",
+              	:container => "sub_element_test_area"
+              } do %>
+	<div class="panel test_results">
+		<h3>Ajax loading of sub-element success!</h3>
+		<h4>What this tested</h4>
+		<p>Kamishibai can load an Ajax page in two ways. One way is to specify the Ajax URL in the href hash. The other is to set a 'data-ajax' attribute on an element with the value of the Ajax URL, and to point to this element in the href hash. In the latter case, the Ajax request will be send automatically if Kamishibai considers it necessary.</p>
+		<p>The current test is for the first case.</p>
+		<ul>
+			<li>Reload and confirm that we come back to the same page.</li>
+			<li>Confirm that the current hash is "#!_/ks_tests/ks_tests_ajax_sub_element".</li>
+			<li><a href="/ks_tests/ks_tests">Go back to home</a> and continue testing.</li>
+		</ul>
+	</div>
+<% end %>

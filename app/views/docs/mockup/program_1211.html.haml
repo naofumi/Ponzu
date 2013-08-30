@@ -1,0 +1,15 @@
+= ks_element :id => "program_1211", 
+             :data => { :title => "1211",
+                        :container => "mockup_two_column_content",
+                        :"container-ajax" => docs_path(:page => "mockup/layout") } do
+  .panel
+    :markdown
+      # 12月11日
+    .program_type_icon{:style => "display:inline-block; height: 200px;width: 150px;border:solid 1px green"}
+      Timetable
+    .program_type_icon{:style => "display:inline-block; height: 200px;width: 150px;border:solid 1px green"}
+      Poster Hall
+    = link_to ksp(:docs_path, "mockup/poster_list_1211"), :style => "display:inline-block; height: 200px;width: 150px;border:solid 1px green" do
+      Poster List
+    .program_type_icon{:style => "display:inline-block; height: 200px;width: 150px;border:solid 1px green"}
+      Search

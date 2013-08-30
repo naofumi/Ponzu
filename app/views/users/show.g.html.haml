@@ -1,0 +1,5 @@
+%h1
+  %span.en_name= @user.en_name
+
+- if current_user
+  = render :partial => "users/links.g", :locals => {:users => [@user]}

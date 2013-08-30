@@ -1,0 +1,18 @@
+- if @presentations && !@presentations.results.empty?
+  .panel_title
+    = t('search.hit_presentations', :query => params[:query], :hits => @presentations.total)
+  = ks_will_paginate @presentations.results, :params => {:type => :presentations}
+  .panel.paneled_list
+    - @presentations.each_hit_with_result do |hit, p|
+      = link_to ksp(presentation_path(p)) do
+        = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                          :class => "presentation",
+                          :data => {:ajax => heading_presentation_path(p.id)}
+        .search_hit_text
+          - hit.highlights.each do |hl| 
+            \"...
+            = hl.format{ |word| "<span class='highlight'>#{word}</span>" }.html_safe
+            \..."
+            %br/
+  = ks_will_paginate @presentations.results, :params => {:type => :presentations}
+

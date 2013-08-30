@@ -1,0 +1,7 @@
+.prev_next_navigation
+  = link_to "",
+            ksp(presentation.previous), 'data-backwards' => "true", :class => "arrow left",
+            :style => (presentation.previous ? "" : "visibility:hidden")
+  = link_to "",
+            ksp(presentation.next), 'data-backwards' => "false", :class => "arrow right",
+            :style => (presentation.next ? "" : "visibility:hidden")

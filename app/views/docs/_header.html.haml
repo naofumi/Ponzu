@@ -1,0 +1,17 @@
+#header
+  %div{style: "float:right"}
+    %span{:id => "progress_bar"}
+    = link_to "Download 1,000 Docs", "#",
+      :onclick => "if (KSSqlCache.initialize()){KSCache.simpleBatchLoad('/docs/test_batch')}; return false;"
+    = link_to "Download", "#",
+      :onclick => "if (KSSqlCache.initialize()){KSCache.simpleBatchLoad('/docs/batch')}; return false;"
+    = link_to "Clear webSQL", "#", 
+      :onclick => "KSSqlCache.clear();alert('webSQL cache cleared');return false;"
+    |
+    = link_to "Clear localStorage", "#", 
+      :onclick => "localStorage.clear();alert('localStorage cleared');return false;"
+    |
+    = link_to "Clear sessionStorage", "#", 
+      :onclick => "sessionStorage.clear();alert('sessionStorage cleared');return false;"
+  Kamishibai & Ponzu documentation
+  %div{style: "clear:both"}

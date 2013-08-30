@@ -1,0 +1,2 @@
+module PosterSessionsHelper
+end

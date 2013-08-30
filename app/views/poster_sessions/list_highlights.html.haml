@@ -1,0 +1,8 @@
+- liked_positions = @likes.inject({}){|memo, l| memo[l.presentation.number] = l; memo}
+- @sessions.each_with_index do |session, session_index|
+  - presentations = session.presentations
+  - color_tag = session_index.modulo(12)
+  = ks_element :id => "poster_range_#{session.id}", :style => "word-break:break-all" do
+    %span{:class => ["color_f_#{color_tag}", "poster_range", "session_#{session.id}"]}
+      = presentations.map{|p| liked_positions[p.number] ? content_tag(:span, "●", :class => "#{liked_positions[p.number].kind_of?(Like::Schedule) ? 'scheduled' : ''}") : "●"}.join('').html_safe
+  

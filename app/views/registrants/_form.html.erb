@@ -1,0 +1,57 @@
+<%= form_for(@registrant) do |f| %>
+  <% if @registrant.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@registrant.errors.count, "error") %> prohibited this registrant from being saved:</h2>
+
+      <ul>
+      <% @registrant.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :registration_id %><br />
+    <%= f.text_field :registration_id %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.text_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name %>
+  </div>
+  <div class="field">
+    <%= f.label :middle_name %><br />
+    <%= f.text_field :middle_name %>
+  </div>
+  <div class="field">
+    <%= f.label :last_name %><br />
+    <%= f.text_field :last_name %>
+  </div>
+  <div class="field">
+    <%= f.label :phon_first_name %><br />
+    <%= f.text_field :phon_first_name %>
+  </div>
+  <div class="field">
+    <%= f.label :phon_middle_name %><br />
+    <%= f.text_field :phon_middle_name %>
+  </div>
+  <div class="field">
+    <%= f.label :phon_last_name %><br />
+    <%= f.text_field :phon_last_name %>
+  </div>
+  <div class="field">
+    <%= f.label :salutation %><br />
+    <%= f.text_field :salutation %>
+  </div>
+  <div class="field">
+    <%= f.label :affiliation %><br />
+    <%= f.text_field :affiliation %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

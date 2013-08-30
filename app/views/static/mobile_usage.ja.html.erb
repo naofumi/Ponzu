@@ -1,0 +1,31 @@
+<%= ks_element :id => "mobile_usage",
+              :data => {
+                :container => "ipadish_content",
+                :title => "MBSJ: #{t("dashboard.mobile_usage")}",
+                :position => 20
+              } do %>
+  <div class="panel">
+    <div style="float:right;width: 300px;height: 300px;background-color: #FFF;margin: 10px;border: solid 1px #000">
+      <!-- http://chart.apis.google.com/chart?chs=200x200&cht=qr&chl=http%3a//mbsj2012.castle104.com -->
+      <%= image_tag('galapagos_qr.png') %>
+    </div>
+    <h2>スマートフォン (iPhone, iPod Touch および Android) からのご利用</h2>
+    <p>iPhone, iPod Touch および Androidのスマートフォンをご利用の方はスマートフォン専用サイトに転送されます。URLは下記のものを入力するか、右記のQRコードをご利用ください。</p>
+    <p>スマートフォン専用サイトはパソコン用サイトとほぼ同じ機能を提供しています。「いいね！」および「マイ・スケジュール」はすべてのデバイスから閲覧できます。</p>
+    <p>パソコンで「いいね！」や「マイ・スケジュール」を選択し、学会会場ではスマートフォンで閲覧する使い方をおすすめします。</p>
+    <h2>一般的な携帯（フィーチャーフォン）からの利用</h2>
+    <p>一般的な携帯（iMode, EZWeb等）をご利用の方のために携帯専用サイトを用意しています。URLは下記のものを入力するか、右記のQRコードをご利用ください。</p>
+    <p>携帯専用サイトはパソコン用サイトとほぼ同じ機能を提供しています。ただし時間割やポスターマップなど、グラフィックス的に難しい機能は省かせていただいています。「いいね！」および「マイ・スケジュール」はすべてのデバイスから閲覧できます。</p>
+    <p>パソコンで「いいね！」や「マイ・スケジュール」を選択し、学会会場では携帯電話で閲覧する使い方をおすすめします。</p>
+    <h2>iPadやその他タブレットからの利用</h2>
+    <p>iPadはパソコン用サイトを閲覧するのに十分な画面の広さがありますので、パソコン用サイトに転送されます。</p>
+    <p>Androidのタブレットは画面が小さいものが多いので、スマートフォン専用サイトに転送されます。</p>
+    <h2>パソコン用サイトのサポート対象ブラウザ</h2>
+    <p>パソコン用サイトはSafari, Firefox, Chromeの比較的新しいバージョンおよびInternet Explorer 10に最適化されています。本ウェブサイトではオフラインでの閲覧など最新のウェブテクノロジーを使用していますので、可能な限りこれらのブラウザをご利用ください。Internet Explorer 9でもアニメーションを除いてご利用できます。またInternet Explorer 8はオフラインでの閲覧ができない他、使い勝手が落ちますが、ご利用できます。</p>
+    <p>その他、サポート対象外のブラウザは一般的な携帯（フィーチャーフォン）サイトに自動的に転送れます</p>
+    <br />
+    <%= link_to "mbsj2012.castle104.com", "http://mbsj2012.castle104.com" %>
+    <div style="clear:both"></div>
+  </div>
+  <%= render :partial => 'layouts/biokaimono' %>
+<% end %>

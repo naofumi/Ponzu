@@ -1,0 +1,25 @@
+<h1>Listing umin_rows</h1>
+
+<table>
+  <tr>
+    <th>Format type</th>
+    <th>Csv</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @umin_rows.each do |umin_row| %>
+  <tr>
+    <td><%= umin_row.format_type %></td>
+    <td><%= umin_row.csv %></td>
+    <td><%= link_to 'Show', umin_row %></td>
+    <td><%= link_to 'Edit', edit_umin_row_path(umin_row) %></td>
+    <td><%= link_to 'Destroy', umin_row, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Umin row', new_umin_row_path %>

@@ -1,0 +1,62 @@
+= ks_element :id => "imode",
+             :data => { :title => "iMode optimizations",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Separating Static Content Using Fragments
+
+      Kamishibai let's us separate static content that is infrequently updated and
+      seldom needs to be fetched from the server, and dynamic content that is 
+      frequently updated and should be regularly updated.
+
+      When the network is flakey, getting a response from the server is slow. If 
+      most of the content is static, then we can just show the static content first
+      from the cache and then fetch dynamic content later.
+
+      To do this, we have to break up the web page into fragments. 
+
+      ## Breaking up the content
+
+      ### Headers and navigation tabs, menus
+
+      These elements are typically very static. They are also never targetted (never
+      are the toElements). We use `ks_ajax_placeholder` and `ks_placeholder` for 
+      these. We assign a long expiration time. We can get each element as a separate
+      request, or we can combine all these "chrome"-ish elements into a single response.
+
+      Sometimes, these elements will change depending on login status. If so, we should
+      explicitly send the user_id in the request. Otherwise, a single URL will have
+      different content depending on the login status, and this is rarely a good idea.
+
+      ### Presentations and session pages
+
+      These elements are very static. However, they also embed like_buttons, comments
+      and other social stuff that is dynamic.
+
+      The static content is relatively straightforward.
+
+      To accomodate the dynamic content, we embed `ks_placeholder` elements within the
+      static content. At the end of the static content, we embed a `ks_ajax_placeholder`
+      which triggers an Ajax call that should return Kamishibai elements to populate
+      all the `ks_placeholder` elements.
+
+      ## The actions for the dynamic content
+
+      Since loading dynamic content requires additional controller actions and routes,
+      they can be tedious to set up. We should standardize on the routes and actions
+      to reduce work. We should make separating content as easy as possible.
+
+      We can't reduce the actions because each set of dynamic content requires a unique
+      set of instance variables. We can however standardize on the routes. We use 
+      something similar to the old-fashioned Rails routes, but with some security 
+      measures. Something like the following.
+
+          match ':controller(/:action(/:id))', :action => /_sup$/, :via => :get
+
+      The "_sup" suffix tells us that the content is useless on its own and is
+      a supplerment to content already in the DOM.
+
+      This way, you won't have to change `routes.rb` every time we create a new 
+      dynamic content serving action. All we need to do is to create an action 
+      in the controller, and then write the view code.

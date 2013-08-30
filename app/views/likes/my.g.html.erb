@@ -1,0 +1,13 @@
+<h3>
+  「いいね！」した演題<br />
+  <%= l(@date, :format => :month_day) %>
+</h3>
+<% if !current_user %>
+  <%= t('login_required') %>
+<% else %>
+  <div class="presentation_list">
+    <% @likes.each do |l| %>
+      <div><%= render :partial => "sessions/presentation.g", :locals => {:p => l.presentation} %></div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+/ The top navigation is for shortcuts. Don't rely on users finding this element.
+/ It's a way to get back, and mostly useful on full-screen type pages.
+#header
+  .top_menu
+    %div{style: "float:right"}
+      = link_to "Clear cache", "#", 
+        :onclick => "KSSqlCache.clear();localStorage.clear();sessionStorage.clear();alert('Cache cleared');return false;"
+    %div{style: "float:left"}
+      - if defined?(back) && back
+        = link_to "<< Back", back
+      - else
+        = link_to "<< Docs", ksp(:docs_path, 'showcase/introduction')
+    %ul
+      %li{:class => "selected"}= link_to "Home"
+      %li= link_to "Timetable"
+      %li= link_to "Poster map"
+      %li= link_to "Exhibition"
+      %li= link_to "Search"
+  %div{style: "clear:both"}

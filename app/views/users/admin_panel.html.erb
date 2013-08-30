@@ -1,0 +1,75 @@
+<%= ks_page :id => "admin_panel_#{}",
+            :data => {:title => "Admin panel #{@user.name}"} do %>
+  <div class="panel" style="font-size: 20px">
+		<%= form_tag admin_search_users_path, :method => :get, 
+		                                     :'data-ks_get_form' => "", 
+		                                     :class => 'search_form' do %>
+			<%= text_field_tag :query, params[:query], :placeholder => "名前 or 所属", :autocomplete => 'off' , :style => "font-size: 20px;width: 300px"  %>
+			<%= button_tag "", :disable_with => "searching...", :type => 'submit', :class => "search_submit" %>
+		<% end %>
+		<%= form_tag admin_search_by_registration_id_users_path, :method => :get,
+		                               :'data-ks_get_form' => "",
+		                               :class => 'search_form' do %>
+      <%= text_field_tag :registration_id, params[:registration_id], :placeholder => "登録ID", :autocomplete => 'off' , :style => "font-size: 20px;width: 300px"  %>
+      <%= button_tag "", :disable_with => "searching...", :type => 'submit', :class => "search_submit" %>
+		<% end %>
+  </div>
+  <div class="panel">
+		<h2><%= @user.name %> 先生 ユーザアカウント 管理パネル</h2>
+	</div>
+	<div class="panel" style="font-size:20px">
+		<% if @user.registrant %>
+			<p>
+			  参加登録ID (Login ID): 
+			  <%= @user.login %>
+			</p>
+
+			<%= form_for(@user) do |f| %>
+			  <% if @user.errors.any? %>
+			    <div id="error_explanation">
+			      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+			      <ul>
+			      <% @user.errors.full_messages.each do |msg| %>
+			        <li><%= msg %></li>
+			      <% end %>
+			      </ul>
+			    </div>
+			  <% end %>
+				<div class="field">
+				  <%= f.label :jp_name %><br />
+				  <%= f.text_field :jp_name, :style => "font-size: 20px" %>
+				</div>
+				<div class="field">
+				  <%= f.label :en_name %><br />
+				  <%= f.text_field :en_name, :style => "font-size: 20px" %>
+				</div>
+
+			  <p>
+			    初期パスワード: 
+			    <span style="font-family:serif;font-size: 20px"><%= @user.registrant.password %></span>
+			  </p>  
+
+				パスワードを変更するときのみ入力
+				<div class="field">
+				  <%= f.label :password %><br />
+				  <%= f.password_field :password, :style => "font-size: 20px" %>
+				</div>
+				<div class="field">
+				  <%= f.label :password_confirmation %><br />
+				  <%= f.password_field :password_confirmation, :style => "font-size: 20px" %>
+				</div>
+				<div class="actions">
+				  <%= f.submit %>
+				</div>
+			<% end %>
+		<% else %>
+		  <h3>
+		  	この人は参加登録していないか、参加登録IDとひも付いていません。
+		  </h3>
+		 <% end %>
+	</div>
+
+<% end %>
+
+

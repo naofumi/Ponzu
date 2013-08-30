@@ -1,0 +1,15 @@
+= ponzu_frame :data => {:title => "Edit cache version"} do
+  .panel
+    %h1 Edit cache version
+    %p
+      This is the cache version for browser storage. Browsers keep a copy 
+      of this cache version in a cookie. When we change the cache version
+      and the browser notices that its version string (in a cookie) is different from what
+      it gets from the server, then it flushes its local storage cache.
+    %p
+      Currently, we can only flush the whole cache. We are thinking of ways 
+      to expire only specific cache entries in the future.
+    = form_tag admin_path(:action => 'cache_version'), :remote => true, :data => {"ks-insert-response" => true} do 
+      = text_area_tag('cache_version', @cache_version, :rows => 10, :escape => false)
+      = button_tag "Change cache version", :class => "button big", :style => "float:right"
+      %div{:style => "clear:both;"}

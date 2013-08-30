@@ -1,0 +1,19 @@
+=ponzu_frame :title_args => {:name => @with.name} do
+  .panel
+    %h1
+      = @with.name
+      %span.profile_link= link_to t('.view_profile'), ksp(@with)
+    = render :partial => "form"
+
+    .message_thread
+      - @receipts.each do |r|
+        = time_in_list_for r
+        - css_class = ['message']
+        - if r.message.sender_id == current_user.id
+          - css_class += ["mine", 'sent']
+        - elsif
+          - css_class += ['received']
+        %div{ :class => css_class }
+          = r.message.body
+        %div{:style => "clear:both"}
+    = ks_will_paginate @receipts

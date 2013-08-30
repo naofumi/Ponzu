@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>夜ゼミ</title>
+  <%= stylesheet_link_tag    "d/application", :media => "all" %>
+  <%= javascript_include_tag "d/application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%= yield %>
+  <!-- We always put out-of-page elements at behind the yield so that we
+       can yank out the whole body and have basically the same results as
+       an AJAX request -->
+  <div class="notice"><%= flash[:notice] %></div>
+  <div class="error"><%= flash[:error] %></div>
+</body>
+</html>

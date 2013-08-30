@@ -1,0 +1,11 @@
+<% unless todos.empty? %>
+  <div class="todo">
+    <h3>これからやる作業のメモ</h3>
+    <ul>
+      <% todos.each do |todo| %>
+        <li><%= todo %></li>
+      <% end %>
+    </ul>
+    <%= link_to "[close TODO box]", "#", :onclick => "$('.todo').hide();return false;"%>
+  </div>
+<% end %>

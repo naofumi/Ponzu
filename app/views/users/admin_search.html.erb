@@ -1,0 +1,32 @@
+<%= ks_page :id => "admin_search_results",
+            :data => {
+            	:title => "Admin user search results for #{params[:query]}"
+            } do %>
+  <div class="panel" style="font-size: 20px">
+		<%= form_tag admin_search_users_path, :method => :get, 
+		                                     :'data-ks_get_form' => "", 
+		                                     :class => 'search_form' do %>
+			<%= text_field_tag :query, params[:query], :placeholder => "名前 or 所属", :autocomplete => 'off' , :style => "font-size: 20px;width: 300px"  %>
+			<%= button_tag "", :disable_with => "searching...", :type => 'submit', :class => "search_submit" %>
+		<% end %>
+		<%= form_tag admin_search_by_registration_id_users_path, :method => :get,
+		                               :'data-ks_get_form' => "",
+		                               :class => 'search_form' do %>
+      <%= text_field_tag :registration_id, params[:registration_id], :placeholder => "登録ID", :autocomplete => 'off' , :style => "font-size: 20px;width: 300px"  %>
+      <%= button_tag "", :disable_with => "searching...", :type => 'submit', :class => "search_submit" %>
+		<% end %>
+  </div>
+
+	<% if @users %>
+	  <div class="section_title">
+	    <%= t('search.hit_users', :query => params[:query], :hits => @users.total) %><br />
+	    <%= t('search.showing_to_from_users', :to => @users.hits.offset + 1, :from => @users.hits.offset + @users.hits.count) %>
+	  </div>
+
+	  <%= render :partial => "pagination_buttons", :locals => {:collection => @users.hits, :type => 'users'} if @users %>
+
+	  <%= render :partial => "users" %>
+
+	  <%= render :partial => "pagination_buttons", :locals => {:collection => @users.hits, :type => 'users'} if @users %>
+	<% end %>
+<% end %>

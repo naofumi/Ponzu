@@ -1,0 +1,14 @@
+<%= ks_page :id => ["timetable", params[:id]],
+            :class => "program",
+            :data => {
+              :title => t('titles.timetable', :date => params[:id])
+            } do %>
+<!-- <div id="timetable_<%= params[:id] %>" class="program page" data-title="<%= t('titles.timetable', :date => params[:id]) %>"> -->
+  <%= render :partial => 'layouts/s_header' %>
+  <% cache ['s', I18n.locale, 'timetable', @show_date] do %>
+    <div class="panel timetable" style="<%= "width:#{tt.left_position_for_time(@show_date.change(:hour => 20)).to_i + 100}px;" %> position: absolute; top: 70px;">
+      <%= render :partial => 'time_table' %>
+    </div>
+  <% end %>
+<!-- </div> -->
+<% end %>

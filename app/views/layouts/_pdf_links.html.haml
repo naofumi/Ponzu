@@ -1,0 +1,17 @@
+/ #pdf_links
+/   #pdf_list
+/     %div
+/       = link_to "All (21.9MB)", download_full_pdf_sessions_path
+/       / = link_to "English", download_pdf_session_path(session, :locale => :en), 
+/       /           :target => "_pdf"
+/       / | 
+/       / = link_to "日本語", download_pdf_session_path(session, :locale => :ja), 
+/       /           :target => "_pdf"
+/       / |
+/       / = link_to "Full Day", download_full_day_pdf_session_path(session, :locale => :en), 
+/       /           :target => "_pdf"
+/       / | 
+/       / = link_to "一日分", download_full_day_pdf_session_path(session, :locale => :ja), 
+/       /           :target => "_pdf"
+/   = link_to image_tag('pdficon_large.png', :style => "vertical-align:bottom"), "#",
+/             :onclick => "kss.toggleClass(document.getElementById('pdf_list'), 'show');return false;"

@@ -1,0 +1,43 @@
+<div class="page" data-title="registrant list" id="registrant_list">
+  <div class="panel">
+    <h1>Listing registrants from <%= @registrants.first && @registrants.first.id %>-<%= @registrants.last && @registrants.last.id %></h1>
+    <a href="http://mbsj2012.castle104.com/ja/registrants?grey=true&only_active=true&from=21000">start 1</a>
+    <a href="http://mbsj2012.castle104.com/ja/registrants?grey=true&only_active=true&from=24590">start 2</a>
+    <a href="http://mbsj2012.castle104.com/ja/registrants?grey=true&only_active=true&from=24702">start 3</a>
+    <a href="http://mbsj2012.castle104.com/ja/registrants?grey=true&only_active=true&from=24817">start 4</a>
+    <a href="http://mbsj2012.castle104.com/ja/registrants?grey=true&only_active=true&from=24929">start 5</a>
+
+    <%= link_to "[登録者のみ]", registrants_path(:only_active => true) %>
+    <%= link_to "[grey: 未確認のもの]", registrants_path(:only_active => true, :grey => true) %>
+    <%= link_to "[black: 間違っていたもの]", registrants_path(:only_active => true, :black => true) %>
+    <%#= will_paginate :renderer => WillPaginate::ViewHelpers::KSLinkRenderer %>
+    <%= will_paginate %>
+    <%= form_tag whitelist_registrants_path, :method => :put do %>
+      <table class="registrants_list">
+        <tr>
+          <th>Registration</th>
+          <th>Name</th>
+          <th>Affiliation</th>
+        </tr>
+
+      <% @registrants.each do |registrant| %>
+      <% row_color = cycle("odd", "even") %>
+        <%= render :partial => "registrant_info_row_2", :locals => {:registrant => registrant, :row_color => row_color} %>
+        <% registrant.user.unique_umin_name_and_affiliation_combos.each do |combo| %>
+          <% name, affiliation = combo.split('---') %>
+          <tr class="<%= row_color %>">
+            <td></td>
+            <td><%= name %></td>
+            <td><%= affiliation %></td>
+          </tr>
+        <% end %>
+      <% end %>
+      </table>
+      <%= hidden_field_tag :last_registrant_id, @registrants.last && @registrants.last.id %>
+      <%= submit_tag %>
+    <% end %>
+    <br />
+
+    <%= link_to 'New Registrant', new_registrant_path %>
+  </div>
+</div>

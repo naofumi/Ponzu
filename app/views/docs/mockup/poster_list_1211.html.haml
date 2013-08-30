@@ -1,0 +1,19 @@
+= ks_page :id => "poster_list_1211", 
+          :class =>"fluid_multicolumn",
+          :data => { :title => "Poster List 1211" } do
+  %div
+    = render :partial => 'docs/mockup/header', 
+             :locals => {:back => ksp(:docs_path, "mockup/program_1211")}
+    #ipadish.body
+      .left_column#ipadish_left
+        %ul
+          %li= link_to "poster 1211 category 1", ksp(:docs_path, "mockup/poster_1211_category_1")
+          %li= link_to "poster 1211 category 2", ksp(:docs_path, "mockup/poster_1211_category_2")
+          %li= link_to "poster 1211 category 3", ksp(:docs_path, "mockup/poster_1211_category_3")
+          %li= link_to "poster 1211 category 4", ksp(:docs_path, "mockup/poster_1211_category_4")
+          %li= link_to "poster 1211 category 5", ksp(:docs_path, "mockup/poster_1211_category_5")
+          %li= link_to "poster 1211 category 6", ksp(:docs_path, "mockup/poster_1211_category_6")
+          %li= link_to "poster 1211 category 7", ksp(:docs_path, "mockup/poster_1211_category_7")
+          %li= link_to "poster 1211 category 8", ksp(:docs_path, "mockup/poster_1211_category_8")
+      #poster_list_1211_content.two_column_content
+      %div{style: "clear:both"}

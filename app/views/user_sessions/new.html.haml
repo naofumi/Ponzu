@@ -1,0 +1,33 @@
+= ponzu_frame :id => "login" do
+  #splash
+    %h1
+  .panel.settings_bg
+    = form_for @user_session do |form|
+      = render :partial => "layouts/error_messages", :locals => {:target => @user_session}
+      .grid
+        .col-1-3 Registration ID
+        .col-2-3= form.text_field :login, :placeholder => "Registration ID", :class => "login_field"
+      .grid
+        .col-1-3 Password
+        .col-2-3= form.password_field :password, :placeholder => "password", :class => "login_field"
+      .grid
+        .col-1-3{:style => "height: 40px"}
+          &nbsp;
+        .col-2-3
+          <![if !(IE 8)]>
+          <!-- IE 8 doesn't allow changing of input type -->
+          = check_box_tag "show_password", '1', false
+          = label_tag "show_password", "show password"
+          <![endif]>
+          %br/
+          = form.check_box :remember_me
+          = form.label :remember_me, "Automatically login on this device"
+      .grid{:style => "text-align:right;"}
+        = form.button "Login!", :class => "button big"
+  .panel.settings_bg
+    Having problems? Please contact
+    %br/
+    - support_email = current_conference.support_email
+    = mail_to support_email, support_email, :encode => "hex"
+    %div{:style => "text-align:right;"}
+      = link_to "Use without logging-in ", root_path, :class => "button icon arrowright"

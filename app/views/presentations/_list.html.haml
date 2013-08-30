@@ -1,0 +1,4 @@
+#presentations_list.sortable{:data => {:action => "/presentations/sort", :"ks-insert-response" => 'true'}}
+  - presentations.each do |p|
+    %div{:draggable => "true", :id => "presentations_#{p.id}"}
+      = render :partial => 'presentations/edit', :locals => {:presentation => p}

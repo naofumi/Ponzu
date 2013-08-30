@@ -1,0 +1,13 @@
+%h1
+  %span.en_name= @author.en_name
+  
+- if current_user && !@author.users.empty?
+  = render :partial => "users/links.g", :locals => {:users => @author.users}
+
+%h2= t('users.presentations')
+
+.presentation_list
+  - @author.presentations.order(:starts_at).each do |p|
+    = render :partial => "sessions/presentation.g", :locals => {:p => p}
+
+= render :partial => 'layouts/biokaimono'

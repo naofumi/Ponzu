@@ -1,0 +1,47 @@
+= ks_page :id => ["presentation", @presentation.id],
+          :class => "program",
+          :data => { :title => t('titles.presentation', 
+                                 :number => @presentation.number, 
+                                 :title => strip_tags(@presentation.title)) } do 
+  = render :partial => 'layouts/s_header'
+  .content.presentations.panel
+    - cache ['s', I18n.locale, @presentation, !!current_user] do
+      %div(style="float:right")
+        = map_link(@presentation)
+      = render :partial => "session_title", :object => @presentation, :as => :presentation
+      %div(style="clear:both")
+      .presentation_header
+        %span.presentation_number
+          = @presentation.number
+          &nbsp;
+        = starts_at_ends_at_combo @presentation, :month_day_time
+      = render :partial => "short_talk"
+      %h2= sanitize @presentation.title
+      .authors_list
+        = authors_list(@presentation.submission, [], [], true, true, true)
+      .institutions_list
+        = institutions_list(@presentation.submission, :single_language => true)
+      = render :partial => "email_address"
+      %h3= t('presentations.summary').upcase
+      .abstract
+        = sanitize @presentation.abstract
+    .like_box
+      = render :partial => 'likes/like_button', :object => @presentation, :as => :presentation
+      = render :partial => 'comments.s'
+  .panel
+    %h3= t('presentations.keywords').upcase
+    %div= keyword_links @presentation
+
+  .panel
+    = render :partial => "network_diagram"
+
+  - cache ['s', I18n.locale, @presentation, !!current_user, 'related'] do
+    .content.panel.session_list
+      %h3 OTHER PRESENTATIONS BY THE AUTHORS AT MBSJ2012
+      %ul.related_presentations
+        - (@presentation.submission.submissions_by_same_authors - [@presentation.submission]).each do |s|
+          %li
+            = link_to ksp(presentation_path(s.presentations.first)) do
+              %h4= s.title.html_safe
+              .authors_list= authors_list(s, [], [], false, true, true)
+              .institutions_list= institutions_list(s, :same_line => true, :single_language => true)

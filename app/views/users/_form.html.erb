@@ -1,0 +1,154 @@
+<%= form_for(@user, {remote: true, data: {'ks-insert-response' => true}}) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :login, "参加登録ID (Login ID)" %><br />
+    <%= f.text_field :login %>
+  </p>
+  <p>
+    UMINデータ内の参加登録ID: <br />
+    <%= @user.registration_id_in_umin %>
+  </p>
+  <% if @user.registrant %>
+  <p>
+    初期パスワード: <br />
+    <%= @user.registrant.password %>
+  </p>  
+  <% end %>
+
+  <% author = @user.author %>
+  <table>
+    <tr>
+      <th></th>
+      <th>User</th>
+      <th>Author</th>
+    </tr>
+    <tr>
+      <th>Jp name</th>
+      <td><%= @user.jp_name %></td>
+      <td><%= author && author.jp_name %></td>
+    </tr>
+    <tr>
+      <th>En name</th>
+      <td><%= @user.en_name %></td>
+      <td><%= author && author.en_name %></td>
+    </tr>
+    <tr>
+      <th>En aff.</th>
+      <td><%= @user.en_affiliation %></td>
+      <td rowspan="2">
+        <% author.all_unique_affiliations.each do |aff| %>
+          <%= aff %><br />
+        <% end if author %>
+        <div class="field">
+          <%= f.label :author_id %>: 
+          <%= f.text_field :author_id, :style => "width: 100px" %>
+          <%= link_to "link", ksp(author), :target => "author" %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>Jp aff.</th>
+      <td><%= @user.jp_affiliation %></td>
+    </tr>
+  </table>
+
+  <h3>Other author candidates</h3>
+  <% if Author.respond_to? :nayose_extreme_find_all_by %>
+    <% en_candidates = Author.nayose_extreme_find_all_by(:en_name, @user.en_name, current_conference) %>
+    <% jp_candidates = Author.nayose_extreme_find_all_by(:en_name, @user.en_name, current_conference) %>
+    <% (en_candidates + jp_candidates - [author]).uniq.each do |author| %>
+      <%= link_to "#{author.en_name} (#{author.jp_name})", ksp(author), :target => "author" %>
+      <br>
+    <% end %>
+  <% else %>
+    Author.nayose_extreme_find_all_by not implemented.
+    Maybe Nayose::Finders wasn't included into Author class.
+  <% end %>
+
+  <div class="field">
+    <%= f.label :jp_name %><br />
+    <%= f.text_field :jp_name %>
+  </div>
+  <div class="field">
+    <%= f.label :en_name %><br />
+    <%= f.text_field :en_name %>
+  </div>
+  <div class="field">
+    <%= f.label :jp_affiliation %><br />
+    <%= f.text_field :jp_affiliation %>
+  </div>
+  <div class="field">
+    <%= f.label :en_affiliation %><br />
+    <%= f.text_field :en_affiliation %>
+  </div>
+  <div class="field">
+    <%= f.label :email, "学会期間中の連絡用email (本システムからの通知はこっちに送られます)" %><br />
+    <%= f.text_field :email %>
+  </div>
+  パスワードを変更するときのみ入力
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation %>
+  </div>
+  <% if can? :whitelist, User %>
+    <div class="field">
+      <%= f.label :whitelisted %><br />
+      <%= f.text_field :whitelisted %>
+    </div>
+    <div class="field">
+      <%= f.label :whitelisted_by %><br />
+      <%= f.text_field :whitelisted_by %>
+    </div>
+    <div class="field">
+      <%= f.label :whitelisted_at %><br />
+      <%= f.text_field :whitelisted_at %>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :twitter_id %><br />
+    <%= f.text_field :twitter_id %>
+  </div>
+  <div class="field">
+    <%= f.label :facebook_id %><br />
+    <%= f.text_field :facebook_id %>
+  </div>
+  <div class="field">
+    <%= f.label :linkedin_id %><br />
+    <%= f.text_field :linkedin_id %>
+  </div>
+  <div class="field">
+    <% if can? :manage, @user %>
+      <!-- dummy hidden field to handle cases where none are checked -->
+      <%= hidden_field_tag "user[roles][]", "dummy" %>
+      <%= f.label :roles %><br />
+      <p>
+        <% for role in User::ROLES %>
+          <div>
+            <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
+            <%= role %>
+          </div>
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+  
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

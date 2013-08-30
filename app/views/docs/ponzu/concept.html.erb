@@ -1,0 +1,99 @@
+<%= ks_element :id => "Ponzu_concept",
+               :data => {
+                 :title => "Ponzu Concept",
+                 :container => "ipadish_content",
+                 :"container_ajax" => docs_path(:page => "showcase/layout")
+               } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+# Ponzu Concept
+
+"Ponzu" is the name for the integrated conference system. I use the name "Ponzu" because it is
+a Japanese soy-sauce, vinegar and citrus combination that enhances the flavor of meat, cutting down
+on it's oiliness and making it light and easy to consume. I consider the presentations
+and discussions to be the *meat* of conferences and our integrated conference system to be a nice
+flavoring.
+
+The concept of Ponzu is to create an IT infrastructure that is not simply an optimization
+of current solutions, but is also an innovative re-imagination of what a scientific conference
+could be. Since innovations frequently happen at the intersection of different disciplines, 
+we emphasize integration. As of today, Ponzu aims to provide the following components.
+
+1.  A website that is optimized for all the devices that a scientist is likely to want to
+    use. Furthermore, this website should be fully viewable offline.
+2.  A database that treats authors as first-class objects, enabling us to use social features.
+3.  A collection of various social features such as "likes", "private messages" and "comments"
+    which will encourage researchers who previously had little connections, to come together
+    and sprout new ideas and collaborations.
+4.  A system that semi-automatically generates PDFs for offline viewing and printing.
+5.  A system that can automatically generate ePubs for offline viewing.
+6.  A website that makes it easy for attendees to schedule their time.
+7.  A website that provides visual cues so that attendees can easily manage their schedules.
+8.  A system that makes it a joy to edit and assign presentations to conference sessions.
+
+The above feature stem from the following beliefs about what a conference IT system should provide.
+
+## The IT system should adjust to attendee's workflows and devices
+
+Conference IT systems should adjust to the needs and devices that scientists possess. Scientist
+should not be forced to own certain devices simply to access conference information. 
+The IT systems should be there to help, not rule over.
+
+We realize that while 100% of scientists have a laptop computer, much fewer own smartphones
+and even less own tablet PC devices. We recognize that scientists are not necessarily tech-
+geeks and many will not purchase new fads. There will be "laggards" in the high-tech device
+sense, but these "laggards" are often the scientists who have a large presence and saying
+in the scientific community.
+
+We also acknowledge that even though tech-savvy scientists will want to use smartphones or
+iPads at the conference floor, they will still use traditional PCs in their planning phase
+at their office. Hence the IT system should seamlessly sync whatever they did on their
+laptops to their smartphones.
+
+Therefore, an IT system for scientific conferences must work well with laptop computers,
+and also accomodate new gadgets. Focusing on new gadgets at the expense of laptops is not
+an option.
+
+Unfortunately, this is contrary to what a lot of conferences are providing.
+
+Looking at competitor activity, it seems that their priorities are;
+
+1.  Provide a native smartphone application.
+2.  Provide a rudimentary web site for PCs.
+3.  Congre uniquely provides syncing between the PC site and smartphone apps.
+4.  Provide a iMode site (only Congre).
+
+Our priorities are;
+
+1.  Provide a cutting-edge experience on PCs so that they can do their preparations effectively.
+2.  Attendees can chose whether they want to bring smartphones, tablets
+    PCs, iMode phones or printouts to the conference.
+3.  We support smartphones, tablets, PCs, iMode phones on-site.
+4.  After the event, they can go back to their PCs and create a report.
+
+## URLs should be the similar among devices
+
+We believe that even though the devices have a broad range of screen sizes, the features
+that they offer should be almost identical.
+
+There are multiple reasons for this. One is that it makes code reuse much easier, and hence
+cheaper to develop for. Another is that by making the user feel comfortable that
+they can access any feature on any device, they will trust each device more.
+
+Another reason is that by making the URLs the similar/same and automatically convertible, we can encourage sharing of deep links.
+
+## CMS included
+
+Ponzu should include a simple CMS. This is because as people rely less and less on 
+printed abstracts and more and more on online ones, the online material must become
+more integrated. Features such as a map of the whole venue, registration information,
+accomodation information, access information etc. should be included into the online system.
+
+The best way to do this is to provide simple CMS functionality. Since none of the off-the-shelf
+CMS solutions will work inside Kamishibai, we will have to create our own. However, we don't
+need many editing options, it shouldn't be too difficult.
+
+MARKDOWN
+%>
+  </div>
+<% end %>

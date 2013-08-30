@@ -1,0 +1,10 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+generic_comment:
+  presentation: generic_presentation
+  text: This is a generic comment
+  user: generic_user
+comment_from_other_conference:
+  presentation: presentation_from_other_conference
+  text: Comment from other conference
+  user: generic_user

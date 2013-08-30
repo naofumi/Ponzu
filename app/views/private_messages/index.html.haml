@@ -1,0 +1,12 @@
+/ For Admin
+= ponzu_frame do
+  .panel
+    = ks_will_paginate
+    - @private_messages.each do |pm|
+      .private_message
+        %div
+          = pm.sender.en_name
+          \-&lt;
+          = pm.receipts.map{|r| r.receiver.en_name unless r.receiver == pm.sender}.compact.join(', ')
+          = pm.created_at
+        %div= pm.body

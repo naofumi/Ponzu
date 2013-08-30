@@ -1,0 +1,20 @@
+@import "../kamishibai/ks_settings";
+
+#threads_private_messages {
+  .paneled_list > a {
+    .time {
+      float: right;
+      color: $color-2;
+      font-size: $smaller-font-size;
+    }
+    .excerpt {
+      font-size: $even-smaller-font-size; 
+      color: $light_gray;
+      clear: both;      
+    }
+  }
+}
+
+#private_message_body {
+  height: 80px;
+}

@@ -1,0 +1,6 @@
+<% if current_user %>
+  <%= "#{t("users.greetings", :name => current_user.name)}" %>
+<% else %>
+  <%= link_to t('users.login'), login_path %><br />
+  <%= t('users.login_benefits') %>
+<% end %>

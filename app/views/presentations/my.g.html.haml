@@ -1,0 +1,21 @@
+%h1 My presentations
+- if @author
+  - if !@author.receipts.unread.empty? 
+    %h2 Notifications
+    %div
+      - @author.receipts.unread.each do |r|
+        - m = r.message
+        - p = m.sender.presentation
+        - if m.sender.kind_of? Comment
+          = galapagos_bullet
+          = link_to ksp(p), :onclick => mark_read([r]) do
+            = "Comment added on presentation #{p.number}"
+          %br/
+  %h2 My Presentations
+  .presentation_list
+    - @presentations.each do |p|
+      = render :partial => "sessions/presentation.g", :locals => {:p => p}
+- else
+  .panel
+    %p 残念ながらあなたが著者となっている発表が見つかりませんでした。
+    %p もしあなたが著者となっている発表があるにもかかわらず、ここに表示されていないのであれば、ご連絡ください。

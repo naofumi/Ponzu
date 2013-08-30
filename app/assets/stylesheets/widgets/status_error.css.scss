@@ -1,0 +1,13 @@
+@import "../kamishibai/ks_settings";
+
+// http://jsfiddle.net/Wexcode/E8uHf/546/
+#error_msg .dialog {
+  width: 25em;
+  padding: 0 4em;
+  margin: 4em auto 0 auto;
+  border: 1px solid #ccc;
+  border-right-color: #999;
+  border-bottom-color: #999;
+  background-color: #FFF;
+  h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
+}

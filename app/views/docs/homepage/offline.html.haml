@@ -1,0 +1,17 @@
+= ks_element :id => "offline", 
+             :data => { :title => "Offline access",
+                        :container => "homepage_two_column_content",
+                        :"container-ajax" => docs_path(:page => "homepage/layout") } do
+  .panel
+    :markdown
+      # Webなのにオフラインでも使えます
+
+      まずは論より証拠です。下の「データ取り込み」ボタンを押したあと、一端ネットワークを切断してください。もしもあなたの使用ブラウザが新しいFirefox, SafariかAndroid, Chromeであれば、ネットワークにつながらなくてもこのウェブサイトは自在に見られるはずです。Webなのにオフラインで使えるはずです。
+
+      ## オフラインの重要性
+
+      学会の会場で無線LAN (WiFi)をしっかり提供するのは非常に大変かつ高価です。場合によっては一千万円を超え、抄録を紙に印刷して会員に発送するのに匹敵する金額です。
+
+      そこで抄録集システムをデザインするに当たって、我々はオフラインでの使用を大変重視しました。特に最先端のWeb技術に着目し、localStorage, webSQL, Indexed Database, Application Cacheと呼ばれる機能に着目しました。そしてこれらを使用することによってオフラインでの閲覧を実現しました。
+
+      オフラインで閲覧できるWebサイトはまだ技術が十分に整っておらず、我々はこの実現のために独自技術をいくつも開発しています。

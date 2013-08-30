@@ -1,0 +1,10 @@
+= ks_hidden_page(:id => "mockup", 
+                   :class => %w(program fluid_multicolumn), 
+                   :data => { :title => "Mockup" }) do
+  = render :partial => 'docs/mockup/header'
+  #ipadish.body
+    = ks_ajax_placeholder :id => "ipadish_left",
+                          :class => "left_column",
+                          :data => { :ajax => docs_path(:page => "mockup/left_navigation")}
+    #mockup_two_column_content.two_column_content
+    %div{style: "clear:both"}

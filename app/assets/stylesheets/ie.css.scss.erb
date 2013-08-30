@@ -1,0 +1,76 @@
+html > body {
+  font-family: arial, "メイリオ", sans-serif;
+}
+.ie8 {
+
+  // Because IE8 can't do .ios_icon + p
+  .grid.buttons a > p {
+    margin: 5px 0 0 0;
+    padding: 0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .ios_icon {
+    border: none;
+    border-right: 2px solid #666;
+    border-bottom: 2px solid #666;
+    border-top: 2px solid #DDD;
+    border-left: 2px solid #DDD;
+  }
+
+  #header {
+    background-color: #FFF;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Style=3,Opacity=80,FinishOpacity=80);
+  }
+
+  #overlay {
+    .shade {
+      background-color: rgb(0, 0, 0);  
+      filter: progid:DXImageTransform.Microsoft.Alpha(Style=3,Opacity=80,FinishOpacity=80);
+    }
+  }
+
+  .presentation_highlight {
+    background-color: rgb(255,128,0);
+    border: solid 2px rgb(255,255,255);
+    &.scheduled {
+      background-color: rgb(196,36,79);
+    }
+  }
+
+  .presentation {
+    &.liked {
+      background-image: image-url('ponzu/like_72.png');
+    }
+    &.scheduled {
+      background-image: image-url('ponzu/clock_72.png');
+    }
+  }
+
+  // Because ie8 doesn't recoginize :last-child;
+  #header {
+    .top_menu > ul {
+      li {
+        left: auto;
+        right: 10px;
+        &:first-child {
+          right: auto;
+          left: 10px;
+        }
+      }
+    }
+  }
+
+  .timetable {
+    div#entries {
+      a.session {
+        border: none;
+        border-right: 2px solid #666;
+        border-bottom: 2px solid #666;
+        border-top: 2px solid #DDD;
+        border-left: 2px solid #DDD;
+      }
+    }
+  }
+}

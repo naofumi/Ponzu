@@ -1,0 +1,10 @@
+.map
+  = image_tag('ponzu/round-pushpin_122_92.png', :class => "pushpin", :id => "pushpin",
+                                   :style => "left:#{room.pin_left}px;top:#{room.pin_top}px;")
+  - if can? :edit, @room
+    = content_tag(:div, "", :style => "position:absolute;z-index:1001;left:#{room.pin_left}px;top:#{room.pin_top}px;border:solid 2px red;width: 9px;height: 9px;box-sizing: border-box;margin: -4px 0 0 -4px;border-radius: 4px")
+
+  = image_tag(room.map_url)
+  :javascript
+    KSScrollMemory.set({href:'/#{ksp(room_path(@room))}', elementId:'pushpin', 
+                                                          priority: 'element'})    

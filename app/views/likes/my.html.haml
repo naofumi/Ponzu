@@ -1,0 +1,5 @@
+= ponzu_frame do
+  = render :partial => "my", :locals => {:likes => @likes,
+                                         :link_method => :my_like_path,
+                                         :title => t('.title'),
+                                         :empty_message => t('.messages.no_likes')}

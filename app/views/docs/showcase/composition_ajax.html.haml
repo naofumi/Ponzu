@@ -1,0 +1,21 @@
+= ks_element :id => "ajax_placeholder_test" do
+  %div{:style => "border:solid 1px green"}
+    :markdown
+      ### Hello
+
+      This element lives in `"docs/showcase/composition_ajax"`
+
+= ks_element :id => "placeholder_test" do
+  %div{:style => "border:solid 1px orange"}
+    :markdown
+      ### Hello again
+
+      This element also lives in `"docs/showcase/composition_ajax"`
+
+= ks_modify_elements "should_turn_yellow" => {add_class: "highlight"}
+
+:javascript
+  (function() {
+    var e = document.getElementById('should_turn_orange');
+    e.style.backgroundColor = 'orange';
+  })();

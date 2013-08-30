@@ -1,0 +1,32 @@
+= ponzu_frame do
+  %h1 Listing presentations
+  = ks_will_paginate
+  %table
+    %tr
+      %th Starts at
+      %th Ends at
+      %th Session
+      %th Number
+      %th En title
+      %th Jp title
+      %th Main author
+      %th Abstract
+      %th
+      %th
+      %th
+    - @presentations.each do |presentation|
+      %tr
+        %td= presentation.starts_at
+        %td= presentation.ends_at
+        %td= presentation.session_id
+        %td= presentation.number
+        %td= presentation.en_title
+        %td= presentation.jp_title
+        %td= presentation.main_author_id
+        %td= presentation.abstract
+        %td= link_to 'Show', ksp(presentation)
+        %td= link_to 'Edit', ksp(edit_presentation_path(presentation))
+        %td= link_to 'Destroy', presentation, confirm: 'Are you sure?', method: :delete
+  %br/
+
+  = link_to 'New Presentation', ksp(new_presentation_path)

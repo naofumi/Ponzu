@@ -1,0 +1,12 @@
+<% @users && @users.results.each do |u| %>
+  <div class="panel">
+    <div style="width:300px; float:left;">
+      <%= link_to u.jp_name, ksp(admin_panel_user_path(u)) if u.jp_name %> | 
+      <%= link_to u.en_name, ksp(admin_panel_user_path(u)) if u.en_name %>
+    </div>
+    <div style="margin-left: 310px">
+      <%= u.mashed_up_affiliation %>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<% end %>

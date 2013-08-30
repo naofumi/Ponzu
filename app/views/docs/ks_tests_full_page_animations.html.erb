@@ -1,0 +1,103 @@
+<script>
+  lscache.flush();
+</script>
+
+<div id="transition_test_home" class="page" data-default>
+  <div id="default_header" class="panel">
+    <h3>Full page animations test page</h3>
+    <p>Kamishibai provides animations to transition between pages. This page is the starting point to test various animations under various scenarios. Here we only work with full page animations.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Links to tests</h3>
+    <ul>
+      <li><a href="/ks_tests/ks_tests_full_page_animations">Go back to transition testing home (If things don't work, try going back here.)</a></li>
+      <li><a href="#!id_transition_target">Simple Full page transition</a></li>
+      <li><a href="#!_/ks_tests/ks_tests_flip_transition">Full page ajax transition with Flip animation specified in toElement</a></li>
+      <li><a href="#!id_transition_target_with_scrolling">Simple Full page transition with scrolling adjustments (not-yet implemented)</a></li>
+      <li><a href="#!tabbed_transition_home">Home for testing tabbed transitions</a></li>
+      <li>
+        <%= link_to "Home for testing Two column interfaces",
+                    ksp(docs_path(:page => "ks_tests_two_column_layout")) %>
+        <!-- <a href="/ks_tests/ks_tests_two_column_layout">Home for testing Two column interfaces</a> -->
+      </li>
+    </ul>
+  </div>
+  <div class="panel">
+    <h4>Note about animation direction</h4>
+    <p>Animation direction is very important. Without correct animation directions, users would not get a spacial sense of where each window is position in document space. This spacial sense is what enhances the users perception of knowing where they are. Without the perception, users will feel lost and uneasy.</p>
+    <p>On the other hand, animation direction is difficult. It requires that we calculate based on both the before state and the after state. For example, when we go to a page that we have never visited, then we want to sense 'moving-forward'. When we go back, we want to sense 'moving-back'. </p>
+    <p>Furthermore, if we have a set of links like in a set of tabs, the position of each tab hints at the location of the actual pages and the transitions must coordinate with this. For example, if we have a set of tabs labeled "tab_1", "tab_2" and "tab_3", and these are laid out from left to right, then the animations have to match this direction. If we move from "tab_1" to "tab_2", then the transition must move to the right. On the other hand, if we move from "tab_3" to "tab_2", then the transition must move to the left. Since this direction does not correspond to the order in which we visited these pages, animation direction calculations in these circumstances must be different from the browsing history approach.</p>
+    <p>In Kamishibai, the default is to automatically calculate for the history approach. If however the current page contains links (or links that have been inactivated and are shown as non-clickable text) with the class 'ks_tab', then we compare the toElement and fromElements to these links. If both the toElement and fromElements[0] match 'ks_tab' links, then we use the order of the links in the DOM to decide the animation direction. If either the toElement or fromElement[0] cannot be found in any 'ks_tab', then we fallback to the history to determine animation direction.</p>
+    <h4>Implementing 'ks_tab' link sets in your pages.</h4>
+    <p>All you have to do is to add class='ks_tab' to all the links that comprise the tabbed links widget. If you have an inactivated link, a span element instead of an a element, then instead of a href attribute, add a data-href attribute and set the value to exactly the same href you would use if it was an active link.</p>
+    <p>As an additional benefit, links with ks_tab will automatically toggle the 'selected' class using an eventListener automatically set in Kamishibai (to be implemented).</p>
+  </div>
+</div>
+
+<div id="id_transition_target" class="page" style="display:none">
+  <div class="panel test_results">
+    <h3>Great! "Page transition with Id" was successful!</h3>
+    <h4>What this tested</h4>
+    <ul>
+      <li>Confirm that the "slide animation" was smooth and devoid of any noticable flicker.</li>
+      <li>Confirm the direction of the animation when going back with both the back button and with a Kamishiba link to the top page
+      <a href="#!transition_test_home">transition testing home via Kamishibai</a>.</li>
+      <li>Scroll the toPage down, and see how it works.</li>
+      <li>Go back to <a href="/ks_tests/ks_tests_full_page_animations">transition testing home</a> and continue with the other tests.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="tabbed_transition_home" class="page" style="display:none">
+  <div class="panel">
+    <h3>Testing animation direction for tabbed links</h3>
+    <p>Click on the following links and confirm that the direction of the transision is what you would expect. That is, the tabs that are higher than current should take you back and the tabs that are lower that current should take you forward.</p>
+    <ul>
+      <li><a href="#!tabbed_transition_home" class="ks_tab">tabbed transition home</a></li>
+      <li><a href="#!tab_1" class="ks_tab">tab 1</a></li>
+      <li><a href="#!tab_2" class="ks_tab">tab 2</a></li>
+      <li><a href="#!tab_3" class="ks_tab">tab 3</a></li>
+      <li>Go back to <a href="/ks_tests/ks_tests_full_page_animations">transition testing home</a> and continue with the other tests.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="tab_1" class="page" style="display:none">
+  <div class="panel">
+    <h3>Page for tab 1</h3>  
+    <ul>
+      <li><a href="#!tabbed_transition_home" class="ks_tab">tabbed transition home</a></li>
+      <li><a href="#!tab_1" class="ks_tab">tab 1</a></li>
+      <li><a href="#!tab_2" class="ks_tab">tab 2</a></li>
+      <li><a href="#!tab_3" class="ks_tab">tab 3</a></li>
+      <li>Go back to <a href="/ks_tests/ks_tests_full_page_animations">transition testing home</a> and continue with the other tests.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="tab_2" class="page" style="display:none">
+  <div class="panel">
+    <h3>Page for tab 2</h3>  
+    <ul>
+      <li><a href="#!tabbed_transition_home" class="ks_tab">tabbed transition home</a></li>
+      <li><a href="#!tab_1" class="ks_tab">tab 1</a></li>
+      <li><a href="#!tab_2" class="ks_tab">tab 2</a></li>
+      <li><a href="#!tab_3" class="ks_tab">tab 3</a></li>
+      <li>Go back to <a href="/ks_tests/ks_tests_full_page_animations">transition testing home</a> and continue with the other tests.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="tab_3" class="page" style="display:none">
+  <div class="panel">
+    <h3>Page for tab 3</h3>  
+    <ul>
+      <li><a href="#!tabbed_transition_home" class="ks_tab">tabbed transition home</a></li>
+      <li><a href="#!tab_1" class="ks_tab">tab 1</a></li>
+      <li><a href="#!tab_2" class="ks_tab">tab 2</a></li>
+      <li><a href="#!tab_3" class="ks_tab">tab 3</a></li>
+      <li>Go back to <a href="/ks_tests/ks_tests_full_page_animations">transition testing home</a> and continue with the other tests.</li>
+    </ul>
+  </div>
+</div>

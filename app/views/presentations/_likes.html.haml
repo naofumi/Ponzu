@@ -1,0 +1,6 @@
+= ks_element :id => ["likes_presentation", presentation.id] do
+  .panel
+    %strong Liked by :
+    - likes.each.with_index do |l, i|
+      = ", " unless i == 0
+      = link_to "#{l.user.name}", ksp(user_path(l.user))

@@ -1,0 +1,22 @@
+<%= ks_element :id => "faqs",
+               :data => {
+                 :container => "ipadish_content",
+                 :title => t('titles.faqs'),
+                 :position => 80
+               } do %>
+  <div class="panel">
+    <h3>Logout</h3>
+    <p>Click on the "Welcome, Dr ...." link on the upper right corner of the screen. Click on the Logout link.</p>
+    <h3>Changing Passwords</h3>
+    <p>Click on the "Welcome, Dr ...." link on the upper right corner of the screen. Click on the Logout link on the User Settings page.</p>
+    <h3>Offline Usage</h3>
+    <p>This online program system is a website that you can use from your browser without installing any applications. However unlike most websites, it can be viewed offline. This should be especially useful at the Poster Hall where WiFi connections might be unreliable.</p>
+    <p> The offline feature stores all previously visited pages inside the browser. If the network is not available, the stored page will be displayed. All presentations that you have "Liked" or put into "My Schedule" will also be available, even if you viewed them on a different PC. In other words, "Liked" and "My Schedule" presentations are guaranteed to be available offline.</p>
+    <p>However, all Internet Explorer versions excluding 10 do not have the features to support full offline viewing. We recommend that you install Internet Explorer 10 of use the latest versions of Firefox or Chrome.</p>
+    <h3>Synchronizing your data</h3>
+    <p>All data is sent to the server, and will be updated from the server at pre-determined intervals. Users should not need to worry about data synchronization.</p>
+    <h3>Solving Issues</h3>
+    <p>Due to the offline capabilities, issues that do not occur with regular websites may happen. One possible solution is to select "reset cache" from the "Welcome, Dr ...." link. If this does not solve your problem, please notify us via <a href="http://twitter.com/mbsj2012it">Twitter</a> or come to the support desk by the Conference registration counter. Support in English is available.</p>
+  </div>
+  <%= render :partial => 'layouts/biokaimono' %>
+<% end %>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" unique-identifier="bookid" version="2.0">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <meta name="cover" content="MBSJ2012_png" />
+    <dc:title>MBSJ2012 Program Day 1</dc:title>
+    <dc:identifier opf:scheme="URI">http://mbsj2012.castle104.com/epub/day_1</dc:identifier>
+    <dc:identifier id="bookid"><%= book_id %></dc:identifier>
+    <dc:date opf:event="original-publication">2012-11-12</dc:date>
+    <dc:date opf:event="ops-publication"><%= Time.now.strftime('%Y-%m-%d') %></dc:date>
+    <dc:language>ja</dc:language>
+    <dc:creator>Molecular Biology Society of Japan</dc:creator>
+    <dc:subject>Molecular Biology Conference Program</dc:subject>
+    <dc:contributor>Naofumi Kagami</dc:contributor>
+    <dc:publisher>Castle104, LLC</dc:publisher>
+    <dc:rights>2012, All rights reserved.</dc:rights>
+    <dc:source>Molecular Biology Society of Japan 2012</dc:source>
+  </metadata>
+  <manifest>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="css" href="stylesheets/style.css" media-type="text/css"/>
+    <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
+<%= @content_manifests %>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="cover"/>
+<%= @spine %>
+  </spine>
+  <guide>
+    <reference type="cover" href="cover.xhtml"/>
+<!--    <reference type="title-page" href="Walden_c0.xhtml"/>
+    <reference type="copyright-page" href="Walden_c0copy.xhtml"/>
+    <reference type="preface" href="Walden_c0note.xhtml"/>
+    <reference type="text" href="Walden_c1.xhtml"/>
+    <reference type="text" href="Walden_c2.xhtml"/>
+    <reference type="text" href="Walden_c18.xhtml"/> -->
+  </guide>
+</package>

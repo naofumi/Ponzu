@@ -1,0 +1,22 @@
+- if !(tw_links = consolidated_links(users, :twitter_id, :twitter_url)).blank?
+  %div
+    %strong Twitter: 
+    = tw_links
+- if !(fb_links = consolidated_links(users, :facebook_url, :facebook_url)).blank?
+  %div
+    %strong Facebook: 
+    = fb_links
+- if !(ln_links = consolidated_links(users, :linkedin_id, :linkedin_url)).blank?
+  %div
+    %strong LinkedIn: 
+    = ln_links
+- if !(rrm_links = consolidated_links(users, :read_research_map_id, :read_research_map_id)).blank?
+  %div
+    %strong Read & ResearchMap: 
+    = rrm_links
+- users.inject([]){|memo, u| memo + u.other_links}.uniq.select{|l| l.present?}.each_with_index do |link, i|
+  %div
+    %strong Other #{i + 1}:
+    - link =~ /^http(s?):\/\//
+    - url = "http#{$1}://#{link.sub(/^https?:\/\//, '')}"
+    = link_to url, url

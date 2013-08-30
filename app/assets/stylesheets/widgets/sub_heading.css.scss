@@ -1,0 +1,8 @@
+@import "../kamishibai/ks_settings";
+
+.fixed_sub_header {
+  position: fixed;
+  width: 100%;
+  padding: 5px;
+  z-index: 500;
+}

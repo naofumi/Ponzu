@@ -1,0 +1,26 @@
+= ponzu_frame do
+  .panel
+    %h1= t('.title')
+    .warnings= t('.messages.instructions')
+    .panel_title= t('.panel_titles.excellent')
+    .panel.paneled_list
+      - unless @excellent_votes.empty?
+        - @excellent_votes.each do |l|
+          - p = l.presentation
+          = link_to ksp(presentation_path(p)) do
+            = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                              :class => "presentation",
+                              :data => {:ajax => heading_presentation_path(p.id)}
+      - else
+        = t('.messages.no_excellent')
+    .panel_title= t('.panel_titles.unique')
+    .panel.paneled_list
+      - unless @unique_votes.empty?
+        - @unique_votes.each do |l|
+          - p = l.presentation
+          = link_to ksp(presentation_path(p)) do
+            = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                              :class => "presentation",
+                              :data => {:ajax => heading_presentation_path(p.id)}
+      - else
+        = t('.messages.no_unique')

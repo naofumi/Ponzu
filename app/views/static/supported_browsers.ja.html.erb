@@ -1,0 +1,70 @@
+<%= ks_element :id => "supported_browsers",
+               :data => {
+                 :title => "MBSJ: Supported Browsers",
+                 :container => "ipadish_content",
+                 :position => 90
+               } do %>
+  <div class="panel">
+    <!--[if IE 9]>
+      <div style="color:#d80048">
+        あなたの使用しているブラウザは Microsoft Internet Explorer 9 です。本オンライン抄録集では可能な限りサポートをしていますが、「お勧め！」よりは使用感が落ちます。可能であれば「お勧め！」ブラウザをご利用ください。
+      </div>
+    <![endif]-->
+    <!--[if IE 8]>
+      <div style="color:#d80048">
+        あなたの使用しているブラウザは Microsoft Internet Explorer 8 です。本オンライン抄録集では可能な限りサポートをしていますが、スピード、見栄えなどかなり使用感が落ちます。可能であれば「お勧め！」ブラウザをご利用ください。
+      </div>
+    <![endif]-->
+    <h2>サポート対象ブラウザについて</h2>
+    <p>
+      最新のウェブテクノロジーを駆使しているため、メーカー自身がサポートを終了したブラウザについては、本オンライン抄録集でもサポート対象から外しています。最高の使用感のためには「お勧め！」ブラウザをご利用ください。
+    </p>
+    <table class="supported_browsers">
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">お勧め！</span> Apple Safari, Google Chrome, Mozilla Firefox, Microsoft Internet Explorer 10</h3>
+          <ol>
+            <li>見た目がきれい</li>
+            <li>アニメーション</li>
+            <li>オフラインで部分的に使用可能</li>
+            <li>Windows XPユーザは最新バージョンのGoogle ChromeとMozilla Firefoxが動きます</li>
+            <li>Macユーザー: SafariはMacにインストール済み, <%= link_to "Chrome for Mac" %>, <%= link_to "Firefox for Mac" %></li>
+            <li>Windowsユーザー: Windows 8ユーザーはIE 10がインストール済み, <%= link_to "Windows 7用 IE10", "http://windows.microsoft.com/en-US/internet-explorer/downloads/ie-10/worldwide-languages"%>, <%= link_to "Chrome for Windows" %>, <%= link_to "Firefox for Windows" %></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">サポート対象</span> Microsoft Internet Explorer 9</h3>
+          <ol>
+            <li>見栄えは普通</li>
+            <li>アニメーションは無し</li>
+            <li>オフラインで部分的に使用可能</li>
+            <li>Windows Vista, 7ユーザーはインストール可能: <%= link_to "Internet Explorer 9"%></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">ギリギリ サポート</span> Microsoft Internet Explorer 8</h3>
+          <ol>
+            <li>見栄えは良くない</li>
+            <li>アニメーションは無し</li>
+            <li>オフラインで部分的に使用可能</li>
+            <li>Windows XP, Vista, 7にインストール可能: <%= link_to "Internet Explorer 8" %></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3><span style="color:#d80048">簡略 サポート</span> Microsoft Internet Explorer 6, 7, Firefox 3.6</h3>
+          <ol>
+            <li>自動的に簡略的なサイトに転送されます。簡略サイトはiModeなどのフィーチャーフォンと同じサイトです。</li>
+          </ol>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+  <%= render :partial => 'layouts/biokaimono' %>
+<% end %>

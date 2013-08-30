@@ -1,0 +1,48 @@
+<%= ks_element :id => "fragments",
+            :data => {
+              :title => "Fragments",
+              :container => "ipadish_content",
+              :"container-ajax" => docs_path(:page => "showcase/layout")
+            } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+
+# Why Fragments?
+
+Kamishibai breaks pages down into fragments. Below are the reasons
+why we do it.
+
+## You can reuse fragments between mobile and desktop
+
+Contrary to our expectations, when we created both the desktop and
+smartphone versions of the MBSJ2012 website, we converged a lot
+on the controllers and views. This is due to the fact that we
+wanted a consistent look-and-feel, and that for the desktop site,
+we actually targetted the iPad with a 728px native horizontal resolution
+which is much less than current day websites are designed for.
+
+If we extend support for fragments and use a suitable URL scheme 
+(described elsewhere), we envision that we can actually use the 
+same identical controller and views for both desktop and smartphone
+versions.
+
+## Fragments make cache management easier
+
+Regular HTML pages contain a lot of stuff. This means that when something
+gets uploaded on the website, there are potentially multiple HTML pages
+that have to be expired. If we use fragments, this expiry is much easier.
+
+First, since a fragment will depend on only a small number of data, the
+number of fragments to expire will be smaller compared to whole pages.
+
+Additionally, if we are using time-based expiration, then we can set
+different page elements to expire at a different time. For example, 
+the top navigation elements will seldom change so we can set a longer
+expiry time for these.
+
+
+
+MARKDOWN
+%>
+  </div>
+<% end %>

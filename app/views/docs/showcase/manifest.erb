@@ -1,0 +1,51 @@
+CACHE MANIFEST
+# In production, we version the manifest by time.
+# Version: 13
+
+CACHE:
+<%= docs_root_path %>
+<%= asset_path('ks_tests/application.js?body=1') %>
+<%= asset_path('ks_tests/application.css?body=1') %>
+<% [
+      :kamishibai,
+      :kamishibai_event_listeners,
+      :ks_ajax,
+      :ks_app,
+      :ks_benchmark,
+      :ks_cache,
+      :ks_compositor,
+      :ks_controller,
+      :ks_effect,
+      :ks_history,
+      :ks_log,
+      :ks_scroll_memory,
+      :ks_support,
+      :ks_transition_selector,
+      :ks_url,
+      :ks_validator,
+      :lscache,
+      :rails,
+      :ks_sqlcache,
+      :ks_cookie
+    ].each do |name| %>
+<%= asset_path("kamishibai/#{name}.js?body=1") %>
+<% end %>
+
+<% [
+      :kamishibai,
+      :ks_layout,
+      :ks_icons,
+      :ks_pages,
+      :ks_settings,
+      :simple_grid
+    ].each do |name| %>
+<%= asset_path("kamishibai/#{name}.css?body=1") %>
+<% end %>
+<%= asset_path("industrial.png") %>
+<%= asset_path("angle.png") %>
+
+
+NETWORK:
+*
+
+FALLBACK:

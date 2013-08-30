@@ -1,0 +1,8 @@
+- cache ['v0', 'ponzu_frame', Time.zone.now.strftime("%Y%m%d"), can?(:manage, :all), can?(:clear, Kamishibai::Cache)] do
+  = ks_hidden_page(:id => "ponzu_body", 
+                     :class => %w(program), 
+                     :data => { :title => "Ponzu Frame" }) do
+    #print_message_header
+      = t('print_message_header.message')
+    = render :partial => 'layouts/ponzu_header'
+    #ponzu_frame.sliding_container

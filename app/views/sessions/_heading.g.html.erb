@@ -1,0 +1,10 @@
+<% session_duration = (session.ends_at - session.starts_at) %>
+<%= content_tag :div do %>
+  <%= content_tag(:span, "■", :class => "color_f_#{color_tag} session_#{session.id} block")%>
+  <%= image_tag('clock_small.png', :style => "vertical-align:bottom") if schedules_in_session.size > 0 %>
+  <%= content_tag(:span, "★", :style => "color: #ffe109") if likes_in_session.size > 0 %>
+  <span class="time">
+    <%= session.starts_at.strftime('%H:%M') %>-<%= session.ends_at.strftime('%H:%M') %> <%= session.room.name %>
+  </span> <br />  
+  <%= link_to session.title, session %>
+<% end %>

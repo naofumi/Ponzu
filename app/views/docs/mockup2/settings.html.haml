@@ -1,0 +1,57 @@
+= ks_element :id => "settings", 
+             :data => { :title => "Settings",
+                        :container => "mockup2_body",
+                        :"container-ajax" => docs_path(:page => "mockup2/layout") } do
+  .settings_page
+    %h1 Change your settings
+    .panel_title Password
+    .panel
+      .grid
+        .col-1-3
+          New password
+        .col-2-3
+          = text_field_tag :en_name, nil, :style => "width: 100%"
+      .grid
+        .col-1-3
+          New password (confirm)
+        .col-2-3
+          = text_field_tag :jp_name, nil, :style => "width: 100%"
+    .panel_title Your name
+    .panel
+      .grid
+        .col-1-3
+          English name
+        .col-2-3
+          = text_field_tag :en_name, nil, :style => "width: 100%"
+      .grid
+        .col-1-3
+          Japanese name
+        .col-2-3
+          = text_field_tag :jp_name, nil, :style => "width: 100%"
+    .panel_title Additional info
+    .panel
+      .grid
+        .col-1-3
+          Email address
+        .col-2-3
+          = text_field_tag :en_name, nil, :style => "width: 100%"
+      .grid
+        .col-1-3
+          Twitter
+        .col-2-3
+          = text_field_tag :jp_name, nil, :style => "width: 100%"
+      .grid
+        .col-1-3
+          Facebook
+        .col-2-3
+          = text_field_tag :jp_name, nil, :style => "width: 100%"
+      .grid
+        .col-1-3
+          LinkedIn
+        .col-2-3
+          = text_field_tag :jp_name, nil, :style => "width: 100%"
+      .grid
+        .col-1-3
+          ReaD & Researchmap
+        .col-2-3
+          = text_field_tag :jp_name, nil, :style => "width: 100%"

@@ -1,0 +1,18 @@
+= ponzu_frame do
+  %h1 Listing likes
+  %table
+    %tr
+      %th Presentation
+      %th User
+      %th
+      %th
+      %th
+    = @likes.each do |like|
+      %tr
+        %td= like.presentation_id
+        %td= like.user_id
+        %td= link_to 'Show', ksp(like)
+        %td= link_to 'Edit', ksp(edit_like_path(like))
+        %td= link_to 'Destroy', like, confirm: 'Are you sure?', method: :delete
+    %br/
+    = link_to 'New Like', ksp(new_like_path)

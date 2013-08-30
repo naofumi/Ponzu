@@ -1,0 +1,59 @@
+- like_count = presentation.likes.size
+%div{:id => "like_button_#{presentation.id}", :class => "like"}
+  %span.social_controls
+    - button_class = "button icon"
+    - if like = like_for_current_user_and_presentation(presentation)
+      - if !like.kind_of?(Like::Schedule)
+        = link_to t('likes.add_to_my_schedule'), schedulize_like_path(like),
+              :remote => true, :method => :put, :'data-ks-insert-response' => '',
+              'data-invalidates-keys' => invalidated_paths(like),
+              :class => "#{button_class} clock"
+        = link_to t('likes.unlike'), like_path(like.id), 
+                  :class => "#{button_class} like", 
+                  :method => :delete,
+                  :remote => true,
+                  :'data-ks-insert-response' => '',
+                  :'data-invalidates-keys' => invalidated_paths(like)
+      - else
+        = link_to t('likes.remove_from_my_schedule'), 
+                unschedulize_like_path(like),
+                :remote => true, :method => :put, :'data-ks-insert-response' => '',
+                'data-invalidates-keys' => invalidated_paths(like),
+                :class => "#{button_class} clock"
+    - else
+      / To invalidate Like related paths, we need a like object
+      - like = presentation.likes.build
+      = link_to t('likes.like'), likes_path(:like => {:presentation_id => presentation.id}), 
+                :class => "#{button_class} like", 
+                :method => :post,
+                :remote => true,
+                :'data-ks-insert-response' => '',
+                :'data-invalidates-keys' => invalidated_paths(like)
+      .prompt_message
+        (
+        = t('likes.like_is_required_to_schedulize')
+        )
+  
+  %div.social_stats
+    - if like_count > 0
+      = image_tag('ponzu/like.png')
+    - if current_user && like_count > 0
+      - if current_user_likes_this(presentation)
+        You
+        - if like_count > 1
+          and
+          = link_to "#{pluralize (like_count - 1), "other"}", 
+                  likes_presentation_path(presentation.id, 
+                  :user => current_user.id), :remote => true, 
+                  :data => {"ks-insert-response" => true}
+          
+        - else 
+          
+      - else
+        = link_to "#{pluralize like_count, "person"}", 
+                  likes_presentation_path(presentation.id, 
+                  :user => current_user.id), :remote => true, 
+                  :data => {"ks-insert-response" => true}
+      liked this.
+
+  .likes_list{:id => ['likes_presentation', presentation.id]}

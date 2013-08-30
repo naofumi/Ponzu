@@ -1,0 +1,51 @@
+<h2>検索条件</h2>
+<div style="text-align:center">
+  <%= form_tag search_index_path, :method => :get do %>
+    <div>演題、要旨、人名、メルアド</div>
+    <%= text_field_tag :query, params[:query] %>
+    <%= submit_tag "検索実行" %>
+  <% end %>
+</div>
+<% if !@query.blank? %>
+  <h2>結果</h2>
+  <div class="presentation_list">
+    <h3>著者･参加者</h3>
+    <% if @users && !@users.results.empty? %>
+      <%= will_paginate @users.hits, :next_label => ">", :previous_label => "<", :params => {:type => 'users'} %>
+      <% @users.results.each do |u| %>
+        <div>
+          <%= link_to highlight(u.name, params[:query]), u %>
+          <span class="user_type"><%= u.kind_of?(Author) ? "Author" : "Participant" %></span>
+          <br />
+          <%= "(#{u.en_affiliation})" if u.kind_of?(User) %>
+          <%= "(#{u.all_unique_affiliations.first})" if u.kind_of?(Author) %>
+        </div>
+      <% end %>
+
+      <%= will_paginate @users.hits, :next_label => ">", :previous_label => "<", :params => {:type => 'users'} %>
+
+    <% end %>
+
+
+    <h3>演題</h3>
+    <% if @presentations && !@presentations.results.empty? %>
+      <%= will_paginate @presentations.hits, :next_label => ">", :previous_label => "<", :params => {:type => 'presentations'} %>
+
+      <% @presentations.each_hit_with_result do |hit, p| %>  
+        <div>
+          <%= render :partial => 'sessions/presentation.g', :locals => {:p => p}%>
+          <div class = "search_hit_text" %>
+            <% hit.highlights.each do |hl| %>
+              "...
+              <%= hl.format{ |word| "<span class='highlight'>#{word}</span>" }.html_safe %>
+              ..."<br />
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= will_paginate @presentations.hits, :next_label => ">", :previous_label => "<", :params => {:type => 'presentations'} %>
+    <% end %>
+  </div>
+<% end %>
+

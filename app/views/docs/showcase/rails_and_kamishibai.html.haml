@@ -1,0 +1,55 @@
+= ks_element :id => "rails_and_kamishibai",
+             :data => { :title => "Rails and Kamishibai",
+                        :container => "ipadish_content",
+                        :"container_ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Rails and Kamishibai
+
+      Kamishibai does not depend on Rails in any direct way. However in actual use, it is 
+      much more pleasant to use Kamishibai together with a mature server-side web framework.
+      I give the reasons below.
+
+      ## Rails makes the code simple
+
+      In jQuery Mobile, they make a huge amount of effort to make the markup simple. The 
+      downside is that they create a lot of DOM elements in Javascript on the client side. 
+      This consumes a lot of precious CPU resources on mobile devices and is quite slow.
+      It also severely restricts the freedom to design your own widgets.
+
+      In Kamishibai, we use Rails to simplify the markup. Kamishibai sets a lot of attributes
+      on DOM elements to get the work done, and coding this is repetitive, confusing, irritating
+      and results in hard to modify and maintain code. Rails can DRY this up significantly.
+
+      ## HAML makes the code even simpler
+
+      HAML makes the code easy to read and easy to maintain. There is no
+      equivalent to the advantages that HAML provides.
+
+      ## Rails generates HTML, Kamishibai is the compositor
+
+      Whereas frameworks like Sencha Touch keep models on the client and render the DOM,
+      Kamishibai keeps all models on the server. There is zero business logic on the client
+      in Kamishibai. The reason is simply because we feel that the business logic should
+      only be present in a single location. Otherwise it gets confusing really quickly.
+
+      Kamishibai simply serves as the compositor. It combines and displays the various
+      HTML fragments that Rails sends to the client. Kamishibai caches the HTML
+      fragments and has to manually expire them at times. However, Kamishibai does not
+      infer the business logic to decide what to expire. Instead, Rails tells Kamishibai
+      which pages to expire.
+
+      ## Possibility of using client-side templating languages
+
+      Although we generally don't think that generating HTML on the client is a good idea, 
+      there is one case where it makes sense. This is when we want to reduce the amount
+      of data going between the server and the client. The amount of network traffic is not
+      the issue here because it is rarely the bottleneck. However, local storage is.
+      Keeping the amount of data small makes it easier to cache inside the browser. We
+      have observed that you can reduce the amount of data to 1/2.
+
+      In these cases, it makes sense to use a client-side templating language. It does
+      become complex however, when we want to use Rails helpers to generate URLs, forms
+      and stuff.
+
+      We prefer to use fragments more effectively in order to reduce storage.

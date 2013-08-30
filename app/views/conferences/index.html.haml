@@ -1,0 +1,25 @@
+= ponzu_frame :container => :ponzu_admin_frame do
+  %h1 Listing conferences
+  - if @conferences.empty?
+    %div No conferences yet.
+  - else
+    %table
+      %tr
+        %th{style: "width: 500px"} Name
+        %th{style: "width: 200px;"} Module Name
+      - @conferences.each do |conference|
+        %tr
+          %td
+            = conference.name
+            %br/
+            = link_to "Show", ksp(conference)
+            |
+            = link_to "Edit", ksp(:edit_conference_path, conference)
+            |
+            = link_to "Destroy", :remote => true, :method => :delete,
+                                 :confirm => 'Are you sure?'
+            |
+            = link_to 'View', conference_root(conference)
+          %td= conference.module_name
+
+  = link_to "Create New Conference", ksp(new_conference_path)

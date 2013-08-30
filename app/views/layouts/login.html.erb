@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" <%= manifest_attribute %>>
+<!-- lang="en" for hypenation purposes http://www.w3.org/TR/css3-text/#hyphenation -->
+<head>
+  <title>Ponzu Conference Information System</title>
+  <%= stylesheet_link_tag    "jsdb2013/application", :media => "all" %>
+  <%= javascript_include_tag "d/application" %>
+  <!--[if IE 9]>
+    <%= stylesheet_link_tag    "ie9/application", :media => "all" %>
+    <%= javascript_include_tag "ie9/application" %>
+  <![endif]-->
+  <!--[if IE 8]>
+    <%= stylesheet_link_tag    "ie9/application", :media => "all" %>
+    <%= javascript_include_tag "ie9/application" %>
+    <%= stylesheet_link_tag    "ie8/application", :media => "all" %>
+    <%= javascript_include_tag "ie8/application" %>
+  <![endif]-->
+  <script>
+    if (navigator.appVersion.indexOf("Win") != -1) {
+      document.write('<%= stylesheet_link_tag "windows/application", :media => "all" %>');
+    }
+  </script>
+  <%= csrf_meta_tags %>
+  <!-- Viewport tag taken from http://snippet-editor.com/2010/08/viewport-equal-1024.html -->
+  <!-- Fixed provides the best viewing experience IMHO -->
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0 minimum-scale=1.0" />
+
+</head>
+<body>
+  <%= yield %>
+  <div class="notice"><%= flash[:notice] %></div>
+  <div class="error"><%= flash[:error] %></div>
+</body>
+</html>

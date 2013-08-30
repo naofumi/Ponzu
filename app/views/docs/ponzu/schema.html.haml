@@ -1,0 +1,49 @@
+= ks_element :id => "ponzu_schema",
+             :data => { :title => "Ponzu Schema",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Ponzu schema
+      
+      ## Presentations, Submissions and Sessions
+
+      ### Dividing Presentations and Submissions
+
+      We have divided Presentations and Submissions. Submissions basicaly constitute what the
+      authors have submitted. That is title, abstract text, associated authors. The Presentation
+      is now a join table that connects Submissions to Sessions (Symposia, Workshops, Posters, etc.). Hence the Presentation object contains session_id, starts_at, ends_at, number, position.
+
+      We did this division because the same Submission is often presented in multiple ways; i.e. 
+      Workshop and Poster.
+
+      ### Subclassing Presentations into Poster, Forum, Booth, Seminar, Workshop, Syposium, etc.
+
+      We have subclassed Presentations. The Presentation object is first subclassed into
+      Mappable and TimeTableable. These represent presentations that are done at at location 
+      (Posters and Booths) and those done at a specific time (Forums, Workshops, Symposia, Seminars). These presentations tend to have different requirements. For example, Mappable presentations
+      have a tag that represents the location (for a Poster, we use a substring of the presentation
+      number. For Booths, we will have to create a specific field). On the other hand, TimeTableable
+      presentations will calculate ends_at times based on when the next Presentation starts (because
+      ends_at will not generally be directly inputted, but rather needs to be calculated). We use
+      Rails single-table-inheritance for this. The benefit is that we can separate the code for each type of Presentation, and we can easily mix and match behaviours by changing the inheritance or adding mixins.
+
+      By dividing Mappable into Posters, and Booths we can handle the mapping differently. Poster
+      mapping will tend to be simple because the presentation number directly indicates the
+      position of the poster. Poster sizes are also uniform. For booths, the situation is much
+      more complicated. Most likely, we will create a grid system for booths, and each booth will
+      contain a list of which grids it encompasses.
+
+      Also for Seminars (which generally represent sponsored seminars), we can handle them differently because they are different classes.
+
+      ## Authors and Users
+
+      We have divided Authors and Users. Authors are the persons that are found in the Submissions.
+      Authors are **information** and do not represent users of the system. The users of the system
+      are represented by the User objects. Hence all login information and Twitter accounts, etc.
+      will be placed in the User objects.
+
+      To allow Users to view the "likes" on their Presentations, we will link together Authors and
+      Users during Nayose. We will allow multiple Users per Author to solve the multiple login 
+      accounts problem.
+

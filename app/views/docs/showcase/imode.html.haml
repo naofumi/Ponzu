@@ -1,0 +1,50 @@
+= ks_element :id => "imode",
+             :data => { :title => "iMode optimizations",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # iMode is still strong
+
+      The percentage of people using smartphones in Japan is still at less than 30% 
+      according to data for the year 2012 (depends on the research company). Although
+      the growth is strong, it will get slower as the market saturates and we should
+      expect a significant number of people to still be using iMode in the mid-term.
+
+      Kamishibai renders HTML and is very suited for iMode. We want to 
+      create a few Rails libraries that make it even easier to share code between
+      websites for various devices.
+
+      # What should the library do
+
+      Kamishibai handles iMode sites very well, and in most cases, the iMode site
+      structure is very similar to the smartphone site structure. Therefore we
+      can share controllers most of the time.
+
+      The problem with iMode sites is that CSS is not supported very well and 
+      therefore it is difficult to adjust to iMode simply by manipulating CSS; 
+      you have to change the HTML as well. 
+
+      One thing that could help would be to switch from ERB to HAML. HAML is a 
+      more terse syntax so it might be easier to convert from a smartphone layout
+      to a iMode layout. It might also be possible to do some automatic convertsion
+      because HAML uses helpers extensively.
+
+      # Some examples for conversion
+
+      iMode sites do not use `li` tags for lists. Instead they use `■` directly in 
+      the text. We should have helpers to make it easy to insert these.
+    %h3 Keitai-like square block helpers
+    = galapagos_bullet
+    This uses a square as a bullet with the
+    %code galapagos_bullet
+    helper. The code is pretty simple.
+    %pre
+      %code
+        \= galapagos_bullet
+        This uses a square as a bullet with the
+        \%code galapagos_bullet
+        helper. The code is pretty simple.
+
+
+      

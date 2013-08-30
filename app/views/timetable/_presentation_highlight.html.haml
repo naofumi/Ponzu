@@ -1,0 +1,8 @@
+- d = tt.entry(:starts_at => presentation.starts_at,
+               :ends_at => presentation.ends_at || presentation.starts_at + 10 * 60,
+               :row => @rooms.index(presentation.session.room))
+- style_string = "top:#{d[:top].to_i + d[:height].to_i - 18}px;left:#{d[:left].to_i + 1}px;width:#{d[:width].to_i}px;"
+= content_tag('div', nil, :id => "presentation_highlight_#{presentation.id}",
+              :style => "#{style_string};",
+              :class => "presentation_highlight #{like.kind_of?(Like::Schedule) ? "scheduled" : ""}",
+              'data-container' => "like_highlights_#{presentation.starts_at.strftime('%Y-%m-%d')}")

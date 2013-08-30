@@ -1,0 +1,76 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+# For presentation_test.rb
+
+
+generic_presentation:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: generic_presentation_number
+  session: generic_session
+  submission: generic_submission
+  type: Presentation::Workshop
+
+generic_presentation_2:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: generic_presentation_number_2
+  session: generic_session
+  submission: generic_submission
+  type: Presentation::Poster
+
+generic_poster_presentation:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: generic_poster_presentation_number
+  session: generic_poster_session
+  submission: generic_submission
+  type: Presentation::Poster
+
+scheduled_presentation:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: scheduled_presentation
+  session: generic_session
+  submission: generic_submission
+  type: Presentation::Poster
+
+first_in_session:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: first_in_session
+  session: session_for_ordering
+  submission: generic_submission
+  position: 0
+
+second_in_session:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: second_in_session
+  session: session_for_ordering
+  submission: generic_submission
+  position: 1
+
+last_in_session:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: last_in_session
+  session: session_for_ordering
+  submission: generic_submission
+  position: 2
+
+presentation_from_other_conference:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: presentation_from_other_conference
+  session: generic_session
+  submission: another_conference_submission
+  type: Presentation::Workshop
+
+scheduled_presentation_from_other_conference:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 12:20:00
+  number: scheduled_presentation_from_other_conference
+  session: generic_session
+  submission: another_conference_submission
+  type: Presentation::Workshop

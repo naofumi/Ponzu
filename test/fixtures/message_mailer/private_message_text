@@ -1,0 +1,2 @@
+You can use this as a fixture for ActionMailer tests.
+Read the content of this file using engine_read_fixture('private_message_text')

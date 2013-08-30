@@ -1,0 +1,54 @@
+= form_for(@submission,
+             :html => {:data => { :remote => true,
+                       :ks_insert_response => true}}) do |f|
+  - if @submission.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@submission.errors.count, "error")
+        prohibited this submission from being saved:
+
+      %ul
+        - @submission.errors.full_messages.each do |msg|
+          %li= msg
+
+  #changed_alert
+
+  .field
+    = f.label :submission_number
+    %br/
+    = f.text_field :submission_number
+  .field
+    = f.label :en_title
+    %br/
+    = f.text_field :en_title, 
+                   :onchange => "document.getElementById('changed_alert').textContent = 'shit'"
+  .field
+    = f.label :jp_title
+    %br/
+    = f.text_field :jp_title
+  .field
+    = f.label :jp_abstract
+    %br/
+    = f.text_area :jp_abstract
+  .field
+    = f.label :en_abstract
+    %br/
+    = f.text_area :en_abstract
+  .field
+    = f.label :presenting_author_id
+    %br/
+    = f.number_field :presenting_author_id
+  .field
+    = f.label :main_author_id
+    %br/
+    = f.number_field :main_author_id
+  .field
+    = f.label :disclose_at
+    %br/
+    = f.datetime_select :disclose_at
+
+    / The session_id field is used to automatically create a Presentation object
+    / linking this Submission to a Session.
+    = hidden_field_tag :session_id, params[:session_id]
+  .actions
+    = f.submit

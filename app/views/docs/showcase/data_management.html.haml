@@ -1,0 +1,123 @@
+= ks_element :id => "data_management",
+             :data => { :title => "Data Management",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Data Management
+
+      Here I want to outline how we are going to manage data, how we take the
+      data from the initial Excel files and how we place it into the database,
+      and how we massage it, how we edit it etc.
+
+      # Initial Import
+
+      We accept data in a UMIN like format. We are considering a multi-pass approach to 
+      simplify each step. We do the following;
+
+      ## Pass 1: Create Submission objects
+
+      1.  Each data in a UMIN like format corresponds to a Submission object. We first look
+          for each unique Submission ID within the data set and create a Submission object.
+          Inside this submission object, we include the titles and the abstract.
+
+      ## Pass 2: Create Author and Authorship objects
+
+      1.  From the UMIN like format, we create Author objects. We take a false positive
+          approach to Nayose, and merge Authors if the Japanese name in Kanji is the same.
+      2.  We create Authorship objects joining the Authors and Submissions. Inside the 
+          Authorship objects, we add the author names exactly as they are found in the UMIN
+          submissions. We also add affiliations, also exactly as they are found in the UMIN
+          submissions.
+
+      ## Pass 3: Create Session objects
+
+      1.  Create Session objects. Scan each row in the UMIN data and extract only the
+          data pertaining to Sessions (this is often duplicated). Depending on the whether
+          you have already created Session objects, either find of create Session objects.
+          Include Session time and room information if available.
+      2.  Sessions can be of many types; Symposium, Forum, Workshop, Poster, Luncheon Seminar,
+          Booth. When creating Session objects, assign the appropriate type. 
+      3.  If we want to create a new Session type, then enter the tag for that type in the
+          Session Class. (we won't create a separate SessionType object). For each 
+          Session type, label it as either :timetable, :poster, :exhibition. This will
+          allow us to extract sessions and presentations for display in **timetable views**, 
+          **poster_map views** and **exhibition views**.
+
+      ## Pass 4: Create Presentation objects
+
+      1.  If the submissions in the UMIN data have been assigned to sessions, then reflect that.
+          Each submission should have a Session number assigned. They may or may not have
+          Presentation numbers assigned. 
+      2.  If Session numbers have been assigned, find the matching Session and create a Presentation
+          object (a join between Submissions and Sessions). In general, the UMIN data should
+          be ordered by presentation order. Therefore, we assign `position` in the same order as 
+          the UMIN data.
+      3.  If available, assign presentation time.
+
+      ## Create Room objects
+
+      1.  Create Room objects manually. Assign the names to be identical to the data in
+          UMIN data, so that we can automatically assign Room objects to Sessions.
+      2.  Collect maps of each room. Resave with Photoshop to reduce file size.
+      3.  Using the Room Editing interface, change the pushpin coordinates to correcly
+          point to the appropriate location.
+
+      # Handling registrants
+
+      In the new Ponzu, registered users are the equivalent of User objects. We won't fuck with
+      Registrant objects which were a real pain. Authors are not necessarily associated with User
+      objects if they aren't attending the conference.
+
+      The realization with MBSJ2012 is that a single Author might be given multiple login IDs.
+      I don't think it is realistic to ask the conference organizers to remedy this. This kind of
+      shit will happen. We will have to absorb that inside Ponzu. Hence the relationship between
+      Users and Authors is many-to-one. A single Author may have multiple Users.
+
+      We will think about how to display User profile pages when there are multiple users for
+      a single Author. We might merge information or do something else.
+
+      Each registrant will be given a login ID and an initial password.
+
+      On site-registrants will ge given a login ID and an initial password for pre-created User
+      accounts. These accounts will not have Authors assigned to them. We will allow a feature
+      to receive requests for User-Author assignment and to do the assignment.
+
+      # Nayose
+
+      Nayose is multiple stepped.
+
+      ## Nayose within Authors
+
+      We first merge and then split.
+
+      1.  Run a rake task that looks for Authors with names that are somewhat similar, using 
+          an aggressive algorithm that will generate many false positives but is unlikely to
+          miss.
+      2.  Looking at that list, merge any Authors that are likely to be the same.
+      3.  Next step is splitting. We will have a UI that enables us to scan every single Author
+          and to manually discern whether that entry is a single person or a miss-merge of
+          two different people. If they are two different people, flag them.
+      4.  Split those who were different people.
+
+      ## Nayose of Authors and Users
+
+      We do this on pre-registered users only.
+
+      Nayose of Authors and Users allows each user to manage their Author profile page. The Author
+      profile page pulls information from User objects. Thus an assignment has to made for this 
+      to happen.
+
+      Furthermore, this assignment allows users to edit their presentations and view who liked them.
+
+      Therefore, users can view the abstracts before Nayose. We don't have to hurry too much.
+
+      1.  We automatically assign Authors and Users using a relatively strict algorithm. We 
+          don't make the assignment **live** until manual confirmation though.
+      2.  We list up the Users who could not be automatically assigned and assign them manually.
+      3.  We do a Nayose Jamboree to manually whitelist each Author-User relationship.
+
+      ## Nayose confirmation
+
+      1.  We run rake tasks to generate lists of potential false-positives and false-negatives.
+

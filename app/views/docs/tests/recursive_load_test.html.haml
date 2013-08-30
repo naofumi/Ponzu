@@ -1,0 +1,17 @@
+= ks_element :id => "recursive_load_test",
+             :data => { :title => "Recursive test",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    %h1 Recursive Load test
+    %h2 Test nested loading
+    %p This tests nested recursive loading of 'data-ajax' attributes. You should see ORANGE &gt; RED &gt; PURPLE
+    = ks_ajax_placeholder :id => "recursive_1", 
+                          :data => {:ajax => docs_path('tests/recursive_1')},
+                          :style => "background-color: orange;padding: 10px"
+    %h2 Test loading of many placeholders in parallel
+    %p This tests loading of many placeholders in parallel. You should see 100 ORANGE bars. You should also notice that although loading can be slow on a network, loading via a warmed cache
+    is fast.
+    - 1.upto(100) do |i|
+      = ks_ajax_placeholder :id => "parallel_placeholders_#{i}", 
+                            :data => {:ajax => docs_path(:page => 'tests', :sub_page => 'parallel_placeholders', :number =>i)}

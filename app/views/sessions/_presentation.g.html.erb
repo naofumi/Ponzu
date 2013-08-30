@@ -1,0 +1,12 @@
+<%= content_tag :div do %>
+  <div class="presentation_header">
+    <h4>
+      <%= image_tag('clock_small.png', :style => "vertical-align:bottom") if current_user_scheduled_this(p) %>
+      <%= content_tag(:span, "★", :style => "color: #ffe109") if current_user_likes_this(p) %>
+      <%= p.number %>
+      <%= p.starts_at && l(p.starts_at, :format => :month_day_time) %>
+    </h4>
+  </div>
+  <div><%= link_to sanitize(p.title), presentation_path(p) %></div><div class="authors"><%= authors_list(p.submission, [], [], false, true, true) %></div>
+  <div class="institutions"><%= institutions_list(p.submission, :same_line => true, :single_language => true) %></div>
+<% end %>

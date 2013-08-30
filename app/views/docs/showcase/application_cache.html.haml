@@ -1,0 +1,52 @@
+
+= ks_element :id => "application_cache",
+             :data => { :title => "Application Cache",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Application Cache
+
+      Correct use of the application cache is critical to using Kamishibai offline.
+      The [Appcache Facts](http://appcachefacts.info) website is a great resource for this.
+
+      [A List Apart](http://alistapart.com/article/application-cache-is-a-douchebag) also is 
+      great and has information about how to create an offline app with the combination
+      of localStorage and AppCache, without our hash-URL scheme. Unfortunately, relying on
+      the AppCache `FALLBACK` has its drawbacks. The biggest issue in our context is
+      "The experience on a temperamental connection isn’t great". A temperamental connection
+      is exactly what we get at conferences. Instead of relying on `FALLBACK`, we would like
+      the flexibility to define our own timeouts for fallback situations.
+
+      ## What to and what not to cache
+
+      The application cache is not good for stuff that will change frequently. You
+      cannot invalidate a single entry in Appcache. To invalidate the cache, you modify the
+      manifest file, which will cause the browser to re-request every single entry and 
+      update the cache in its entirety. Although the re-requests will honor browser cache
+      settings (standard If-Modified-Since headers) and will not download files that have not
+      changed, the fact remains that a large number of requests will be made.
+
+      Therefore, we only cache static stuff. This is mostly Javascript, CSS and image files.
+
+      We will however cache the bootloader page (the root page). To do this, instead of putting
+      the bootloader URL in the cache manifest (which isn't necessary because Appcache will cache
+      the current page if it points to a manifest file), we simply make sure that the bootloader
+      page and the bootloader page only will point to a manifest file. 
+
+      This should go into the `CACHE` section.
+
+      Don't put anything in the AppCache that has any state information. Only put things that can be
+      uniquely identified by URL.
+
+      In the `NETWORK` section, we should have `*`, `http://*` and `https://*`
+
+      In the `FALLBACK` section, we could solve situations where the user tries to
+      access a non-hash type URL when offline. The fallback page would redirect to a hash-type
+      URL which is likely to be handled with offline cache.
+
+      ## The bootloader should be very minimal
+
+      Specifically, the bootloader should not contain any state information including login status,
+      language status, etc. This makes working with Appcache complicating.
+

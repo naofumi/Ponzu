@@ -1,0 +1,64 @@
+<div class="user_settings">
+  <%= form_for(@user, :url => settings_user_path(@user),
+                      :method => :put) do |f| %>
+    <%= error_messages_for :user %>
+    <h1><%= t 'users.settings.title_for', :name => @user.name %></h1>
+
+    <h2><%= t 'users.settings.panel_titles.account_info' %></h2>
+    <div>
+      <%= galapagos_bullet %><%= t 'users.login_id' %>:<br />
+      <%= @user.login %>
+    </div>
+    <div>
+      <%= galapagos_bullet %><%= t('users.new_password') %>:<br />
+      <%= f.password_field :password %>
+    </div>
+    <div>
+      <%= galapagos_bullet %><%= t('users.new_password_confirm') %>:<br />
+      <%= f.password_field :password_confirmation %>
+    </div>
+    <div>
+      <%= f.submit %>
+    </div>
+    <h2>Your name</h2>
+    <div>
+      <%= galapagos_bullet %>English Name:<br />
+      <%= f.text_field :en_name %>
+    </div>
+<!--     <div>
+      <%= galapagos_bullet %>Japanese Name: 
+      <%= f.text_field :jp_name %>
+    </div>
+ -->
+    <h2>Additional Information</h2>
+    <div>
+      <%= galapagos_bullet %><%= t('users.settings.email') %>:<br />
+      <%= f.text_field :email %>
+    </div>
+    <div>
+      <%= galapagos_bullet %>Twitter:<br />
+      <%= f.text_field :twitter_id %>
+    </div>
+    <div>
+      <%= galapagos_bullet %>Facebook:<br /> 
+      <%= f.text_field :facebook_id %>
+    </div>
+    <div>
+      <%= galapagos_bullet %>LinkedIn: <br />
+      <%= f.text_field :linkedin_id %>
+    </div>
+    <div>
+      <%= galapagos_bullet %>Read &amp; Researchmap: <br />
+      <%= f.text_field :read_research_map_id %>
+    </div>
+    <div>
+      <%= f.submit %>
+    </div>
+  <% end %>
+  <h2><%= t 'others' %></h2>
+  <div>
+    <%= galapagos_bullet %>
+    <%= link_to "View profile", @user %>
+  </div>
+  
+</div>

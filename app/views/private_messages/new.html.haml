@@ -1,0 +1,13 @@
+= ponzu_frame :title_args => { :to => @private_message.to.first.name }do
+
+  / We will load all user names and affiliation strings into the DOM
+  / and use QuickSilver-ish live search to select the message receiver.
+  / We will do this only when params[:to_id] is not set (the receiver has not been pre-set).
+  / http://ejohn.org/blog/jquery-livesearch
+  .panel
+    %h1
+      = t('.header', :to => @private_message.to.first.name)
+
+    = render :partial => "warning"
+
+    = render :partial => "form"

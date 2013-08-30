@@ -1,0 +1,1 @@
+<%= link_to t('header.reset_cache'), "#", :onclick => "javascript:localStorage.clear();sessionStorage.clear();KSSqlCache.clear();alert('#{t('header.cache_was_cleared')}');return false;" %>

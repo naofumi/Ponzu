@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <title><%= (strip_tags(@session.title)) %></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../stylesheets/style.css" />
+  </head>
+  <body>
+    <h1><%= clean_xml_epub @session.title %></h1>
+    <% @session.presentations.includes([:likes, :authors]).each do |p| %>
+      <div class="presentation">
+        <div class="title">
+          <div><%= p.number %> <%= p.starts_at && p.starts_at.strftime('%m/%d %H:%M') %>-</div>
+          <a href="../<%= relative_xhtml_filename p %>"><%= clean_xml_epub p.title %></a>
+        </div>
+        <div class="authors">
+          <%= authors_list(p) %>
+        </div>
+        <div class="institutions">
+          <%= decode_entities(institutions_list(p)) %>
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

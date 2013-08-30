@@ -1,0 +1,100 @@
+<%= ks_element :id => "introduction", 
+               :data => {
+                :title => "Introduction",
+                :container => "ipadish_content",
+                :"container-ajax" => docs_path(:page => "showcase/layout")
+               } do %>
+  <div class="panel">
+    <h1>Introduction to Kamishibai.js</h1>
+    <p>
+      Kamishibai.js is a Javascript Library for creating websites that are
+      optimzed for PCs, tablets, smartphones and feature phones (iMode).
+      Unlike mobile web frameworks like Sencha-touch which have a Javascript
+      MVC structure, Kamishibai.js pages are written in simple HTML. This enables
+      one to use the same technology and framework for all devices. In fact,
+      the MBSJ2012 used the same Models and Controllers for all supported devices.
+      Furthermore, the PC, smartphone and iMode pages often shared view helpers
+      and view partials. In this sense, Kamishibai.js is very similar to 
+      creating simple mobile optimized web pages.
+    </p>
+    <p>
+      However, Kamishibai.js pages are more than simple mobile pages. 
+      Kamishibai.js incorporates ideas from the iOS user interface. For example,
+      we think that the slide transition that is common in iOS when switching
+      pages gives the user a strong sense of location within the application.
+      We think that this sends hints to the user and helps prevent them from
+      feeling lost. We therefore incorporated slide transition animations.
+    </p>
+    <p>
+      Additionally, mobile usage means that the user might find themselves in
+      locations where they cannot connect to the Internet. Therefore, Kamishibai.js
+      provides capabilities to store pages in local storage.
+    </p>
+    <h2>Key features of Kamishibai.js</h2>
+    <ol>
+      <li>
+        <strong>NAJSMVCF (not another JavaScript MVC framework):</strong> We strongly think that
+        complex rendering tasks should be left to the server for both performance and
+        multi-device support effort reasons. We consider the client-side Javascript
+        to be a compositor. Instead of rendering the DOM, client-side Javascript should 
+        focus on combining and caching the HTML from the server.
+      </li>
+      <li>
+        <strong>Offline baked-in:</strong> It should be easy to make offline-capable applications
+        without having to push hundreds of static HTML pages into an application distributed
+        through App stores.
+      </li>
+      <li>
+        <strong>Flexible in design:</strong> We should leave designing to designers, not
+        to framework developers.
+      </li>
+      <li>
+        <strong>Server programming environment integration:</strong> HTML is not a nice language for
+        DRY-ing up your code. You need a programming language for that. We chose Ruby and Ruby-on-Rails,
+        but we plan to provide similar helper libraries for PHP.
+      </li>
+    </ol>
+    <h2>What makes Kamishibai.js special</h2>
+    <p>
+      When we were looking around for Javascript frameworks, we were disappointed by
+      what we found. We will give our reasons below.
+    </p>
+    <h3>Sencha Touch</h3>
+    <ul>
+      <li>
+        We don't want to learn another MVC framework on top of Rails. On top of that
+        we strongly doubt that a client side framework would ever approach the sophistication
+        and completeness of Rails. This is because bloat on the server side can easily be
+        solved by more powerful servers. However, mobile devices are very limited in 
+        processing power, and bloat cannot be easily compensated for.
+      </li>
+      <li>
+        Sencah Touch and virtually all Javascript frameworks that mimic the iOS user
+        interface are very limited in customizability. They all provide pre-made widgets for
+        lists, headers, buttons, etc. In many cases, all that an end-user can change is
+        the colors. We think that this is a ridiculous idea. There are hordes of very
+        skilled designers who work on websites. Assuming that the people who made the frameworks
+        can consistently come up with better designs is absurd. Furthermore, unlike iOS,
+        there is absolutely no reason why the widgets should be standardized along a 
+        common design. Website developers should be given complete freedom over the 
+        design, and in most cases, their skills fully deserve this.
+      </li>
+      <li>
+        Slow load times. Because mobile devices are limited in CPU power, the time that it
+        takes to render CSS and Javascript is quite noticable. Most mobile Javascript
+        frameworks use jQuery or a similar library, which require a few hundred milliseconds to
+        render. This is a waste of CPU power, especially considering that almost all smartphones
+        use a standards-compliant browser.
+      </li>
+      <li>
+        Optimized for Mobile. Interestingly, 
+      </li>
+    </ul>
+    <h3>jQuery Mobile</h3>
+    <ul>
+      <li>
+        This is the epitome of bloat.
+      </li>
+    </ul>
+  </div>
+<% end %>

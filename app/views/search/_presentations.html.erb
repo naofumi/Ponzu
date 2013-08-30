@@ -1,0 +1,13 @@
+<% @presentations && @presentations.each_hit_with_result do |hit, p| %>  
+  <% hit_text = capture do %>
+    <% highlights = [:en_title, :jp_title, :en_abstract, :jp_abstract, :number, :authors].inject([]){|memo, f| memo += hit.highlights(f)} %>
+    <% if !highlights.empty? %>
+      <div class="search_hit_text">
+        <% highlights.each do |highlight| %>
+          <%= highlight.format{ |word| "<span class='highlight'>#{word}</span>" }.html_safe %>
+        <% end %><br />
+      </div>
+    <% end %>
+  <% end %>
+  <%= render :partial => 'sessions/presentation', :locals => {:p => p, :hit_text => hit_text} %>
+<% end %>

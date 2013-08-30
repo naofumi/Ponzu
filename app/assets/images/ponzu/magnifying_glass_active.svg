@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.1//EN'
+  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg height="142pt" version="1.1" viewBox="55 7 143 142" width="143pt" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:date>2013-06-20 01:52Z</dc:date>
+    <!-- Produced by OmniGraffle Professional 5.4.3 -->
+  </metadata>
+  <defs>
+    <style type="text/css">
+      <![CDATA[
+      .magnifying_glass_icon circle{
+        stroke: #999;
+        fill: #EEE;
+      } 
+      .magnifying_glass_icon path{
+        fill: #999;
+      } 
+      ]]>
+    </style>
+  </defs>
+  <g fill="none" fill-opacity="1" stroke="none" stroke-dasharray="none" stroke-opacity="1" class="magnifying_glass_icon">
+    <g>
+      <circle cx="139.75" cy="65.5" r="53.000084" stroke="maroon" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+      <path d="M 92.46961 97.64826 L 74.305325 115.81254 C 64.86963 125.24824 57.220645 136.470645 62.58078 141.83078 C 67.940913 147.19091 79.16332 139.54193 88.599015 130.10623 L 106.7633 111.94195 C 107.153824 111.551424 107.153824 110.91826 106.7633 110.527735 L 93.88382 97.64826 C 93.4933 97.257734 92.860133 97.257734 92.46961 97.64826 Z"/>
+    </g>
+  </g>
+</svg>

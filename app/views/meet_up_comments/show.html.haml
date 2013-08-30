@@ -1,0 +1,10 @@
+= ponzu_frame do
+  %p
+    %b User:
+    = @meet_up_comment.user_id
+  %p
+    %b Content:
+    = @meet_up_comment.content
+  = link_to 'Edit', ksp(edit_meet_up_comment_path(@meet_up_comment))
+  |
+  = link_to 'Back', ksp(meet_up_comments_path)

@@ -1,0 +1,40 @@
+@import "../kamishibai/ks_settings";
+
+.button {
+  &.like_button, &.unlike_button, &.schedule_button {
+    font-size: $smaller-font-size;
+    line-height: $smaller-font-size;
+    padding: 3px;
+  }
+}
+
+.like_box {
+  .social_stats {
+    margin-top: 5px;
+    font-size: $smaller-font-size;
+  }
+  .prompt_message {
+    margin-top: 5px;
+    font-size: $even-smaller-font-size;
+  }
+}
+
+.vote_box {
+  margin-top: 10px;
+  border: solid 1px #CCC;
+  border-radius: 5px;
+  padding: 3px;
+  .social_controls span {
+    white-space: nowrap;
+    line-height: $label-font-size;
+    font-size: $smaller-font-size;
+  }
+}
+.social_box {
+  min-height: 87px;
+  margin: 10px 0;
+}
+
+.likes_list {
+  font-size: $smaller-font-size;
+}

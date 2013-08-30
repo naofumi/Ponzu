@@ -1,0 +1,21 @@
+= ponzu_frame :id => %w(index rooms) do
+  %div
+    %h1 Listing rooms
+
+    %table
+      %tr
+        %th Name
+        %th Location
+        %th
+      - @rooms.each do |room|
+        %tr
+          %td= room.name
+          %td= room.location
+          %td
+            = link_to '↑', move_up_room_path(room), remote: true, method: :put, data: {:ks_insert_response => true}
+            = link_to '↓', move_down_room_path(room), remote: true, method: :put, data: {:ks_insert_response => true}
+            = link_to 'Show', ksp(room)
+            = link_to 'Edit', ksp(:edit_room_path, room)
+            = link_to 'Destroy', room, confirm: 'Are you sure?', :method => :delete, :remote => true
+    %br
+    = link_to 'New Room', ksp(new_room_path)

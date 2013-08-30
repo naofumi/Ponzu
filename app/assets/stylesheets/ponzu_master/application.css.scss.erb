@@ -1,0 +1,32 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require ponzu
+ *= require media_queries
+ *
+ * == Notes about CSS management
+ *
+ * Each conference will have it's own CSS files.
+ * The manifest will live in './[conference_tag]/application.css.scss'.
+ * If we need a separate CSS file for mobile (which we generally
+ * shouldn't because we can use media queries instead), then
+ * we simply add another manifest in './[conference_tag].s/application.css.scss'.
+ *
+ * We keep the CSS files as modular as possible to enable reuse
+ * in various conferences.
+ *
+ * Remember that the last CSS rules take precedence. That's
+ * why we load theme.css.scss last.
+*/
+<% self.extend PonzuHelper %>
+<%= scss_color_palette %>
+
+

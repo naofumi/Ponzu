@@ -1,0 +1,161 @@
+///////////////
+// Various icon / button styles
+//////////////
+
+// We might go further and do the stuff in this URL
+// to make it really look like iOS
+// http://stackoverflow.com/questions/7880497/css-icon-ios-osx-style
+.image_icon {
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position: center;
+  width:80px;
+  height:80px;
+  margin: 0 auto;
+  border-radius: 20px;
+  // border: solid 1px #BBB;
+  box-shadow: 1px 1px 3px 1px #DDD;
+}
+
+// http://stackoverflow.com/questions/7880497/css-icon-ios-osx-style
+// iPad 72px (1/3.5), iPhone 57px (1/4.5)
+.ios_icon {
+  background: #000;
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-position: center;
+  -moz-background-clip: padding; /* for Firefox 3.6 */
+  background-clip: padding-box;
+
+  width: 256px;
+  height: 256px;
+  border-radius: 38px;
+  overflow:hidden;
+  border: solid 6px #666;
+  position: relative;
+  z-index: 10;
+}
+.ios_icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  border-radius: 18px;
+  border-width: 1px;
+  border-color: #DDD #CCC #CCC #DDD;
+}
+$ios_icon_gloss: top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 5%, rgba(255,255,255,0.2) 100%;
+// $ios_radial_icon_gloss: ellipse, closest-side, rgba(255,255,255,1.0) 0%, rgba(255,255,255,0.5) 20%, rgba(255,255,255,0.2) 100%;
+.ios_icon .gloss {
+  background-image: #e3e3e0;
+  // background-image: -webkit-radial-gradient($ios_icon_gloss);
+  background-image: -webkit-linear-gradient($ios_icon_gloss);
+  background-image: -moz-linear-gradient($ios_icon_gloss);
+  background-image: -o-linear-gradient($ios_icon_gloss);
+  background-image: -ms-linear-gradient($ios_icon_gloss);
+  background-image: linear-gradient($ios_icon_gloss);
+  height: 144px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+  border-bottom-right-radius: 170px 20px;
+  border-bottom-left-radius: 170px 20px;
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  position: absolute;
+  top: 0px;
+}
+.ios_icon .gloss{
+  height: 32px;
+  border-bottom-right-radius: 36px 8px;
+  border-bottom-left-radius: 36px 8px;
+  border-top-right-radius: 18px;
+  border-top-left-radius: 18px;
+}
+
+.ios_icon + p {
+  margin: 5px 0 0 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+// http://cssglobe.com/drawing-calendar-icon-with-css3/
+.calendar_icon {
+  margin:.25em 10px 10px 0;
+  padding-top:5px;
+  float:left;
+  width:80px;
+  background:#ededef;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ededef), to(#ccc)); 
+  background: -moz-linear-gradient(top,  #ededef,  #ccc); 
+  font:bold 30px/60px Arial Black, Arial, Helvetica, sans-serif;
+  text-align:center;
+  color:#000;
+  text-shadow:#fff 0 1px 0; 
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  border-radius:3px;  
+  position:relative;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-b;
+  -moz-box-sizing: border-box;
+  border: 1px solid #888;
+  -moz-box-shadow:2px 2px 2px #CCC;
+  -webkit-box-shadow:2px 2px 2px #CCC;
+  box-shadow:2px 2px 2px #CCC;
+
+  em{
+    display:block;
+    font:normal bold 11px/30px Arial, Helvetica, sans-serif;
+    color:#fff;
+    text-shadow:#00365a 0 -1px 0; 
+    background:#04599a;
+    background:-webkit-gradient(linear, left top, left bottom, from(#04599a), to(#00365a)); 
+    background:-moz-linear-gradient(top,  #04599a,  #00365a); 
+    -moz-border-radius-bottomright:3px;
+    -webkit-border-bottom-right-radius:3px; 
+    border-bottom-right-radius:3px;
+    -moz-border-radius-bottomleft:3px;
+    -webkit-border-bottom-left-radius:3px;  
+    border-bottom-left-radius:3px;  
+    border-top:1px solid #00365a;
+    &:before, &:after{
+      content:'';
+      float:left;
+      position:absolute;
+      top:-5px; 
+      width:4px;
+      height:14px;
+      background:#dadada;
+      background:-webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#aaa)); 
+      background:-moz-linear-gradient(top,  #f1f1f1,  #aaa); 
+      z-index:2;
+      -moz-border-radius:2px;
+      -webkit-border-radius:2px;
+      border-radius:2px;
+    }
+    &:before{left:13px;} 
+    & em:after{right:13px;} 
+  }
+
+  &:before, &:after{
+    content:'';
+    float:left;
+    position:absolute;
+    top:5px;  
+    width:8px;
+    height:8px;
+    background:#111;
+    z-index:1;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    -moz-box-shadow:0 1px 1px #fff;
+    -webkit-box-shadow:0 1px 1px #fff;
+    box-shadow:0 1px 1px #fff;
+  }
+
+  &:before{left:11px;}  
+  &:after{right:11px;}
+}
+

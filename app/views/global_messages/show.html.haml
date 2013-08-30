@@ -1,0 +1,10 @@
+= ponzu_frame do
+  .panel
+    %h1 Show Announcement
+    .panel_title JP Text:
+    .panel= @global_message.jp_text
+    .panel_title EN Text:
+    .panel= @global_message.en_text
+    = link_to 'Edit this announcement', ksp(:edit_global_message_path, @global_message)
+    |
+    = link_to 'Show all announcements', ksp(global_messages_path)

@@ -1,0 +1,11 @@
+- cache ['timetable_v1', @sessions.max_by{|s| s.updated_at}, @show_date] do
+  = ponzu_frame :id => ["timetable", params[:id]],
+                :title_args => {:date => l(@show_date, :format => :month_day)} do
+    .fixed_sub_header.radio_button_set.button-group
+      - current_conference.dates_for('time_table').each do |date|
+        - date_string = to_date_string(date)
+        = link_to l(date, :format => :month_day), 
+                  ksp(timetable_path(date_string)), 
+                  :class => ['ks_tab', "timetable_#{date_string}_menu", "button", date_string == params[:id] ? "primary" : nil]
+    .panel.timetable{:style => "width: #{tt.total_width}px; height: #{tt.total_height}px"}
+      = render :partial => 'time_table'

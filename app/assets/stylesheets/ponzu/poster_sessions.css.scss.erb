@@ -1,0 +1,153 @@
+// Place all the styles related to the poster_sessions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$mbsj_pink : #F70039;
+$link: #053175;
+$light_gray: #888;
+$background_gray: #f7f4f5;
+$very_light_gray: #BBB;
+$mbsj_dark_pink: #C2244F;
+
+$scheduled: #C2244F;
+$liked: #ff8000;
+
+.backdrop {
+  /*background-image: url('/assets/marine_messe.jpg');*/
+  /*border: solid 1px $very_light_gray;*/
+  // margin: 10px 0px;
+  // background-position: 0px -100px;
+  // width: 2000px;
+  // border-radius: 10px;
+}
+
+.poster_slot {
+  -mox-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: $liked;
+  border-radius: 7px;
+  border: solid 2px #FFF;
+
+  position:absolute;
+  &.scheduled {
+    background-color: $scheduled;
+  }
+}
+
+#poster_hall {
+  position: relative;
+  border-radius: 10px;
+  padding: 8px;
+  color: #333;
+  margin: 90px 10px;
+  
+  .poster_row {
+    position:absolute;    
+    font-size: 12px;
+    color: #333;
+  }
+  a.poster_row {
+    display: block;
+    border-radius: 3px;
+    cursor: pointer;
+    /*background-color: rgba(227, 0, 89, 0.2);*/
+    &:hover, &:active {
+      border: solid 1px $light_gray;
+      // box-shadow: 0 0 5px $light_gray;
+    };
+    &.selected {
+      background-color: rgba(227, 0, 89, 1);
+    }
+  }
+  .poster_slot {
+/*    background: rgba(255, 165, 0, 0.9);
+    border-radius: 5px;
+*/    cursor: pointer;
+    &:hover {
+      /*background:$mbsj_pink;*/
+      // box-shadow: 0 0 5px $mbsj_pink;
+      border: solid 1px #FF0;
+    };
+  }
+  .poster_row_top_label {
+    position:absolute;
+    top:-15px;
+    width:50px;
+  }
+  .poster_row_bottom_label {
+    position:absolute;
+    bottom:-15px;
+    width:50px;
+  }
+  .direction_label {
+    position:absolute;
+    text-align:center;
+    font-size: 20px;
+  }
+  .even {
+    left: -12px;
+    text-align: left;
+    background-color: transparent;
+  }
+  .odd {
+    right: -12px;
+    text-align: right;
+    background-color: transparent;
+  }
+  
+  .row_details {
+    padding: 8px;
+  }
+  .row_detail {
+    /* Find other stuff in timetable.css.scss */
+    color: #333;
+    #session_title {
+      font-size: 20px;
+    }
+    .prev_next_navigation {
+      margin-top: 40px;
+      margin-bottom:5px;
+      img.arrow {
+        height:30px;
+        vertical-align:middle
+      }
+    }
+    a {
+      color: #003366;
+      &:visited {
+        color: #003366; 
+      }
+      &:hover {
+        color: #003366;
+      } 
+    }
+  }
+  
+}
+
+// As list
+.poster_list.panel {
+  margin-top: 80px;
+}
+.split_range {
+  border-radius: 5px;
+  position:relative;
+  height: 10px;
+  margin-bottom: 2px;
+}
+.poster_range {
+  background-color: rgba(0,0,0, 0.03);
+  box-shadow: 1px 1px 1px #DDD inset;
+  padding: 1px 3px;
+  border-radius: 10px;
+  line-height: 25px;
+  span {
+    color: $liked;
+    text-shadow: 0 0 5px #ff0, 0 0 5px #ff0,0 0 5px #ff0,0 0 5px #ff0;
+    &.scheduled {
+      color: $scheduled;
+    }
+  }
+}

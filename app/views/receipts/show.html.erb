@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Receiver:</b>
+  <%= @receipt.receiver_id %>
+</p>
+
+<p>
+  <b>Receiver type:</b>
+  <%= @receipt.receiver_type %>
+</p>
+
+<p>
+  <b>Message:</b>
+  <%= @receipt.message_id %>
+</p>
+
+<p>
+  <b>Read:</b>
+  <%= @receipt.read %>
+</p>
+
+
+<%= link_to 'Edit', edit_receipt_path(@receipt) %> |
+<%= link_to 'Back', receipts_path %>

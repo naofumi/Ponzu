@@ -1,0 +1,68 @@
+@media screen {
+  #print_message_header {
+    display: none;
+  }
+  .no_screen { 
+    display: none; 
+  }
+}
+@media print and (color) {
+  * {
+    // http://coding.smashingmagazine.com/2013/03/08/tips-tricks-print-style-sheets/
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body { 
+    background: white !important; 
+  }
+  #print_message_header {
+    display: block;
+    color: blue;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14pt;
+  }
+  #header, #overlay, .no_print { 
+    display: none; 
+  }
+
+  div.no_screen { 
+    display: block; 
+  }
+  span.no_screen { 
+    display: inline; 
+  }
+
+    
+  #page { 
+    width: auto; 
+    margin: 0 5%; 
+    padding: 0; 
+    border: 0; 
+    float: none !important; 
+    color: black; 
+    background: transparent none; 
+  }
+    
+  #ponzu_frame {
+    margin:0;
+    padding:0;
+  }
+    
+  a:link, 
+  a:visited { 
+    background: transparent; 
+    // font-weight: bold; 
+    // text-decoration: underline; 
+  }
+    
+  // #content a:link:after, 
+  // #content a:visited:after { 
+  //   content: " (" attr(href) ") "; 
+  //   font-size: 90%; 
+  // }
+    
+  // #content a[href^="/"]:after { 
+  //   content: " (http://www.alistapart.com" attr(href) ") "; 
+  // }
+}

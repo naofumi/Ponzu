@@ -1,0 +1,4 @@
+<div class="pagination_buttons">
+  <%= link_to t('search.previous'), ksp(previous_page_path(collection, type)), :class => "back" if collection.previous_page %>
+  <%= link_to t('search.next'), ksp(next_page_path(collection, type)), :class => "forward" if collection.next_page %>
+</div>

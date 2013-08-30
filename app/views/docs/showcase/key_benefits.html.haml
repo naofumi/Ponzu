@@ -1,0 +1,184 @@
+= ks_element :id => "key_benefits",
+             :data => { :title => "Key Benefits of Kamishibai",
+                        :container => "ipadish_content",
+                        :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Key Benefits of Kamishibai
+      ## What are the demands of a conference program system ?
+      
+      Kamishibai was born because the existing mobile frameworks did not satisfy the demands
+      of the kind of websites that we wanted to create. Namely, websites to display the
+      program of huge conferences (several thousand presentations).
+
+      ### Some characteristics of conference information management
+
+      1.  The number of attendees and presentations can be several thousands.
+      2.  The WiFi tends to be costly and dismal. We can't rely on it.
+      3.  Conference attendees are professionals and hence possess laptops.
+      4.  Preparation time is very tight and the site must be done on schedule.
+
+      ### Technical demands for a conference information system
+      
+      1.  They have to display thousands of pages.
+      2.  They have to at least partially work offline.
+      3.  They have to be optimized for iPad.
+      4.  There must be a PC optimized version.
+      5.  The URLs must be sharable between devices.
+      6.  Search has to be extremely good.
+      
+      #### Displaying thousands of pages
+
+      This obviously requires that dynamically requesting pages from 
+      servers is strongly supported. However since many mobile frameworks are
+      designed to generate downloadable apps, this is not necessarily the case. Often,
+      frameworks are designed to contain all of the pages within a single HTML document.
+      When Ajax loading of external pages is supported, it is often an afterthought.
+      This is not sufficient for a huge conference website.
+
+      #### Offline usage
+
+      This demand means that HTML5 storage must be used to cache pages, and
+      that this should be a central component of the application. It should be as
+      invisible as possible, and should also support cache invalidation. None of the
+      frameworks has adequete support for this.
+
+      #### Optimized for iPad
+      
+      The third demand arises from the observation that iPad is by far the ideal device
+      to carry around inside a conference building. Although many conferences have
+      embraces iOS/Android conference applications, they are almost exclusively
+      designed for smartphones. However, smartphone screens are far too small to comfortably
+      display the abstracts. Conference timetables are also very challenging on a small screen.
+      On the other hand, the iPad can display abstracts beautifully and timetables etc. also
+      fit nicely. Since iPad market penetration is still a fraction of smartphones,
+      there should be both iPad and iPhone/Android applications. To reduce duplicated effort,
+      the iPad/iPhone/Android versions should share as much code as possible.
+
+      #### Works well on PCs
+
+      The fourth demand is a consequece of the fact that the only device
+      that every conference attendee ubiquitously possesses is a personal computer. They
+      may not have actually brought it to the conference, but every professional researcher
+      will have a PC on their desk at their office. Since there will be a significant
+      number of participants who can only use a PC, the program must support these
+      devices as one of the highest priorities.
+
+      #### Works well on smartphone
+
+      Compared to tablet devices, the market penetration of smartphones is much larget.
+      This means that we also have to optimize for smartphones.
+
+      #### Works well with iMode
+
+      Although smartphones are being used by about 30% of the people in Japan, the
+      rest are on their old iMode and EZweb feature phones (Galapagos). 
+      Given the current usage statistics, leaving out iMode is not an option.
+
+      #### Sharing URLs between devices
+
+      The URLs should ideally be identical between devices. If that is not possible,
+      then at least the URLs should be automatically convertable.
+
+      This is critical if we want to share links to specific sessions or presentations
+      on Twitter, blogs or conference pages. If we can do this seamlessly, then it
+      becomes an important differentiating factor vis-a-vis native applications.
+
+      On the other hand, if the URLs are not interchangable, then it creates a lot
+      of confusion in our promotional and marketing efforts. Whenever we want to
+      promote a certain section of the program, we will have to list multiple URLs,
+      and most users will not understand which one they ought to click.
+
+      ## How Kamishibai meets these requirements
+
+      Kamishibai addresses each of these requirements.
+      
+      ### Handles thousands of pages and offline viewing
+
+      Most of the mobile Javascript frameworks assume that all the pages are
+      contained within the application, either as a section within a multi-page DOM
+      HTML document or as a set of static pages within the application filesystem.
+      The tendency is to treat Ajax loading of external pages as an afterthought;
+      something that will only be done rarely, and not important enough to be the
+      focus of the framework.
+
+      However, when the application has to handle thousands of pages, this clearly won't 
+      do. In Kamishibai, in contrast to other frameworks, the preferred way to load pages
+      if by using Ajax to request external documents. The URL scheme is designed to 
+      do this effectively. Furthermore, each of these Ajax requests can be cached locally
+      to enable offline viewing. Kamishibai easily handles thousands of pages without
+      slowing down loading time, and at the same time, also handles offline viewing.
+
+      ### Optimized for iPad
+
+      To enable navigation that is easy to use on iPad, we emulate the left-navigation 
+      bar structure common on iPad. This requires that we can easily switch not only 
+      pages, but sub-structures within pages. This must also be supported by the URL
+      scheme.
+
+      jQuery Mobile, although capable of displaying an iPad-like layout, cannot transition
+      sub-structures. Hence the whole page is always redrawn.
+
+      jQMobi can transition sub-structures. However, since it is not designed with Ajax 
+      loading of pages as a priority, all the pages have to be pre-loaded into a single
+      HTML document.
+
+      With Kamishibai, sub-structure transitions are combined with Ajax loading of pages.
+      Since this is a major focus of the Kamishibai framework, we have made this 
+      extremely easy and flexible.
+
+      The key benefits of Kamishibai can be summarized as follows.
+
+      1. Optimized for iPad.
+      2. Suitable for very large websites with lots of content and a web of links.
+      3. Offline capable.
+      4. HTML designers are given a free reign.
+      5. HTML is generated on server.
+
+      ## Optimized for iPad
+      The iPad user interface poses many complications compared to iPhone development. 
+      Whereas the iPhone UI mostly transitions a full page, the iPad UI often changes only
+      a portion of the page. 
+
+      The most common iPad UI consists of a navigational row on the
+      left-side, with the remainder of the screen used to display the content. To
+      emulate this behavior, a click on the left navigation must use Ajax to redraw only a 
+      portion of the screen. Within the iPad UI, this scheme is used for email, settings and 
+      a whole lot of other applications. Therefore, a Javascript Framework must 
+      support this view if we want to call it iPad-optimized.
+
+      Unfortunately, frameworks like jQuery Mobile don't really support this view. 
+      jQuery Mobile support the rendering of these views, but do not support partial
+      transition of the screen.
+
+      Kamishibai is actually optimized for this kind of view. As far as we know, Kamishibai
+      is the only framework that really works well with this. Both the left navigation and the
+      page content can be dynamically loaded via Ajax.
+
+      ### Rapid development on multiple platforms
+
+      We think that a conference IT solution should support PCs, tablets, smartphones and
+      feature phones. For smartphones and tablets, we have to support both iOS and Android.
+      For PCs, we have to support Windows and Mac OS X. It's pretty obvious that multi-platform
+      support would be horrendous if we were to go the native application route.
+
+      Instead, we should use HTML, CSS. It's the only way to go.
+
+      Even with the same common web technologies for each platform, we have to code
+      different views for each screen size. This can be very time consuming and prone to
+      error. To minimize our pain, we use a HTML fragment compositing system within
+      Kamishibai. On the server side, we use HAML instead of ERB because it is
+      by far the most easy to read HTML generator on the planet. HAML should give
+      us a significant advantage in multi-platform customization and development.
+
+      ### Search
+
+      The best search is done on the server. There are a number of very good free search 
+      index solutions to run on servers. There are basically zero for native mobile applications.
+      The reason is simple. You can use large amounts of RAM, a very fast hard drive, and
+      a powerful CPU if you do search on the server. Indexes need that. On mobile devices,
+      you only have a fraction of the resources.
+
+      We don't forsee search on mobile devices catching up with the server any time soon.
+      There is very little demand for such solutions, and it probably be very hard even if
+      you tried.

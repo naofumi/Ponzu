@@ -1,0 +1,9 @@
+= ks_element :id => "room_1", 
+             :data => { :title => "Room 1",
+                        :container => "mockup2_body",
+                        :"container-ajax" => docs_path(:page => "mockup2/layout") } do
+  #rooms{:style => "position: relative"}
+    / We could further add CSS3 animations to zoom in, and to drop the push-pin
+    = image_tag 'round-pushpin.png', 
+                :style => "position:absolute;z-index:1000;left:500px;top:200px"
+    = image_tag 'convention_2.png'

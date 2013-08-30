@@ -1,0 +1,20 @@
+<h3><%= @session.number %><%= t('session.poster') if @session.poster? %></h3>
+<span class="time">
+  <%= l(@session.starts_at, :format => :month_day_time) %> - <%= @session.ends_at.strftime("%H:%M") %>
+</span>
+<span style="margin-left: 20px">
+  <%= @session.room.name %>(<%= link_to t('map'), @session.room %>)
+</span>
+<h3><%= sanitize(@session.title) %></h3>
+<div style="font-size: 12px">
+  <%= @session.organizers_string && @session.organizers_string.split(',').join('</br>').html_safe %>
+</div>
+<div class="presentation_list">
+	<%= will_paginate @presentations, :next_label => ">", :previous_label => "<" %><br />
+  <% @presentations.each do |p| %>
+    <hr>
+    <%= render :partial => "presentation.g", :locals => {:p => p}%>
+  <% end %>
+  <br />
+	<%= will_paginate @presentations, :next_label => ">", :previous_label => "<" %>
+</div>

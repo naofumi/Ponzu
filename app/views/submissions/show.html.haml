@@ -1,0 +1,29 @@
+= ponzu_frame do
+  %p
+    %b En title:
+    = @submission.en_title
+  %p
+    %b Jp title:
+    = @submission.jp_title
+  %p
+    %b Main author:
+    = @submission.main_author_id
+  %p
+    %b Jp abstract:
+    = @submission.jp_abstract
+  %p
+    %b En abstract:
+    = @submission.en_abstract
+  %p
+    %b Presenting author:
+    = @submission.presenting_author_id
+  %p
+    %b Submission number:
+    = @submission.submission_number
+  %p
+    %b Disclose at:
+    = @submission.disclose_at
+
+  = link_to 'Edit', ksp(edit_submission_path(@submission))
+  |
+  = link_to 'Back', ksp(submissions_path)

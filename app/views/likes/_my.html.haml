@@ -1,0 +1,21 @@
+.panel
+  %h1= title
+  .radio_button_set.button-group
+    - current_conference.dates_for(:time_table).each do |date|
+      - date_string = to_date_string(date)
+      = link_to l(date, :format => :month_day), 
+                ksp(send(link_method, date_string)), 
+                :class => ['ks_tab', "timetable_#{date_string}_menu", "button", "big", date_string == params[:id] ? "primary" : nil]
+    = link_to t(".menu.posters"),
+               ksp(send(link_method, "Poster")),
+               :class => ['ks_tab', "timetable_poster_menu", "button", "big", "Poster" == params[:id] ? "primary" : nil]
+  .panel.paneled_list
+    - unless likes.empty?
+      - likes.each do |l|
+        - p = l.presentation
+        = link_to ksp(presentation_path(p)) do
+          = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                            :class => "presentation",
+                            :data => {:ajax => heading_presentation_path(p.id)}
+    - else
+      = empty_message

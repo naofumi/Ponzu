@@ -1,0 +1,104 @@
+<div id="top" class="page fluid_multicolumn">
+  <div class="header panel">
+    <h2>Fluid Three column hierarchical layout</h2>
+  </div>
+  <div class="body">
+    <div class="left_column panel">
+      <ul>
+        <li><a href="#!middle_1" class="ks_tab">Middle 1</a></li>
+        <li><a href="#!middle_2" class="ks_tab">Middle 2</a></li>
+        <li><a href="#!middle_3" class="ks_tab">Middle 3</a></li>
+        <li><a href="/ks_tests/ks_tests_three_column_layout">Go to the three column layout test</a></li>
+        <li><a href="/ks_tests/ks_tests_three_column_hierarchical_layout">Go to the three column hierarchical layout test</a></li>
+        <li><a href="/ks_tests/ks_tests_full_page_animations">Go back to animations test home</a></li>
+      </ul>
+    </div>
+    <div id="top_middle_container" class="two_column_content">
+      <div id="middle_1" data-default>
+        <div class="left_column panel">
+          <ul>
+            <li><a href="#!content_1" class="ks_tab">Content 1</a></li>
+            <li><a href="#!content_2" class="ks_tab">Content 2</a></li>
+            <li><a href="#!content_3" class="ks_tab">Content 3</a></li>
+            <li><a href="/ks_tests/ks_tests_three_column_layout">Go to the three column layout test</a></li>
+            <li><a href="/ks_tests/ks_tests_three_column_hierarchical_layout">Go to the three column hierarchical layout test</a></li>
+            <li><a href="/ks_tests/ks_tests_full_page_animations">Go back to animations test home</a></li>
+          </ul>
+        </div>
+        <div id="top_content_content" class="two_column_content panel">   
+          <div id="content_1" class="" data-container="top_content_content">
+            <h3>iPadish design and transitions</h3>
+            <p>Here we design and test minimal iOS-inspired designs. This is a multi-panel design which is common on the iPad and also on MacOS X (iTunes, Mail).</p>
+            <p>To ensure buttery smooth transitions with minimal flicker and jittering, keep the CSS on the content element simple. </p>
+            <p>The content element should be positioned with the DOM flow ('position:relative' or nothing at all). </p>
+            <p>Furthermore, be careful not to place elements with a margin-top that would be collapsed. If you need extra spacing, use padding instead. This is because that margin would be collapsed when the content is normally rendered on the DOM. However, since we shift to "position:absolute" during the transition and since that margin won't be collapsed when "absolute", this will cause the content to shift down during the transition and then shift back up afterwards, causing slight jittering.</p>
+            <p><strong>TODO: </strong>Refactor the animation code because it's ugly.</p>
+            <h4>Test the following</h4>
+            <ul>
+              <li>Test the animations as you click the tabs on the left.</li>
+              <li>Check if the top position of each page is aligned.</li>
+              <li>Check if the content that overflows during the animation is hidden.</li>
+              <li>Check if the content container always streches to fit the content.</li>
+              <li>Check the direction of the animations. Does the direction feel natural?</li>
+            </ul>
+          </div>
+          <div id="content_2" class="" data-container="top_content" style="display:none">
+            <h3>Content 2</h3>
+            <p>We purposefully made this content large so that it will stretch the container.</p>
+            <% 4.times do %>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris urna justo, faucibus sed lobortis non, tristique quis dui. Ut orci dolor, fringilla id ullamcorper eu, laoreet sed dolor. Praesent porttitor diam sed dolor feugiat vel sollicitudin ligula dapibus. Morbi eu orci ut ligula fringilla volutpat et ut elit. Maecenas ut est lectus, et porta orci. Donec vestibulum dapibus pharetra. Nam aliquam orci eget arcu sodales non ornare felis pretium. Proin sit amet nibh elit, eu placerat orci. Donec sapien felis, bibendum et ultricies non, scelerisque eget nisl. Nulla placerat leo vitae ipsum ornare quis rhoncus leo euismod. Quisque sollicitudin nunc imperdiet nunc adipiscing sit amet condimentum magna rutrum. Quisque pulvinar, elit sit amet aliquam ullamcorper, magna massa auctor nulla, ac gravida eros elit sed eros. Nunc ultricies tortor quis lacus pellentesque quis imperdiet eros sollicitudin. Suspendisse potenti. Donec elementum mauris eget tortor consequat vehicula.</p>
+            <% end %>
+          </div>
+          <div id="content_3" class="" data-container="top_content" style="display:none">
+            <h3>Content 3</h3>
+            <p>Here we design and test minimal iOS-inspired designs. This is a multi-panel design which is common on the iPad and also on MacOS X (iTunes, Mail).</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="middle_2" style="display:none">
+        <div class="left_column panel">
+          <ul>
+            <li><a href="#!content_1" class="ks_tab">Content 1</a></li>
+            <li><a href="#!content_2" class="ks_tab">Content 2</a></li>
+            <li><a href="#!content_3" class="ks_tab">Content 3</a></li>
+            <li><a href="/ks_tests/ks_tests_three_column_layout">Go to the three column layout test</a></li>
+            <li><a href="/ks_tests/ks_tests_three_column_hierarchical_layout">Go to the three column hierarchical layout test</a></li>
+            <li><a href="/ks_tests/ks_tests_full_page_animations">Go back to animations test home</a></li>
+          </ul>
+        </div>
+        <div id="top_content_content" class="two_column_content panel">   
+          <div id="content_1" class="" data-container="top_content_content">
+            <h3>iPadish design and transitions</h3>
+            <p>Here we design and test minimal iOS-inspired designs. This is a multi-panel design which is common on the iPad and also on MacOS X (iTunes, Mail).</p>
+            <p>To ensure buttery smooth transitions with minimal flicker and jittering, keep the CSS on the content element simple. </p>
+            <p>The content element should be positioned with the DOM flow ('position:relative' or nothing at all). </p>
+            <p>Furthermore, be careful not to place elements with a margin-top that would be collapsed. If you need extra spacing, use padding instead. This is because that margin would be collapsed when the content is normally rendered on the DOM. However, since we shift to "position:absolute" during the transition and since that margin won't be collapsed when "absolute", this will cause the content to shift down during the transition and then shift back up afterwards, causing slight jittering.</p>
+            <p><strong>TODO: </strong>Refactor the animation code because it's ugly.</p>
+            <h4>Test the following</h4>
+            <ul>
+              <li>Test the animations as you click the tabs on the left.</li>
+              <li>Check if the top position of each page is aligned.</li>
+              <li>Check if the content that overflows during the animation is hidden.</li>
+              <li>Check if the content container always streches to fit the content.</li>
+              <li>Check the direction of the animations. Does the direction feel natural?</li>
+            </ul>
+          </div>
+          <div id="content_2" class="" data-container="top_content" style="display:none">
+            <h3>Content 2</h3>
+            <p>We purposefully made this content large so that it will stretch the container.</p>
+            <% 4.times do %>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris urna justo, faucibus sed lobortis non, tristique quis dui. Ut orci dolor, fringilla id ullamcorper eu, laoreet sed dolor. Praesent porttitor diam sed dolor feugiat vel sollicitudin ligula dapibus. Morbi eu orci ut ligula fringilla volutpat et ut elit. Maecenas ut est lectus, et porta orci. Donec vestibulum dapibus pharetra. Nam aliquam orci eget arcu sodales non ornare felis pretium. Proin sit amet nibh elit, eu placerat orci. Donec sapien felis, bibendum et ultricies non, scelerisque eget nisl. Nulla placerat leo vitae ipsum ornare quis rhoncus leo euismod. Quisque sollicitudin nunc imperdiet nunc adipiscing sit amet condimentum magna rutrum. Quisque pulvinar, elit sit amet aliquam ullamcorper, magna massa auctor nulla, ac gravida eros elit sed eros. Nunc ultricies tortor quis lacus pellentesque quis imperdiet eros sollicitudin. Suspendisse potenti. Donec elementum mauris eget tortor consequat vehicula.</p>
+            <% end %>
+          </div>
+          <div id="content_3" class="" data-container="top_content" style="display:none">
+            <h3>Content 3</h3>
+            <p>Here we design and test minimal iOS-inspired designs. This is a multi-panel design which is common on the iPad and also on MacOS X (iTunes, Mail).</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="clear:both"></div>
+  </div>
+</div>

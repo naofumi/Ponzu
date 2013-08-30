@@ -1,0 +1,73 @@
+@import "../kamishibai/ks_settings";
+
+
+
+#overlay {
+  position:fixed;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  top: -100%;
+  animation-duration: 0.5s;
+  -webkit-animation-duration: 0.5s;
+  animation-name: overlay_hide;
+  -webkit-animation-name: overlay_hide;
+  animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  display: none;
+  &.show {
+    display: block;
+    animation-name: overlay_show;
+    -webkit-animation-name: overlay_show;
+    top: 0px;
+  }
+  a {color: #FFF;}
+  .shade {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0;
+    padding: 2%;
+    width: 100%;
+    border: solid 1px #000;
+    border-radius: 0 0 15px 15px;
+    background-color: rgba(0, 0, 0, 0.8);  
+    color: #FFF;
+  }
+}
+
+@-webkit-keyframes overlay_show {
+  from {
+    top: -100%;
+  }
+  to {
+    top: 0px;
+  }
+}
+
+@-webkit-keyframes overlay_hide {
+  from {
+    top: 0px;
+  }
+  to {
+    top: -100%;
+  }
+}
+
+@keyframes overlay_show {
+  from {
+    top: -100%;
+  }
+  to {
+    top: 0px;
+  }
+}
+
+@keyframes overlay_hide {
+  from {
+    top: 0px;
+  }
+  to {
+    top: -100%;
+  }
+}

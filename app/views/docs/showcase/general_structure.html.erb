@@ -1,0 +1,64 @@
+<%= ks_element :id => "general_structure",
+               :data => {
+               	 :title => "Kamishibai General Structure",
+               	 :container => "ipadish_content",
+                 :"container-ajax" => docs_path(:page => "showcase/layout")
+               } do %>
+  <div class="panel">
+  	<h1>General Structure of Kamishibai</h1>
+  	<p>
+  		Kamishibai is not a general purpose framework but a one that expects that
+  		you want to create a multilingual application that works on multiple
+  		devices. Hence Kamishibai imposes a structure that enables this.
+  	</p>
+  	<h2>Load sequence</h2>
+    <h3>First load</h3>
+  	<p>
+  		Kamishibai breaks up a single HTML document into multiple requests. The simplest
+  		Kamishibai page will make two HTML requests to the server, one to load the
+  		base page, and the other to load the contents. If the page contains sub-page 
+  		fragments, then requests will be made for each fragment.
+  	</p>
+  	<p>
+  		Whereas this looks inefficient since the number of requests increase, this is not
+  		necessarily the case. If we use HTML5 Application cache, then we can put 
+  		some of these fragments into the cache so that we don't send requests to the
+  		Internet. We describe how this looks like below.
+  	</p>
+  	<h4>The first load is for the headers and application containers</h4>
+  	<p>
+  		The first request is for an empty page that contains headers loading CSS &amp; Javascript. This request corresponds to the path portion of the URL. It will
+  		typically be device dependent, but not locale dependent.
+  	</p>
+  	<p>
+  		Since this page will typically be completely static, it is safe to place this in 
+  		the Application cache. Even if it is not in the Application cache, the server
+  		should be able to render it very quickly. In either case, this request should
+  		be very quick in most cases, and may be completely local.
+  	</p>
+  	<h4>The first load triggers loading of CSS, Javascript and HTML fragments</h4>
+  	<p>
+  		The first load contains the header and minimal DOM structure. Since the first load, if
+      cached in the application cache, will load almost immediately, this means that the 
+      request for javascript files and CSS will start very early compared to regular web pages.
+      Regular web pages load all the HTML in one request, and unless that page is cached on
+      the server, it may take several hundred milliseconds or even seconds to load.
+  	</p>
+    <p>
+      For example, if we look at asahi.com, the first page request has a latency of 144ms and
+      the data transfer takes 194ms. Since a significant amount of data has to be transferred
+      before the browser can request any of the resources in the header, the first CSS request 
+      fires roughly 300ms after the initial request.
+    </p>
+    <p>
+      On the other hand, if we load a Kamishibai page (with application cache but no other cache),
+      then the first load will be very fast (latency 0.3ms, transfer 22.9ms). CSS and JS will load
+      starting at about 20ms. The Ajax request to load the actual contents of the page fires at about
+      50ms since the request, after JS has been loaded and rendered. Therefore, even though
+      there is a penalty associated with a double request, if the first request is simple, static
+      and cached, then the penalty will not be more than a few tens of milliseconds. Depending on the
+      cache state, it is possible to imagine situations where a double request might even actually
+      be faster (i.e. if the CSS takes a long time to load).
+    </p>
+  </div>
+<% end %>

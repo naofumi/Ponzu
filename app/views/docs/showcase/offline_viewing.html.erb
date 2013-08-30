@@ -1,0 +1,119 @@
+<%= ks_element  :id => "offline_viewing",
+                :data => {
+                  :container => "ipadish_content",
+                  :"container-ajax" => docs_path(:page => "showcase/layout"),
+                  :title => "Offline Viewing"
+                } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+
+# Offline viewing
+
+Offline viewing in Kamishibai is not a simple caching mechanism that replicates what
+native apps generally do (download the whole shit). Instead, Kamishibai aims to
+combine the benefits of the web with offline capability. What we want to provide
+is a seamless experience where you can view the content instantly if you are online,
+and backup data is automatically downloaded in the background. We want to make
+it so that the user never has to conciously realize that they are syncing data.
+
+## The problem with other offline apps
+
+Most offline capable apps like the one for Asahi shinbun or even the Financial Timeweb application load content at the beginning. The user is forced to wait until the data is downloaded; until
+downloading is finished, the user cannot enter a word. We think that this is really crummy.
+
+For example, if an attendee wanted to quickly look up what's going on in the next room,
+he would still be forced to wait until all the other stuff syncs. If the WiFi is slow,
+than this could take ages.
+
+The solution is to not be obsessed with providing up-to-date data, but instead to show 
+what you've got as soon as you can.
+
+The other kind of offline app is the one that you have to manually sync. Users are
+expected to know when their data is stale, and then they are supposed to navigate to
+and click a sync button. The sync will also take a few minutes, during which the user
+cannot use his device. This is also very crummy.
+
+## Our solution
+
+There are two tenets to our solution.
+
+First is that the user should get access to whatever data they have as soon as possible.
+The second is that the user should not have to worry about syncing (the initial data
+load might be too much for background syncing so we'll have a button for that).
+
+Regarding the first tenet, the device should first check to see if it can rely on
+the cached version by looking at the expiry time. If it has expired, then it 
+attempts to download the most up-to-date version from the server within a reasonable 
+amount of time. If it can not, then it will fallback to the version in the cache.
+The idea is that a stale version is better than a long wait. My experience is that
+5 seconds is what users will wait for most of the time, so we will fallback to the
+cached version if we cannot get it from the server within that amount of time.
+
+Basically, we ensure that the user has to wait only 5 seconds.
+
+The second tenet can be solved by syncing in the background. This should work if the number
+of updates is not too large. However, if there are lots of updates, then this will create
+a long queue on WebSQL and prevent page transitions. Currently, I don't know how to work
+around this. For the first load, we probably need a button.
+
+## Our batch upload solution
+
+After testing UI responsiveness during the updating of thousands of DB records, we
+conclude that a **Download** button is necessary, and that we will have to block the UI
+during this. 
+
+However, we can still maintain user friendliness.
+
+1. The user has to explicitly press the **Download** button to download to local. Unlike 
+   many newspaper apps, you don't have to download if you don't want to. The
+   user can interact with the website *online*, even if the data has not been downloaded.
+   They don't have to wait until the data downloads. This means very little wait time;
+   just need to wait as long as a regular website.
+2. The user should push the **Download** button when they are online with a reliable WiFi
+   connection.
+3. If the user want's to abort, a simple **reload** is sufficient. We might provide a button for
+   this.
+4. After the first **Download**, subsequent updates should not require that much data and should
+   be pretty quick. We could do these in the background, without the user even noticing.
+5. If we do need to **Download** a lot of data, we should show a notification on the screen.
+6. We need to manage database versions. The best way is to use a timestamp.
+7. For example, for batch downloading `Presentation` pages. The version will be equal to the 
+   most recently updated `Presentation` object's timestamp. When a request to batch download
+   `Presentations` is sent from the browser, it will also send the last downloaded version number.
+   Since the version number is a simple timestamp, it is trivial to query the `Presentations`
+   that were updated since the last request. We can also cache the response in memecached with
+   a key for "[last_downloaded_version]-[most_recently_updated_presentation_timestamp]".
+8. We should have an action that returns a JSON has of each `version` for each batch download.
+   We will have batch download actions for `Presentations`, `Authors`, `Sessions`, etc.
+
+## Batch retrieval of pages for offline storage
+
+We provide a `batch` action on controllers. These actions will return a JSON response
+with multiple pages in a hash with the request URLs as keys.
+
+## Offline storage databases
+
+WebSQL is available on Safari and Android Browser. Chrome has a severe storage limit of WebSQL,
+so it's probably better to use IndexedDB. Firefox will have to use IndexedDB. IE <= 9 doesn't
+support either. We will have to use localStorage for this.
+
+Depending on the size of the database, localStorage might be sufficient to hold everything. If
+this is the case, we might fallback to localStorage. Otherwise, localStorage should be only as
+a temporary memcached-like store. In this case, batch uploading tends to be complicated because
+we need to provide a customized version for each user and we have to make sure that we don't exceeed localStorage limits.
+
+The goal is to completely remove the need to flush the cache. Then things should be simpler.
+
+## Future directions
+
+1. Make it possible to like presentations offline. We need a `Model` for this.
+2. Make it possible to take notes offline. We need a `Model` for this.
+
+## Some cautions
+
+1. To make incremental updates easier, we should never totally delete a page. Instead, we should blank it out. Otherwise, if we had an auditing system on Rails, we might be able to keep track of deletions.
+
+MARKDOWN
+%>
+  </div>
+<% end %>

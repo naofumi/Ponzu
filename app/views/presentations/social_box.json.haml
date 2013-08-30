@@ -1,0 +1,25 @@
+-# Cache keys are the @presentation, current_user and
+-# anything that changes any Like belonging to the @presentation (incl. other users)
+-# so that we can update counts.
+-#
+-# We don't share the cache between different users because we
+-# would have to specify each single attribute of User which
+-# changes how the social box is displayed, which is possible, but tough.
+-#
+-# TODO: We currently user Like.where(:presentation_id => ...) because we want to be
+-# sure that we are collecting all descendants. We need to clean up the Like class
+-# notation, so that we can be confident about what @presentation.likes would mean.
+-# (will it include all descendants of Like?)
+-#
+-# all_likes = Like.where(:presentation_id => @presentation)
+-# Cache keys @presentation.id,
+-#            all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at
+-#            current_user && current_user.id
+- all_likes = Like.where(:presentation_id => @presentation)
+- cache ["v2", 
+       "presentations/social_box/json", 
+       @presentation.id, 
+       all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
+       current_user && current_user.id] do
+  = render(:partial => "presentations/social_box", :formats => [:json]).html_safe
+  -# http://keighl.com/post/fragment-caching-with-jbuilder

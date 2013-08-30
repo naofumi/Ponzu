@@ -1,0 +1,27 @@
+<div id="id_transition_sub_element_with_data_ajax" data-container="sub_element_test_area">
+	<div class="panel test_results">
+    <div class="success">
+  		<h3>Transition to sub-element with data-ajax successful</h3>
+  		<h4>What this tested</h4>
+  		<p>Kamishibai has two ways of sending an Ajax request. One is to use the URL for that Ajax request in the href hash. Another is to set the URL in a 'data-ajax' attribute on an element, and then request that element id in the href hash.</p>
+  		<p>Another thing that this test asserts is multi-element processing of the Ajax response. Kamishibai analyzes Ajax responses and if there are multiple top-level elements, then each of these elements are processed independently. In this test, in addition to </p>
+  		<p>This test is the latter.</p>
+  		<ul>
+  			<li>Confirm that you got a cache hit message when you transitioned to this page. This occurs because this resourceUrl was actually pre-loaded when we loaded "#!default", because Kamishibai automatically loads empty elements with a 'data-ajax' attribute.
+  			<li>Confirm that in addition to the sub_element container, the header of this page should have changed as well.</li>
+  			<li>Check that the href hash = "#!id_transition_sub_element_with_data_ajax"</li>
+  			<li>Confirm that we get the same page with a reload.</li>
+  			<li><a href="/ks_tests/ks_tests">Go back</a> and continue testing.</li>
+  		</ul>
+    </div>
+	</div>
+</div>
+
+<div id="sub_element_with_data_ajax_loaded_message">
+  <div class="success">
+    <h3>Automatic loading of element with 'data-ajax' attribute success!</h3>
+    <h4>What this tested</h4>
+    <p>When Kamishibai loads a page, it looks for elements with a 'data-ajax' attribute and automatically loads the contents (via Ajax or cache) into the DOM.</p>
+    <p>In the current page, we have such an element in the "sub element test area" (#id_transition_sub_element_with_data_ajax) although it is not visible on initial load. The Ajax response for this page "/ks_tests_id_transition_sub_element_with_data_ajax" contains two top-level elements; one for #id_transition_sub_element_with_data_ajax and the other for the this div #sub_element_with_data_ajax_loaded_message. Kamishibai looks for these IDs in the current document and replaces their contents with the AJAX response.</p>
+  </div>
+</div>

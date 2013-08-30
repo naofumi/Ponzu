@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- http://www.weblan3.com/mobile/reference-mobilesite-3c.php -->
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="type/html; charset=Shift_JIS">
+  <meta name="disparea" content="qvga">
+  <!-- For Android 1.*, 2.1, 2.2  -->
+  <meta name="viewport" content="width=device-width">
+  <%= stylesheet_link_tag    "#{conference_tag}/galapagos/application", :media => "all" %>
+  <title><%= conference_module %></title>
+</head>
+<body>
+  <div align="center"><%= image_tag("#{conference_tag}/logo_for_keitai.jpg") %></div>
+  <div class="top_menu">
+    <%= link_to "Home", root_path %>
+    <%= link_to "Search", search_index_path %>
+    <%#= link_to "ﾏｲ･ｽｹ&ｲｲﾈ!", by_day_likes_path %>
+    <%#= link_to "日", url_for(params.merge({:locale => 'ja'})) %>
+    <%#= link_to "Eng.", url_for(params.merge({:locale => 'en'})) %>
+  </div>
+  <div>
+    <!-- Show no external CSS warning unless overridden by external CSS -->
+    <div id="no_external_css_warn" style="color:red;border: solid 1px red; font-weight: bold; margin: 5px; padding: 5px;font-size:large;">
+      <font size="5" color="#FF0000"><%= t('pre_imode_2_warning').html_safe %></font>
+    </div>
+    <div class="notice"><%= flash[:notice] %></div>
+    <div class="error"><%= flash[:error] %></div>
+    <%= yield %>
+  </div>
+  <!-- <div class="footer">powered by Castle104</div> -->
+</body>
+</html>

@@ -1,0 +1,34 @@
+= ks_element :id => "network_situation",
+             :data => { :title => "Network situation",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Benefits of a compositor architecture
+
+      Kamishibai is similar to a graphic compositor. The best known graphic compositor is 
+      the [Quartz Compositor](http://en.wikipedia.org/wiki/Quartz_Compositor) in Mac OS X.
+      Quartz Compositor receives bitmaps from Quartz 2D, OpenGL, etc. and assembles them into
+      one image for the display.
+
+      Similarly, Kamishibai receives HTML fragments from the backend server via Ajax calls. It
+      combines them into a single HTML document for display.
+
+      The benefit of this approach is that Kamishibai does not have to know anything about
+      the business logic. All of that is left to the backend server. There is a very clear
+      distinction between the roles of the server and the browser and hence no duplication.
+
+      ## Browsers aren't good at business logic
+
+      Although HTML5 has made some improvements, the browser is still a very lousey place to 
+      place your business logic. The persistence layer is still not fixed and there still isn't
+      a common model that you can use across browsers.
+
+      Even if indexed DB becomes the standard and browsers like Safari start to support it, it
+      still is very limited compared to the sophisticated relational databases and full-text
+      search indexes that you can use on the server. We think that business logic is not
+      what the browser was originally made for, and even in the future, the browser will 
+      severely lag behind servers in managing business logic.
+
+      Therefore, if your application has reasonably complicated business logic, it would be much 
+      better to use the Kamishibai approach as opposed to a Sencha Touch approach.

@@ -1,0 +1,42 @@
+= ponzu_frame :container => :ponzu_admin_frame do
+  .panel
+    %h1 Conference data
+    %p
+      %b Name:
+      = @conference.name
+    %p
+      %b Module:
+      = @conference.module_name
+    %p
+      %b Tag:
+      = @conference.tag
+    %p
+      %b Subdomain:
+      = @conference.subdomain
+    %p
+      %b Dates:
+      = @conference.dates
+    %p
+      %b Icons:
+      = @conference.icons
+    %p
+      %b Support Conference Home Page Url:
+      = @conference.conference_home_page_url
+    %p
+      %b Support email:
+      = @conference.support_email
+    %p
+      %b Send all emails to:
+      = @conference.send_all_emails_to
+      %br/
+      (space delimited list. If set, all emails will be sent to these addresses only.
+      Use until we are ready to send real users emails)
+    %p
+      %b KS Cache Version:
+      = @conference.ks_cache_version
+
+    = link_to 'Edit', ksp(edit_conference_path(@conference))
+    |
+    = link_to 'Back', ksp(conferences_path)
+    |
+    = link_to 'View this conference site', conference_root(@conference)

@@ -1,0 +1,7 @@
+= ponzu_frame do
+  %h1 Editing comment
+  = render 'form'
+
+  = link_to 'Show', ksp(@comment)
+  |
+  = link_to 'Back', ksp(comments_path)

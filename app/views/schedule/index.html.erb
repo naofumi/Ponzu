@@ -1,0 +1,28 @@
+<h1>Schedule for <%= @user.jp_name %></h1>
+
+<h3>Schedule</h3>
+<div id="timetable">
+  <% @schedules.each_with_index do |l, i| %>
+    <% next unless p = l.presentation %>
+    <div class="time_entry" style="<%= "left:#{0}px;top:#{i * 300}px;height:200px;width:200px;"%>">
+      <%= p.jp_title || p.en_title %>
+      <%= link_to "[remove from schedule]", toggle_schedule_presentation_path(p),
+          :method => :put %>
+    </div>
+  <% end %>
+</div>
+
+<h3>Likes</h3>
+<% @likes.each do |l| %>
+<div>
+  <% next unless p = l.presentation %>
+  <%= render :partial => 'browser/presentation', :locals => {:p => p}%>
+  <% if l.scheduled %>
+    <%= link_to "[remove from schedule]", toggle_schedule_presentation_path(p),
+        :method => :put %>
+  <% else %>
+    <%= link_to "[add to schedule]", toggle_schedule_presentation_path(p),
+        :method => :put %>
+  <% end %>
+</div>
+<% end %>

@@ -1,0 +1,16 @@
+generic_authorship:
+  author: generic_author
+  submission: generic_submission
+  en_name: Generic author
+generic_authorship_2:
+  author: generic_author_2
+  submission: generic_submission
+  en_name: Generic author 2
+another_conference_authorship:
+  author: another_conference_author
+  submission: another_conference_submission
+  en_name: another conference author
+to_linked_author:
+  author: linked_author
+  submission: generic_submission
+  en_name: Linked author

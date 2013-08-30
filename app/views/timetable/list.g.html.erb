@@ -1,0 +1,18 @@
+<h2><%= t('dashboard.orals', :date => l(@show_date, :format => :month_day)) %></h2>
+<div id="session_list">
+  <% @sessions.each_with_index do |session, session_index| %>
+    <% color_tag = session_index.modulo(12) %>
+    <% likes_in_session = @likes.select{|l| l.presentation.session_id == session.id} %>
+    <% schedules_in_session = @schedules.select{|l| l.presentation.session_id == session.id} %>
+    <% session_duration = (session.ends_at - session.starts_at) %>
+    <%= content_tag :div do %>
+      <%= content_tag(:span, "　", :class => "color_#{color_tag} session_#{session.id}")%>
+      <%= image_tag('clock_small.png', :style => "vertical-align:bottom") if schedules_in_session.size > 0 %>
+      <%= content_tag(:span, "★", :style => "color: #ffe109") if likes_in_session.size > 0 %>
+      <span class="time">
+        <%= session.starts_at.strftime('%H:%M') %>-<%= session.ends_at.strftime('%H:%M') %> <%= session.room.name %>
+      </span> <br />  
+      <%= link_to session.title, session %>
+    <% end %>
+  <% end %>
+</div>

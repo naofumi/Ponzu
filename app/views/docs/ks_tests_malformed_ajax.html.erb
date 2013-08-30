@@ -1,0 +1,29 @@
+<div class="page">
+  <div class="panel test_results">
+    <h3>Malformed Ajax response validation</h3>
+    <h4>What this tests</h4>
+    <p>Kamishibai tries to identify problems with markup.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Notes about malformed ajax response validation</h3>
+    <p>Kamishibai requires correct tags to function. The consequences of incorrect tags is complex and difficult to predict and debug. We therefore think that it is essential to have a validator to prevent common issues.</p>
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Ajax response top-level elements must all have an ID assigned.</li>
+      <li>None of the top-level elements should have style="display:none".</li>
+      <li>All pages must have a unique ID assigned.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="page" id="sub_element_with_data_ajax_loaded_message">
+    <h3>Automatic loading of element with 'data-ajax' attribute success!</h3>
+    <h4>What this tested</h4>
+    <p>When Kamishibai loads a page, it looks for elements with a 'data-ajax' attribute and automatically loads the contents (via Ajax or cache) into the DOM if it is empty or has a 'data-force' or 'data-force-once' attribute. Even if the toElement is a sub-page element, Kamishibai will go up to the top page element (class="page") and search down from there.</p>
+    <p>In the current page, we have such an element in the "sub element test area" (#id_transition_sub_element_with_data_ajax) although it is not visible on initial load. The Ajax response for this page "/ks_tests/id_transition_sub_element_with_data_ajax" contains two top-level elements; one for #id_transition_sub_element_with_data_ajax and the other for the this div #sub_element_with_data_ajax_loaded_message. Kamishibai transfers the contents of the Ajax response to the elements which pre-existed in the DOM with corresponding IDs.</p>
+</div>
+
+<div class="page" id="hello" style="display:none">
+  <h3>This page is set to display:none which is invalid.</h3>
+</div>

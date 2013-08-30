@@ -1,0 +1,50 @@
+= ks_element :id => "dashboard", 
+             :data => { :title => "Dashboard",
+                        :container => "mockup2_body",
+                        :"container-ajax" => docs_path(:page => "mockup2/layout") } do
+  %div{:style => "height: 270px;text-align:center"}
+    = image_tag('mbsj_logo.png', :style => "height:200px;")
+    %br/
+    %h1{:style => "font-size:20px;font-style: italic;font-family: times;"} 35th Annual Meeting of the Molecular Biology Society of Japan
+  .blank_page
+    .grid
+      .col-1-4{:style => "text-align:center"}
+        .image_icon{:style => "background-image:url('#{asset_path('mockup/megaphone.jpg')}');"}
+        Announcements
+      .col-1-4{:style => "text-align:center"}
+        .image_icon{:style => "background-image:url('#{asset_path('mockup/oral.jpg')}');"}
+        Oral Sessions
+      .col-1-4{:style => "text-align:center"}
+        .image_icon{:style => "background-image:url('#{asset_path('mockup/poster.jpg')}');"}
+        Poster Sessions
+      .col-1-4{:style => "text-align:center"}
+        .image_icon{:style => "background-image:url('#{asset_path('mockup/perfume.png')}');"}
+        Perfume
+    .grid
+      .col-1-4{:style => "text-align:center"}
+        %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+        My presentations
+      .col-1-4{:style => "text-align:center"}
+        %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+        My schedule
+      .col-1-4{:style => "text-align:center"}
+        %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+        My likes
+      .col-1-4{:style => "text-align:center"}
+        %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+        Private messages
+    .grid
+      .col-1-4{:style => "text-align:center"}
+        =link_to ksp(:docs_path, "mockup2/room"), :style => "display:block" do
+          %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+          Room 1
+      .col-1-4{:style => "text-align:center"}
+        %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+        Forums
+      .col-1-4{:style => "text-align:center"}
+        %div{:style => "width: 80px; height: 80px;border: solid 1px green; margin: 0 auto;"}
+        Exhibition
+      .col-1-4{:style => "text-align:center"}
+        =link_to ksp(:docs_path, "mockup2/settings"), :style => "display:block" do
+          .image_icon{:style => "background-image:url('#{asset_path('mockup/settings.jpg')}');"}
+          設定

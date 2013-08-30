@@ -1,0 +1,18 @@
+#meet_up_comments
+  - @meet_up.meet_up_comments.each do |c|
+    .comment{:id => "meet_up_comment_#{c.id}"}
+      .comment_properties
+        %strong= link_to c.user.name, ksp(c.user)
+        &nbsp;&nbsp;
+        = c.created_at.strftime('%m-%d %H:%M')
+        - if c.user == current_user
+          = link_to "[x]", c, :method => :delete, :remote => true, :confirm => t('meet_ups.alerts.confirm_delete_comment'), :data => {'ks-insert-response' => ""}        
+
+      = auto_link c.content
+  - if current_user
+    = form_for(MeetUpComment.new(:meet_up_id => @meet_up.id), :remote => true,
+                 :html => {:data => {"invalidates-keys" => invalidated_paths(@meet_up),
+                                     "ks-insert-response" => ""}}) do |f|
+      = f.hidden_field :meet_up_id
+      = f.text_area :content
+      = f.button t("meet_ups.submit_comment"), :class => "button icon comment"

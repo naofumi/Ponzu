@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Format type:</b>
+  <%= @umin_row.format_type %>
+</p>
+
+<p>
+  <b>Csv:</b>
+  <%= @umin_row.csv %>
+</p>
+
+
+<%= link_to 'Edit', edit_umin_row_path(@umin_row) %> |
+<%= link_to 'Back', umin_rows_path %>

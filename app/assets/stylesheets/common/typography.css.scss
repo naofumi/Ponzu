@@ -1,0 +1,8 @@
+// Requires that we set lang="en-US" or
+// similar as an attribute on the html tag.
+.auto-hyphen {
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;  
+  word-wrap: break-word;
+}

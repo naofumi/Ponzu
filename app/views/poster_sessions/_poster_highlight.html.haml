@@ -1,0 +1,7 @@
+- grid = presentation.grid
+- css_string = pg.cssify([grid])
+= content_tag :a, ' '.html_safe,
+              :class => "poster_slot #{like.kind_of?(Like::Schedule) ? "scheduled" : ""}",
+              :href => ksp(presentation_path(presentation)),
+              :id => "presentation_highlight_#{presentation.id}",
+              :style => css_string

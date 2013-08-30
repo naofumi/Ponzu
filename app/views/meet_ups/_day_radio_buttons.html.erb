@@ -1,0 +1,6 @@
+<% dates.each do |date| %>
+  <div style="display:inline-block">
+    <%= f.radio_button :starts_at_date, to_date_string(date)%>
+    <%= f.label "starts_at_date_#{to_date_string(date)}", l(date, :format => :month_day) %>
+  </div>
+<% end %>

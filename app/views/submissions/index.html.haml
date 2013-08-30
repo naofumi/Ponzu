@@ -1,0 +1,26 @@
+= ks_element :id => "list_submissions",
+             :data => {:container => "ponzu_frame",
+                       :"container-ajax" => static_path("ponzu_frame")} do
+
+  %h1 Listing submissions
+
+  = ks_will_paginate
+
+  %table
+    %tr
+      %th submission
+      %th presentations
+      %th title
+      %th
+    - @submissions.each do |submission|
+      %tr
+        %td= submission.submission_number
+        %td= submission.presentations.map{|p| p.number}.join(', ')
+        %td= submission.title
+        %td
+          = link_to 'Show', ksp(submission)
+          |
+          = link_to 'Edit', ksp(edit_submission_path(submission))
+          |
+          = link_to 'Destroy', submission, confirm: 'Are you sure?', method: :delete, remote: true
+  = link_to "New Submission", new_submission_path

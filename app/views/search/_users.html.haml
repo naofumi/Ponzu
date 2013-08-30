@@ -1,0 +1,7 @@
+- @users && @users.results.each do |u|
+  = link_to ksp(u) do
+    = highlight(u.name, params[:query])
+    %span.user_type= u.kind_of?(Author) ? "Author" : "Participant"
+    .institutions
+      = "(#{u.affiliation})" if u.kind_of?(User)
+      = "(#{u.all_unique_affiliations.first})" if u.kind_of?(Author)

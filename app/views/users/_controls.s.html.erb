@@ -1,0 +1,10 @@
+<div id="controls">
+  <div id="user_nav">
+    <% if current_user %>
+      <%= link_to "#{t("users.greetings", :name => current_user.name)} ▼", 
+                  ksp(settings_user_path(current_user.id)), :id => "user_menu_button" %>
+    <% else %>
+      <%= link_to t('users.login'), login_path, :id => 'user_menu_button' %>
+    <% end %>
+  </div>
+</div>

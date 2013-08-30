@@ -1,0 +1,58 @@
+<%= form_for(@session, :remote => true, :data => {'ks-insert-response' => true}) do |f| %>
+  <% if @session.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@session.errors.count, "error") %> prohibited this session from being saved:</h2>
+
+      <ul>
+      <% @session.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :starts_at %><br />
+    <%= f.datetime_select :starts_at, :start_year => 2012, 
+                          :default => current_conference.dates_for(:time_table).first %>
+  </div>
+  <div class="field">
+    <%= f.label :ends_at %><br />
+    <%= f.datetime_select :ends_at, :start_year => 2012, 
+                          :default => current_conference.dates_for(:time_table).first %>
+  </div>
+  <div class="field">
+    <%= f.label :room_id %><br />
+    <%= f.select(:room_id, Room.in_conference(current_conference).order(:position).collect{|e| ["#{e.en_name} #{e.jp_name}", e.id]}, :include_blank => true) %>
+    <%#= f.number_field :room_id %>
+  </div>
+  <div class="field">
+    <%= f.label :number %><br />
+    <%= f.text_field :number %>
+  </div>
+  <div class="field">
+    <%= f.label :type %><br />
+    <%= f.select :type, Session.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :en_title %><br />
+    <%= f.text_field :en_title %>
+  </div>
+  <div class="field">
+    <%= f.label :jp_title %><br />
+    <%= f.text_field :jp_title %>
+  </div>
+  <div class="field">
+    <p>Split organizers with "|" character</p>
+    <%= f.label :organizers_string_en %><br />
+    <%= f.text_field :organizers_string_en %>
+  </div>
+  <div class="field">
+    <p>Split organizers with "|" character</p>
+    <%= f.label :organizers_string_jp %><br />
+    <%= f.text_field :organizers_string_jp %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

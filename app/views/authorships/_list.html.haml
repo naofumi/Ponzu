@@ -1,0 +1,8 @@
+#authorship_list.sortable{:data => {:action => sort_authorships_path}}
+  - authorships.each do |as|
+    %div{:draggable => "true", :id => "authorship_#{as.id}"}
+      ⇅
+      = as.name
+      != "(" + as.affiliations.map{|aff| content_tag :span, "#{aff}", 
+                                         :class => "color_#{aff - 1}"}.join(', ') + ")"
+      = link_to "edit", ksp(:edit_authorship_path, as)

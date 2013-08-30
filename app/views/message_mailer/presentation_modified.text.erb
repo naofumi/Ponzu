@@ -1,0 +1,9 @@
+<%= t('message_mailer.presentation_modified.header', 
+      :number => @obj.number,
+      :namespace => @conference.tag) %>
+
+<%= t('message_mailer.presentation_modified.view_web', 
+      :link => ksp_and_galapagos_email_links(@obj),
+      :namespace => @conference.tag) %>
+    
+<%= mail_footer %>

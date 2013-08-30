@@ -1,0 +1,21 @@
+= ponzu_frame do
+  %h1 Listing meet_up_comments
+  %table
+    %tr
+      %th Meet up
+      %th User
+      %th Content
+      %th
+      %th
+      %th
+
+    - @meet_up_comments.each do |meet_up_comment|
+      %tr
+        %td= meet_up_comment.meet_up_id
+        %td= meet_up_comment.user_id
+        %td= meet_up_comment.content
+        %td= link_to 'Show', ksp(meet_up_comment)
+        %td= link_to 'Edit', ksp(edit_meet_up_comment_path(meet_up_comment))
+        %td= link_to 'Destroy', meet_up_comment, confirm: 'Are you sure?', method: :delete
+  %br/
+  = link_to 'New Meet up comment', ksp(new_meet_up_comment_path)

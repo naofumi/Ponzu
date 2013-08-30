@@ -1,0 +1,46 @@
+generic_author:
+  jp_name: 鈴木 一郎
+  en_name: Ichiro Suzuki
+
+generic_author_2:
+  jp_name: MyString
+  en_name: MyString
+
+linked_author:
+  jp_name: linked author
+  en_name: linked author
+
+similar_author_1:
+  jp_name: 鈴木 マック 一郎
+  en_name: Ichiro Mac Suzuki
+similar_author_2:
+  jp_name: 鈴木 金太郎 一郎
+  en_name: Ichiro Kintaro Suzuki
+similar_author_jp_only:
+  jp_name: 鈴木 虎の助 一郎
+similar_author_en_only:
+  en_name: Ichiro Toranosuke Suzuki
+not_similar_author_1:
+  jp_name: ちょっと珍しい名前
+  en_name: exotic name
+
+blank_jp_name:
+  jp_name: ""
+  en_name: blank_jp_name
+
+# for whitelisting
+wl_1:
+  en_name: wl_1
+wl_2:
+  en_name: wl_2
+wl_3:
+  en_name: wl_3
+wl_4:
+  en_name: wl_4
+wl_5:
+  en_name: wl_5
+
+# For multi-conference
+another_conference_author:
+  jp_name: AC author jp
+  en_name: AC author en

@@ -1,0 +1,47 @@
+<%= ks_element :id => "Ponzu_concept",
+               :data => {
+                 :title => "Ponzu Concept",
+                 :container => "ipadish_content",
+                 :"container_ajax" => docs_path(:page => "showcase/layout")
+               } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+# Exhibitor support
+
+The idea is to integrate exhibitor support into the site so that exhibitors show up as
+a) Ads, b) search results.
+
+We need a flexible platform because I suspect that there is a lot of innovation to be
+done here.
+
+## Exhibitors as a presentation
+
+We could make the Exhibitions and the luncheon seminars as a session type similar to
+"Workshops", "Symposiums" and "Posters". This way, it will be straightforward to include
+luncheon seminars into timetables and exhibition maps. It will be simple to also
+add "likes" and "my schedule" support.
+
+## Exhibitors should be free to edit their stuff.
+
+Contrary to the presentations, exhibition stuff does not need to be edited by organizers.
+The exhibitors should be free to add information as they wish.
+
+## Exhibitors should have a live feed.
+
+Prior to MBSJ2012, I entertained the idea of having a live feed of exhibitor activity, much
+like a Twitter hashtag for the exhibition that was more integrated with Ponzu. However,
+after seeing the failure that was JBS2012, I'm not so sure. Maybe this isn't the best
+way to do it.
+
+## Exhibitors might be slow to adopt new ideas
+
+Exhibitors will naturally have a risk avoidance tendency unless digtal marketing 
+responsibilities have been assigned. I don't think that we can just give them a tool
+and expect them to adopt it.
+
+We have to think about how we can coax them by supporting them thorugh digital.
+
+MARKDOWN
+%>
+  </div>
+<% end %>

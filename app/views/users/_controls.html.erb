@@ -1,0 +1,18 @@
+<div id="controls">
+  <div id="user_nav">
+    <% if current_user %>
+      <%= link_to "#{t("users.greetings", :name => current_user.name)} ▼", 
+                  ksp(settings_user_path(current_user.id)), :id => "user_menu_button" %>
+      <div id="user_menu">
+        <ul>
+          <li><%= link_to t('users.settings'), ksp(settings_user_path(current_user.id)), 'data-animation' => 'horizontalFlip' %></li>
+          <li><%= link_to t('users.logout'), logout_path %></li>
+          <li><%= render :partial => "layouts/reset_cache_link" %></li>
+        </ul>
+      </div>
+    <% else %>
+      <%= link_to t('users.login'), login_path, :id => 'user_menu_button' %>
+      (<%= t('users.login_benefits') %>)
+    <% end %>
+  </div>
+</div>

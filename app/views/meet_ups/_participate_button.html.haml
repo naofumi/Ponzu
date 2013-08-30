@@ -1,0 +1,25 @@
+- if !current_user
+  Please first login to register for participation.
+  %span.signup_message= t('meet_ups.buttons.you_get_notifications_if_you_register')
+  = link_to "Login", ksp(login_path), :class => 'signup_button button big'
+    
+- elsif @meet_up.participate? current_user
+  - participation = @meet_up.participation_for_user(current_user)
+  = link_to(participate_meet_up_path(@meet_up),
+            :method => :put, :class => 'cancel_button button icon remove big',
+            :remote => true, 
+            "data-invalidates-keys" => invalidated_paths(participation),
+            :confirm => t('meet_ups.alerts.do_you_really_want_to_cancel')) do
+    = t('meet_ups.buttons.you_are_planning_to_attend_this_yorusemi')
+  %br/
+  %span.cancel_message= t('meet_ups.buttons.click_here_to_cancel')
+- else
+  - participation = @meet_up.participations.build
+  = link_to(participate_meet_up_path(@meet_up),
+            :method => :put, :class => 'signup_button button icon add big',
+            :remote => true,
+            "data-invalidates-keys" => invalidated_paths(participation),
+            :confirm => t('meet_ups.alerts.confirm_participation')) do
+    = t('meet_ups.buttons.click_here_to_attend_this_yorusemi')
+  %br/
+  %span.signup_message= t('meet_ups.buttons.you_get_notifications_if_you_register')

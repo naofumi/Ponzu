@@ -1,0 +1,156 @@
+window.KSAjax = function() {
+	var allAjaxRequests = {};
+
+	var defaultTimeout = 30000;
+	var timerStatus = false; // true: timer running, false: timer stopped
+	// Make it similar to the jQuery API so that we can easily move 
+	// between the two. 
+	// We can manage responses in the options.success, options.complete as
+	// well as with the event handler style.
+	// Use the event handler style to manage responses.
+	function ajax(options) {
+		startSpinner();
+
+	  var url = options.url;
+	  // jQuery uses the options.type to specify the method, but we prefer options.method.
+	  var method = (options.method || options.type || "post").toUpperCase();
+	  var data = options.data || null; // Only accepts URI encoded string, not objects.
+	  // Add CSRF parameter
+	  if (method && method != "GET" && KSRails) {
+	  	data += "&" + KSRails.csrfParam() + "=" + KSRails.csrfToken()
+	  }
+	  var async = options.async || true;
+	  var timeout = options.timeoutInterval || defaultTimeout;
+	  var timeoutCallback = options.timeout
+	  var callbackContext = options.callbackContext || document.body; // The object on which the callbacks will be targeted
+
+	  var xhr = new XMLHttpRequest();
+	  xhr.open(method, url, true);
+	  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+	  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	  xhr.setRequestHeader('Accept', 'text/html, application/json;q=0.9, text/javascript;q=0.8');
+	  xhr.addEventListener('readystatechange', readyStateCallback, false);
+
+	  // timeout == 0 for no timeout
+	  if (async && timeout > 0) {
+	  	console.log('ajax timeout is set to ' + options.timeout + 'ms');
+	  	timerStatus = true;
+	  	xhr.timeoutCallback = function(){
+  			stopSpinner();
+  			timerStatus = false;
+  		  xhr.abort();
+  		  xhr.aborted = true;
+  		  if (typeof(timeoutCallback) === 'function') {
+  		    timeoutCallback(xhr)
+  		  }
+  		  kss.sendEvent('ajaxTimeout', callbackContext, {xhr: xhr, ajaxOptions: options, error: "response timeout at " + timeout + "ms"})	  		
+  		  delete allAjaxRequests[url];
+  		  // timeout all other XHR requests
+  		  for (var i = allAjaxRequests.length - 1; i >= 0; i--) {
+  		  	allAjaxRequests[i].timeoutCallback();
+  		  };
+	  	}
+	    timeoutTimer = setTimeout(xhr.timeoutCallback, timeout );
+	  } else {
+	  	xhr.timeoutCallback = function(){};
+	  }
+	  xhr.send(data);
+	  allAjaxRequests[url] = xhr;
+
+	  // Intermediate function to trap the callbackContext in a closure.
+	  function readyStateCallback(event) {
+	    ajaxReadyStateChangeHander(event, callbackContext, options, timeoutTimer);
+	    return true;
+	  }
+	}
+
+	function ajaxReadyStateChangeHander(event, callbackContext, ajaxOptions, timeoutTimer) {
+	  var xhr = event.target,
+	      textStatus = xhr.statusText,
+	      data;
+	  var sendEventFlag = true;
+	  if (xhr.readyState === 4) {
+	  	clearTimeout(timeoutTimer);
+	  	delete allAjaxRequests[ajaxOptions.url];
+	  	stopSpinner();
+	  	// jQuery processes javascript responses in the "text script" converter.
+	  	// Each converter is run in #ajaxConvert, which is one of the first things
+	  	// that jQuery does after receiving a response. The result is used to 
+	  	// feed the callbacks. We will do similar stuff here but we set data to null if Javascript.
+	  	data = processResponse(xhr);
+	  	status = getAjaxStatus(xhr);
+	    if (status == "success") {
+	      // processAjaxResponse(xhr, callbackContext);
+	      if (typeof(ajaxOptions.success) === 'function') {
+	        ajaxOptions.success(data, textStatus, xhr)
+	      }
+	      kss.sendEvent('ajaxSuccess', callbackContext, 
+	                    {xhr: xhr, data: data, ajaxOptions: ajaxOptions});
+	    } else if (status == "redirect") {
+	    	// Don't do anything special on redirect
+	    } else {
+	      if (typeof(ajaxOptions.error) === 'function') {
+	        sendEventFlag = ajaxOptions.error(xhr, textStatus)
+	      }
+	      if (sendEventFlag !== false){
+	      	kss.sendEvent('ajaxError', callbackContext,
+	      	              {xhr: xhr, ajaxOptions: ajaxOptions, errorMessage: status});	      	
+	      }
+	    }
+	    if (typeof(ajaxOptions.complete) === 'function') {
+	      ajaxOptions.complete(xhr, textStatus)
+	    }
+	    kss.sendEvent('ajaxComplete', callbackContext,
+	                    {xhr: xhr, ajaxOptions: ajaxOptions});
+	    timerStatus = false;
+	  }
+	  return true;
+	}
+
+	function getAjaxStatus(xhr) {
+	  // Manage local file responses with indexOf('http')
+	  // TODO: We might have to hand 300, 304 responses (not changed)
+	  if (xhr.status == "200" || window.location.href.indexOf("http") == -1) {
+	    return "success";
+	  } else if (xhr.status == "303" || xhr.status == "302") {
+	  	return "redirect";
+	  } else if (xhr.status == "404") {
+	    return "404 file not found at url"
+	  } else if (xhr.status == 0) {
+	  	return (timerStatus ? "status 0 error" : "timeout");
+	  } else {
+	    return ("xhr status " + xhr.status);
+	  }
+	}
+
+	function processResponse(xhr) {
+		var responseType = xhr.getResponseHeader('Content-Type');
+		if (responseType) {
+		  if (responseType.indexOf('javascript') != -1) {
+		    new function() { eval(xhr.responseText); }();
+		    return null;
+		  } else {
+		  	return xhr.responseText;
+		  }
+		}
+	}
+
+	function startSpinner(){
+		var logos = document.querySelectorAll('#logo');
+		for (var i = 0; i < logos.length; i++) {
+			kss.addClass(logos[i], 'css_pulse')
+		};
+	}
+
+	function stopSpinner(){
+		var logos = document.querySelectorAll('#logo');
+		for (var i = 0; i < logos.length; i++) {
+			kss.removeClass(logos[i], 'css_pulse')
+		};
+	}
+
+	return {
+		ajax: ajax,
+		allAjaxRequests: allAjaxRequests
+	}
+}()

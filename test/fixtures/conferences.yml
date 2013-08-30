@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+generic_conference:
+  module_name: GenericConference
+  dates: |
+    <%= [{"time_table" => ["2013-5-21", "2013-5-22", "2013-5-23"],"presentation/poster" => ["2013-5-22"],"meet_up" => ["2013-5-21", "2013-5-22", "2013-5-23", "2013-5-24"]}].to_json %>
+  support_email: generic@conference.com
+  name: Generic Conference
+  subdomain: generic-conference
+  tag: generic_conference
+another_conference:
+  module_name: AnotherConference
+  dates:
+  support_email: another@conference.com
+  name: Another Conference
+  subdomain: another-conference
+

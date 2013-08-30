@@ -1,0 +1,7 @@
+<%= raise 'SHIT: should use sessions/presentation.g for partial' %>
+<div>
+  <h4><%= p.number %> <%= starts_at_ends_at_combo p, :month_day_time %></h4>
+  <div><%= link_to sanitize(p.title), presentation_path(p) %></div>
+  <div class="authors"><%= authors_list(p.submission, [], [], false, true, true) %></div>
+  <div class="institutions"><%= institutions_list(p.submission, :same_line => true, :single_language => true) %></div>
+</div>

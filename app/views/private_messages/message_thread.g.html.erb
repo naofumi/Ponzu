@@ -1,0 +1,30 @@
+<h3><%= @correspondant.name %> さんとのプライベートメッセージ</h3>
+<%= form_for PrivateMessage.new(:to_id => @correspondant.id, :subject => "private message") do |f| %>
+  <%= f.hidden_field :to_id %>
+  <%= f.hidden_field :subject  %>
+  <%= f.text_area :body, :rows => "2", :style => "width: 90%;margin: 0 5%;" %><br />
+  <div style="text-align:right">
+    <%= f.submit 'プライベートメッセージを送信する' %>
+  </div>
+  <div style="clear:both"></div>
+<% end %>
+<div style="text-align:right;margin-bottom:5px">
+  <%= link_to t('users.name_with_salutation', :name => @correspondant.name) + "のページ", @correspondant %>
+</div>
+<% hour_cursor = nil %>
+<% @receipts.each do |r| %>
+  <% if !hour_cursor || hour_cursor > r.created_at.change(:min => 59, :sec => 59) %>
+    <% hour_cursor = r.created_at.change(:min => 00) %>
+    <div class="time_indicator"><%= hour_cursor.strftime('%m月%d日 %H:00') %></div>
+  <% end %>
+  <% received_message = r.message.sender != current_user %>
+  <div class="message <%= received_message ? 'received' : 'sent' %>">
+    <% if received_message %>
+      <%= t('users.name_with_salutation', :name => @correspondant.name) %>
+    <% else %>
+      <%= t 'dashboard.you' %>
+    <% end %>
+    <%= simple_format r.message.body unless r.message.body == "---" %>
+  </div>
+  <div style="clear:both"></div>
+<% end %>

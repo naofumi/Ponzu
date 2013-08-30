@@ -1,0 +1,36 @@
+- labeled_hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+- entry_height_compensation = 5
+- now = @show_date.change(:hour => 8, :min => 0)
+- left = tt.left_position_for_time now
+
+#entries
+  .now_cursor{ :style => "top:20px;left:#{left.to_i}px;height:#{tt.total_height.to_i}px;",
+               "data-initial-left" => left.to_i,
+               "data-width_per_minute" => tt.width_per_minute}
+    = image_tag('ponzu/yellow_clock.png', :style => "width:30px;position:absolute;top:-55px;left:-15px;")
+  - labeled_hours.each do |hour|
+    - time = @show_date.change(:hour => hour)
+    .header{:style => tt.header_css(time)}
+      #{hour}:00
+  - @rooms.each_with_index do |r, i|
+    .row{:class => [cycle('dark', '')],
+          :style => tt.row_css(i)}
+      .room{:style => "height:100%"}
+        %div() #{r.name}
+  - @sessions.each_with_index do |s, i|
+    - next unless @rooms.include?(s.room)
+    - style_string = tt.entry_css(:starts_at => s.starts_at, 
+                                  :ends_at => s.ends_at, 
+                                  :row => @rooms.index(s.room))
+    - color_tag = "color_#{i.modulo(12)}"
+    = link_to ksp(session_path(s)), :class => ["session", color_tag, "session_#{s.id}"], 
+                :id => "session_#{s.id}", :style => style_string do
+      %span.time
+        = s.number
+        = "#{s.starts_at.strftime('%H:%M')}-#{s.ends_at.strftime('%H:%M')}"
+        = s.room.name
+        %br/
+      %span.title
+        = s.title
+  = ks_ajax_placeholder :id => "like_highlights_#{params[:id]}",
+                        :data => {:ajax => like_highlights_timetable_path(params[:id])}

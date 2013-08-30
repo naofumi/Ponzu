@@ -1,0 +1,71 @@
+= ponzu_frame :data => {:title => "Likes report"} do
+  .panel
+    %h1 Likes and Login report
+    .panel_title= "Likes"
+    .panel
+      %dl
+        %dt Total Number of Likes
+        %dd
+          = @number_of_schedules
+          \/
+          = @number_of_likes
+          (schedules/likes)
+        %dt Number of Liked Presentations
+        %dd
+          = @number_of_liked_presentations
+          \/
+          = @number_of_all_presentations
+        %dt Number of Users who liked at least once
+        %dd
+          = @number_of_users_who_liked
+          \/
+          = @number_of_logined_users
+          (per users who logged in)
+        %dt Average number of likes per user who logged in
+        %dd 
+          = sprintf "%.2f", @number_of_likes.to_f / @number_of_logined_users
+    .panel_title Top Schedules
+    .panel
+      %dl
+        %dt Top Schedules
+        %dd
+          %ol
+            - @top_schedules.each do |p|
+              %li
+                = sanitize p.title
+                (
+                = link_to p.number, ksp(p)
+                \:
+                = "#{pluralize p.count, "schedule"} total" 
+                )
+    .panel_title Top Likes
+    .panel
+      %dl
+        %dt Top Likes
+        %dd
+          %ol
+            - @top_likes.each do |p|
+              %li
+                = sanitize p.title
+                (
+                = link_to p.number, ksp(p)
+                \:
+                = "#{pluralize p.count, "like"} total" 
+                )
+    .panel_title= "Logins"
+    .panel
+      %dl
+        %dt Number of Users who logged in
+        %dd
+          = @number_of_logined_users
+          \/
+          = @number_of_all_users
+          (per all system users)
+        %dt Users who tried but failed to log in
+        %dd
+          %ol
+            - @users_who_failed_to_log_in.each do |u|
+              %li
+                = link_to "#{u.name} (#{u.login} : failed #{u.failed_login_count})", ksp(user_path(u))
+                = mail_to u.email, u.email
+

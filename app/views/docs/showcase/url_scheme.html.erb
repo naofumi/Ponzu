@@ -1,0 +1,96 @@
+<%= ks_element :id => "url_scheme",
+               :data => {
+                 :container => "ipadish_content",
+                 :title => "Kamishibai URL Scheme",
+                 :"container-ajax" => docs_path(:page => "showcase/layout")
+               } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+# Kamishibai URL Scheme
+
+Since Kamishibai uses sub-page fragments, the question arises about what the URL scheme
+to specify this state should be; should the URL state information only mention the fragment
+or should the URL contain state information about the parent element in addition to
+the fragment.
+
+In the former scheme, the URL would be very simple. In the latter, there would be multiple
+resource locations inside a single URL and would tend to be complex.
+
+Our decision is to go with the former scheme. Hence the URL will not contain state information
+about the parent element. Instead, we will supply this information in the fragment itself.
+
+The biggest reason why we want to go with a simple URL is because we want to maintain 
+URL compatibility with smartphones and feature phones. Having different URL schemes makes
+sharing URLs via Twitter, blogs and other media very challenging. It also complicates
+development. Smartphones will generally not use sub-page fragments and all URLs will 
+be simple. We want to maintain that simplicity even with iPad-like interfaces.
+
+## The URL
+
+The URL looks like the following;
+
+    http://localhost:5000/ja/ks_tests/showcase#!_/ja/ks_tests/showcase/url_scheme
+
+The path section specifies the HTML to be loaded in a regular HTTP request.
+What you load is completely up to you. 
+
+# Possible ways to use Kamishiba
+
+## My current preferred way
+
+My current preference is to **not** use multi-page DOMs like many of the other mobile
+frameworks do. 
+
+One reason is because multi-page DOMs confuse scripts which rely on unique IDs. This
+may make multi-page DOMs incompatible with commonly use scripts. 
+
+Another big reason is that multi-page DOMs result in another cache store that we have
+to manage. Cache management is hard. In Kamishibai, we already have to manage local 
+cache and having to work with another cache store is a nightmare.
+
+Yet another reason is because I want to make Kamishibai a seamless to a regular
+web developer as possible. Multi-page DOMs require a change in thinking and managing
+the application. We don't want this to be. We want Kamishibai to be easy to
+develop for a Rails developer. Maintaining a similar web page structure helps.
+
+Yet yet another reason is because we want to create truly offline applications. 
+Creating offline applications means putting all the stuff in the cache. HTML5 
+provides us with two different types of cache; local storage (webStorage, webSQL, indexedDB)
+and application cache. The first type is straightforward to use from a programmer's perspective.
+The latter is confusing. If your website has i18n or authentication or user specific
+content, that should all stay in local storage and you should never use application cache
+for that. It's very difficult to predict what is going to happen with the application cache.
+Application cache is best for static content.
+
+To make an application offline, the first HTTP request that you load has to be stored in
+application cache. When you load the first HTTP request, Javascript won't be loaded and you 
+will not be able to use Kamishibai. Application cache is the only option. Since we don't
+want to have authentication or i18n stuff on that first HTTP request, this means that we
+have to load the content via Kamishiba. We can't put much on the first HTTP request.
+
+Therefore, my approach is to create a very simple (nearly blank) first HTTP request.
+All the other stuff is loaded via Kamishibai.
+
+Many people will have performance concerns since we will load everything in multiple HTTP
+requests. However, remember that after the first access, the first HTTP request will now
+be inside the application cache. It will load within a few millisecs. The same for
+the Kamishibai JS framework. Loading the first HTTP request and parsing Kamishibai should
+not take less than 100ms. This means that the performance penalty is quite small. Of course
+if local caching works, then the performance advantage is huge.
+
+
+## Multi-page DOM
+
+It is possible to use Kamishibai with multi-page DOMs, in a similar way to jQuery Mobile,
+jQMobi and iUI. We can load all the pages in a single HTTP request, or we can use 
+load additional pages with Ajax.
+
+When we take this approach, the first HTTP request (via the path of the URL) often contains
+the framework of the web application. It contains placeholders and containers for 
+pages that we will load later.
+
+
+MARKDOWN
+%>
+  </div>
+<% end %>

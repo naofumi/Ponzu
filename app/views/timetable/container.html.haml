@@ -1,0 +1,14 @@
+/ Deprecated
+= ks_element :id => "timetables", 
+             :data => {:position => "20",
+                       :container => "ponzu_frame",
+                       :"container-ajax" => static_path(:page => "ponzu_frame")} do
+  .fixed_sub_header.radio_button_set.button-group
+    - TimeTable.dates.each do |date|
+      - date_string = to_date_string(date)
+      = link_to l(date, :format => :month_day), 
+                ksp(timetable_path(date_string)), 
+                :class => ['ks_tab', "timetable_#{date_string}_menu", "button"]
+  %div{:style => "clear:both"}
+  #content
+    #timetables_container{:style => "position:relative;"}

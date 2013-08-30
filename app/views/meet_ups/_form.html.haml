@@ -1,0 +1,57 @@
+= form_for(@meet_up, :remote => true, 
+            :html => {:data => {'invalidates-keys' => invalidated_paths(@meet_up),
+                                'ks-insert-response' => true}}) do |f|
+  = render :partial => "layouts/error_messages", :locals => {:target => @meet_up}
+  .panel_title= t('meet_ups.panel_titles.summary')
+  .panel
+    .grid
+      .col-1-3
+        = t('meet_ups.fields.title')
+      .col-2-3
+        = f.text_field :title, :class => "h2_input", 
+                     :placeholder => t('meet_ups.placeholders.title')
+    .grid
+      = f.text_area :description, :class => "text_area",
+                      :placeholder => t('meet_ups.placeholders.description')
+  .panel_title= t('meet_ups.panel_titles.starts_at_or_assembly_time')
+  .panel
+    .grid
+      .col-1-3
+        = t('meet_ups.fields.event_day')
+      .col-2-3{:class => "#{error_indicator(@meet_up, :starts_at)}"}
+        = render :partial => 'day_radio_buttons', 
+                 :locals => {:f => f, :dates => current_conference.dates_for('meet_up')}
+    .grid
+      .col-1-3
+        = t('meet_ups.fields.event_starts_at')
+      .col-2-3{:class => "#{error_indicator(@meet_up, :starts_at)}"}
+        = f.select :starts_at_hour, (17..23).to_a.map{|h| [h,h]}
+        \: 
+        = f.select :starts_at_minute, ['00', '15', '30', '45'].map{|m| [m,m]}
+  .panel_title= t('meet_ups.panel_titles.bar_or_assembly_place')
+  .panel
+    .grid
+      .col-1-3
+        = t('meet_ups.fields.venue')
+      .col-2-3
+        = f.text_field :venue, :class => "text_field", 
+                           :placeholder => t('meet_ups.placeholders.venue')
+  .panel_title= t('meet_ups.panel_titles.related_links')
+  .panel
+    .grid
+      .col-1-3
+        = t('meet_ups.fields.link_to_venue')
+      .col-2-3
+        = f.text_field :venue_url, :class => "text_field", 
+                          :placeholder => t('meet_ups.placeholders.link_to_venue')
+  .panel_title= t('meet_ups.panel_titles.organizer_contact')
+  .panel
+    .grid
+      .col-1-3
+        = t('meet_ups.fields.organizer_contact')
+      .col-2-3
+        = f.text_field :owner_phone, :class => "text_field", 
+                          :placeholder => t('meet_ups.placeholders.organizer_contact')
+
+  .panel{:style => "text-align:right"}
+    = f.button nil, :class => "button icon approve big"

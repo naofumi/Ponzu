@@ -1,0 +1,45 @@
+= ponzu_frame :title_args => {:name => @author.name} do
+  .panel
+    %h1
+      %span.jp_name= @author.jp_name
+      %span.en_name= @author.en_name
+
+    %p
+      %span= @author.users.first.affiliation if @author.users.any?
+
+    = render :partial => "users/whitelisting_box"
+  
+  - if current_conference.tag == 'ponzu_demo'
+    -# Demo only (login as user)
+    - if @author.users.any?
+      .panel
+        = link_to "login as this user (demo only)",
+                  switch_user_sessions_path(:user_session => {:login => @author.users.first.login,
+                                                             :password => "password",
+                                                             :password_confirm => "password"}),
+                  :method => :post
+
+  - if current_user && !@author.users.empty?
+    .panel
+      = link_to t('users.send_message_to', :name => @author.name), 
+                ksp(new_private_message_path(:to_id => @author.users)),
+                :class => "send_message_button"
+    .panel_title links
+    .panel
+      = render :partial => "users/links", :locals => {:users => @author.users}
+  .panel_title= t('users.presentations')
+
+  .panel.paneled_list
+    - @author.presentations.order(:starts_at).each do |p|
+      = link_to ksp(presentation_path(p)) do
+        = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                          :class => "presentation",
+                          :data => {:ajax => heading_presentation_path(p.id)}
+
+  = render :partial => 'layouts/biokaimono'
+
+  - author_appearances = Author.frequency_in(@author.presentations)
+  - @other_highlight_authors = author_appearances.authors_more_than_once(:excluding => [@author])
+  :javascript
+    cssSet("#{highlight_authors_css(@author, @highlight_authors, @other_highlight_authors)}");
+

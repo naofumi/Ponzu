@@ -1,0 +1,13 @@
+<%= ks_page :id => "ajax_target",
+            :data => {:title => "ajax_target"} do %>
+  <div class="panel test_results">
+  	<h3>Great! "Page transition with Ajax loading of page." was successful.</h3>
+  	<h4>What we tested</h4>
+  	<p>Kamishibai has two ways of sending Ajax responses. One is to set the Ajax URL in the href hash. The other is to put the Ajax URL in a 'data-ajax' attribute of a pre-existing element, and to request the id of that element in the href hash. This test validates the first method.</p>
+  	<ul>
+  		<li>Confirm that the location.hash == "#!_/ks_tests_ajax_target"</li>
+  		<li>Confirm that a browser reload will bring us to the same page.</li>
+  		<li><%= link_to "Go back", ks_test_home_path %> and continue testing.</li>
+  	</ul>
+  </div>
+<% end %>

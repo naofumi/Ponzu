@@ -1,0 +1,66 @@
+= ks_element :id => "base_css",
+             :data => { :title => "Base CSS",
+                       :container => "ipadish_content",
+                       :"container-ajax" => docs_path(:page => "showcase/layout") } do
+  .panel
+    :markdown
+      # Base CSS
+
+      Kamishibai does not impose pre-designed widgets on the developer. The developer
+      is free to use any design that they wish to reflect the brand image they
+      want to express. This is very different from jQuery Mobile, Sencha Touch, etc.
+      These frameworks focus on providing a native-like experience, and make it
+      difficult to customize the look-and-feel, other than changing colors.
+
+      That said, there are several widgets that are of wide utility, like lists and
+      buttons. We provide a simple set of these, which can easily be overridded in 
+      a CSS file. The purpose of these pre-made widgets is to unify the HTML so
+      that CSS can easily be applied. What we will provide is the base CSS and a 
+      set of examples to show how they should be used in the basic widgets.
+
+      We will use the same base CSS for both PCs and smartphones.
+
+      ## Font size
+
+      1. Button labels and list labels should have a default
+         font size of 20px.
+      2. Font size for reading lots of text should be 16px.
+      3. Supplementary fonts can be 14px or 10px.
+
+      ## Font family
+
+      We use simple helvetica, arial, sans-serif. For Windows, we might use merio.
+
+      ## Headers
+
+      Headers are where a lot of the branding takes place so we don't impose any rules
+      on it. 
+
+      The only restriction is that buttons should be at least 44px x 44px in size.
+
+      ## Panels
+
+      iOS uses panels when there is more than one kind of information is on a single
+      page. Panels are often accompanied by titles.
+
+      1. CSS class "panel_title"
+      2. CSS class "panel"
+
+      ## Lists
+
+      iOS has two types of lists. One covers the whole screen and leaves nothing on the side.
+      There might be a search window on the header.
+
+      The other type is a list inside a panel.
+
+      Apple always puts an arrow to the right of a list item to indicate that you can click this
+      button. Others like Twitter don't bother and assume that they user knows that you can
+      click it.
+
+      We will provide simple CSS of both types of list with arrows.
+
+      ## Buttons
+
+      iOS has two kinds of button. The kind that you embed in menus and the kind that are shown
+      in dialog boxed. The former is quite small. The latter, quite large.
+

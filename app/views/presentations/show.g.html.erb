@@ -1,0 +1,27 @@
+<div class="presentation_detail">
+  <h3><%= @presentation.number %> <%= starts_at_ends_at_combo @presentation, :month_day_time %></h3>
+  <h1><%= sanitize @presentation.title %></h1>
+  <div class="authors"><%= authors_list(@presentation.submission, [], [], true, true, true) %></div>
+  <div class="institutions"><%= institutions_list(@presentation.submission) %></div>
+  <%= render :partial => "email_address" %>
+  <div style="clear:both"></div>
+  <h3><%= t('presentations.summary').upcase %></h3>
+  <div style="font-size:12px"><%= sanitize @presentation.abstract %></div>
+  <% if current_user %>
+    <div class="like_box">
+      <%= render :partial => 'likes/like_button.g', :locals =>{ :presentation => @presentation } %>
+    </div>
+
+    <%= render :partial => 'comments.g' %>
+  <% end %>
+  <h3><%= t('presentations.keywords').upcase %></h3>
+  <div>
+    <%= keyword_links @presentation %>
+  </div>
+
+  <h3>関連する論文</h3>
+  <%= link_to "関連する論文", related_presentation_path(@presentation) %>  
+</div>
+
+
+

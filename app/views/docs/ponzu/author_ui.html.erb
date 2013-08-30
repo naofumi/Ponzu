@@ -1,0 +1,28 @@
+<%= ks_element :id => "ponzu_author_ui",
+               :data => {
+                 :title => "Ponzu Author UI",
+                 :container => "ipadish_content",
+                 :"container_ajax" => docs_path(:page => "showcase/layout")
+               } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+# Ponzu Author UI
+
+Some thoughts about how an iPad inspired UI might make the workflow extremely easy.
+
+## List the stuff to enter in the left navigation
+
+1.  User settings
+2.  Title & Abstract
+3.  Authors & Affiliations
+4.  Preview
+
+If any of the tabs don't have sufficient information, we can put a tag on them to
+indicate further work is needed.
+
+We should create a prototype to show that it is actually working.
+
+MARKDOWN
+%>
+  </div>
+<% end %>

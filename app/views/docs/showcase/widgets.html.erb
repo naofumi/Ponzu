@@ -1,0 +1,43 @@
+<%= ks_element  :id => "widgets",
+                :data => {
+                  :container => "ipadish_content",
+                  :"container-ajax" => docs_path(:page => "showcase/layout"),
+                  :title => "Widgets"
+                } do %>
+  <div class="panel">
+    <%= markdown_render <<MARKDOWN
+
+# Kamishibai widget collection
+
+We do need a widget collection. Ideas about what we will use.
+
+## Using jQuery UI stuff
+
+Kamishibai should be compatible with jQuery UI. Although we don't want to load jQuery and
+jQuery UI at the actual conference, using jQuery UI for the editing and authoring interface
+is OK.
+
+## Other stuff
+
+1.  Better list views
+2.  Buttons
+3.  Form elements http://jquerymobile.com/demos/1.2.0/docs/forms/docs-forms.html http://dev.sencha.com/deploy/touch/examples/production/kitchensink/index.html#demo/forms
+
+## Future stuff
+
+We should create a HTML5, CSS3 native widget library that works well on touch.
+
+## Widgets that we really need
+
+1.  Sortable
+2.  Drag Drop
+3.  Date picker
+4.  Some kinds of dialog boxes
+5.  Drop down menus
+6.  Tabs
+7.  In place editor (refer to scriptaculous)
+
+MARKDOWN
+%>
+  </div>
+<% end %>

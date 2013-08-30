@@ -1,0 +1,5 @@
+= ponzu_frame :container => :ponzu_admin_frame do
+	.panel
+		%h1 New Conference
+		= render 'form'
+		= link_to 'Back', ksp(conferences_path)

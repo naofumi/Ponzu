@@ -1,0 +1,8 @@
+<% if current_user %>
+  <% @session.presentations.includes([:likes, {:submission => :authors}]).each do |p| %>
+    <%= ks_element :id => ["session_detail", @session.id, "presentation", p.id, "social_box"],
+                   :class => "like_box" do %>
+      <%= render :partial => 'likes/like_button', :locals => {:presentation => p} %>
+    <% end %>
+  <% end %>
+<% end %>

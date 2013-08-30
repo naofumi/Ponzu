@@ -1,0 +1,10 @@
+<h2><%= t('dashboard.posters', :date => l(Time.zone.local(2012, 12, 10 + @day.to_i), :format => :month_day)) %></h2>
+<% @sessions.each_with_index do |session, session_index| %>
+  <% color_tag = session_index.modulo(12) %>
+  <% likes_in_session = @likes.select{|l| l.presentation.session_id == session.id} %>
+  <% schedules_in_session = @schedules.select{|l| l.presentation.session_id == session.id} %>
+  <%= render :partial => "sessions/heading.g", 
+             :locals => {:session => session, :likes_in_session => likes_in_session,
+                         :schedules_in_session => schedules_in_session,
+                         :color_tag => color_tag} %>
+<% end %>

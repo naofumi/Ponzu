@@ -1,0 +1,23 @@
+%h1= "ログイン"
+%div
+  = form_for @user_session do |form|
+    = render :partial => "layouts/error_messages", :locals => {:target => @user_session}
+    %p
+      %div ID
+      %div= form.text_field :login, :class => "login_field"
+    %p
+      %div パスワード
+      %div= form.password_field :password, :class => "login_field"
+    %p
+      %div
+        = form.check_box :remember_me
+        = form.label :remember_me, "次回以降、自動ログイン"
+    %p
+      = form.button "ログイン!", :class => "button big"
+%div
+  問題があれば、下記にご連絡ください
+  %br/
+  - support_email = current_conference.support_email
+  = mail_to support_email, support_email, :encode => "hex"
+  %div{:style => "text-align:right;"}
+    = link_to "ログインしないで使用する... ", root_path

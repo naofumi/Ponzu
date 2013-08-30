@@ -1,0 +1,138 @@
+@import "../kamishibai/ks_settings";
+/* ======================================
+    MediaQuery-Reporter Styles
+========================================= */
+body:after {
+    font-size: 300%;
+    font-weight: bold;
+    position: fixed;
+    bottom: 60px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    // Comment below to display a media query indicator for
+    // debugging.
+    display:none;
+}
+
+// All 1024px and higher
+@media only screen and (min-width: 1024px) {
+    body:after {
+        content: "1024 and up";
+        background-color: hsla(360,60%,40%,0.7);
+    }
+}
+
+// For all below 1023px. iPad
+@media only screen and (max-width: 1023px) {
+    body:after {
+        content: "768 to 1024px";
+        background-color: hsla(270,60%,40%,0.7);
+    }
+}
+// For all below 768px. All 7-inch tablets
+@media only screen and (max-width: 767px) {
+  body:after {
+      content: "480 to 768px";
+      background-color: hsla(180,60%,40%,0.7);
+  }
+}
+
+// Best size to switch single-column and two-column
+// based on trying to keep characters per line
+// between 35 and 75.
+// http://samnabi.com/blog/line-length-and-readability-speed-vs-user-experience
+// http://designshack.net/articles/typography/the-importance-of-designing-for-readability/
+@media only screen and (max-width: 620px) {
+  .text {
+    -webkit-column-count: 1;
+    -webkit-hyphens: auto;
+    -moz-column-count: 1;
+    -moz-hyphens: auto;
+    -ms-column-count: 1;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    column-count: 1;
+    text-align: justify;    
+  }
+}
+
+// For all below 480px. iPhones to Larger phones
+@media only screen and (max-width: 480px) {
+  .pdf_links {
+    display: none;
+  }
+
+  body:after {
+    content: "320 to 480px";
+    background-color: hsla(90,60%,40%,0.7);
+  }
+
+  .grid.buttons > div {
+    .ios_icon + p {
+      font-size: 12px;
+    }
+    .ios_icon {
+      width: 57px;
+      height: 57px;
+      margin: 0 auto;
+      border-radius: 16px;
+    }
+    .ios_icon + p {
+      margin: 5px 0 0 0;
+      font-size: 12px;
+    }
+    .ios_icon .gloss{
+      height: 25px;
+      border-bottom-right-radius: 29px 6px;
+      border-bottom-left-radius: 29px 6px;
+      border-top-right-radius: 16px;
+      border-top-left-radius: 16px;
+    }
+  }
+
+  .panel, .paneled_list {
+    padding: 7px;
+  }
+
+  #header {
+    height: $phone_header_height;
+    .top_menu > ul li a {
+      height: $phone_header_icon_height;
+      margin-left: $phone_header_icon_spacing;
+    }
+    #logo {
+      height: $phone_header_icon_height;
+    }
+  }
+
+  #ponzu_frame {
+    padding-top: $phone_header_height;
+  }
+
+  #splash {
+    h1 {
+        font-size: 20px;
+    }
+  }
+  .session_header {
+    // On small screens, we have to 
+    // auto hyphen. Otherwise some
+    // words (connected with '/')
+    // get too long for the screen.
+    .title {
+      -webkit-hyphens: auto;
+      -moz-hypens: auto;
+      -ms-hypens: auto;
+      hyphens: auto;
+    }
+  }
+}
+
+// Up till smaller than iPhone
+@media only screen and (max-width: 319px) {
+    body:after {
+        content: "less than 320px";
+        background-color: hsla(1,60%,40%,0.7);
+    }
+}

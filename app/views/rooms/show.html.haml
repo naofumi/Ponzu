@@ -1,0 +1,12 @@
+- cache ["v1", @room, can?(:edit, Room)] do
+  = ks_element :id => ["room", @room.id],
+               :class => "program",
+               :data => {:title => "JSDB: #{@room.name}",
+                         :container => "ponzu_frame",
+                         :"container-ajax" => static_path(:page => "ponzu_frame")} do
+    .fixed_sub_header.room_header
+      %h1= @room.name
+      %p= @room.location
+    = render :partial => "map", :locals => {:room => @room}
+    - if can? :edit, Room
+      = link_to "[edit]", ksp(:edit_room_path, @room) 

@@ -1,0 +1,18 @@
+= ks_element :id => "presentation_#{@presentation.id}_comments" do
+  - @presentation.comments.each do |c|
+    = render :partial => 'presentations/comment', :locals => {:c => c}
+
+  - if current_user
+    - comment = Comment.new(:user_id => current_user.id, :presentation_id => @presentation.id)
+
+    = form_for comment, 
+             :url => create_comment_presentation_path(@presentation),
+             :remote => true,
+             :html => { :'data-ks-insert-response' => '',
+                        :'data-invalidates-keys' => invalidated_paths(comment)} do |f|
+      = f.hidden_field :user_id
+      = f.hidden_field :presentation_id
+      = f.text_area :text, 
+                  :placeholder => "Write your comment here"
+      %br/
+      = f.button "Submit comment", :class => "comment_submit button icon comment"

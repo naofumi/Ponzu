@@ -1,0 +1,46 @@
+@import "ks_settings";
+
+@mixin page {
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 2px 2px 2px #AAA;
+  border:solid 1px #AAA;
+  border-radius: 3px;
+}
+
+@mixin settings_background {
+  background-image: linear-gradient(left, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02) 70%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02) 70%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0));
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02) 70%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0));
+  background-size: 10px 1px;
+  background-repeat: repeat;    
+}
+////////////////////
+// Various page styles
+////////////////////
+
+// http://cssdeck.com/labs/css3-notebook-paper
+.notebook_page {
+  @include page;
+  padding-left: 12%;
+  background: rgba(255,255,255,1);
+  background-image: linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -webkit-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -webkit-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -webkit-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+  background-image: -webkit-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -webkit-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -webkit-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -webkit-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+  background-size: 1px, 1px, auto, auto 20px;
+  background-repeat: repeat-y, repeat-y, no-repeat, repeat;
+  background-position: 90% 0px, 10% 0px, 0px 0px, 0px 0px;
+}
+
+.settings_page {
+  @include page;
+  @include settings_background;
+}
+
+.settings_bg {
+  @include settings_background;
+}
+
+.blank_page {
+  @include page;
+  background-color: #FFF;
+}

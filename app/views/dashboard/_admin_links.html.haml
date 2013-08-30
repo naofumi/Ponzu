@@ -1,0 +1,39 @@
+#admin_link
+  = link_to t('dashboard.admin_links.manage_conferences'), ksp(conferences_path)
+  |
+  = link_to t('dashboard.admin_links.manage_submissions'), ksp(submissions_path)
+  |
+  = link_to t('dashboard.admin_links.manage_sessions'), ksp(sessions_path)
+  |
+  = link_to t('dashboard.admin_links.manage_authors'), ksp(authors_path)
+  |
+  = link_to t('dashboard.admin_links.manage_users'), ksp(users_path)
+  |
+  = link_to t('dashboard.admin_links.manage_rooms'), ksp(rooms_path)
+  |
+  = link_to t('dashboard.admin_links.rake_reports'), ksp(static_path(:page => 'rake_reports'))
+  |
+  = link_to t('dashboard.admin_links.manage_global_messages'), ksp(global_messages_path)
+  %br/
+  = link_to t('dashboard.admin_links.manage_presentations'), ksp(presentations_path)
+  |
+  = link_to t('dashboard.admin_links.manage_messages'), ksp(messages_path)
+  |
+  = link_to t('dashboard.admin_links.manage_receipts'), ksp(receipts_path)
+  |
+  = link_to t('dashboard.admin_links.manage_participations'), ksp(receipts_path)
+  |
+  = link_to t('dashboard.admin_links.manage_likes'), ksp(likes_path)
+  |
+  = link_to t('dashboard.admin_links.manage_authorships'), ksp(authorships_path)
+  |
+  = link_to t('dashboard.admin_links.manage_private_messages'), ksp(private_messages_path)
+  |
+  = link_to t('dashboard.admin_links.manage_meet_ups'), ksp(meet_ups_path)
+  |
+  = link_to t('dashboard.admin_links.manage_comments'), ksp(comments_path)
+  |
+  = link_to t('dashboard.admin_links.manage_cache_version'), ksp(admin_path(:action => "cache_version"))
+  %br/
+  = link_to t('dashboard.admin_links.show_poster_map_test'), 
+      ksp(show_test_poster_session_path(to_date_string(current_conference.closest_date_for('presentation/poster',Time.zone.now))))

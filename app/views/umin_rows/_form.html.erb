@@ -1,0 +1,25 @@
+<%= form_for(@umin_row) do |f| %>
+  <% if @umin_row.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@umin_row.errors.count, "error") %> prohibited this umin_row from being saved:</h2>
+
+      <ul>
+      <% @umin_row.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :format_type %><br />
+    <%= f.text_field :format_type %>
+  </div>
+  <div class="field">
+    <%= f.label :csv %><br />
+    <%= f.text_field :csv %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

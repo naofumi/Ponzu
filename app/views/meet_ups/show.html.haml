@@ -1,0 +1,29 @@
+= ponzu_frame :title_args => {:title => "JSDB2013 Yoruzemi: #{@meet_up.title}"} do
+  .panel
+    = link_to t('meet_ups.buttons.back_to_list', :date_string => @meet_up.starts_at.strftime('%m/%d')), 
+              ksp(:meet_ups_path, :date => to_date_string(@meet_up.starts_at)),
+              :class => 'button arrowleft icon'
+  .panel
+    %h1= "Yoruzemi: “#{@meet_up.title}”"
+    = link_to t('meet_ups.buttons.edit_button'), ksp(edit_meet_up_path(@meet_up)), :class => "button icon edit" if current_user == @meet_up.owner
+    %dl.panel
+      %dt= t('meet_ups.fields.starts_at_or_assembly_time')
+      %dd= @meet_up.starts_at ? l(@meet_up.starts_at, :format => :month_day_time) : t('meet_ups.undecided')
+      %dt= t('meet_ups.fields.restaurant_or_assembly_place')
+      %dd
+        = @meet_up.venue
+        &nbsp;
+        = !@meet_up.venue_url.blank? ? link_to(t('meet_ups.fields.link'), @meet_up.venue_url, :class => "button icon arrowright") : @meet_up.venue_url
+      %dt= t('meet_ups.fields.organizer')
+      %dd= link_to @meet_up.owner.name, ksp(user_path(@meet_up.owner))
+      %dt= t('meet_ups.fields.organizer_contact')
+      %dd= @meet_up.owner_phone
+      %dt= t('meet_ups.fields.people_planning_to_participate')
+      %dd= @meet_up.participants.map{|p| link_to p.name, ksp(user_path(p))}.join(', ').html_safe
+    %h3= t('meet_ups.fields.description').upcase
+    .panel= @meet_up.description
+  .panel
+    = render :partial => "participate_button"
+  .panel
+    %h3= t('meet_ups.comments')
+    = render :partial => 'meet_up_comments'

@@ -1,0 +1,7 @@
+- if @presentation.authors.include?(current_user.author)
+  = render :partial => 'presentations/likes', :locals => {:presentation => @presentation,
+                                                          :likes => @likes}
+- else
+  = ks_element :id => ["likes_presentation", @presentation.id] do
+    .panel
+      Only authors can view here a list of all participants who "liked" or "scheduled" their presentation.

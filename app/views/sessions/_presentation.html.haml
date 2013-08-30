@@ -1,0 +1,21 @@
+/ I don't think that we are using this any longer.
+- raise('Deprecated use of sessions/_presentations. Use presentations/heading instead')
+%div{:id => "session_details_presentation_#{p.id}",
+     :class => ["panel", "presentation",
+                "#{current_user_likes_this(p) ? ' liked' : ''}"]}
+  - cache [I18n.locale, 'session_presentation', p] do
+    .time
+      = starts_at_ends_at_combo p, :month_day_time
+    .number
+      = p.number
+    .title
+      = sanitize(p.title)
+    .authors
+      = render :partial => 'submissions/author_list', 
+               :locals => {:submission => p.submission}
+    .institutions
+      = render :partial => 'submissions/institution_list', 
+               :locals => {:submission => p.submission}
+  = ks_placeholder :id => ["presentation", p.id, "social_box"], 
+                   :class => "like_box"
+  = hit_text if defined? hit_text

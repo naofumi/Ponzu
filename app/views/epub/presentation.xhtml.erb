@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <title><%= decode_entities(strip_tags(@presentation.title)) %></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../stylesheets/style.css" />
+  </head>
+  <body>
+    <div>
+      <span class="presentation_number"><%= @presentation.number %></span>
+      <span class="presentation_info"><%= @presentation.string_for_starts_at_ends_at %> 会場: 会場: <%= @presentation.session.room.name %> セッション: <%= @presentation.session.number %></span>
+    </div>
+    <h1>
+      <%= [clean_xml_epub(@presentation.jp_title), clean_xml_epub(@presentation.en_title)].join('<br />') %>
+    </h1>
+    <div class="authors">
+      <%= clean_xml_epub authors_list(@presentation, [], false, false) %>
+    </div>
+    <div class="institutions">
+      <%= clean_xml_epub institutions_list(@presentation) %>
+    </div>
+    <h3>SUMMARY</h3>
+    <div id="abstract">
+        <%= clean_xml_epub @presentation.abstract %>
+    </div>
+  </body>
+</html>

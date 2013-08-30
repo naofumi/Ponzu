@@ -1,0 +1,48 @@
+    <% if false #can? :whitelist, @author %>
+      <div class="admin">
+        <div style="float:left;border: solid 2px pink;padding: 5px;border-radius: 5px">
+          <%= t('admin.users.total_whitelisted') %>: <%= User.where(:whitelisted_by => current_user.name).count %><br />
+          <%= t('admin.users.whitelisting_speed') %>: <%= User.where(:whitelisted_by => current_user.name).where("whitelisted_at > ?", 1.hour.ago).count %>/hr<br />
+          <%= User.where(:whitelisted_by => current_user.name).where("whitelisted_at > ?", 1.minutes.ago).count %>/min
+        </div>
+        <div>
+          <%= link_to t("admin.users.previous_gray"), ksp(@author.previous_non_whitelisted_user_by_id) if @author.previous_non_whitelisted_user_by_id%> &lt;&lt;
+          <%= link_to t("admin.users.previous"), ksp(@author.previous_user_by_id) if @author.previous_user_by_id%> | 
+          <%= link_to t("admin.users.next"), ksp(@author.next_user_by_id) if @author.next_user_by_id%>&gt;&gt;
+          <%= link_to t("admin.users.next_gray"), ksp(@author.next_non_whitelisted_user_by_id) if @author.next_non_whitelisted_user_by_id %>
+        </div>
+        <div style="text-align:right;margin-bottom: 20px;margin-top: 20px">
+          <% if @author.whitelisted %>
+            WHITELISTED (by <%= @author.whitelisted_by %> at <%= @author.whitelisted_at && @author.whitelisted_at.strftime('%m/%d %H:%M') %>)<br />
+          <% end %>
+          <% if @author.blacklisted %>
+            BLACKLISTED (by <%= @author.blacklisted_by %> at <%= @author.blacklisted_at && @author.blacklisted_at.strftime('%m/%d %H:%M') %>)<br />
+          <% end %>
+          <%= link_to "[このユーザは一人の人物（シロ）です]", 
+                      user_path(@author, "user[whitelisted]" => true, "user[blacklisted]" => false), :method => :put, :remote => true, :class => "nayose", :'data-invalidates-keys' => [user_path(@author)] %><br />
+          <%= link_to "[このユーザは一人の人物と断言できません（グレー）]", 
+                      user_path(@author, "user[whitelisted]" => false, "user[blacklisted]" => false), :method => :put, :remote => true, :class => "nayose", :'data-invalidates-keys' => [user_path(@author)] %><br />
+          <%= link_to "[このユーザは複数の人物です（クロ）]", 
+                      user_path(@author, "user[blacklisted]" => true, "user[whitelisted]" => false), :method => :put, :remote => true, :class => "nayose", :'data-invalidates-keys' => [user_path(@author)] %>
+
+        </div>
+        <div class="copy_id_link" style="text-align:left">
+          User ID: <%= @author.id %><br />
+          Login count: <%= @author.login_count %>
+        </div>
+        <div id="registration_info" style="text-align:right;clear:both;font-size:20px;font-weight:bold;">
+          <% if @author.login_active? %>
+            <% r = Registrant.find_by_registration_id(@author.login) %>
+            <%= r && r.registration_id %><br />
+            <%= r && r.affiliation %>
+          <% end %>
+        </div>
+        <div id="user_institutions_list" style="clear:both;font-size:16px;line-height:1.2em;text-align:left">
+          <%= @author.unique_umin_name_and_affiliation_combos.map{|s| "<p>#{s}</p>"}.join("\n").html_safe %>
+        </div>
+        <%= link_to 'New user with same name', new_user_path(:jp_name => @author.jp_name, :en_name => @author.en_name)%> |
+        <%= link_to 'Edit', edit_user_path(@author) %> |
+        <%= link_to 'Delete', user_path(@author), :method => :delete, :remote => true, :confirm => "!!!! DELETE !!!" %> |
+        <%= link_to "[hide ADMIN box]", "#", :onclick => "document.getElementsByClassName('admin')[0].style.display = 'none';return false;"%>
+      </div>
+    <% end %>

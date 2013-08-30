@@ -1,0 +1,42 @@
+- cache [@session, can?(:edit, Session), params[:page]] do
+  = ks_element :id => ["session_detail", @session.id],
+            :class => "program #{@session.poster? ? 'posters' : 'orals'}",
+            :data => { :title => t('.title', 
+                                   :number => @session.number, 
+                                   :title => @session.title),
+                       :container => "ponzu_frame",
+                       :"container-ajax" => static_path(:page => "ponzu_frame")} do
+    
+    .panel.session_header
+      = render :partial => "layouts/pdf_links", :locals => {:session => @session}
+      .number
+        = @session.number
+      .time
+        = link_to ksp(@session.path(controller)), 
+          :onclick => "KSScrollMemory.set({href:'/#{@session.path(controller)}', elementId:'session_#{@session.id}'})",
+          :class => "button icon clock" do
+          / TODO: This should be a helper
+          = l(@session.starts_at, :format => :month_day_time)
+          \-
+          = @session.starts_at.beginning_of_day == @session.ends_at.beginning_of_day ? @session.ends_at.strftime("%H:%M") : l(@session.ends_at, :format => :month_day_time)
+      .room
+        = link_to @session.room && @session.room.name, ksp(room_path(@session.room)),
+                  :class => "button icon pin"
+      .title
+        = sanitize(@session.title)
+      - if !@session.organizers_string.blank?
+        .chairs
+          %span{:class => 'label'}= t('.chairs.label')
+          %div= @session.organizers_string && @session.organizers_string.split('|').join('</br>').html_safe
+      - if can? :edit, Session
+        = link_to "[edit]", ksp(edit_session_path(@session))
+        %br/
+    = ks_will_paginate @presentations
+    .panel.paneled_list
+      - @presentations.order("presentations.position ASC, presentations.number ASC").each do |p|
+        = link_to ksp(presentation_path(p)) do
+          = ks_ajax_placeholder :id => ['session_details_presentation', p.id],
+                            :class => "presentation",
+                            :data => {:ajax => heading_presentation_path(p.id)}
+    = ks_will_paginate @presentations
+    = render :partial => 'layouts/biokaimono'
