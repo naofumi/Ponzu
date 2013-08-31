@@ -34,7 +34,7 @@
               %li
                 = sanitize p.title
                 (
-                = link_to p.number, ksp(p)
+                = link_to "#{p.number} ▷▷", ksp(p)
                 \:
                 = "#{pluralize p.count, "schedule"} total" 
                 )
@@ -48,7 +48,7 @@
               %li
                 = sanitize p.title
                 (
-                = link_to p.number, ksp(p)
+                = link_to "#{p.number} ▷▷", ksp(p)
                 \:
                 = "#{pluralize p.count, "like"} total" 
                 )

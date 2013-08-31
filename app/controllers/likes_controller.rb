@@ -199,16 +199,26 @@ class LikesController < ApplicationController
   end
 
   def likes_report
-    @number_of_schedules = Like::Schedule.count
-    @number_of_likes = Like.count
-    @number_of_liked_presentations = Presentation.includes(:likes).where("likes.id IS NOT NULL").count('id', :distinct => true)
-    @number_of_all_presentations = Presentation.count
-    @number_of_users_who_liked = User.includes(:likes).where("likes.id IS NOT NULL").count('id', :distinct => true)
-    @number_of_all_users = User.count
-    @number_of_logined_users = User.where('login_count > 0').count
-    @users_who_failed_to_log_in = User.where('failed_login_count > 0 AND login_count = 0')
-    @top_likes = Presentation.select('presentations.*, count(*) as count').joins(:likes).group('presentations.id').order('count(*) DESC').limit(10)
-    @top_schedules = Presentation.select('presentations.*, count(*) as count').joins(:schedules).group('presentations.id').order('count(*) DESC').limit(10)
+    @number_of_schedules = Like::Schedule.in_conference(current_conference).count
+    @number_of_likes = Like.in_conference(current_conference).count
+    @number_of_liked_presentations = Presentation.in_conference(current_conference).includes(:likes).where("likes.id IS NOT NULL").count('id', :distinct => true)
+    @number_of_all_presentations = Presentation.in_conference(current_conference).count
+    @number_of_users_who_liked = User.in_conference(current_conference).includes(:likes).where("likes.id IS NOT NULL").count('id', :distinct => true)
+    @number_of_all_users = User.in_conference(current_conference).count
+    @number_of_logined_users = User.in_conference(current_conference).where('login_count > 0').count
+    @users_who_failed_to_log_in = User.in_conference(current_conference).where('failed_login_count > 0 AND login_count = 0')
+    @top_likes = Presentation.
+                   select('presentations.*, count(*) as count').
+                   joins(:session => :conference). #INNER JOIN??
+                   where("sessions.conference_id" => current_conference.id).
+                   joins(:likes).group('presentations.id').
+                   order('count(*) DESC').limit(50)
+    @top_schedules = Presentation.
+                       select('presentations.*, count(*) as count').
+                       joins(:session => :conference). #INNER JOIN??
+                       where("sessions.conference_id" => current_conference.id).
+                       joins(:schedules).group('presentations.id').
+                       order('count(*) DESC').limit(50)
   end
 
   def votes_report
