@@ -1,6 +1,6 @@
 KSAjaxConstructor = ->
   allAjaxRequests = {}
-  defaultTimeout = 30000
+  defaultTimeout = 5000
 
   ajax = (options) ->
     startSpinner()
