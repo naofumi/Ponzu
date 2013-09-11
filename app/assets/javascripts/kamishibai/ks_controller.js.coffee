@@ -3,31 +3,22 @@
 # The controller analyzes the new hash after a hash change
 # and fires necessary loads and KSCompositor methods.
 #
-# Our concept for loading is that we will try not to use DOM cache.
-# Instead, we will try to reload everything downstream per hash change. 
-# We will not reload upstream stuff. That means for downstream elements,
-# that the "expire" attribute is the sole determinator of cache life.
-# Even DOM cached pages will still be reloaded.
+# It serves as the intermediary between hashChanges, 
+# Ajax requests and DOM insertions.
 #
-# As a result, pageId only transitions should also fire a reload.
-#
-# As a result of this concept, multi-page DOMs tend to only differ
-# from separate pages in that they allow us to batch load multiple pages.
-# There is no *cache* advantage.
-#
-# URLs with pageId only;
+# ### hashChange for URLs with pageId only;
 #
 # Find the pageId element on the current page and transition to it.
 # Then load dependencies. If that element has a data-ajax attribute,
 # then it will be reloaded, which is most of the time because all
 # loaded pages will be given a data-ajax stamp.
 #
-# URLs with resourceUrl only;
+# ### hashChange for URLs with resourceUrl only;
 #
 # Load the resourceUrl and then transition to the page with 'data-default' or
 # if not available, to the first page. Then load dependencies.
 #
-# URLs with both resourceUrl and pageId;
+# ### hashChange for URLs with both resourceUrl and pageId;
 #
 # Look for the pageId element on the current page. If available, then
 # handle as if there was no resourceUrl in the first place.
