@@ -94,12 +94,19 @@ KSControllerConstructor = ->
                     targetState.resourceUrl
     return [resourceUrl, pageId]
 
-  processAjaxSuccess = (data, textStatus, xhr, resourceUrl, callback) ->
+  # #insertAjaxIntoDom is used to post-process an Ajax response
+  # and to insert HTML (sometimes converted from JSON) into the DOM.
+  #
+  # If the Ajax response requires a container that isn't present,
+  # then it will load that recursively (otherwise we wouldn't be
+  # able to insert it into the DOM)
+  insertAjaxIntoDom = (data, textStatus, xhr, resourceUrl, callback) ->
     KSDom.convertAjaxDataToElements data, (dslpages) ->
+      # Ensure that the containers are available before we insert
+      # the Ajax response.
       loadMissingContainers dslpages, () ->
         KSDom.insertPagesIntoDom(dslpages, resourceUrl, 
           (dompages) -> callback and callback(dompages))
-
 
   # Load from a URL and then insert into DOM.
   # If resourceUrl evaluates to false, then don't load anything
@@ -150,7 +157,7 @@ KSControllerConstructor = ->
 
   # Public interface
   this.handleHashChange = handleHashChange
-  this.processAjaxSuccess = processAjaxSuccess
+  this.insertAjaxIntoDom = insertAjaxIntoDom
   return this
 
 window.KSController = new KSControllerConstructor()

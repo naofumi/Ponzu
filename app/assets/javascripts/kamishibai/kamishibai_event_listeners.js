@@ -110,7 +110,7 @@ kamishibai.beforeInitialize(function(){
     if (target && 
         target.hasAttribute('data-ks-insert-response') && data) {
       console.log('Insert response because data-ks-insert-response was set');
-      KSController.processAjaxSuccess(data, 'success', event.xhr, event.ajaxOptions.url)
+      KSController.insertAjaxIntoDom(data, 'success', event.xhr, event.ajaxOptions.url)
     }
   });
 
