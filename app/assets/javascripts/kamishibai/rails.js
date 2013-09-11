@@ -159,8 +159,6 @@ new function(e) {
           }
         }
 
-        // TODO: We have to test more to see if we can reliably use
-        // cached Ajax instead of regular Ajax.
         // Manage success in callbacks.
         KSCache.cachedAjax({
           url: urlWithData,

@@ -1,3 +1,19 @@
+# == KSCache concept
+#
+# KSCache wraps ks_ajax with a cache management layer. This is
+# similar to how fragment caching works in Ruby-on-Rails.
+# 
+# By using KSCache.ajax instead of KSAjax.ajax, you transparently
+# get the benefits of a caching.
+#
+# One difference to note is that KSCache will return 
+# a "cachedAjaxSuccess" event when
+# a value has successfully been recovered, either from the network
+# or from the cache.
+#
+# Note that a successful Ajax response will fire the
+# "ajaxSuccess" event.
+#
 # == How Kamishibai Cache is designed.
 #
 # Kamishibai Cache should behave as follows;
