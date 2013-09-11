@@ -78,13 +78,13 @@ function Kamishibai() {
         // }
         
         console.log('hashchange event received');
-        self.changePageByHash(true);
+        self.changePageByHash({animate: true});
         event.preventDefault();
         event.stopPropagation();
       });
       // lscache.setBucket(KSApp.user_id() + "-" + KSCookie.get('device') + "-"  + KSCookie.get('locale') + "-");
       // KSSqlCache.setBucket(KSApp.user_id() + "-" + KSCookie.get('device') + "-"  + KSCookie.get('locale') + "-");
-      self.changePageByHash(true); // Set animation true even for page reloads
+      self.changePageByHash({animate: true}); // Set animation true even for page reloads
       self.initializeDynamicCachePolling();
       KSSortable.initialize();
       window.kamishibaiInitialized = true;
@@ -104,9 +104,11 @@ function Kamishibai() {
   }
 
   // Switch to the page as specified by the hash in window.location.
-  this.changePageByHash = function(animate){
+  // Importantly, set the hash to a default value if currently
+  // blank.
+  this.changePageByHash = function(options){
     if (!setHashIfBlank()) {
-      KSController.handleHashChange();
+      KSController.handleHashChange(options);
     };
   }
 
