@@ -163,17 +163,6 @@ kss.addEventListener(document, 'ajaxSuccess', function(event){
   }
 })
 
-kss.addEventListener(document, 'cachedAjaxSuccess', function(event){
-  var data = event.data;
-  var target = event.target;
-  // var target = event.target && kss.closestByTagName(event.target, 'form', true);
-  if (target && 
-      target.hasAttribute('data-ks-insert-response') && data) {
-    console.log('Insert response because data-ks-insert-response was set');
-    KSController.insertAjaxIntoDom(data, 'success', event.xhr, event.ajaxOptions.url)
-  }
-})
-
 // $(document).on('ajaxSuccess', function(event, xhr, ajaxOptions){
 //   event.ajaxOptions = ajaxOptions;
 //   event.xhr = xhr;
