@@ -40,8 +40,8 @@
 # also reloaded when specifically targeted in case the pre-loading failed.
 
 KSControllerConstructor = ->
-  ajaxLoadTimeout = 20000 # ms
-  ajaxLoadtimeoutIntervalIfExpiredCacheFound = 5000 # ms
+  ajaxLoadTimeout = 10000 # ms
+  ajaxLoadtimeoutIntervalIfExpiredCacheFound = 3000 # ms
   requestHistory = {} # memo for all urls requested per hashChange (to prevent redundant requests)
 
   handleHashChange = ->
