@@ -60,10 +60,13 @@ KSCacheConstructor = ->
   #   If we find a cached value that has expired, set the timeoutInterval
   #   to this value (which is normally shorter). This is because we have
   #   can display the cached value, so we don't have to wait so long.
+  #
+  # If the response has come out of the cache, then xhr.fromCache will
+  # be set to true in the callback.
   cachedAjax = (options) ->
     # Wrap success callback so that we additionally send
     # a 'cachedAjaxSuccess' on success.
-    options.success = successCallbackWithCachedAjaxSuccessEvent(options, options.success)
+    options.success = addCachedAjaxSuccessEventToCallback(options, options.success)
 
     if !options.method || options.method.toUpperCase() isnt 'GET'
       # Non 'GET' methods will not be cached
@@ -84,8 +87,9 @@ KSCacheConstructor = ->
           else if cacheHasExpired
             console.log('cache expired for ' + url)
 
-          options.success = successCallbackOnAjax(options, options.success)
-          options.timeout = timeoutCallback(options, cachedValue, options.success)
+          # wrap the callbacks for Ajax
+          options.success = storeInCacheAndRunCallback(options, options.success)
+          options.timeout = fallbackToCacheOrTimeoutError(options, cachedValue, options.success)
           options.error = errorCallbackOnAjax(options, cachedValue, options.success)
 
           console.log('send ajax for ' + url);
@@ -95,7 +99,7 @@ KSCacheConstructor = ->
           KSApp.debug('cache hit for ' + url)
 
           if options.success
-            options.success(cachedValue, 'success')
+            options.success(cachedValue, 'success', {fromCache: true})
   
   resetTimeoutIntervalIfCacheInvalid = (options, cachedValue, cacheHasExpired) ->
     if options.timeoutIntervalIfExpiredCacheFound
@@ -105,14 +109,14 @@ KSCacheConstructor = ->
     options
 
 
-  successCallbackWithCachedAjaxSuccessEvent = (options, originalCallback) ->
+  addCachedAjaxSuccessEventToCallback = (options, originalCallback) ->
     (data, textStatus, xhr) ->
       kss.sendEvent('cachedAjaxSuccess', options.callbackContext,
                     {data: data, ajaxOptions: options, xhr: xhr})
       if typeof(originalCallback) is 'function'
         originalCallback(data, textStatus, xhr)
 
-  successCallbackOnAjax = (options, originalCallback) ->
+  storeInCacheAndRunCallback = (options, originalCallback) ->
     (data, textStatus, xhr) ->
       cacheExpiry = options.expires || getExpiryDate(data) || defaultCacheExpiry
       if cacheExpiry
@@ -123,13 +127,13 @@ KSCacheConstructor = ->
       if typeof(originalCallback) is 'function'
         originalCallback(data, textStatus, xhr)
 
-  timeoutCallback = (options, fallbackValue, successCallback) ->
+  fallbackToCacheOrTimeoutError = (options, fallbackValue, successCallback) ->
     (xhr) ->
       if fallbackValue
         # Silently fail if we have a fallback value.
         # KSNetworkStatus will send KSOnlineIndicator a request to
         # show the network status.
-        successCallback(fallbackValue, 'success')
+        successCallback(fallbackValue, 'success', {fromCache: true})
       else
         KSApp.notify('Network timed out. Cannot display URL: ' + options.url)
         console.log('Network timed out. Cannot display URL: ' + options.url)
