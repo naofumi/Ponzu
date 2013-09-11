@@ -52,7 +52,7 @@ KSControllerConstructor = ->
   show = (targetState) ->
     [resourceUrl, pageId] = resourceUrlAndPageId(targetState)
 
-    load resourceUrl,
+    loadResourceIntoDom resourceUrl,
       (pages) ->
         toElement = if pageId
                       document.getElementById(pageId)
@@ -114,7 +114,7 @@ KSControllerConstructor = ->
   # Do not recursively load downstream dependencies
   # but recursively load upstream containers.
   # The callback receives pages (the pages in the ajax response)
-  load = (resourceUrl, callback) ->
+  loadResourceIntoDom = (resourceUrl, callback) ->
     return callback && callback([]) if !resourceUrl || requestHistory[resourceUrl]
 
     console.log('loadResourceUrl ' + resourceUrl)
@@ -137,7 +137,7 @@ KSControllerConstructor = ->
   # Containers are the frames into which the dslpages will be inserted into.
   loadMissingContainers = (dslpages, callback) ->
     KSDom.missingContainers dslpages, (missingContainers) ->
-      load missingContainers[0], () -> callback()
+      loadResourceIntoDom missingContainers[0], () -> callback()
 
   # Recursively load dependencies
   #
@@ -145,7 +145,7 @@ KSControllerConstructor = ->
   loadDependencies = (redrawnAreas) ->
     urls = allDataAjaxUrlsIn(redrawnAreas)
     for url in urls
-      load(url, (pages) -> loadDependencies(pages)) unless requestHistory[url]
+      loadResourceIntoDom(url, (pages) -> loadDependencies(pages)) unless requestHistory[url]
 
   # Finds all 'data-ajax' resource URLs
   allDataAjaxUrlsIn = (elements) ->
