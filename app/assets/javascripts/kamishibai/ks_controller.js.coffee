@@ -1,6 +1,6 @@
 # Understanding the controller logic.
 #
-# The controller analyzed the new hash after a hash change
+# The controller analyzes the new hash after a hash change
 # and fires necessary loads and KSCompositor methods.
 #
 # Our concept for loading is that we will try not to use DOM cache.
@@ -30,7 +30,7 @@
 # URLs with both resourceUrl and pageId;
 #
 # Look for the pageId element on the current page. If available, then
-# handle as if there was now resourceUrl in the first place.
+# handle as if there was no resourceUrl in the first place.
 #
 # If not available, then load resourceUrl and look any element with pageId.
 # Transition to it and then load dependencies.
@@ -123,24 +123,31 @@ KSControllerConstructor = ->
       method: "get"
       dataType: 'html'
       success: (data, textStatus, xhr) ->
-        processAjaxSuccess(data, textStatus, xhr, resourceUrl, callback)
+        insertAjaxIntoDom(data, textStatus, xhr, resourceUrl, callback)
       error: (jqXHR, textStatus, errorThrown) ->
+        # We should only need an error message if the load is for the toElement.
         KSApp.notify("Load failed: " + resourceUrl + textStatus + "<br />" + errorThrown)
         return false
       timeoutInterval: ajaxLoadTimeout
       timeoutIntervalIfExpiredCacheFound: ajaxLoadtimeoutIntervalIfExpiredCacheFound
       url: resourceUrl
 
+  # Load all missing containers for pages.
+  #
+  # Containers are the frames into which the dslpages will be inserted into.
   loadMissingContainers = (dslpages, callback) ->
     KSDom.missingContainers dslpages, (missingContainers) ->
       load missingContainers[0], () -> callback()
 
   # Recursively load dependencies
+  #
+  # Loads all resources specified by 'data-ajax'.
   loadDependencies = (redrawnAreas) ->
     urls = allDataAjaxUrlsIn(redrawnAreas)
     for url in urls
       load(url, (pages) -> loadDependencies(pages)) unless requestHistory[url]
 
+  # Finds all 'data-ajax' resource URLs
   allDataAjaxUrlsIn = (elements) ->
     elements = [elements] if !(elements instanceof Array)
     result = []
