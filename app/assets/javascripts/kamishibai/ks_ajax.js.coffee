@@ -9,9 +9,6 @@ KSAjaxConstructor = ->
     # jQuery uses the options.type to specify the method, but we prefer options.method.
     method = (options.method || options.type || "post").toUpperCase()
     data = options.data || null; # Only accepts URI encoded string, not objects.
-    # Add CSRF parameter
-    if method && method != "GET" && KSRails
-      data += "&" + KSRails.csrfParam() + "=" + KSRails.csrfToken()
 
     async = options.async || true
     options.timeoutInterval = timeoutInterval = options.timeoutInterval || defaultTimeout

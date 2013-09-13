@@ -16,62 +16,6 @@ new function(e) {
   this.handleEvent = function(e) {
     var target = e.target;
 
-    function csrfToken(){
-      var meta, cookie;
-
-      if (cookie = KSCookie.get('csrf-token')) {
-        return cookie;
-      } else if (meta = document.querySelector("meta[name='csrf-token']")) {
-        return meta.getAttribute('content');
-      }
-    }
-
-    function csrfParam(){
-      var meta, cookie;
-
-      if (cookie = KSCookie.get('csrf-param')) {
-        return cookie;
-      } else if (meta = document.querySelector("meta[name='csrf-param']")) {
-        return meta.getAttribute('content');
-      }
-    }
-
-    // This sets csrf_param and csrf_token on the document load event.
-    // We don't want this. We want to check the csrf_param and csrf_token
-    // from the cookie each time.
-    //
-    // if (target === document && e.type === 'load') {
-    //   self.ajaxTarget = target;
-    //   var metatags = target.getElementsByTagName('meta');
-    //   for (var i = 0; i < metatags.length; i++) {
-    //     if (metatags[i].getAttribute('name') == 'csrf-param') {
-    //       self.csrf_param = metatags[i].getAttribute('content');
-    //     }
-    //     else if (metatags[i].getAttribute('name') == 'csrf-token') {
-    //       self.csrf_token = metatags[i].getAttribute('content');
-    //     }
-    //   }
-    //   return true;
-    // }
-
-    // if (e.type === 'readystatechange') {
-    //   if (target.readyState === 4) {
-    //     var responseType = target.getResponseHeader('Content-Type');
-    //     var status = target.status,
-    //         statusText = target.statusText;
-    //     if (responseType) {
-    //       if (responseType.indexOf('javascript') != -1) {
-    //         new function() { eval(target.responseText); }();
-    //       } else if (responseType.indexOf('html') != -1) {
-    //         kss.sendEvent('ajaxSuccess', self.ajaxTarget, 
-    //                       {body: target.responseText, xhr: target}
-    //                     );
-    //       }
-    //     }
-    //   }
-    //   return true;
-    // }
-
     if (e.type === 'click') {
       target = kss.closestByTagName(target, 'A', true)
     } else if (e.type === 'submit') {
@@ -108,11 +52,11 @@ new function(e) {
           document.body.appendChild(form);
         }
         // Either way, it needs the CSRF token
-        if (!form[csrfParam()] && form.getAttribute('method').toUpperCase() != 'GET') {
+        if (!form[KSRails.csrfParam()] && form.getAttribute('method').toUpperCase() != 'GET') {
           var field = document.createElement('input');
           field.type = 'hidden';
-          field.name = csrfParam();
-          field.value = csrfToken();
+          field.name = KSRails.csrfParam();
+          field.value = KSRails.csrfToken();
           form.appendChild(field);
         }
       }
