@@ -69,4 +69,7 @@ Gem::Specification.new do |s|
   # and always escapes the UTF-8 output
   s.add_dependency 'oj'
 
+  # Use qunit-rails in testing
+  s.add_development_dependency 'qunit-rails'
+
 end

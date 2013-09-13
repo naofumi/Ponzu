@@ -17,3 +17,16 @@ gem "sprockets-dotjs", :git => 'git://github.com/jamifsud/sprockets-dotjs.git'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
+
+# Use qunit-rails in dummy
+# We don't put it in :development, :test group because
+# for some reason, it doesn't get read it in.
+gem 'qunit-rails'
+
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+
+  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  gem 'therubyracer', :platforms => :ruby
+end
