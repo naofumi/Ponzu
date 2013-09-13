@@ -13,8 +13,8 @@ gem "jquery-rails"
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-gem "sprockets-dotjs", :git => 'git://github.com/jamifsud/sprockets-dotjs.git'
-
+# Moved git repository from jamifsud to duyleekun
+# gem "sprockets-dotjs", :git => 'git://github.com/duyleekun/sprockets-dotjs.git'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 

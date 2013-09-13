@@ -12,6 +12,5 @@
 //
 //= require_tree ../kamishibai/
 //= require_tree ../shims/
-// require doT
 //= require_tree ../templates/dot
 //= require_tree ../common/
