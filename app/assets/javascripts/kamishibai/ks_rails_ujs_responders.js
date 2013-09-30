@@ -127,8 +127,5 @@ kamishibai.beforeInitialize(function(){
     } else {
       KSApp.notify('Failed to receive response from server. Error: ' + (event.errorMessage));      
     }
-
-    event.preventDefault();
-    event.stopPropagation();
   });
 })
