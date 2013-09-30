@@ -1,6 +1,8 @@
 Dummy::Application.routes.draw do
   mount Qunit::Rails::Engine => '/qunit'
 
+  match 'cache_test' => 'cache_test#index', :as => :cache_test
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
