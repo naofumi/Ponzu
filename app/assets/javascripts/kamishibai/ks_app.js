@@ -13,6 +13,7 @@ window.KSApp = function(){
 
   function notify(string) {
     var noticeElement = document.getElementsByClassName('notice')[0];
+    if (!noticeElement) {return};
     if (string)
       noticeElement.innerHTML = string;
       // $('.notice').html(string);
@@ -39,6 +40,7 @@ window.KSApp = function(){
 
   function errors(string) {
     var errorsElement = document.getElementsByClassName('error')[0];
+    if (!errorsElement) {return};
     if (string)
       errorsElement.innerHTML = string;
       // $('.notice').html(string);
