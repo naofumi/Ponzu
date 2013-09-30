@@ -87,9 +87,8 @@ KSAjaxConstructor = ->
       data = processResponse(xhr)
       status = getAjaxStatus(xhr)
       if status is "success"
-        # processAjaxResponse(xhr, callbackContext);
         if typeof(ajaxOptions.success) is 'function'
-          ajaxOptions.success(data, textStatus, xhr)
+          ajaxOptions.success(data, "success", xhr)
         kss.sendEvent 'ajaxSuccess', callbackContext(ajaxOptions), 
           xhr: xhr, 
           data: data, 
@@ -101,7 +100,7 @@ KSAjaxConstructor = ->
         # TODO: We have error handling in KSCache, KSAjax and
         # in ks_event_listeners.js. We need to clean this up.
         if typeof(ajaxOptions.error) is 'function'
-          sendEventFlag = ajaxOptions.error(xhr, status, "")
+          sendEventFlag = ajaxOptions.error(xhr, status, textStatus)
         if sendEventFlag isnt false
           kss.sendEvent 'ajaxError', callbackContext(ajaxOptions),
             xhr: xhr, 
@@ -109,7 +108,7 @@ KSAjaxConstructor = ->
             errorMessage: status
       
       if typeof(ajaxOptions.complete) is 'function'
-        ajaxOptions.complete(xhr, textStatus)
+        ajaxOptions.complete(xhr, status)
       kss.sendEvent 'ajaxComplete', callbackContext(ajaxOptions),
         xhr: xhr, 
         ajaxOptions: ajaxOptions
