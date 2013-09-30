@@ -1,3 +1,25 @@
+# Basic Ajax management modeled after the jQuery API.
+#
+# Features;
+# 1. Timeout management.
+# 2. Evaluate Javascript contained in custom 'X-JS' header.
+# 3. Evaluate Javascript if content-type is "javascript" (same as jQuery).
+# 4. 'Accept' header is optimized for Kamishibai.
+#
+# Timeout management is tricky, and has a lot of room for improvement.
+# We currently do the following (in #setTimeoutCallback);
+# 1. We kill all currently running Ajax requests. #abortAndTimeoutAllAjax
+#
+# In actual use though, the handling of slow HTTP requests should actually 
+# be quite different.
+#
+# 1. If fallback content is available, then timeout should be very quick.
+# 2. If fallback content is not available, then timeout should be quite slow.
+# 3. However, when the user makes an action that results in an Ajax request,
+#    then, previous Ajax requests should be aborted immediately to make way for the new
+#    requests. User actions could be detected by hashChange events or rails_ujs.
+#    The largest issue I have with slow responses is that the browser doesn't 
+#    respond to hashChange, etc. if there are many Ajax requests in the queue.
 KSAjaxConstructor = ->
   allAjaxRequests = {}
   defaultTimeout = 5000
