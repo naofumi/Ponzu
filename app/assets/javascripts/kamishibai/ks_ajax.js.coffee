@@ -27,7 +27,7 @@ KSAjaxConstructor = ->
       setTimeoutCallback(xhr, options, timeoutInterval)
     
     readyStateCallback = (event) ->
-      ajaxReadyStateChangeHander(event, options, timeoutInterval)
+      ajaxReadyStateChangeHandler(event, options, timeoutInterval)
       true
 
     xhr.addEventListener('readystatechange', readyStateCallback, false)
@@ -69,8 +69,9 @@ KSAjaxConstructor = ->
     delete allAjaxRequests[ajaxOptions.url];
     KSNetworkStatus.timedOut()
 
-  ajaxReadyStateChangeHander = (event, ajaxOptions, timeoutInterval) ->
+  ajaxReadyStateChangeHandler = (event, ajaxOptions, timeoutInterval) ->
     xhr = event.target
+    return unless xhr
     textStatus = xhr.statusText
     sendEventFlag = true
     if xhr.readyState is 4
