@@ -3,7 +3,7 @@
 # KSCache wraps ks_ajax with a cache management layer. This is
 # similar to how fragment caching works in Ruby-on-Rails.
 # 
-# By using KSCache.ajax instead of KSAjax.ajax, you transparently
+# By using KSCache.cachedAjax instead of KSAjax.ajax, you transparently
 # get the benefits of a caching.
 #
 # One difference to note is that KSCache will return 
