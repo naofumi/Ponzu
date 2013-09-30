@@ -1,35 +1,38 @@
 # Provides high-level DOM manipulation methods.
 #
+# #convertAjaxDataToElements generates DOM elements from an Ajax response.
+# The response may be HTML or it may be JSON, in which case we use a handler
+# (template) to convert it to HTML.
+#
 # #insertPagesIntoDom will replace elements with same IDs,
 # look inside containers, and merge the current DOM with the HTML data.
-# It takes a list of DOM elements as the argument.
+# It takes a list of DOM elements as the argument, which will usually
+# come from #convertAjaxDataToElements.
 #
 # #missingContainers will return the URLs of missing containers so that
-# the controller can load them.
+# the controller can load them. Without the missing containers loaded,
+# we won't be able to do #insertPagesIntoDom.
 # It takes a list of DOM elements as the argument.
 #
-# #convertAjaxDataToElements generates DOM elements from an Ajax HTML response.
+# KSDom enables us to modify the DOM without Javascript.
+# The common way to handle Ajax is to write Javascript that will insert/replace
+# the response body into a DOM element. Although this can be hugely simplified
+# with jQuery, Prototype and Rails helpers, the fact remains that we have to write 
+# customized Javascript.
+#
+# I find the current situation a bit funny. Rails UJS allows you to send
+# Ajax requests without a single line of Javascript, but requires you to 
+# write Javascript event handlers (or Javascript in the response) to process
+# the responses. Ideally, we would like to make response processing possible
+# without any Javascript.
+#
+# The Kamishibai approach is to extend the Rails_ujs.js approach to the Ajax
+# response. Instead of requiring the developer to write custom Javascript, we use
+# 'data-' attributes inside the Ajax response to tell Kamishibai how to handle it.
+#
+# This is what the KSDom object does.
 window.KSDomConstructor = () ->
 
-  # This method enables us to modify the DOM with a simple HTML Ajax response.
-  # The common way to handle Ajax is to write Javascript that will insert/replace
-  # the response body into a DOM element. Although this can be hugely simplified
-  # with jQuery, Prototype and Rails helpers, the fact remains that we have to write 
-  # customized Javascript. This is in contrast to Rails_ujs.js which provides 
-  # generic event handlers for sending Ajax requests from normal HTML forms. 
-  # Rails_ujs.js does not require the developer to write a single line of Javascript
-  # to send a Javascript request, but instead uses the 'data-' attributes to
-  # send arguments to a generic submit handler.
-
-  # The funny situation with Rails_ujs.js is that it is super easy to send an
-  # Ajax request without a line of Javascript, but you have to write jQuery to
-  # handle the response. In Rails 2, Rails wrote the Javascript for you so
-  # handling the response was super easy. In Rails 3, it has gotten harder.
-  # Now the developer has to write Javascript themselves to handle the response.
-
-  # The Kamishibai approach is to extend the Rails_ujs.js approach to the Ajax
-  # response. Instead of requiring the developer to write custom Javascript, we use
-  # 'data-' attributes inside the Ajax response to tell Kamishibai how to handle it.
 
   # Insert the kamishibai elements from an Ajax response into the DOM.
   # If an element is already in the DOM (identified by matching IDs),
@@ -37,10 +40,10 @@ window.KSDomConstructor = () ->
   # If an element has a 'data-container' element, then insert the element
   # into the corresponding container element (ignore if container is not 
   # present). Otherwise, append the element to the <body>.
-
+  #
   # Since we also use this method to handle non-GET requests, for example 
   # in response to an Ajax POST, PUT to modify like status, setting the
-  # resourceUrl does not always make sense. In these situations, resourceUrl
+  # resourceUrl (without parameters) does not always make sense. In these situations, resourceUrl
   # should be set to null.
   insertPagesIntoDom = (pages, resourceUrl, callback) ->
     referencesToPages = []
@@ -79,6 +82,8 @@ window.KSDomConstructor = () ->
   convertJSONToHTMLWithTemplate = (data, callback) ->
     # The following is client-side templating code.
     # We run it asyncronously in case it's slow.
+    # But we should really consider webworkers.
+    # However, even Android Jelly Bean doesn't support it.
     setTimeout () ->
       try
         # We can't tell if its JSON or a string, so we try to parse anyway.
@@ -90,8 +95,6 @@ window.KSDomConstructor = () ->
         else
           JSON.parse(data)
         data = JST[json.renderer.template](json)
-        # dust.render json.renderer.template, json, (err, html) ->
-        #   callback(html)
       catch e
         # If we can't parse, it's probably because it isn't an object
         # We don't think about it too much.
