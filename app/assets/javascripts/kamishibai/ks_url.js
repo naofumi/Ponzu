@@ -16,10 +16,11 @@ window.KSUrl = function(){
 	  // Remove domain from href
 	  url = url.replace(/^https?:\/\/[^\/]+/, '');
 	  // remove trailing "/" to equate to rails paths
+	  // unless root (always have a "/" for root).
 	  if (url.length == 0) {
 	    url += "/";
 	  } else {
-	    url = url.replace(/\/+$/, '');
+	    url = url.replace(/([^\/]+)\/+$/, "$1");
 	  }
 	  return url;
 	}
