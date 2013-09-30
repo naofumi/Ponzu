@@ -4,10 +4,10 @@ window.KSUrl = function(){
 	// Strips the protocol, host and port
 	// from the url string. Uses the current
 	// protocol, host and port.
+	// TODO: toNormalizedPath actually does a stripHost
+	//       so we probably don't need stripHost.
 	function stripHost(url) {
-		protocolHostPort = window.location.protocol + "//" +
-		                   window.location.host;
-		return url.replace(protocolHostPort, '');
+		return toNormalizedPath(url.replace(/^https?:\/\/[^/]+/, ''));
 	}
 
 	// Use this function to convert trailing slashes
