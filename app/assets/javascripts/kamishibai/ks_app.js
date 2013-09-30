@@ -1,4 +1,9 @@
+// Display status messages (flash).
+// Also get's the user_id
 window.KSApp = function(){
+  // Messages to be shown in a message dialog (flash) are
+  // sent through the 'X-Message-Type', 'X-Message'
+  // custom headers.
   kamishibai.beforeInitialize(function(){
     kss.addEventListener(document, 'ajaxComplete', function(event) {
       var msg = JSON.parse(event.xhr.getResponseHeader('X-Message'));
