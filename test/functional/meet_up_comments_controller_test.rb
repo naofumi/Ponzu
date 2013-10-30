@@ -49,7 +49,7 @@ class MeetUpCommentsControllerTest < ActionController::TestCase
     ks_ajax :post, :create, 
          meet_up_comment: { content: "Meet up comment content", 
                             meet_up_id: meet_ups(:meet_up_for_other_conference) }
-    assert_include assigns(:meet_up_comment).errors.get(:base), "Conference for MeetUpComment and User must match."
+    assert_include assigns(:meet_up_comment).errors.get(:base), "user.conference_tag (generic_conference) must match MeetUpComment#conference_tag (another_conference)."
   end
 
   test "should show meet_up_comment" do
@@ -87,7 +87,7 @@ class MeetUpCommentsControllerTest < ActionController::TestCase
     ks_ajax :put, :update, id: @meet_up_comment, 
             meet_up_comment: { content: @meet_up_comment.content, 
                                meet_up_id: meet_ups(:meet_up_for_other_conference) }
-    assert_include assigns(:meet_up_comment).errors.get(:base), 'Conference for MeetUpComment and User must match.'
+    assert_include assigns(:meet_up_comment).errors.get(:base), "meet_up.conference_tag (another_conference) must match MeetUpComment#conference_tag (generic_conference)."
   end
 
   test "should destroy meet_up_comment" do

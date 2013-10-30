@@ -82,7 +82,7 @@ class Like < ActiveRecord::Base
   validates_uniqueness_of :presentation_id, :scope => [:user_id, :type]
   belongs_to :user, :inverse_of => :likes
   belongs_to :presentation, :inverse_of => :likes
-  validate :presentation_and_user_conferences_must_match
+  # validate :presentation_and_user_conferences_must_match
 
   scope "timetableable", lambda {
     where('presentations.type IN (?)', Presentation::TimeTableable.descendants.map{|d| d.to_s})
@@ -102,31 +102,19 @@ class Like < ActiveRecord::Base
     raise "Deprecated use of #scheduled. Use single table inheritance instead."
   end
 
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    # http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
-    # For some reason, I couldn't get the following to work.
-    # joins(:presentation => :submission)
-    # joins('INNER JOIN presentations ON likes.presentation_id = presentations.id ' +
-    #       'INNER JOIN submissions ON presentations.submission_id = submissions.id ').
-    includes(:presentation => :submission). # Use includes because we want distint results
-    where(:submissions => {:conference_id => conference}).
-    readonly(false)
-  }
+  # include ConferenceConfirm
 
-  def conference
-    @conference ||= presentation.submission.conference
-  end
+  include ConferenceRefer
+  infer_conference_from :presentation, :user
+  validates_conference_identity :presentation, :user
 
-  include ConferenceConfirm
 
   private
   
-  def presentation_and_user_conferences_must_match
-    if presentation.submission.conference != user.conference
-      errors.add(:base, "Conference for Presentation and User must match.")
-    end
-  end
+  # def presentation_and_user_conferences_must_match
+  #   if presentation.submission.conference != user.conference
+  #     errors.add(:base, "Conference for Presentation and User must match.")
+  #   end
+  # end
 
 end

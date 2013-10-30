@@ -57,7 +57,7 @@ class AuthorsControllerTest < ActionController::TestCase
             author: { en_name: "New Author", jp_name: "JP New Author",
                       initial_submission: submissions(:another_conference_submission).id
                     }
-    assert_include assigns(:author).errors.get(:base), "Attribute conference_confirm did not match conference attribute."
+    assert_include assigns(:author).errors.get(:base), "submissions.conference_tag (another_conference) must match Author#conference_tag (generic_conference)."
   end
 
   test "should show author" do

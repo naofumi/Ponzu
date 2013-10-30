@@ -11,6 +11,7 @@ class Authorship < ActiveRecord::Base
   
   acts_as_list :scope => :submission
 
+  before_validation :fill_conference_tag_if_nil
   before_save :fill_names_if_nil
 
   after_save :reset_whitelist_of_user
@@ -19,25 +20,15 @@ class Authorship < ActiveRecord::Base
 
   validates_uniqueness_of :submission_id, :scope => :author_id
 
-  validate :submission_and_author_conferences_must_match
+  # validate :submission_and_author_conferences_must_match
 
   include SimpleSerializer
   serialize_array :affiliations, :typecaster => :convert_affiliations_to_integers,
                   :sort => Proc.new {|a, b| a <=> b}
 
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    includes(:submission).  # includes instead of joins to make distinct
-    where(:submissions => {:conference_id => conference}).
-    readonly(false)
-  }
-
-  def conference
-    submission.conference
-  end
-
-  include ConferenceConfirm
+  include ConferenceRefer
+  validates_conference_identity :author, :submission
+  infer_conference_from :submission
 
   # :section: To calculate related Submissions
 
@@ -72,16 +63,24 @@ class Authorship < ActiveRecord::Base
     affiliations.map{|aff| aff.to_i}
   end
 
-  def submission_and_author_conferences_must_match
-    if conference != author.conference
-      errors.add(:base, "Conference for Submission and Author must match.")
-    end
-  end
+  # def submission_and_author_conferences_must_match
+  #   if conference != author.conference || conference != submission.conference
+  #     errors.add(:base, "Conference for Authorship, Submission and Author must match.")
+  #   end
+  # end
 
   def fill_names_if_nil
     if en_name.blank? && jp_name.blank?
       self.en_name = author.en_name
       self.jp_name = author.jp_name
+    end
+  end
+
+  def fill_conference_tag_if_nil
+    if conference_tag.nil?
+      if ct = submission.conference_tag || author.conference_tag
+        self.conference_tag = ct
+      end
     end
   end
 end

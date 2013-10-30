@@ -8,22 +8,14 @@ class Room < ActiveRecord::Base
                   :en_location, :map_url, :pin_top, :pin_left
   locale_selective_reader :name, :en => :en_name, :ja => :jp_name
   locale_selective_reader :location, :en => :en_location, :ja => :jp_location
+  validates_presence_of :en_name
   acts_as_list
-  belongs_to  :conference, :inverse_of => :rooms
-  validates_presence_of :conference_id
 
+  include ConferenceRefer
 
   def number
   	name =~ /(\d+)/
   	$1
   end
-
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    where(:conference_id => conference)
-  }
-
-  include ConferenceConfirm
 
 end

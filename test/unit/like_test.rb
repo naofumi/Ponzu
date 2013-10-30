@@ -9,10 +9,17 @@ class LikeTest < ActiveSupport::TestCase
     assert_equal conferences(:generic_conference), @like.conference
   end
 
+  test "should reset conference" do
+    c = conferences(:generic_conference)
+    @like.conference_tag = nil
+    assert @like.save
+    assert_equal conferences(:generic_conference), @like.conference
+  end
+
   test "presentation and user conferences must match" do
   	like = Like.new(:user_id => users(:user_from_different_conference).id, 
-  	                :presentation_id => presentations(:generic_presentation).id,
-  	                :type => 'Like::Like')
+  	                :presentation_id => presentations(:generic_presentation).id)
+    like.type = 'Like::Like'
   	assert_raise ActiveRecord::RecordInvalid do
   		like.save!
   	end

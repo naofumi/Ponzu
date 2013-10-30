@@ -68,8 +68,8 @@ class AuthorshipsControllerTest < ActionController::TestCase
     login_as_admin
     ks_ajax :post, :update, id: @authorship,
             authorship: { submission_id: submissions(:another_conference_submission),
-                          author_id: authors(:generic_author_2) }              
-    assert_include assigns(:authorship).errors.get(:base), "Attribute conference_confirm did not match conference attribute."
+                          author_id: authors(:another_conference_author) }              
+    assert_include assigns(:authorship).errors.get(:base), "submission.conference_tag (another_conference) must match Authorship#conference_tag (generic_conference)."
   end
 
   test "should destroy authorship" do

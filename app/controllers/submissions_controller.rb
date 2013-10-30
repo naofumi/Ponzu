@@ -50,7 +50,7 @@ class SubmissionsController < ApplicationController
   # POST /submissions.json
   def create
     @submission = Submission.new(params[:submission])
-    @submission.conference = current_conference
+    @submission.conference_confirm = current_conference
     success = false
     Submission.transaction do
       begin

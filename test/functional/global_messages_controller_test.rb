@@ -67,13 +67,13 @@ class GlobalMessagesControllerTest < ActionController::TestCase
   end
 
   # Multiple conference test
-  test "cannot alter conference_id attribute via mass assignment" do
+  test "cannot alter conference_tag attribute via mass assignment" do
     login_as_admin
     assert_raise ActiveModel::MassAssignmentSecurity::Error do
       ks_ajax :put, :update, id: @global_message, 
               global_message: { en_text: @global_message.en_text,
                                 jp_text: @global_message.jp_text,
-                                conference_id: conferences(:another_conference) }
+                                conference_tag: 'another_conference' }
     end
   end
 

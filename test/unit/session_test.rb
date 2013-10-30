@@ -21,8 +21,30 @@ class SessionTest < ActiveSupport::TestCase
     assert_equal session.starts_at + 10 * 60, session.presentations[1].starts_at
   end
 
+  test "two sessions in same conference cannot share same number" do
+    session_two = sessions(:generic_session_2)
+    session_two.number = @session.number
+    e = assert_raise ActiveRecord::RecordInvalid do
+      session_two.save!
+    end
+    assert_equal "Validation failed: Number has already been taken", e.message
+  end
+
   test "must refer to a conference" do
     assert_equal conferences(:generic_conference), @session.conference
+  end
+
+  test "conference_tags for session and room must match" do
+    @session.room = rooms(:room_for_different_conference)
+    e = assert_raises ActiveRecord::RecordInvalid do
+      @session.save!
+    end
+  end
+
+  test "two sessions belonging to difference conferences can have same number" do
+    session_two = sessions(:session_on_different_conference)
+    session_two.number = @session.number
+    assert session_two.save
   end
 
 end

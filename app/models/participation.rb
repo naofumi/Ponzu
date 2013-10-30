@@ -6,6 +6,8 @@ class Participation < ActiveRecord::Base
   belongs_to :user
   # after_save :notify_owner_of_participant
   # before_destroy :notify_owner_of_removal
-   
-   
+  
+  include ConferenceRefer
+  validates_conference_identity :meet_up, :user
+  infer_conference_from :meet_up, :user
 end

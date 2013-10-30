@@ -166,9 +166,9 @@ class SessionsController < ApplicationController
   # POST /sessions
   # POST /sessions.json
   def create
-    class_name = params[:session][:type]
-    @session = class_name.constantize.new(params[:session])
-    @session.conference = current_conference
+    type_name = params[:session].delete(:type)
+    @session = type_name.constantize.new(params[:session])
+    @session.conference_confirm = current_conference
 
     respond_to do |format|
       if @session.save
@@ -184,7 +184,8 @@ class SessionsController < ApplicationController
   # PUT /sessions/1
   # PUT /sessions/1.json
   def update
-    @session = Session.in_conference(current_conference).
+    type_name = params[:session].delete(:type)
+    @session = type_name.constantize.in_conference(current_conference).
                        find(params[:id])
 
     respond_to do |format|

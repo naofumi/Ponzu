@@ -39,7 +39,7 @@ class PresentationsController < ApplicationController
     set_menu(@presentation.is_poster? ? :posters : :sessions)
     restrict_disclosure(@presentation)
     @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
-                        with(:conference_id).equal_to(current_conference.id)
+                        with(:conference_tag).equal_to(current_conference.database_tag)
                         fields :en_abstract, :en_title, :jp_abstract, :jp_title
                         minimum_word_length 3
                         boost_by_relevance true
@@ -65,7 +65,7 @@ class PresentationsController < ApplicationController
     @presentation = Presentation.in_conference(current_conference).
                     find(params[:id])
     @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
-                        with(:conference_id).equal_to(current_conference.id)
+                        with(:conference_tag).equal_to(current_conference.database_tag)
                         fields :en_abstract, :en_title, :jp_abstract, :jp_title
                         minimum_word_length 3
                         boost_by_relevance true
@@ -108,8 +108,8 @@ class PresentationsController < ApplicationController
   # POST /presentations.json
   # Presentations will be created by drag-drop of sessions and presentations.
   def create
-    @presentation = Presentation.new(params[:presentation])
-    @session = Session.find(params[:presentation][:session_id])
+    type_name = params[:presentation].delete(:type)
+    @presentation = type_name.contantize.new(params[:presentation])
     @presentation.starts_at = @session.starts_at
     if url = params[:data_transfer]['text/plain']
       @presentation.submission =  if url =~ /submissions\/(\d+)/
@@ -137,9 +137,9 @@ class PresentationsController < ApplicationController
   # PUT /presentations/1
   # PUT /presentations/1.json
   def update
-    @presentation = Presentation.in_conference(current_conference).
+    type_name = params[:presentation].delete(:type)
+    @presentation = type_name.constantize.in_conference(current_conference).
                                  find(params[:id])
-
     respond_to do |format|
       if @presentation.update_attributes(params[:presentation])
         flash[:notice] = "Presentation was successfully updated"

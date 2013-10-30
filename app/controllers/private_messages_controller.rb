@@ -34,8 +34,8 @@ class PrivateMessagesController < ApplicationController
     # a polymorphic association, and we can't simply JOIN it.
     # Here, we directly write down the SQL.
     @private_messages = Message.where(:sender_type => 'User').
+                                in_conference(current_conference).
                                 joins('INNER JOIN users on users.id = messages.sender_id').
-                                where('users.conference_id = ?', current_conference).
                                 paginate(page: params[:page], per_page: 50)
     respond_with @private_messages
   end

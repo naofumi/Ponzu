@@ -2,15 +2,19 @@ generic_authorship:
   author: generic_author
   submission: generic_submission
   en_name: Generic author
+  conference_tag: generic_conference
 generic_authorship_2:
   author: generic_author_2
   submission: generic_submission
   en_name: Generic author 2
+  conference_tag: generic_conference
 another_conference_authorship:
   author: another_conference_author
   submission: another_conference_submission
   en_name: another conference author
+  conference_tag: another_conference
 to_linked_author:
   author: linked_author
   submission: generic_submission
   en_name: Linked author
+  conference_tag: generic_conference

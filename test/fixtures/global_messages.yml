@@ -3,8 +3,8 @@
 generic_global_message:
   en_text: "Generic Global Message."
   jp_text: "一般的なグローバルメッセージ"
-  conference: generic_conference
+  conference_tag: generic_conference
 global_message_for_other_conference:
   en_text: "Global Message for another conference."
   jp_text: "日本語 Global Message for another conference."
-  conference: another_conference
+  conference_tag: another_conference

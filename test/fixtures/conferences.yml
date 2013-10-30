@@ -8,10 +8,13 @@ generic_conference:
   name: Generic Conference
   subdomain: generic-conference
   tag: generic_conference
+  database_tag: generic_conference
 another_conference:
   module_name: AnotherConference
   dates:
   support_email: another@conference.com
   name: Another Conference
   subdomain: another-conference
+  tag: another_conference
+  database_tag: another_conference
 

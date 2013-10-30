@@ -208,15 +208,15 @@ class LikesController < ApplicationController
     @number_of_logined_users = User.in_conference(current_conference).where('login_count > 0').count
     @users_who_failed_to_log_in = User.in_conference(current_conference).where('failed_login_count > 0 AND login_count = 0')
     @top_likes = Presentation.
+                   in_conference(current_conference).
                    select('presentations.*, count(*) as count').
                    joins(:session => :conference). #INNER JOIN??
-                   where("sessions.conference_id" => current_conference.id).
                    joins(:likes).group('presentations.id').
                    order('count(*) DESC').limit(50)
     @top_schedules = Presentation.
+                       in_conference(current_conference).
                        select('presentations.*, count(*) as count').
                        joins(:session => :conference). #INNER JOIN??
-                       where("sessions.conference_id" => current_conference.id).
                        joins(:schedules).group('presentations.id').
                        order('count(*) DESC').limit(50)
   end

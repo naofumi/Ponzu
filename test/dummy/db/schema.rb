@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130824094122) do
+ActiveRecord::Schema.define(:version => 20131025060345) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.boolean  "whitelisted",    :default => false
     t.string   "whitelisted_by"
     t.datetime "whitelisted_at"
+    t.string   "conference_tag"
   end
 
   create_table "authorships", :force => true do |t|
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.string   "affiliations"
     t.integer  "author_id",                               :null => false
     t.integer  "submission_id",                           :null => false
+    t.string   "conference_tag"
   end
 
   add_index "authorships", ["author_id"], :name => "index_authorships_on_author_id"
@@ -53,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.integer  "user_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "conference_tag"
   end
 
   create_table "conferences", :force => true do |t|
@@ -68,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.text     "icons"
     t.string   "conference_home_page_url"
     t.string   "ks_cache_version"
+    t.string   "database_tag"
   end
 
   create_table "conversations", :force => true do |t|
@@ -78,10 +82,11 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
 
   create_table "global_messages", :force => true do |t|
     t.text     "jp_text"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.text     "en_text"
     t.integer  "conference_id"
+    t.string   "conference_tag"
   end
 
   create_table "likes", :force => true do |t|
@@ -92,14 +97,16 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.boolean  "scheduled",       :default => false, :null => false
     t.string   "type"
     t.integer  "score",           :default => 0
+    t.string   "conference_tag"
   end
 
   create_table "meet_up_comments", :force => true do |t|
     t.integer  "meet_up_id"
     t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "conference_tag"
   end
 
   create_table "meet_ups", :force => true do |t|
@@ -109,22 +116,24 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.text     "description"
     t.text     "meet_at"
     t.integer  "owner_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.string   "title"
     t.string   "interest"
     t.string   "venue_phone"
     t.string   "owner_phone"
-    t.integer  "conference_id", :null => false
+    t.integer  "conference_id",  :null => false
+    t.string   "conference_tag"
   end
 
   create_table "messages", :force => true do |t|
     t.integer  "sender_id"
-    t.string   "sender_type", :default => ""
+    t.string   "sender_type",    :default => ""
     t.text     "body"
     t.string   "subject"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.string   "conference_tag"
   end
 
   add_index "messages", ["id"], :name => "id_test"
@@ -158,8 +167,9 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
   create_table "participations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "meet_up_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "conference_tag"
   end
 
   create_table "presentation_groups", :force => true do |t|
@@ -185,6 +195,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.integer  "submitter_id"
     t.string   "type"
     t.boolean  "cancel",                            :default => false
+    t.string   "conference_tag"
   end
 
   add_index "presentations", ["position"], :name => "index_presentations_on_position"
@@ -194,9 +205,10 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.integer  "receiver_id"
     t.string   "receiver_type"
     t.integer  "message_id"
-    t.boolean  "read",          :default => false, :null => false
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.boolean  "read",           :default => false, :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.string   "conference_tag"
   end
 
   add_index "receipts", ["message_id"], :name => "index_receipts_on_message_id"
@@ -220,8 +232,8 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
   end
 
   create_table "rooms", :force => true do |t|
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.string   "jp_name"
     t.string   "en_name"
     t.string   "jp_location"
@@ -230,7 +242,8 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.integer  "pin_top"
     t.integer  "pin_left"
     t.integer  "position"
-    t.integer  "conference_id", :null => false
+    t.integer  "conference_id",  :null => false
+    t.string   "conference_tag"
   end
 
   create_table "sessions", :force => true do |t|
@@ -246,6 +259,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.string   "organizers_string_jp"
     t.string   "type"
     t.integer  "conference_id",                        :null => false
+    t.string   "conference_tag"
   end
 
   create_table "submissions", :force => true do |t|
@@ -264,6 +278,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.boolean  "show_email",                           :default => false
     t.binary   "institutions"
     t.integer  "conference_id",                                           :null => false
+    t.string   "conference_tag"
   end
 
   create_table "umin_rows", :force => true do |t|
@@ -307,6 +322,7 @@ ActiveRecord::Schema.define(:version => 20130824094122) do
     t.string   "en_affiliation"
     t.string   "jp_affiliation"
     t.integer  "conference_id",                                  :null => false
+    t.string   "conference_tag"
   end
 
   add_index "users", ["en_name"], :name => "index_users_on_en_name"

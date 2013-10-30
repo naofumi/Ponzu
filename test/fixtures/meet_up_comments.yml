@@ -4,7 +4,9 @@ generic_meet_up_comment:
   meet_up: generic_meet_up
   user: generic_user
   content: Generic Meet up Comment
+  conference_tag: generic_conference
 meet_up_comment_for_other_conference:
   meet_up: meet_up_for_other_conference
   user: generic_user
   content: Meet up Comment For other Conference
+  conference_tag: another_conference

@@ -6,8 +6,6 @@ class Submission < ActiveRecord::Base
                   :institutions, :keywords, :type
 
   has_many  :presentations, :inverse_of => :submission, :dependent => :destroy
-  belongs_to  :conference, :inverse_of => :submissions
-  validates_presence_of :conference_id
 
 
   # Apparently, Presentation.touch does not fire
@@ -28,22 +26,19 @@ class Submission < ActiveRecord::Base
   locale_selective_reader :abstract, :ja => :jp_abstract, :en => :en_abstract
 
   validates_presence_of :submission_number
-  validates_uniqueness_of :submission_number, :scope => :conference_id
+  validates_uniqueness_of :submission_number, :scope => :conference_tag
 
   include SimpleSerializer
   serialize_array :institutions, :class => "Institution", 
                                  :typecaster => :hash_to_institution
   serialize_array :keywords
 
+  include ConferenceRefer
 
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    where(:conference_id => conference)
-  }
-
-  include ConferenceConfirm
-
+  # TODO: Remove after we add conference_tag attributes
+  def find_conference
+    Conference.find(conference_id)
+  end
 
   def first_author
     @first_author ||= begin

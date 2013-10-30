@@ -62,7 +62,22 @@ class SubmissionTest < ActiveSupport::TestCase
 
   test "must refer to a conference" do
     assert_equal conferences(:generic_conference), 
-                 sessions(:generic_session).conference
+                 submissions(:generic_submission).conference
+  end
+
+  test "in_conference should select for conference" do
+    s = submissions(:generic_submission)
+    as = submissions(:another_conference_submission)
+    assert_includes Submission.in_conference(s.conference), s
+    refute_includes Submission.in_conference(s.conference), as
+  end
+
+  test "conference_tag must not be empty" do
+    s = submissions(:generic_submission)
+    s.conference_tag = nil
+    assert_raise ActiveRecord::RecordInvalid do
+      s.save!
+    end
   end
 
 end

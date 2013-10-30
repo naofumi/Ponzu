@@ -43,6 +43,10 @@ class Author < ActiveRecord::Base
 
   before_validation :assign_initial_submission
 
+  include ConferenceRefer
+  validates_conference_identity :authorships, :submissions#, :users, :presentations
+  infer_conference_from :authorships, :submissions
+
   begin
     include Nayose::Finders
     include Nayose::Whitelisting
@@ -64,9 +68,7 @@ class Author < ActiveRecord::Base
       authorships.map{|au| au.jp_name}.uniq.join(' | ')
     end
 
-    integer :conference_id do
-      submissions.first ? submissions.first.conference_id : 0
-    end
+    string :conference_tag
 
     # TODO: use Submission to do this.
     # text :authorship_affiliations do
@@ -81,19 +83,10 @@ class Author < ActiveRecord::Base
     # end
   end
 
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    includes(:submissions).  # includes instead of joins to make distinct
-    where(:submissions => {:conference_id => conference}).
-    readonly(false)
-  }
-
-  def conference
+  # Deprecated: only until we set the conference_tag attribute
+  def find_conference
     submissions.first.conference
   end
-
-  include ConferenceConfirm
 
   # Takes an array of objects, each of which
   # responds to an #authors method.
@@ -171,7 +164,7 @@ class Author < ActiveRecord::Base
 
   def has_at_least_one_submission
     if submissions.empty?
-      errors.add :base, "Must have at least one submission"
+      errors.add :base, "Must have at least one submission for Author #{id}"
     end
   end
 

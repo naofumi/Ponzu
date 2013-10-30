@@ -8,7 +8,6 @@ class Receipt < ActiveRecord::Base
   belongs_to  :message, :inverse_of => :receipts
   belongs_to  :receiver, :polymorphic => true
   validates_presence_of :message_id, :receiver_id, :receiver_type
-  validate :sender_and_receiver_must_belong_to_same_conference
 
   def set_read
     update_attribute(:read, true)
@@ -21,19 +20,9 @@ class Receipt < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
 
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    includes(:receiver). # for distinct
-    where(:receivers => {:conference_id => conference}).
-    readonly(false)
-  }
-
-  def conference
-    receiver.conference
-  end
-
-  include ConferenceConfirm
+  include ConferenceRefer
+  validates_conference_identity :receiver, :message
+  infer_conference_from :receiver, :message
 
   ##
   # :singleton-method:
@@ -138,13 +127,5 @@ class Receipt < ActiveRecord::Base
            "GROUP_CONCAT(other_receipts.id) AS receipt_ids").
       to_or_from_obj(obj).order("newest_message_at DESC").group("receipts.receiver_id")
   }
-
-  private
-
-  def sender_and_receiver_must_belong_to_same_conference
-    if conference != message.conference
-      errors.add(:base, "Conference for Sender and Receiver must match.")
-    end
-  end
 
 end

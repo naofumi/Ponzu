@@ -259,5 +259,3 @@ class ActionController::TestCase < ActiveSupport::TestCase
   end
 
 end
-
-

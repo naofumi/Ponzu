@@ -1,6 +1,7 @@
 generic_author:
   jp_name: 鈴木 一郎
   en_name: Ichiro Suzuki
+  conference_tag: generic_conference
 
 generic_author_2:
   jp_name: MyString
@@ -44,3 +45,4 @@ wl_5:
 another_conference_author:
   jp_name: AC author jp
   en_name: AC author en
+  conference_tag: another_conference

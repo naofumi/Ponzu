@@ -59,7 +59,7 @@ class MeetUpsController < ApplicationController
   def create
     @meet_up = MeetUp.new(params[:meet_up])
     @meet_up.owner_id = current_user.id
-    @meet_up.conference = current_conference
+    @meet_up.conference_confirm = current_conference
 
     if @meet_up.save
       flash[:notice] = "Successfully created Yoruzemi"

@@ -17,18 +17,26 @@ class PonzuController < ActionController::Base
   before_filter :load_single_table_inheritance
   # before_filter :require_login
 
-  unless false #Rails.configuration.consider_all_requests_local
+  # TODO: We have to consider how to handle errors
+  # unless false #Rails.configuration.consider_all_requests_local
+  unless Rails.configuration.consider_all_requests_local
     rescue_from Exception do |exception|
-      render :file => "#{Rails.root}/public/500.html", :layout => false, :status => 500
+      render :file => "#{Rails.root}/public/500", 
+            :formats => [:html],
+            :layout => false, :status => 500
       raise exception # We want the error logs
     end
 
     rescue_from ActiveRecord::RecordNotFound do |exception|
-      render :file => "#{Rails.root}/public/404.html", :layout => false, :status => 404
+      render :file => "#{Rails.root}/public/404", 
+             :formats => [:html],
+             :layout => false, :status => 404
     end
 
     rescue_from CanCan::AccessDenied do |exception|
-      render :file => "#{Rails.root}/public/422.html", :layout => false, :status => 422
+      render :file => "#{Rails.root}/public/422", 
+             :formats => [:html],
+             :layout => false, :status => 422
     end
   end
 

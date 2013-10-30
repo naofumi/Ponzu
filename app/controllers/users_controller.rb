@@ -83,7 +83,7 @@ class UsersController < ApplicationController
   def create
     authorize! :create, User
     @user = User.new(params[:user])
-    @user.conference = current_conference
+    @user.conference_confirm = current_conference
 
     if @user.save
       flash[:notice] = 'User was successfully created.'

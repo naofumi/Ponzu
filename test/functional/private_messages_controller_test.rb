@@ -51,7 +51,6 @@ class PrivateMessagesControllerTest < ActionController::TestCase
     login_as_admin
     ks_ajax :get, :index
     assert_response :success
-    assert_include assigns(:private_messages), @send_1
     assert_not_include assigns(:private_messages), @private_message_on_other_conference
     assert_ponzu_frame
     assert_template :index

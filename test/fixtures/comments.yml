@@ -4,7 +4,9 @@ generic_comment:
   presentation: generic_presentation
   text: This is a generic comment
   user: generic_user
+  conference_tag: generic_conference
 comment_from_other_conference:
   presentation: presentation_from_other_conference
   text: Comment from other conference
   user: generic_user
+  conference_tag: another_conference

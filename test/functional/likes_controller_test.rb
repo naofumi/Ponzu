@@ -4,8 +4,7 @@ class LikesControllerTest < ActionController::TestCase
   setup :activate_authlogic
 
   setup do
-    @like = likes(:one)
-    @like_owned_by_user = likes(:owned_by_user)
+    @like = @like_owned_by_user = likes(:owned_by_user)
     @scheduled_by_user = likes(:scheduled_by_user)
     @request.user_agent = mountain_lion_safari_ua
     @request.host = "generic-conference.ponzu.local"
@@ -43,7 +42,7 @@ class LikesControllerTest < ActionController::TestCase
     login_as_user
     ks_ajax :post, :create, like: { presentation_id: presentations(:presentation_from_other_conference), 
                                     user_id: @controller.send(:current_user) }
-    assert_include assigns(:like).errors.get(:base), "Attribute conference_confirm did not match conference attribute."
+    assert_include assigns(:like).errors.get(:base), "presentation.conference_tag (another_conference) must match Like::Like#conference_tag (generic_conference)."
   end
 
   test "should not create like if already present" do

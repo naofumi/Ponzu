@@ -11,7 +11,7 @@ generic_meet_up:
   interest: "For people interested in generics"
   venue_phone: "12-345-6789"
   owner_phone: "02-345-6789"
-  conference: generic_conference
+  conference_tag: generic_conference
 
 meet_up_for_other_conference:
   starts_at: 2012-05-21 14:07:28
@@ -24,4 +24,4 @@ meet_up_for_other_conference:
   interest: "For people interested in generics"
   venue_phone: "12-345-6789"
   owner_phone: "02-345-6789"
-  conference: another_conference
+  conference_tag: another_conference

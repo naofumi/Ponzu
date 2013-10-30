@@ -10,6 +10,26 @@ class PresentationTest < ActiveSupport::TestCase
     assert_equal conferences(:generic_conference), @presentation.conference
   end
 
+  test "conference_tag must be same as submission" do
+    @presentation.submission = submissions(:another_conference_submission)
+    e = assert_raises ActiveRecord::RecordInvalid do
+      @presentation.save!
+    end
+  end
+
+  test "conference_tag must be same as session" do
+    @presentation.session = sessions(:session_on_different_conference)
+    e = assert_raises ActiveRecord::RecordInvalid do
+      @presentation.save!
+    end    
+  end
+
+  test "conference_tag should be reset" do
+    @presentation.conference_tag = nil
+    assert @presentation.save
+    assert_equal conferences(:generic_conference), @presentation.conference
+  end
+
   test "presentation should delegate to submissions" do
     [:en_title, :jp_title, :main_author_id, 
      :disclose_at, :en_abstract, :jp_abstract, :keywords].each do |method|

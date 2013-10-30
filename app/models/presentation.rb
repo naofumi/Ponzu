@@ -31,10 +31,8 @@ class Presentation < ActiveRecord::Base
               :institutions,
               :to => :submission
 
-  attr_accessible :ends_at, 
-                  :number, :session_id, :starts_at,
-                  :position, :submission_id,
-                  :type, :cancel
+  attr_accessible :ends_at, :number, :session_id, :starts_at,
+                  :position, :submission_id, :cancel
 
   belongs_to :submitter, :class_name => User
   has_many    :authorships, :through => :submission
@@ -103,30 +101,16 @@ class Presentation < ActiveRecord::Base
 
     integer :session_id
 
-    integer :conference_id do
-      submission.conference_id
-    end
+    string :conference_tag
   end
   
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    includes(:submission). # for distinct results
-    where(:submissions => {:conference_id => conference}).
-    readonly(false)
-  }
+  include ConferenceRefer
+  validates_conference_identity :submission, :session
+  infer_conference_from :session, :submission
 
-  def conference
-    # We use session instead of submission to get the conference
-    # object, because we often use the session#presentations
-    # association to get many presentations. These presentation
-    # objects will have the Session object set via :inverse_of
-    # and hence will not need a database request.
-    @conference ||= session.conference
+  def find_conference
+    session.conference
   end
-
-  include ConferenceConfirm
-
 
   # We are currently using this to set menus. We should change
   # this to set the menu based on Class. This way, we can manage
@@ -192,7 +176,7 @@ class Presentation < ActiveRecord::Base
   
   def start_and_end_should_be_within_session_ranges
     if session && starts_at
-      errors.add(:starts_at, " must after session starts_at") unless session.starts_at <= starts_at
+      errors.add(:starts_at, " #{starts_at} must after be session starts_at #{session.starts_at} for presentation #{id}") unless session.starts_at <= starts_at
     end
     # if session && ends_at
     #   errors.add(:ends_at, " must after session starts_at") unless session.ends_at >= ends_at

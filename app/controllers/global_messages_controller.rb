@@ -42,7 +42,7 @@ class GlobalMessagesController < ApplicationController
   # POST /global_messages.json
   def create
     @global_message = GlobalMessage.new(params[:global_message])
-    @global_message.conference = current_conference
+    @global_message.conference_confirm = current_conference
 
     @global_message.save ? 
       flash[:notice] = 'Global message was successfully created.' :

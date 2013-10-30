@@ -19,7 +19,7 @@ class SearchController < ApplicationController
 		if !query.blank?
 			if !hide_presentations
 				@presentations = Presentation.search do
-					with(:conference_id).equal_to(current_conference.id)
+					with(:conference_tag).equal_to(current_conference.database_tag)
 					fulltext query do
 						boost_fields :en_title => 2.0, :jp_title => 2.0, :keywords => 1.5
 						highlight :number
@@ -36,7 +36,7 @@ class SearchController < ApplicationController
 
 			if !hide_users
 				@users = Sunspot.search(Author, User) do
-					with(:conference_id).equal_to(current_conference.id)
+					with(:conference_tag).equal_to(current_conference.database_tag)
 					fulltext query do
 						boost_fields :en_name => 2.0, :jp_name => 2.0,
 						             :authorship_en_name => 1.5, :authorship_jp_name => 1.5

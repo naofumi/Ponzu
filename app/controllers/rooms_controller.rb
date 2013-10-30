@@ -47,7 +47,7 @@ class RoomsController < ApplicationController
   # POST /rooms.json
   def create
     @room = Room.new(params[:room])
-    @room.conference = current_conference
+    @room.conference_confirm = current_conference
 
     respond_to do |format|
       if @room.save

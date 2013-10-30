@@ -7,8 +7,6 @@ class MeetUp < ActiveRecord::Base
   has_many :participations, :dependent => :destroy, :inverse_of => :meet_up
   has_many :participants, :through => :participations, :source => :user
   belongs_to :owner, :class_name => 'User'
-  belongs_to  :conference, :inverse_of => :meet_ups
-  validates_presence_of :conference_id
 
   has_many :meet_up_comments, :inverse_of => :meet_up, :dependent => :destroy
   validates_presence_of :owner_id, :title
@@ -16,7 +14,8 @@ class MeetUp < ActiveRecord::Base
   validates_presence_of :starts_at
   after_save   :notify_participants_of_changes
 
-  validate :meet_up_and_owner_conferences_must_match
+  include ConferenceRefer
+  validates_conference_identity :owner
 
   include ConferenceDates
     
@@ -97,21 +96,4 @@ class MeetUp < ActiveRecord::Base
   def name
     title
   end
-
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    where(:conference_id => conference)
-  }
-
-  include ConferenceConfirm
-  
-  private
-
-  def meet_up_and_owner_conferences_must_match
-    if conference != owner.conference
-      errors.add(:base, "Conference for MeetUp and owner must match.")
-    end
-  end
-
 end

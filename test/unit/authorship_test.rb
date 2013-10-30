@@ -11,8 +11,9 @@ class AuthorshipTest < ActiveSupport::TestCase
 
   test "validate submission and author conference must match" do
   	@authorship.submission = submissions(:another_conference_submission)
-  	assert_raise ActiveRecord::RecordInvalid do
+  	e = assert_raises ActiveRecord::RecordInvalid do
 	  	@authorship.save!
 	  end
+    assert_equal "Validation failed: submission.conference_tag (another_conference) must match Authorship#conference_tag (generic_conference).", e.message
   end
 end

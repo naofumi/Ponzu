@@ -1,20 +1,26 @@
 class Conference < ActiveRecord::Base
   attr_accessible :dates, :module_name, :support_email, :name, :tag, 
-                  :subdomain, :send_all_emails_to, :icons, 
+                  :database_tag, :subdomain, :send_all_emails_to, :icons, 
                   :conference_home_page_url, :ks_cache_version
   include SimpleSerializer
   serialize_single :dates, :typecaster => :remove_blank_from_conference_dates
   serialize_single :icons, :typecaster => :remove_blank_from_icons
-  has_many :users, :inverse_of => :conference, :dependent => :restrict
+
+  has_many :users, :foreign_key => :conference_tag, 
+           :primary_key => :database_tag, :dependent => :restrict
   # http://rdoc.info/github/binarylogic/authlogic/Authlogic/AuthenticatesMany
   # Scope users by Conference
   authenticates_many :user_sessions
 
-  has_many :submissions, :inverse_of => :conference, :dependent => :restrict
-  has_many :sessions, :inverse_of => :conference, :dependent => :restrict
-  has_many :meet_ups, :inverse_of => :conference, :dependent => :restrict
-  has_many :rooms, :inverse_of => :conference, :dependent => :restrict
-  has_many :global_messages, :inverse_of => :conference, :dependent => :restrict
+  # We prefer to use Submissions.in_conference(current_conference)
+  # instead of current_conference.submissions in the controller.
+  # This allows us to use the same query regardless of object
+  #
+  # has_many :submissions, :inverse_of => :conference, :dependent => :restrict
+  # has_many :sessions, :inverse_of => :conference, :dependent => :restrict
+  # has_many :meet_ups, :inverse_of => :conference, :dependent => :restrict
+  # has_many :rooms, :inverse_of => :conference, :dependent => :restrict
+  # has_many :global_messages, :inverse_of => :conference, :dependent => :restrict
   include ConferenceDates
 
   # Converts the unserialized icons (strings) into symbols

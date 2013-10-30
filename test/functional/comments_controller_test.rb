@@ -100,7 +100,7 @@ class CommentsControllerTest < ActionController::TestCase
             comment: { presentation_id: presentations(:presentation_from_other_conference), 
                        text: @comment.text, 
                        user_id: @comment.user_id }
-    assert_include assigns(:comment).errors.get(:base), "Attribute conference_confirm did not match conference attribute."
+    assert_include assigns(:comment).errors.get(:base), "presentation.conference_tag (another_conference) must match Comment#conference_tag (generic_conference)."
   end
 
   test "should destroy comment" do

@@ -87,7 +87,7 @@ class PresentationsControllerTest < ActionController::TestCase
     login_as_admin
     assert_raise ActiveRecord::RecordNotFound do
       ks_ajax :put, :update, id: presentations(:presentation_from_other_conference), 
-               presentation: { number: "new number" }
+               presentation: { number: "new number", type: "Presentation::Workshop" }
     end
   end
 

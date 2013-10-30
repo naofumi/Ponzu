@@ -216,6 +216,14 @@ module Import
       end
     end
 
+    def check_author_cleansing
+      authors_each do |author, submission_number|
+        puts "#{author[:en_name]} -> #{author[:en_name_clean]}"
+        puts "#{author[:jp_name]} -> #{author[:jp_name_clean]}"
+        puts "-----------------"
+      end
+    end
+
     # Import Submissions from the UMIN file
     #
     # This is non-destructive. If a Submission has already been created (as detected by submission_number,
@@ -228,9 +236,9 @@ module Import
         umin_rows_each do |ur|
           # No depending object
           # Create new objects
-          s = Submission.find_or_create_by_submission_number_and_conference_id(
+          s = Submission.find_or_create_by_submission_number_and_conference_tag(
              ur.submission_number, 
-             @conference.id,
+             @conference.database_tag,
              :disclose_at => ur.disclose_at,
              :submission_number => ur.submission_number,
              :en_title => ur.title_en,
@@ -241,7 +249,7 @@ module Import
              :institutions => ur.institutions.map{|i| Institution.new(:en_name => i[:en_name],
                                                                       :jp_name => i[:jp_name])},
              :keywords => ur.keywords) {|submission|
-            submission.conference_id = @conference.id
+            submission.conference_tag = @conference.database_tag
           }
           output_error_unless_persisted(s)
         end
@@ -289,7 +297,7 @@ module Import
                                             @conference)
             raise "No author in DB for en_name: #{author[:en_name].inspect}, jp_name: #{author[:jp_name].inspect}" unless author_obj
             # Create new objects
-            as = Authorship.find_or_create_by_author_id_and_submission_id(author_obj.id, submission_obj.id)
+            as = Authorship.in_conference(@conference).find_or_create_by_author_id_and_submission_id(author_obj.id, submission_obj.id)
             # If the Authorships have been updated after initial creation
             # during Author creation.
             next if as.affiliations.size > 0
@@ -329,12 +337,12 @@ module Import
         umin_rows_each do |ur|
           # No depending object
           # Create new objects
-          room_obj = Room.find_or_create_by_en_name(
+          room_obj = Room.in_conference(@conference).find_or_create_by_en_name(
                        ur.session_room_en_name,
                        :jp_name => ur.session_room_jp_name,
                        :jp_location => ur.session_room_jp_location,
                        :en_location => ur.session_room_en_location){|r|
-            r.conference_id = @conference.id
+            r.conference_tag = @conference.database_tag
           }
           output_error_unless_persisted(room_obj)
         end
@@ -351,11 +359,10 @@ module Import
       Session.transaction do
         umin_rows_each do |ur|
           # Find depending objects
-          room_obj = Room.find_by_en_name_and_jp_name(ur.session_room_en_name,
-                                                      ur.session_room_jp_name)
+          room_obj = Room.in_conference(@conference).find_by_en_name(ur.session_room_en_name)
           raise "No room in DB for en_name: #{ur.session_room_en_name}" unless room_obj
           # Create new objects
-          session_obj = Session.find_or_create_by_number(
+          session_obj = Session.in_conference(@conference).find_or_create_by_number(
                            ur.session_number,
                            :starts_at => ur.session_starts_at,
                            :ends_at => ur.session_ends_at,
@@ -363,9 +370,9 @@ module Import
                            :en_title => ur.session_en_title,
                            :jp_title => ur.session_jp_title,
                            :organizers_string_en => ur.organizers_string_en,
-                           :organizers_string_jp => ur.organizers_string_jp,
-                           :type => ur.session_type.to_s) {|s|
-            s.conference_id = @conference.id
+                           :organizers_string_jp => ur.organizers_string_jp) {|s|
+            s.type = ur.session_type.to_s
+            s.conference_tag = @conference.database_tag
           }
           output_error_unless_persisted(session_obj)
         end
@@ -387,10 +394,12 @@ module Import
           raise "No submission in DB for submission_number: #{ur.submission_number}" unless submission_obj
           raise "No session in DB for submission_number: #{ur.session_number}" unless session_obj
           # Create new objects
-          presentation_obj = Presentation.find_or_create_by_session_id_and_submission_id(session_obj.id, submission_obj.id,
-                                                                                         :starts_at => ur.starts_at,
-                                                                                         :number => ur.number_string,
-                                                                                         :type => ur.presentation_type.to_s)
+          presentation_obj = Presentation.in_conference(@conference).
+                               find_or_create_by_session_id_and_submission_id(session_obj.id, submission_obj.id,
+                                                                             :starts_at => ur.starts_at,
+                                                                             :number => ur.number_string) {|p|
+                                                                               p.type = ur.presentation_type.to_s
+                                                                             }
           output_error_unless_persisted(presentation_obj)
         end
       end

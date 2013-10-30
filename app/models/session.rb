@@ -1,14 +1,11 @@
 class Session < ActiveRecord::Base
   attr_accessible :en_title, :ends_at, :jp_title, :organizers_string_en, :organizers_string_jp, 
-                  :number, :room_id, :starts_at, :type
+                  :number, :room_id, :starts_at
   belongs_to :room
   has_many   :presentations, :inverse_of => :session, :order => "position ASC, id ASC"
-  belongs_to  :conference, :inverse_of => :sessions
-  validates_presence_of :conference_id
-
 
   validates_presence_of :number
-  validates_uniqueness_of :number, :scope => :conference_id
+  validates_uniqueness_of :number, :scope => :conference_tag
   locale_selective_reader :title, :en => :en_title, :ja => :jp_title
   locale_selective_reader :organizers_string, :en => :organizers_string_en, :ja => :organizers_string_jp
 
@@ -22,13 +19,8 @@ class Session < ActiveRecord::Base
     Session.where("number LIKE ? OR number LIKE ?", "%P%", "%LBA%")
   end
   
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    where(:conference_id => conference)
-  }
-
-  include ConferenceConfirm
+  include ConferenceRefer
+  validates_conference_identity :room
 
   # Used to display timetables.
   # Find all sessions that are being held

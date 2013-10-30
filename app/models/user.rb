@@ -64,8 +64,6 @@ class User < ActiveRecord::Base
   has_many  :meet_up_comments, :inverse_of => :user, :dependent => :restrict
   has_one   :registrant, :foreign_key => :registration_id, :primary_key => :login, :inverse_of => :user, :dependent => :restrict
   belongs_to  :author, :inverse_of => :users, :touch => true # Touch to update author page (add private message link)
-  belongs_to  :conference, :inverse_of => :users
-  validates_presence_of :conference_id
 
   validates_presence_of :en_name, :if => Proc.new {|user| user.jp_name.blank? }
 
@@ -98,8 +96,8 @@ class User < ActiveRecord::Base
     # c.merge_validates_length_of_password_confirmation_field_options({:unless => :login_not_set?})
 
     # http://rdoc.info/github/binarylogic/authlogic/Authlogic/ActsAsAuthentic/ValidationsScope/Config
-    # Scope everything to #conference_id
-    c.validations_scope = :conference_id
+    # Scope everything to #conference_tag
+    c.validations_scope = :conference_tag
   end
   
 
@@ -109,7 +107,7 @@ class User < ActiveRecord::Base
              :unless => proc {|model| !model.conference} do
     text :jp_name, :en_name, :twitter_id, :email, :login
 
-    integer :conference_id
+    string :conference_tag
 
     # TODO: use Submission to do this.
     # text :authorship_affiliations do
@@ -123,7 +121,15 @@ class User < ActiveRecord::Base
     #   }.flatten.uniq.join(' | ')
     # end
   end
-  
+
+  include ConferenceRefer
+
+  # TODO: Remove once we've migrated to conference_tag
+  def find_conference
+    Conference.find(conference_id)
+  end
+
+
   def toggle_schedule(presentation)
     raise "Deprecated"
     l = likes.where(:presentation_id => presentation).first
@@ -136,16 +142,6 @@ class User < ActiveRecord::Base
       registrant.affiliation
     end
   end
-
-  ## Methods to confirm that the current conference 
-  ## is valid.
-  scope :in_conference, lambda {|conference|
-    where(:conference_id => conference)
-  }
-
-  include ConferenceConfirm
-
-
   
   # Mailboxer
   def receipts_by_sender_type(sender_type)
