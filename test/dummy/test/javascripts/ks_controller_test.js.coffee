@@ -63,4 +63,6 @@ asyncTest "handleHashChange triggers recursive resource loading", ->
           "loaded resource"
 
   # Wait till dependencies load
-  setTimeout(afterLoadHandler, 100)
+  # We are current waiting for 1s but we should find
+  # a way to do it better.
+  setTimeout(afterLoadHandler, 1000)

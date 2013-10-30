@@ -33,28 +33,42 @@
 KSControllerConstructor = ->
   ajaxLoadTimeout = 10000 # ms
   ajaxLoadtimeoutIntervalIfExpiredCacheFound = 3000 # ms
-  requestHistory = {} # memo for all urls requested per hashChange (to prevent redundant requests)
+  requestHistoryForSingleHashChangeEvent = {} # memo for all urls requested per hashChange (to prevent redundant requests)
 
   handleHashChange = ->
-    requestHistory = {}
+    requestHistoryForSingleHashChangeEvent = {}
     targetState = KSUrl.parseHref(location.href);
     show targetState if targetState
-
+    
   show = (targetState) ->
     [resourceUrl, pageId] = resourceUrlAndPageId(targetState)
 
-    loadResourceIntoDom resourceUrl,
-      (pages) ->
-        toElement = if pageId
-                      document.getElementById(pageId)
-                    else
-                      defaultPage(pages)
-        KSApp.errors("ERROR: toElement could not be found") unless toElement
+    loadResourceIntoDom resourceUrl, {showErrorAsPage: true, showTimeoutAsPage: true},
+      showPageCallback(pageId)
+
+  showPageCallback = (pageId) ->
+    (pages, xhr) ->
+      # Show the toElement
+      toElement = if pageId
+                    document.getElementById(pageId)
+                  else
+                    defaultPage(pages)
+      KSApp.errors("ERROR: toElement could not be found") unless toElement
+
+      if (xhr.secondRequestToUpdateCache)
+        # This callback should not trigger 
+        # a transition to the toElement if it is
+        # a second load after displaying the cached version.
+        setTimeout () -> 
+          loadDependencies(toElement)
+        ,10
+      else
         # TODO: Do we really need timeout
         setTimeout () ->
           redrawnArea = reveal(toElement)
           loadDependencies(redrawnArea)
         , 10
+
 
   # Page to show if not defined by pageId
   defaultPage = (pages) ->
@@ -97,38 +111,117 @@ KSControllerConstructor = ->
       # the Ajax response.
       loadMissingContainers dslpages, () ->
         KSDom.insertPagesIntoDom(dslpages, resourceUrl, 
-          (dompages) -> callback and callback(dompages))
+          (dompages) -> callback and callback(dompages, xhr))
 
   # Load from a URL and then insert into DOM.
-  # If resourceUrl evaluates to false, then don't load anything
-  # and just run the callback with empty array.
+  #
+  # If resourceUrl evaluates to false, continue the callback chain with no pages.
+  # Also continue the callback chain with no pages if the request has already been sent.
+  #
   # Do not recursively load downstream dependencies
   # but recursively load upstream containers.
-  # The callback receives pages (the pages in the ajax response)
-  loadResourceIntoDom = (resourceUrl, callback) ->
-    return callback && callback([]) if !resourceUrl || requestHistory[resourceUrl]
+  #
+  # The callback receives an array pages (the pages in the ajax response).
+  #
+  # Error handling behaviour is defined here (it was previously defined in KSCache).
+  # By setting the showErrorAsNotification, showErrorAsPage, showTimeoutAsNotification,
+  # showTimeoutAsPage options, you can specify if and how the errors will be
+  # displayed on the browser. Typically, we only show errors or timeout errors
+  # for hashChange targeted resources or upstream dependencies 
+  # (when the page cannot be displayed). If the page can be displayed even if some
+  # dependencies may be absent, we don't bug the user with notifications.
+  loadResourceIntoDom = (resourceUrl, options, callback) ->
+    # Return no pages if no resourceUrl
+    return callback && callback([]) if !resourceUrl
+    # Return no pages if request already sent in this hashChange event
+    return callback && callback([]) if requestHistoryForSingleHashChangeEvent[resourceUrl]
+
+    showErrorAsNotification = options.showErrorAsNotification
+    showErrorAsPage = options.showErrorAsPage
+    showTimeoutAsNotification = options.showTimeoutAsNotification
+    showTimeoutAsPage = options.showTimeoutAsPage
 
     console.log('loadResourceUrl ' + resourceUrl)
-    requestHistory[resourceUrl] = true
+    requestHistoryForSingleHashChangeEvent[resourceUrl] = true
     KSCache.cachedAjax
       method: "get"
       dataType: 'html'
       success: (data, textStatus, xhr) ->
         insertAjaxIntoDom(data, textStatus, xhr, resourceUrl, callback)
-      error: (jqXHR, textStatus, errorThrown) ->
-        # We should only need an error message if the load is for the toElement.
-        KSApp.notify("Load failed: " + resourceUrl + textStatus + "<br />" + errorThrown)
-        return false
+      error: (xhr, textStatus, errorThrown) ->
+        if showErrorAsNotification
+          KSApp.notify("Load failed: " + resourceUrl + textStatus + "<br />" + errorThrown)
+        if showErrorAsPage
+          insertAjaxIntoDom errorPage(xhr, resourceUrl, textStatus, errorThrown), 
+                            textStatus, 
+                            xhr, 
+                            resourceUrl,
+                            showPageCallback()
+      timeout: (xhr, ajaxOptions) ->
+        if showTimeoutAsNotification
+          KSApp.notify("Load failed: " + resourceUrl + textStatus + "<br />" + errorThrown)
+        if showTimeoutAsPage
+          insertAjaxIntoDom timeoutErrorHtml(ajaxOptions, resourceUrl, textStatus, errorThrown),
+                            textStatus,
+                            xhr,
+                            resourceUrl,
+                            showPageCallback()
+        
       timeoutInterval: ajaxLoadTimeout
       timeoutIntervalIfExpiredCacheFound: ajaxLoadtimeoutIntervalIfExpiredCacheFound
       url: resourceUrl
+
+  errorPage = (xhr, url, textStatus, errorThrown) ->
+    bodyInner = KSDom.extractBodyTag(xhr.responseText)
+    if bodyInner
+      # Show full error page as returned by Rails
+      # ready to be shown as a full top-level Kamishibai page.
+      return "<div id='error_msg' data-ks_loaded class='page' data-title='" + textStatus + "'>" + 
+            bodyInner + "</div>"
+    else
+      return errorWithoutResponseText(textStatus, url, errorThrown)
+
+  errorWithoutResponseText = (textStatus, url, errorThrown) ->
+    """
+    <div id="error_msg" class="page" data-title="Error: #{textStatus}">
+      <div class="dialog">
+        <h1>Error: #{textStatus}</h1>
+        <p>#{errorThrown}</p>
+        <p>
+          We are sorry but we failed to connect to the server at "#{url}".
+        </p>
+        <p>The network may be unstable.
+        </p>
+        <p>
+          Please try again later.
+        </p>
+      </div>
+    </div>
+    """
+  timeoutErrorHtml = (ajaxOptions, resourceUrl, textStatus, errorThrown) ->
+    """
+    <div id="error_msg" class="page" data-title="Error: Network timed-out">
+      <div class="dialog">
+        <h1>The network request timed-out</h1>
+        <p>
+          We could not get a response from the server at #{resourceUrl} in #{ajaxOptions.timeoutInterval} ms.
+        </p>
+        <p>
+          The network may be unstable or the server may be over capacity.
+        </p>
+        <p>
+          Please try again later.
+        </p>
+      </div>
+    </div>
+    """
 
   # Load all missing containers for pages.
   #
   # Containers are the frames into which the dslpages will be inserted into.
   loadMissingContainers = (dslpages, callback) ->
     KSDom.missingContainers dslpages, (missingContainers) ->
-      loadResourceIntoDom missingContainers[0], () -> callback()
+      loadResourceIntoDom missingContainers[0], {showErrorAsPage: true, showTimeoutAsPage: true}, () -> callback()
 
   # Recursively load dependencies
   #
@@ -136,7 +229,7 @@ KSControllerConstructor = ->
   loadDependencies = (redrawnAreas) ->
     urls = allDataAjaxUrlsIn(redrawnAreas)
     for url in urls
-      loadResourceIntoDom(url, (pages) -> loadDependencies(pages)) unless requestHistory[url]
+      loadResourceIntoDom(url, {}, (pages) -> loadDependencies(pages)) unless requestHistoryForSingleHashChangeEvent[url]
 
   # Finds all 'data-ajax' resource URLs
   allDataAjaxUrlsIn = (elements) ->

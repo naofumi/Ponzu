@@ -94,7 +94,8 @@ window.KSDomConstructor = () ->
           data
         else
           JSON.parse(data)
-        data = JST[json.renderer.template](json)
+        if json.renderer.library is 'dot'
+          data = JST["templates/dot/#{json.renderer.template}"](json)
       catch e
         # If we can't parse, it's probably because it isn't an object
         # We don't think about it too much.

@@ -34,7 +34,6 @@ KSAjaxConstructor = ->
 
     async = options.async || true
     options.timeoutInterval = timeoutInterval = options.timeoutInterval || defaultTimeout
-    timeout = options.timeout
     # callbackContext = options.callbackContext || document.body; # The object on which the callbacks will be targeted
 
     xhr = new XMLHttpRequest()
@@ -82,8 +81,9 @@ KSAjaxConstructor = ->
                         # regular error handling if it was a timeout
     xhr.abort()
     clearTimeout(xhr.timeoutTimer)
+    # Run the ajaxOptions.timeout callback
     if typeof(ajaxOptions.timeout) is 'function'
-      ajaxOptions.timeout(xhr)
+      ajaxOptions.timeout(xhr, ajaxOption)
     kss.sendEvent 'ajaxTimeout', callbackContext(ajaxOptions), 
       xhr: xhr,
       ajaxOptions: ajaxOptions,
@@ -115,19 +115,21 @@ KSAjaxConstructor = ->
           xhr: xhr, 
           data: data, 
           ajaxOptions: ajaxOptions
+
       else if status is "redirect"
         # Don't do anything special on redirect
       else
         # Error
         # TODO: We have error handling in KSCache, KSAjax and
         # in ks_event_listeners.js. We need to clean this up.
-        if typeof(ajaxOptions.error) is 'function'
-          sendEventFlag = ajaxOptions.error(xhr, status, textStatus)
-        if sendEventFlag isnt false
-          kss.sendEvent 'ajaxError', callbackContext(ajaxOptions),
-            xhr: xhr, 
-            ajaxOptions: ajaxOptions, 
-            errorMessage: status
+        if !xhr.timeOut # This is set for aborted XHR requests due to timeout.
+                        # We don't need to handle errors for these.
+          if typeof(ajaxOptions.error) is 'function'
+            ajaxOptions.error(xhr, status, textStatus)
+            kss.sendEvent 'ajaxError', callbackContext(ajaxOptions),
+              xhr: xhr, 
+              ajaxOptions: ajaxOptions, 
+              errorMessage: status
       
       if typeof(ajaxOptions.complete) is 'function'
         ajaxOptions.complete(xhr, status)

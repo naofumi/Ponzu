@@ -117,15 +117,10 @@ kamishibai.beforeInitialize(function(){
     }
   });
 
-  // TODO: We have to revisit error handling.
   kss.addEventListener(document, 'ajaxError', function(event){
-    var data = event.data;
-    var target = event.target && kss.closestByTagName(event.target, 'a', true);
     if (event.status === 300 || event.status === 303 || event.status === 302) {
       // jQuery raises an error on redirects so we nullify the effects here.
       return; 
-    } else {
-      KSApp.notify('Failed to receive response from server. Error: ' + (event.errorMessage));      
     }
   });
 })

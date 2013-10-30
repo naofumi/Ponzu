@@ -19,6 +19,8 @@ function KSSupport() {
         }
       }
       node.dispatchEvent(event);
+    } else {
+      console.log("ERROR: node not specified for KSSupport.sendEvent");
     }
   }
 

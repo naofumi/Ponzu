@@ -1,6 +1,6 @@
 json.renderer do
   json.library "dot"
-  json.template "templates/dot/social_box"
+  json.template "social_box"
   json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
 end
 if current_user
