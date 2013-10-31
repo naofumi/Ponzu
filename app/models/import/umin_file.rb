@@ -224,6 +224,25 @@ module Import
       end
     end
 
+    # Check that the columns in *args
+    # are unique for the CSV file
+    def check_uniqueness_of *args      
+      store = Hash.new
+      umin_rows_each do |ur|
+        args.each do |arg|
+          value = ur.send(arg)
+          if !value.blank?
+            store[arg] ||= Hash.new
+            if store[arg][value]
+              puts "NON-UNIQUE: :#{arg} has repeated value of #{value}."
+            else
+              store[arg][value] = true
+            end
+          end
+        end
+      end
+    end
+
     # Import Submissions from the UMIN file
     #
     # This is non-destructive. If a Submission has already been created (as detected by submission_number,

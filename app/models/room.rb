@@ -8,6 +8,7 @@ class Room < ActiveRecord::Base
                   :en_location, :map_url, :pin_top, :pin_left
   locale_selective_reader :name, :en => :en_name, :ja => :jp_name
   locale_selective_reader :location, :en => :en_location, :ja => :jp_location
+  before_validation :use_jp_name_for_en_name_if_blank
   validates_presence_of :en_name
   acts_as_list
 
@@ -16,6 +17,14 @@ class Room < ActiveRecord::Base
   def number
   	name =~ /(\d+)/
   	$1
+  end
+
+  private
+
+  def use_jp_name_for_en_name_if_blank
+    if en_name.blank? && !jp_name.blank?
+      self.en_name = jp_name
+    end
   end
 
 end
