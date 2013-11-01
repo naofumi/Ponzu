@@ -35,8 +35,8 @@ Gem::Specification.new do |s|
   # I want to revisit this and see if we are still using it.
   s.add_dependency 'dynamic_form'
 
-  s.add_dependency 'sunspot_rails'
-  s.add_dependency 'sunspot_solr'
+  s.add_dependency 'sunspot_rails', "~> 2.0.0"
+  s.add_dependency 'sunspot_solr', "~> 2.0.0"
   s.add_development_dependency 'sunspot_test'
   s.add_dependency 'progress_bar' # Not sure why we need this
 
