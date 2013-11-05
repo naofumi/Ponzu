@@ -25,7 +25,6 @@ class UsersController < ApplicationController
       tokens.each do |t|
         @users = @users.where("jp_name LIKE ? OR en_name LIKE ?", "%#{t}%", "%#{t}%")
       end
-      @users
     end
 
     if params[:has_author] == '1'
