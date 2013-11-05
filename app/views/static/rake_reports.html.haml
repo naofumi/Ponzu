@@ -1,16 +1,20 @@
 = ponzu_frame do
 
-  %h1 Reports run by rake
-  :markdown
-    ### :similar_author_reports
+  .panel
+    %h1 名寄せのためのreport (rake taskで作成)
 
-    * [report](/reports/similar_by_en_name.html)
-    * [report](/reports/similar_by_jp_name.html)
+    %h3 １．「この人たちが同一人物か断定できないよ」 レポート
+    %ol
+      %li= link_to "同一人物にしたけど、本当にそれで良いか断定できない人", "/reports/#{current_conference.tag}/whitelisting_report.html"
 
-    ### :whitelisting_report
+    %h3 ２．「この人たちは本当に別人？」 レポート
+    %ol
+      %li= link_to "英語名が似ている人", "/reports/#{current_conference.tag}/similar_by_en_name.html"
+      %li= link_to "日本語名が似ている人", "/reports/#{current_conference.tag}/similar_by_jp_name.html"
+      %li= link_to "Clean比較で英語名が似ている人", "/reports/#{current_conference.tag}/similar_by_en_name_clean.html"
+      %li= link_to "Clean比較で日本語名が似ている人", "/reports/#{current_conference.tag}/similar_by_jp_name_clean.html"
 
-    * [report](/reports/whitelisting_report.html)
 
-    ### :dissimilar_authorships_report
-
-    * [report](/reports/dissimilar_authorships_report.html)
+    %h3 ３．「著者名と演題に記されている名前が一致しない」 レポート
+    %ol
+      %li= link_to "演題に記されている名前が著者名と一致しない人", "/reports/#{current_conference.tag}/dissimilar_authorships_report.html"
