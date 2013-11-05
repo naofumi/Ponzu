@@ -46,15 +46,17 @@
       = f.submit
 
   %fieldset
-    %legend This Authorship will be displayed on the following Author's profile page
+    %legend このAuthorshipは次の著者Authorと関連しています
     .field
       = f.label :author_id
       = f.number_field :author_id
     .field
       = "#{@authorship.author.jp_name} #{@authorship.author.en_name}"
       = link_to "[edit]", ksp(edit_author_path(@authorship.author)) if @authorship.author
+      %br/
+      = link_to "[Create new Author for this Authorship]", ksp(new_author_path(:initial_authorship => @authorship)), :target => "_new_author"
+    .field
+      = @authorship.author.all_unique_affiliations.sort.to_a.join('<br />').html_safe
     %div{:style => "border: #666 1px dotted"}
       :markdown
         Drag an author URL or an author element here to change author
-    .field
-      = @authorship.author.all_unique_affiliations.to_a.join('<br />').html_safe

@@ -19,11 +19,12 @@
     <%= f.label :en_name %><br />
     <%= f.text_field :en_name %>
   </div>
-  <div class="field">
-    <%= f.label :whitelisted %> 
-    <%= f.check_box :whitelisted %>
-  </div>
+  <!-- <div class="field"> -->
+    <!-- <%#= f.label :whitelisted %>  -->
+    <!-- <%#= f.check_box :whitelisted %> -->
+  <!-- </div> -->
   <%= hidden_field_tag "author[initial_submission]", params[:initial_submission] %>
+  <%= hidden_field_tag "author[initial_authorship]", params[:initial_authorship] %>
   <div class="actions">
     <%= f.submit %>
   </div>

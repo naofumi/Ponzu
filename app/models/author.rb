@@ -1,3 +1,4 @@
+# encoding: utf-8
 require_relative "../../lib/locale_reader"
 require 'set'
 
@@ -28,9 +29,9 @@ require 'set'
 # from multiple Users when we display the Author profile.
 class Author < ActiveRecord::Base
   attr_accessible :en_name, :jp_name, :en_name_clean, :jp_name_clean, 
-                  :whitelisted, :initial_submission
+                  :whitelisted, :initial_submission, :initial_authorship
 
-  attr_accessor :initial_submission
+  attr_accessor :initial_submission, :initial_authorship
 
   has_many  :users, :inverse_of => :author
   has_many  :authorships, :inverse_of => :author, :dependent => :destroy
@@ -42,6 +43,7 @@ class Author < ActiveRecord::Base
   validate :has_at_least_one_submission
 
   before_validation :assign_initial_submission
+  before_validation :assign_initial_authorship
 
   include ConferenceRefer
   validates_conference_identity :authorships, :submissions#, :users, :presentations
@@ -163,7 +165,7 @@ class Author < ActiveRecord::Base
   end
 
   def has_at_least_one_submission
-    if submissions.empty?
+    if submissions.empty? && authorships.empty?
       errors.add :base, "Must have at least one submission for Author #{id}"
     end
   end
@@ -171,6 +173,12 @@ class Author < ActiveRecord::Base
   def assign_initial_submission
     if !initial_submission.blank? && submissions.empty?
       self.submissions = [Submission.find(initial_submission)]
+    end
+  end
+
+  def assign_initial_authorship
+    if !initial_authorship.blank? && submissions.empty?
+      self.authorships = [Authorship.find(initial_authorship)]
     end
   end
 end
