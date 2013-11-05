@@ -1,26 +1,33 @@
 = ponzu_frame :id_suffix => "page_#{params[:page] || 1}" do
+  .panel
+    %h1 Listing authors
 
-  %h1 Listing authors
+    = form_tag authors_path, :method => :get, 
+                           :remote => true,
+                           :data => {'ks-insert_response' => true}  do
+      = text_field_tag :query, params[:query], 
+            :placeholder => "著者検索", :style => "font-size: 20px;width: 15em"
+      = submit_tag "検索実行"
 
-  = ks_will_paginate
+    = ks_will_paginate
 
-  = link_to 'New Author', ksp(new_author_path)
-  %table
-    %tr
-      %th Jp name
-      %th En name
-      %th
-    - @authors.each do |author|
+    = link_to 'New Author', ksp(new_author_path)
+    %table
       %tr
-        %td= author.jp_name
-        %td= author.en_name
-        %td
-          = link_to 'Edit', ksp(edit_author_path(author))
-          |
-          = link_to 'Destroy', author, 
-                    confirm: 'Are you sure?', 
-                    method: :delete,
-                    data: {ks_insert_response: 'true'}
+        %th Jp name
+        %th En name
+        %th
+      - @authors.each do |author|
+        %tr
+          %td= author.jp_name
+          %td= author.en_name
+          %td
+            = link_to 'Edit', ksp(edit_author_path(author))
+            |
+            = link_to 'Destroy', author, 
+                      confirm: 'Are you sure?', 
+                      method: :delete,
+                      data: {ks_insert_response: 'true'}
 
-  = ks_will_paginate
+    = ks_will_paginate
 

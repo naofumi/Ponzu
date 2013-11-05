@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AuthorsController < ApplicationController
   authorize_resource :except => [:show]
   respond_to :html, :js
@@ -13,8 +14,18 @@ class AuthorsController < ApplicationController
   # GET /authors
   # GET /authors.json
   def index
-    @authors = Author.in_conference(current_conference).
-                      paginate(:page => params[:page])
+    if params[:query].blank?
+      @authors = Author.in_conference(current_conference).
+                        paginate(:page => params[:page], :per_page => 30)
+    else
+      tokens = params[:query].split(/ |　/)
+      @authors = Author.in_conference(current_conference).
+                        paginate(:page => params[:page], :per_page => 30)
+      tokens.each do |t|
+        @authors = @authors.where("jp_name LIKE ? OR en_name LIKE ?", "%#{t}%", "%#{t}%")
+      end
+    end
+
     respond_to do |format|
       format.html # index.html.erb
     end
@@ -36,7 +47,13 @@ class AuthorsController < ApplicationController
   # GET /authors/new
   # GET /authors/new.json
   def new
-    @author = Author.new
+    if params[:initial_authorship]
+      @authorship = Authorship.find(params[:initial_authorship])
+      @author = Author.new(:en_name => @authorship.en_name,
+                           :jp_name => @authorship.jp_name)
+    else
+      @author = Author.new
+    end
 
     respond_to do |format|
       format.html # new.html.erb
