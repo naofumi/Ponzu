@@ -103,8 +103,7 @@ class User < ActiveRecord::Base
 
   searchable :ignore_attribute_changes_of => [User.attribute_names - 
       %w(en_name jp_name twitter_id facebook_id linkedin_id read_research_map_id other_links
-         email login)].flatten.map{|a| a.to_sym},
-             :unless => proc {|model| !model.conference} do
+         email login)].flatten.map{|a| a.to_sym} do
     text :jp_name, :en_name, :twitter_id, :email, :login
 
     string :conference_tag

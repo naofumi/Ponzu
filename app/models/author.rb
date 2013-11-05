@@ -59,8 +59,10 @@ class Author < ActiveRecord::Base
   # The messages are sent to all the User objects associated with the Author.
   include SimpleMessaging
 
+  # searchable :ignore_attribute_changes_of => ["updated_at"],
+  #            :unless => proc {|model| model.authorships.empty? } do
   searchable :ignore_attribute_changes_of => ["updated_at"],
-             :unless => proc {|model| model.authorships.empty?;false;} do
+             :unless => proc {|model| model.authorships.empty? } do
     text :jp_name, :en_name
 
     text :authorship_en_name do
