@@ -1,46 +1,58 @@
 = ponzu_frame do
+  .panel
+    %h1 Authorの編集
+    %fieldset
+      %legend Author 基礎情報
+      = render 'form'
 
-  %h1 Editing author
-  :markdown
-    ### Usage
-    Use this view to confirm Nayose of Authors and to reassociate
-    Authorships if necessary.
+      = link_to 'Show', ksp(@author)
+      |
+      = link_to 'Authors list', ksp(authors_path), :target => "_author_list"
+      |
+      = link_to 'delete', author_path(@author), :method => :delete, :remote => true, :confirm => "Are you sure?"
+            
+    %fieldset
+      %legend 所属情報のまとめ
+      - @author.unique_affiliation_combos.sort.each do |combo|
+        %div{style: "border-bottom: dotted 2px #888"}= highlight(combo, institution_phrases, highlighter: '<span class="highlight">\1</span>')
+    %fieldset
+      %legend 名前-所属組み合わせ
+      - @author.unique_authorship_name_and_affiliation_combos.sort.each do |combo|
+        %div{style: "border-bottom: dotted 2px #888"}= combo
+    %fieldset
+      %legend この著者にひも付いている学会参加者 (User)
+      - @author.users.each do |u|
+        = link_to "#{u.en_name} (#{u.jp_name}): #{u.en_affiliation} (#{u.jp_affiliation})", ksp(u)
+    %fieldset
+      %legend All Authorships
+      = render :partial => "authorships", :object => @author.authorships
+      .dropbox{:style => "border: dotted 2px #333; height: 100px;background-color: #AAA;margin-top:10px;",
+               :data => {:action => replace_author_path(@author),
+                         :method => 'post',
+                         :'ks-insert-response' => 'true'}}
+        Drop Submissions here to re-associate Author-Submissions
+    :markdown
+      ### 著者Authorを２人に分ける方法
+      1. 著者を二人の人に分ける場合、まずは検索で二人目の著者が既に登録されているかどうかを
+      　　確認します。検索は著者名の下の"Authors list"リンクから行えます。
+      2. もし既に登録されていれば、"Authors list"からその著者の"Edit"を押して、
+      　　画面の上で第一の著者と第二の著者が表示されるようにします。
+      3. 著者間でAuthorshipをドラッグドロップして、Authorshipsの関連を修正します。
+      4. もし既に登録されていなければ、以下の手順で新たに著者を登録します。
+      5. All Authorshipsの中から、新しい著者が関連しているAuthorshipをクリックします。
+      6. 下の方に、このAuthorshipに関連している著者(Author)が表示されます。ここで
+         "Create new Author for this Authorship"リンクをクリックします。
+      7. 著者の名前を確認し、作成します。
+      8. 作成すると第二の著者として表示されるので、上述の「既に登録されている場合」に
+         したがって、必要なら追加のAuthorshipを対応させます。その前に第一の著者の
+         ページはリロードして、Authorships情報を更新しておく必要があります。
 
-    To split an Author into two people, first locate the second Author
-    by searching, or create a new Author. Display browser windows of
-    both Authors, side-by-side. Then drag-and-drop Authorships to re-associate
-    them.
-
-    To merge two Authors into one, display the two Authors and move the
-    Authorships towards the Author that you want to keep. After moving them
-    all, delete the other Author.
-  %fieldset
-    %legend Author basic information
-    %table{:style => "width: 100%"}
-      %tr
-        %td{:style => "width: 50%"}
-          = render 'form'
-
-          = link_to 'Show', ksp(@author)
-          |
-          = link_to 'Authors list', ksp(authors_path)
-          |
-          = link_to 'delete', author_path(@author), :method => :delete, :remote => true, :confirm => "Are you sure?"
-        %td
-          
-  %fieldset
-    %legend All Affiliations
-    - @author.unique_authorship_name_and_affiliation_combos.each do |combo|
-      %div= combo
-  %fieldset
-    %legend All Logins (Users)
-    - @author.users.each do |u|
-      = link_to "#{u.en_name} (#{u.jp_name}): #{u.en_affiliation} (#{u.jp_affiliation})", ksp(u)
-  %fieldset
-    %legend All Authorships
-    = render :partial => "authorships", :object => @author.authorships
-    .dropbox{:style => "border: dotted 1px #666",
-             :data => {:action => replace_author_path(@author),
-                       :method => 'post',
-                       :'ks-insert-response' => 'true'}}
-      Drop Submissions here to re-associate Author-Submissions
+      ### 著者Authorを１人にまとめる方法
+      1. まず最初の著者を表示します。
+      2. 次に上記の方法でもう一人の著者を検索します。そして二人の著者をそれぞれの
+         windowに表示します。
+      3. All Authorshipsのところで、Authorshipsを移動します。
+      4. それぞれのページをリロードして、Authorshipsが移動したことを確認します。
+      5. 最後に、すべてのAuthorshipsが無くなってっしまったAuthorを削除します。
+         なお、deleteはすべてのAuthorshipsが無くならない限りAuthorは削除されないので、
+         誤って削除してしまう心配はほとんどありません。

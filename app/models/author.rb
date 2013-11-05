@@ -136,17 +136,35 @@ class Author < ActiveRecord::Base
   def unique_authorship_name_and_affiliation_combos
     result = [].to_set
     authorships.each do |as|
-      combo_string = "#{as.en_name} #{as.jp_name}-"
+      combo = ["#{as.jp_name} #{as.en_name}"]
       as.affiliations.each do |aff|
         institute = as.submission.institutions[aff - 1]
         unless institute
           # Sometimes the institute info will not yet be filled in
           STDERR.puts "WARNING: institute[#{aff}] not entered for submission #{as.submission.submission_number}"
         else
-          combo_string += " #{institute.en_name} #{institute.jp_name}"
+          combo << "#{institute.jp_name}　#{institute.en_name}"
         end
       end
-      result << combo_string
+      result << combo.join(' ## ')
+    end
+    result
+  end
+
+  def unique_affiliation_combos
+    result = [].to_set
+    authorships.each do |as|
+      combo = []
+      as.affiliations.each do |aff|
+        institute = as.submission.institutions[aff - 1]
+        unless institute
+          # Sometimes the institute info will not yet be filled in
+          STDERR.puts "WARNING: institute[#{aff}] not entered for submission #{as.submission.submission_number}"
+        else
+          combo << "#{institute.jp_name} #{institute.en_name}"
+        end
+      end
+      result << combo.join(' ## ')
     end
     result
   end
