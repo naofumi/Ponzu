@@ -5,7 +5,7 @@
     - @other_highlight_authors = author_appearances.authors_more_than_once(:excluing => @author)
 
   - authorships.each.with_index do |as, i|
-    = link_to ksp(:edit_authorship_path, as), :style => "display:block", :draggable => 'true' do
+    = link_to ksp(:edit_authorship_path, as), :style => "border-bottom: dotted 2px #888;display:block;padding:10px 0;", :draggable => 'true' do
       - s = as.submission
       %div
         %div

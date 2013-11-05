@@ -1,16 +1,17 @@
 = ks_element :id => "edit_authorship",
              :data => {:container => "ponzu_frame",
                        :container_ajax => static_path('ponzu_frame')} do
-  %h1 Editing authorship
-  :markdown
-    ### What are Authorships
-    Authorships describe the relationship between Authors and Submissions. Use this page to change how the author information will be displayed on each Presentation page. To change how it will be displayed on the Author page, go to the Edit Author page.
+  .panel
+    %h1 Editing authorship
+    :markdown
+      ### What are Authorships
+      Authorships describe the relationship between Authors and Submissions. Use this page to change how the author information will be displayed on each Presentation page. To change how it will be displayed on the Author page, go to the Edit Author page.
 
-    * Edit the Author Jp name and En name as it will appear on the Presentation information. This may be different from what is displayed on the Author profile page.
-    * If the Author is the presenting author for this submission, then check the presenting Author.
-    * Select Affiliations for the author. Editing the affiliations can be done on the Submission page.
-  = render 'form'
+      * Edit the Author Jp name and En name as it will appear on the Presentation information. This may be different from what is displayed on the Author profile page.
+      * If the Author is the presenting author for this submission, then check the presenting Author.
+      * Select Affiliations for the author. Editing the affiliations can be done on the Submission page.
+    = render 'form'
 
-  = link_to 'Show', @authorship
-  |
-  = link_to 'Delete', @authorship, :method => :delete, :confirm => "!!! DELETE !!!", :remote => true
+    = link_to 'Show', @authorship
+    |
+    = link_to 'Delete', @authorship, :method => :delete, :confirm => "!!! DELETE !!!", :remote => true
