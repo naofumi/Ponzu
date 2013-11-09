@@ -70,7 +70,7 @@ presentation_from_other_conference:
   starts_at: 2011-12-14 12:00:00
   ends_at: 2011-12-14 12:20:00
   number: presentation_from_other_conference
-  session: generic_session
+  session: session_on_different_conference
   submission: another_conference_submission
   type: Presentation::Workshop
   conference_tag: another_conference
@@ -79,7 +79,7 @@ scheduled_presentation_from_other_conference:
   starts_at: 2011-12-14 12:00:00
   ends_at: 2011-12-14 12:20:00
   number: scheduled_presentation_from_other_conference
-  session: generic_session
+  session: session_on_different_conference
   submission: another_conference_submission
   type: Presentation::Workshop
   conference_tag: another_conference

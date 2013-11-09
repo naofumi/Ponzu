@@ -49,7 +49,6 @@ generic_user_2:
   perishable_token: <%= Authlogic::Random.friendly_token %>
   conference_tag: generic_conference
   email: jiro@conf.com
-  conference_tag: generic_conference
 
 generic_user_3:
   jp_name: "分生 三郎"
@@ -57,7 +56,6 @@ generic_user_3:
   login: "login_id_3"
   conference_tag: generic_conference
   email: saburo@conf.com
-  conference_tag: generic_conference
 
 generic_user_wo_likes:
   jp_name: "generic_user_wo_likes JP"
@@ -108,12 +106,24 @@ user_without_email:
   jp_name: "日本語 User without email"
   en_name: "User without email"
   login: "user_without_email"
+  roles_mask: 0
+  password_salt: <%= salt = Authlogic::Random.hex_token %>
+  crypted_password: <%= Authlogic::CryptoProviders::Sha512.encrypt("benrocks" + salt) %>
+  persistence_token: <%= Authlogic::Random.hex_token %>
+  perishable_token: <%= Authlogic::Random.friendly_token %>
+  email: another_conference@conf.com
   conference_tag: generic_conference
 
 user_without_author:
   jp_name: "日本語 User without author"
   en_name: "User without author"
   login: "user_without_author"
+  roles_mask: 0
+  password_salt: <%= salt = Authlogic::Random.hex_token %>
+  crypted_password: <%= Authlogic::CryptoProviders::Sha512.encrypt("benrocks" + salt) %>
+  persistence_token: <%= Authlogic::Random.hex_token %>
+  perishable_token: <%= Authlogic::Random.friendly_token %>
+  email: another_conference@conf.com
   conference_tag: generic_conference
 
 user_with_author:
@@ -121,4 +131,10 @@ user_with_author:
   en_name: "User with authorship"
   login: "user_with_authorship"
   author: generic_author
+  roles_mask: 0
+  password_salt: <%= salt = Authlogic::Random.hex_token %>
+  crypted_password: <%= Authlogic::CryptoProviders::Sha512.encrypt("benrocks" + salt) %>
+  persistence_token: <%= Authlogic::Random.hex_token %>
+  perishable_token: <%= Authlogic::Random.friendly_token %>
+  email: another_conference@conf.com
   conference_tag: generic_conference

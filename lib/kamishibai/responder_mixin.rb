@@ -45,7 +45,7 @@ module Kamishibai
   # == Usage
   #
   #   class MeetUpsController < ApplicationController
-  #     respond_to :html, :js # Tell #respond_with what formats to respond to
+  #     respond_to :html, :js, :json # Tell #respond_with what formats to respond to
   #     include Kamishibai::ResponderMixin
   #
   #     def index
@@ -64,13 +64,14 @@ module Kamishibai
   #    if you have specified a block that responds to the html format in the
   #    #respond_with block.
   # 2. If Controller#default_render fails, then check if the resource (i.e. @meet_ups)
-  #    contains any errors. If so, then render the action appropirate for the
+  #    contains any errors. If so, then render the action appropriate for the
   #    current REST verb (if POST -> :new, PUT -> :edit). If you want to use
   #    a different action, then you can provide :action => [desired_action] in
   #    #respond_with. Rendering is handled by Responder#render, which delegates
   #    to Controller#render by default.
-  # 3. If there are no errors, then ActiveController::Responder redirects
-  #    to url_for(resource) (i.e. url_for(@meet_up)). You can change the location of
+  # 3. #default_render failed but if there are no errors, then ActiveController::Responder redirects
+  #    to url_for(resource) (i.e. url_for(@meet_up)). This would be the case
+  #    for an :update or :create. You can change the location of
   #    the redirect with :location => [desired_location]. The redirect is handled
   #    by Responder#redirect_to, which delegates to the Controller#redirect_to.
   #
@@ -82,8 +83,9 @@ module Kamishibai
   # 1. By overriding Controller#default_render with Kamishibai::Controller#device_selective_render,
   #    all renders that attempt to use the view template named after the current action
   #    will first look for a device-selective template. If such a template does not
-  #    exist, then it will fallback to the default (which is also the default for the PC view).
-  # 2. By overriding Responder#render with Kamishibai::Responder#render the
+  #    exist, then it will fallback to the default (which is the PC view).
+  # 2. By overriding Responder#render with Kamishibai::Responder#render so that
+  #    Kamishibai::Controller#device_selective_render is eventually called, the
   #    renders that are deduced from the REST verbs and the resource error status
   #    (namely the :create and :update renders) will also search first for a 
   #    device-selective template, falling back to the default if not found.
@@ -102,6 +104,97 @@ module Kamishibai
   # By including the Kamishibai::ResponderMixin, you can do the same with Kamishibai
   # and device selective view-templates. This also uses the POST-then-redirect pattern.
   # 
+  # == Code examples that we want to realize
+  #
+  # # POST and redirect as applied to Kamishibai
+  # # Flash messages should show up on the first Ajax response
+  # # before redirect.
+  # def create
+  #   @meet_up = MeetUp.new(params[:meet_up])
+  #   set_flash @meet_up.save, 
+  #             :success => "Successfully created Yoruzemi"
+  #             :fail => "Failed to create Yoruzemi"
+  # 
+  #   respond_with @meet_up
+  # end
+  #
+  # # If we want to show the edit action on success
+  # # to make it more like a native app.
+  # # Since Kamishibai generally won't reload and scroll to top,
+  # # everything should look unchanged.
+  # # It is a POST and redirect to edit pattern.
+  # # Flash messages should show up on the first Ajax response
+  # # before redirect.
+  # def create
+  #   @meet_up = MeetUp.new(params[:meet_up])
+  #   set_flash @meet_up.save, 
+  #             :success => "Successfully created Yoruzemi"
+  #             :fail => "Failed to create Yoruzemi"
+  # 
+  #   respond_with :location => edit_meet_up_path(@meet_up), @meet_up
+  # end
+  #
+  # # If we want to show the edit action on success
+  # # to make it more like a native app.
+  # # This is similar to the above example where we redirected
+  # # to the edit_meet_up_path (POST and redirect pattern).
+  # # However, since Kamishibai sends the POST request via
+  # # Ajax, we don't have to worry about double-posting
+  # # by reloads, etc. and hence we don't have to adhere
+  # # to the POST and redirect pattern.
+  # # This is a POST and render pattern that would
+  # # not be recommended on normal HTML, but works OK
+  # # with an Ajax POST.
+  # # Flash messages are processed in Kamishibai::Flash
+  # # so that they will appear in the rendered page
+  # # instead of waiting for the redirect (which won't
+  # # happen in this case).
+  # #
+  # # Note that if the request is non-ajax, :success_action
+  # # will have no effect and the POST and render pattern
+  # # will not be applied. Instead, a POST and redirect pattern
+  # # will be used, with the destination determined from the 
+  # # @meet_up resource of the :location option, if specified.
+  # def create
+  #   @meet_up = MeetUp.new(params[:meet_up])
+  #   set_flash @meet_up.save, 
+  #             :success => "Successfully created Yoruzemi"
+  #             :fail => "Failed to create Yoruzemi"
+  # 
+  #   respond_with :success_action => :edit, @meet_up
+  # end
+  #
+  # def index
+  #   @meet_ups = MeetUp.all
+  # end
+  #
+  # def show
+  #   @meet_up = MeetUp.find(params[:id])
+  # end
+  #
+  # def search
+  #   @meet_ups = MeetUp.where(:meet_up_name => params[:query])
+  # end
+  #
+  # def destroy
+  #   @meet_up = MeetUp.find(params[:id])
+  #   if @meet_up.destroy
+  #     flash[:notice] = "Successfully destroyed"
+  #   else
+  #     flash[:error] = "Failed to destroy"
+  #   end
+  #   respond_with @meet_up
+  # end
+  #
+  # 
+  # To see typical controller snippets, take a look at sessions_controller.rb 
+  # 
+  # 
+  # 
+  # 
+  # 
+  # 
+  # = The following is likely to be outdated. We need to check.  
   # == [Not real] How to use the POST-then-replace pattern with Kamishibai::ResponderMixin
   #
   #     app/controllers/meet_up_controller.rb
@@ -218,33 +311,166 @@ module Kamishibai
   # provided non-Ajax code for the success case. Responder doesn't know this because
   # it hasn't actually run the code inside the MIME blocks yet.
   #
+  #
+  #
+  # General thoughts
+  #
+  # They do not provide the flexibility of the original #render method, in that
+  # they select a response mime before checking for the availability of a template.
+  # In this sense, they make rendering a bit more brittle. You can't simply
+  # provide the templates with the mimes that you want to respond to. You need
+  # to configure inside the #respond_to block.
+  #
+  # With #respond_with, they address the boilerplate issue. A lot of the common
+  # stuff is addressed with a simple command. However, the brittleness remains.
+  # You cannot simply change the mime you want to respond with by changing the
+  # template mime.
+  #
+  # I want the boilerplate issue to be resolved, and to also use a device
+  # specific template if available. I want to specify everything simply by
+  # providing template files. If providing a template file is too tedious,
+  # I want to be able to provide the rendering routine directly, but still
+  # want to be able to use template files 
+  #
+  # Inside MimeResponds#retrieve_collector_from_mimes, they decide on a
+  # format they want to use for the response. This is great if that response
+  # is actually implemented, but if we remove the brittleness, then sometimes
+  # it won't. We won't know until we've looked at the template files.
+  #
+  # If the response was written in the block with a format.html{} like notation,
+  # then it's OK to complain if the template for html was not provided.
+  #
+  # Otherwise, we should remain flexible and allow various responses based
+  # on the availability of the templates.
+  #
+  # 
+  # Thoughts on partials
+  #
+  # #respond_with does not originally support partials nor do we want to either.
+  # Partials are often used in Ajax responses because it allows us to transition
+  # easily from a non-Ajax UI to an Ajax UI. That's really the only reason we
+  # need partials.
+  #
+  # This is useful if you want to draw an element first as a part of a traditional
+  # HTML response, and also update it later with Ajax. Very common approach.
+  #
+  # We'll look more carefully into use cases and then think about this again.
+  #
+  # 
   module ResponderMixin
     def self.included(base)
       base.responder = Kamishibai::Responder
     end
 
     def default_render(*args)
+      # In #retrieve_collector_from_mimes, we set self.content_type to the
+      # type as determined before checking the template files for availability.
+      #
+      # This is OK when a response_block is provided because that explicity
+      # specifies the response mime type. However, it is bad when the actual
+      # template files determine the mime type.
+      #
+      # Therefore, if the template file for that content_type is missing and
+      # a different template file with a difference mime_type is used,
+      # the content_type will no longer match the actual content.
+      #
+      # To prevent this, we set content_type to nil when we use the template
+      # files without a response_block.
+      #
+      # We do the same thing on the Responder#render method.
+      self.content_type = nil
       device_selective_render(*args)
+    end
+
+    def respond_with(*resources, &block)
+      raise "In order to use respond_with, first you need to declare the formats your " <<
+            "controller responds to in the class level" if self.class.mimes_for_respond_to.empty?
+
+      # In the original #respond_with code (#retrieve_collector_from_mimes), the formats
+      # that can be used to respond are determined from the original controller.formats
+      # and the respond_with block, without checking whether the template files for each
+      # format exists or not. It then sets controller.formats to only that format.
+      #
+      # For example, if we remove the template file for :html but controller.formats includes
+      # :html, we get an error, even if we have a template file for :json.
+      #
+      # This is not how #render handles mimes. #render checks for the existence of the template
+      # file for :html, but if it can't find one, then it looks for the next candidate in 
+      # controller.formats. #render_with calls #render, but it can't do it's magic because
+      # controller.formats has been reduced to only the first format candidate.
+      #
+      # The reason for doing this is probably because in the #to_format method, they use
+      # the default_render to render a template and if a template file is not available, they
+      # automatically want to do a 
+      #   render :xml => @user
+      # kind of thing, instead of trying out the next format in controller.formats.
+      #
+      # We want the original #render behaviour inside #respond_with, so that #respond_with will
+      # look at the available files and respond accordingly. We will never simply render a whole
+      # resource into xml or json without customizing the output with a template.
+      #
+      # To get the original #render behaviour, we simply add back the missing stuff from the
+      # original controller.formats.
+      original_formats = formats
+
+      if collector = retrieve_collector_from_mimes(&block)
+        options = resources.size == 1 ? {} : resources.extract_options!
+        options[:default_response] = collector.response
+        # If the default_response was not provided in the response block,
+        # then we remove the brittleness of #respond_with and revert to the
+        # flexibility of #render
+        if !(options[:default_response])
+          # uniq preserves order so the format from #retrieve_collector_from_mimes 
+          # will take precedence
+          self.formats = (formats + original_formats).uniq 
+          lookup_context.rendered_format = nil
+        end
+        (options.delete(:responder) || self.class.responder).call(self, resources, options)
+      end
     end
 
   end
   
   class Responder < ActionController::Responder
+    # Original ActionController::Responder delegates
+    # #render to controller#render. We want it to
+    # run #device_selective_render
     def render(*args)
       @controller.instance_eval do
+        # See comments on ResponderMixin#default_render
+        # for why we reset the content_type.
+        self.content_type = nil
         device_selective_render(*args)
       end
     end
+
+    # Original ActionController::Responder delegates
+    # #redirect_to to controller#redirect_to. We want it to
+    # run #device_selective_redirect
     def redirect_to(*args)
       @controller.instance_eval do
         device_selective_redirect(*args)
-        # if request.xhr?
-        #   js_redirect ksp(args[0])
-        # else
-        #   redirect_to *args
-        # end
       end
     end
 
+    # Modified navigation_behavior to respond to the :success_action option
+    # if the request is xhr.
+    # :success_action will trigger the POST and render pattern instead
+    # of the POST and redirect pattern.
+    def navigation_behavior(error)
+      if get?
+        raise error
+      elsif has_errors? && default_action
+        render :action => default_action
+      else
+        if options[:success_action] && @controller.request.xhr?
+          render :action => options[:success_action]
+        else
+          redirect_to navigation_location
+        end
+      end
+    end
+
+    protected :navigation_behavior
   end
 end

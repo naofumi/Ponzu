@@ -49,5 +49,21 @@ module Kamishibai
       end
       return ""
     end
+
+    # Shortcut for setting flash
+    # Usage:
+    #   set_flash @user.save, :success => "User saved.", :fail => "Failed to save user"
+    #
+    # Note:
+    #   Flash should be used for short messages only.
+    #   If we want to return the validation errors, we should embed that in the HTML response.
+    def set_flash success, messages
+      raise "must set :success and :fail messages" if (messages[:success].blank? || messages[:fail].blank?)
+      if success
+        flash[:notice] = messages[:success]
+      else
+        flash[:error] = messages[:fail]
+      end
+    end
   end
 end

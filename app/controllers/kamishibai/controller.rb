@@ -439,7 +439,11 @@ module Kamishibai
 
       # For some reason, it seems that we lose sight of 
       # the controller_path when we Test the PosterSessionsController
-      action = "#{self.class.controller_path}/#{action}"
+      #
+      # We shouldn't be doing this because the action can sometimes
+      # include the controller_path. 
+      #
+      # action = "#{self.class.controller_path}/#{action}"
 
       if smartphone?
         begin

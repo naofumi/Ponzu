@@ -69,5 +69,6 @@ Gem::Specification.new do |s|
   # The JSON library has an issue with ActiveSupport::OrderedHashes
   # and always escapes the UTF-8 output
   s.add_dependency 'oj'
+  # s.add_dependency 'yajl-ruby'
 
 end

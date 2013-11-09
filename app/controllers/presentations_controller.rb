@@ -16,10 +16,6 @@ class PresentationsController < ApplicationController
   def index
     @presentations = Presentation.in_conference(current_conference).
                      paginate(:page => params[:page], :per_page => 30)
-
-    respond_to do |format|
-      format.html # index.html.erb
-    end
   end
 
   def my
@@ -27,8 +23,6 @@ class PresentationsController < ApplicationController
       @presentations = @author && @author.presentations.in_conference(current_conference)
       @receipts = @author.receipts_from_type(Presentation)
     end
-
-    respond_with @presentations
   end
 
   # GET /presentations/1
@@ -47,18 +41,11 @@ class PresentationsController < ApplicationController
                         minimum_term_frequency 1
                         maximum_query_terms 100
                       }
-
-    respond_with @presentation
   end
 
   def heading
     @presentation = Presentation.in_conference(current_conference).
                     find(params[:id])
-    respond_to do |format|
-      format.html {
-        device_selective_render
-      }
-    end    
   end
 
   def related
@@ -73,37 +60,8 @@ class PresentationsController < ApplicationController
                         minimum_term_frequency 1
                         maximum_query_terms 100
                       }
-    respond_to do |format|
-      format.html {
-        if request.xhr?
-        else
-          if galapagos?
-            render_sjis 'related.g'
-          else
-            render
-          end
-        end
-      }
-    end
   end
   
-  # GET /presentations/new
-  # GET /presentations/new.json
-  def new
-    @presentation = Presentation.new
-    @presentation.session = Session.find(params[:session_id]) if params[:session_id]
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @presentation }
-    end
-  end
-
-  # GET /presentations/1/edit
-  def edit
-    @presentation = Presentation.find(params[:id])
-  end
-
   # POST /presentations
   # POST /presentations.json
   # Presentations will be created by drag-drop of sessions and presentations.
@@ -140,13 +98,16 @@ class PresentationsController < ApplicationController
     type_name = params[:presentation].delete(:type)
     @presentation = type_name.constantize.in_conference(current_conference).
                                  find(params[:id])
+    set_flash @presentation.update_attributes(params[:presentation]),
+              :success => "Presentation was successfully updated",
+              :fail => "Presentation failed to update"
+
+    # We can't use #respond_with here because the response is a partial.
     respond_to do |format|
-      if @presentation.update_attributes(params[:presentation])
-        flash[:notice] = "Presentation was successfully updated"
+      if @presentation.errors.empty?
         format.html { render :partial => "edit", :locals => {:presentation => @presentation} }
       else
-        flash[:error] = "Presentation failed to update"
-        format.html { render action: "edit" }
+        format.html { render :partial => 'edit', :locals => {:presentation => @presentation} }
       end
     end
   end
@@ -158,8 +119,12 @@ class PresentationsController < ApplicationController
     @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
     @session = @presentation.session
-    @presentation.destroy
+    
 
+    set_flash @presentation.destroy,
+              :success => "Presentation destroyed",
+              :fail => "Failed to destroy presentation"
+    # We can't use #respond_with here because the response is a partial.
     respond_to do |format|
       format.html { render :partial => 'list', :locals => {:presentations => @session.presentations}}
     end
@@ -196,39 +161,10 @@ class PresentationsController < ApplicationController
     end
   end
   
+  # Only available for PC, not galapagos
   def comments
     @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
-    respond_to do |format|
-      format.html {
-        if request.xhr?
-          render :partial => 'presentations/comments'
-        else
-          render
-        end
-      }
-    end
-  end
-
-  # We also have Comment#create which galapagos uses. 
-  # Should decide which to use.
-  def create_comment
-    @presentation = Presentation.in_conference(current_conference).
-                                 find(params[:id])
-    @comment = @presentation.comments.build(params[:comment])
-
-    respond_to do |format|
-      if @comment.save
-        format.html{
-          if request.xhr?
-            render :partial => 'presentations/comments'
-          end
-        }
-        # format.html {render :partial => 'presentations/comment', :locals => {:c => @comment}}
-      else
-        format.js { render :js => "KSApp.notify('Failed to create comment')" }
-      end
-    end
   end
   
   def toggle_schedule

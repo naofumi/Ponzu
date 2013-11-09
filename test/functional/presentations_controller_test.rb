@@ -27,6 +27,27 @@ class PresentationsControllerTest < ActionController::TestCase
     # Without the '$', template 'presentations/show.g'
     # would also assert true.
     assert_template 'presentations/show$'
+    assert_json
+  end
+
+  test "should show presentation heading" do
+    ks_ajax :get, :heading, {id: @presentation}
+    assert_response :success
+    assert_template 'presentations/heading$'
+    assert_json
+  end
+
+  test "should show related presentations and galapagos" do
+    @request.user_agent = "IE6"
+    ks_ajax :get, :related, {id: @presentation}
+    assert_response :success
+    assert_template 'presentations/related.g$'
+  end
+
+  test "should not have separate related presentations view for PC and smartphones" do
+    assert_raise ActionView::MissingTemplate do
+      ks_ajax :get, :related, {id: @presentation}
+    end
   end
 
   # Multi-conference support
@@ -43,15 +64,6 @@ class PresentationsControllerTest < ActionController::TestCase
     assert_template 'presentations/show.g$'
   end
 
-  test "should show presentation for xhr/smartphone" do
-    skip "pending"
-    skip "haven't done the smartphone views yet"
-    @request.user_agent = "iPhone"
-    xhr :get, :show, {id: @presentation}
-    assert_response :success
-    assert_template 'presentations/show.g'
-  end
-
   test "should show my presentations" do
     login_as_user
     ks_ajax :get, :my
@@ -59,16 +71,6 @@ class PresentationsControllerTest < ActionController::TestCase
     assert_template 'presentations/my$'
     assert_include assigns(:presentations), presentations(:generic_presentation)
     assert_not_include assigns(:presentations), presentations(:presentation_from_other_conference)
-  end
-
-  test "should not get edit if unauthorized" do
-    assert_raise CanCan::AccessDenied do
-      ks_ajax :get, :edit, id: @presentation
-    end
-  end
-
-  test "should get edit if authorized" do
-    skip "pending"
   end
 
   test "should update presentation" do
@@ -106,5 +108,28 @@ class PresentationsControllerTest < ActionController::TestCase
     assert_raise ActiveRecord::RecordNotFound do
       ks_ajax :delete, :destroy, id: presentations(:presentation_from_other_conference)
     end
+  end
+
+  test "should show list of likers for presentation if author" do
+    login_as users(:generic_user)
+    ks_ajax :get, :likes, id: @presentation
+    assert_response :success
+    assert_template 'presentations/likes'
+    assert_include @response.body, "Liked by"
+  end
+
+  test "should decline to show list of likers for presentation unless author" do
+    login_as users(:user_without_author)
+    ks_ajax :get, :likes, id: @presentation
+    assert_response :success
+    assert_template 'presentations/likes'
+    assert_include @response.body, "Only authors can"
+  end
+
+  test "should show comments" do
+    ks_ajax :get, :comments, id: @presentation
+    assert_response :success
+    assert_template 'presentations/comments$'
+    assert_json
   end
 end

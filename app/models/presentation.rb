@@ -120,11 +120,11 @@ class Presentation < ActiveRecord::Base
   end
       
   def next
-    lower_item
+    @next ||= lower_item
   end
 
   def previous
-    higher_item
+    @previous ||= higher_item
   end
   
   def presentations_belonging_to_same_submission

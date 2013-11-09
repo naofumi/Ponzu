@@ -89,12 +89,18 @@ window.KSDomConstructor = () ->
           data
         else
           JSON.parse(data)
+        
+        console.log("Convert JSON respose to HTML with template " + json.renderer.template)
         data = JST[json.renderer.template](json)
+        console.log(data)
         # dust.render json.renderer.template, json, (err, html) ->
         #   callback(html)
       catch e
         # If we can't parse, it's probably because it isn't an object
         # We don't think about it too much.
+        console.log("Error parsing JSON")
+        console.log(data)
+        console.log(e)
       callback(data)
     , 0
 

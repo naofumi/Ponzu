@@ -3,6 +3,8 @@ class Session < ActiveRecord::Base
                   :number, :room_id, :starts_at
   belongs_to :room
   has_many   :presentations, :inverse_of => :session, :order => "position ASC, id ASC"
+  before_destroy :validates_absence_of_presentations # in newer versions of Rails, we just add :dependent => :destroy
+                                                     # https://github.com/rails/rails/pull/4727
 
   validates_presence_of :number
   validates_uniqueness_of :number, :scope => :conference_tag
@@ -68,7 +70,7 @@ class Session < ActiveRecord::Base
   def order_presentations_by_number
     Presentation.transaction do
       Presentation.where(:session_id => self.id).order(:number).each.with_index do |p, i|
-        p.update_attribute(:position, i)
+        errors.add(:base, p.errors.full_messages.join(', ')) unless p.update_attribute(:position, i)
       end
     end
   end
@@ -80,8 +82,17 @@ class Session < ActiveRecord::Base
       presentations.each.with_index do |p, i|
         p.starts_at = self.starts_at + i * duration * 60.0
         p.ends_at = self.starts_at + (i + 1) * duration * 60.0
-        p.save!
+        errors.add(:base, p.errors.full_messages.join(', ')) unless p.save
       end
+    end
+  end
+
+  private
+
+  def validates_absence_of_presentations
+    unless presentations.empty?
+      errors.add(:base, "Cannot delete record because dependent presentation exist")
+      return false
     end
   end
 

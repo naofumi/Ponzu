@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   authorize_resource
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
   
   before_filter do |c|
@@ -17,11 +17,6 @@ class SessionsController < ApplicationController
     @sessions = Session.order(:number).
                 in_conference(current_conference).
                 paginate(:page => params[:page], :per_page => 30)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @sessions }
-    end
   end
 
   # TODO: Set up Nginx
@@ -68,31 +63,32 @@ class SessionsController < ApplicationController
     @show_date = @session.starts_at
 
     @presentations = @session.presentations.paginate(:page => params[:page], :per_page => 30)
-
-    respond_with @session
   end
 
   # PUT /sessions/1/order_presentations_by_number
   def order_presentations_by_number
     @session = Session.in_conference(current_conference).
                        find(params[:id])
-    @session.order_presentations_by_number
-    respond_to do |format|
-      format.html {device_selective_render :action => 'edit'}
-    end
+
+    set_flash @session.order_presentations_by_number,
+              :success => 'Presentations were successfully reordered.',
+              :fail => 'Failed to reorder presentations.'
+    respond_with @session, :success_action => :edit
   end
 
   # PUT /sessions/1/set_presentation_duration?duration=10
   def set_presentation_duration
     @session = Session.in_conference(current_conference).
                        find(params[:id])
-    @session.set_presentation_times_by_duration(params[:duration].to_f)
-    respond_to do |format|
-      format.html {device_selective_render :action => 'edit'}
-    end
+    set_flash @session.set_presentation_times_by_duration(params[:duration].to_f),
+              :success => "Successfully modified presentation times.",
+              :fail => "Failed to modify presentation times."
+    respond_with @session, :success_action => :edit
   end
 
+  # Deprecated?
   def social_box
+    raise "Do we use this? If not, deprecate and remove associated views and routes."
     @session = Session.in_conference(current_conference).
                        find(params[:id])
     respond_to do |format|
@@ -151,10 +147,6 @@ class SessionsController < ApplicationController
   # GET /sessions/new.json
   def new
     @session = Session.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-    end
   end
 
   # GET /sessions/1/edit
@@ -170,15 +162,11 @@ class SessionsController < ApplicationController
     @session = type_name.constantize.new(params[:session])
     @session.conference_confirm = current_conference
 
-    respond_to do |format|
-      if @session.save
-        flash[:notice] = 'Session was successfully created.'
-        format.js {js_redirect ksp(@session)}
-      else
-        flash[:notice] = 'Failed to create Session.'
-        format.html { render action: "new" }
-      end
-    end
+    set_flash @session.save,
+              :success => 'Session was successfully created.',
+              :fail => 'Failed to create Session.'
+
+    respond_with @session
   end
 
   # PUT /sessions/1
@@ -188,14 +176,12 @@ class SessionsController < ApplicationController
     @session = type_name.constantize.in_conference(current_conference).
                        find(params[:id])
 
-    respond_to do |format|
-      if @session.update_attributes(params[:session])
-        flash[:notice] = 'Session was successfully updated.'
-        format.html { render action: 'edit' }
-      else
-        flash[:error] = 'Failed to create Session.'
-        format.html { render action: "edit" }
-      end
+    set_flash @session.update_attributes(params[:session]),
+              :success => 'Session was successfully updated.',
+              :fail => 'Failed to update Session.'
+
+    respond_with @session do |format| 
+      format.html{ render action: 'edit'}
     end
   end
 
@@ -204,7 +190,10 @@ class SessionsController < ApplicationController
   def destroy
     @session = Session.in_conference(current_conference).
                        find(params[:id])
-    @session.destroy
+
+    set_flash @session.destroy,
+              :success => "Session was successfully destroyed.",
+              :fail => "Session could not be destroyed."
 
     respond_with @session
   end

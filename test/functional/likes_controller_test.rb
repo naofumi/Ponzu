@@ -32,6 +32,7 @@ class LikesControllerTest < ActionController::TestCase
     end
 
     assert_response 200
+    assert_json
     assert_template :partial => "_like_button"
     assert_equal "New like was created", flash[:notice]
     assert_not_nil assigns(:like)
@@ -132,7 +133,20 @@ class LikesControllerTest < ActionController::TestCase
     end
 
     assert_response 200
+    assert_json
     assert_template :partial => "likes/_like_button"
+    assert_equal "Successfully created Schedule.", flash[:notice]
+  end
+
+  test "should create schedule on non-ajax" do
+    login_as_user
+    post :create, like: { presentation_id: presentations(:generic_presentation_2), 
+                           user_id: @controller.send(:current_user) }
+    assert_difference("Like::Schedule.count") do
+      put :schedulize, :id => assigns(:like).id
+    end
+
+    assert_redirected_to assigns(:presentation)
     assert_equal "Successfully created Schedule.", flash[:notice]
   end
 

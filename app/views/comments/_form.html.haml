@@ -1,0 +1,12 @@
+= form_for @comment, 
+         :url => comments_path,
+         :remote => true,
+         :html => { :'data-ks-insert-response' => '',
+                    :'data-invalidates-keys' => invalidated_paths(@comment)} do |f|
+  = f.hidden_field :user_id
+  = f.hidden_field :presentation_id
+  = f.hidden_field :parent_id
+  = f.text_area :text, 
+              :placeholder => (@comment.parent_id ? t('comments.reply_placeholder') : t('comments.new_placeholder'))
+  %br/
+  = f.button "Submit comment", :class => "comment_submit button icon comment"

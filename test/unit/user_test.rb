@@ -30,7 +30,6 @@ class UserTest < ActiveSupport::TestCase
     assert_difference('User.count') do
       new_user = User.new(login: "some_login", password: "some_password", 
                 password_confirmation: "some_password", en_name: "some name")
-      new_user.conference_id = "13435451" # workaround until we get rid of User#conference_id
       new_user.conference_tag = 'generic_conference'
       new_user.save!
     end
@@ -49,7 +48,6 @@ class UserTest < ActiveSupport::TestCase
     new_user = User.new(login: old_user.login, password: "benrocks", 
               password_confirmation: "benrocks", en_name: "some name")
     new_user.conference_tag = old_user.conference_tag
-    new_user.conference_id = "13435451" # workaround until we get rid of User#conference_id
     assert_raise ActiveRecord::RecordInvalid do
       new_user.save!
     end
@@ -60,7 +58,6 @@ class UserTest < ActiveSupport::TestCase
     new_user = User.new(login: old_user.login, password: "benrocks", 
               password_confirmation: "benrocks", en_name: "some name")
     new_user.conference_tag = "another_conference"
-    new_user.conference_id = "13435451" # workaround until we get rid of User#conference_id
     assert_difference('User.count') do
       new_user.save!
     end

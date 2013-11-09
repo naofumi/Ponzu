@@ -30,6 +30,16 @@ generic_session_2:
   conference_tag: generic_conference
   type: Session::Workshop
 
+generic_session_wo_presentations:
+  starts_at: 2011-12-14 12:00:00
+  ends_at: 2011-12-14 14:00:00
+  number: generic_session_wo_presentations_number
+  en_title: generic_session_en_title
+  jp_title: generic_session_jp_title
+  room: generic_room
+  conference_tag: generic_conference
+  type: Session::Workshop
+
 generic_poster_session:
   starts_at: 2011-12-14 12:00:00
   ends_at: 2011-12-14 14:00:00

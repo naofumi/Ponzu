@@ -36,6 +36,7 @@ require 'haml-rails'
 require 'sprockets-dotjs'
 
 require 'oj'
+# require 'yajl/json_gem'
 
 # My libraries
 require 'conference_strings'

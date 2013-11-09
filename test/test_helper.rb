@@ -103,6 +103,10 @@ class ActionController::TestCase < ActiveSupport::TestCase
     assert_equal "kss.redirect('#{path}');", @response.body
   end
 
+  def assert_json
+    assert_equal "application/json", @response.content_type, "response content_type should be application/json"
+  end
+
   # Automatically also asserts #assert_absence_of_non_kamishibai_links.
   # To ignore some non_kamishibai_links, provide regexps to ignore:
   #
@@ -241,7 +245,7 @@ class ActionController::TestCase < ActiveSupport::TestCase
 
   alias_method :original_assert_redirected_to, :assert_redirected_to
   def assert_redirected_to(options = {}, message = nil)
-    if @controller.send(:galapagos?)
+    if !@request.xhr?
       original_assert_redirected_to(options, message)
     else
       assert_response(:redirect, message)

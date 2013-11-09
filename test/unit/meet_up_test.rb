@@ -23,7 +23,6 @@ class MeetUpTest < ActiveSupport::TestCase
                          :starts_at_minute => "25",
                          :title => "Test Meet Up")
     meet_up.conference_tag = "generic_conference"
-    meet_up.conference_id = 141353 # TODO: Remove this after we've gotten rid of conference_id
     meet_up.owner = users(:generic_user)
     meet_up.save!
     assert_equal Time.zone.parse("2012-12-11 18:25:00"), meet_up.starts_at

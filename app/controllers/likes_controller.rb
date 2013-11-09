@@ -12,16 +12,12 @@ class LikesController < ApplicationController
   # GET /likes.json
   def index
     @likes = Like.in_conference(current_conference).all
-
-    respond_with @likes
   end
 
   # GET /likes/1
   # GET /likes/1.json
   def show
     @like = Like.in_conference(current_conference).find(params[:id])
-
-    respond_with @like
   end
 
   def by_day
@@ -51,8 +47,6 @@ class LikesController < ApplicationController
                timetableable.
                presentation_on(@date)
     end
-
-    respond_with @likes
   end
 
   def my_schedule
@@ -72,73 +66,47 @@ class LikesController < ApplicationController
                    where('presentations.starts_at > ? AND presentations.starts_at < ?', 
                           @date.beginning_of_day, @date.end_of_day)
     end
-    respond_with @schedules
   end
 
   def my_votes
     # @votes = current_user.votes
     @unique_votes = current_user.votes.where(:score => Like::Vote::UNIQUE)
     @excellent_votes = current_user.votes.where(:score => Like::Vote::EXCELLENT)
-    respond_with @unique_votes
   end
   # POST /likes
   # POST /likes.json
   def create
     @like = Like::Like.new(params[:like].merge(:user_id => current_user.id))
     @like.conference_confirm = current_conference
-
-    if @like.save
-      flash[:notice] = "New like was created"
-    else
-      flash[:error] = "Failed to create new like"
-    end
     @presentation = @like.presentation
 
-    respond_with @like do |format|
-      if request.xhr?
-        format.html {render :partial => 'presentations/social_box'}
-      elsif
-        format.html { redirect_to @like.presentation }
-      end
-    end
+    set_flash @like.save,
+              :success => "New like was created",
+              :fail => "Failed to create new like"
+
+    respond_with @presentation, :success_action => 'presentations/social_box'
   end
 
   # PUT /likes/1/schedulize
   def schedulize
     @like = Like::Like.find(params[:id])
-    if @like.schedulize
-      flash[:notice] = "Successfully created Schedule."
-    else
-      flash[:error] = "Failed to create Schedule."
-    end
     @presentation = @like.presentation
+    set_flash @like.schedulize,
+              :success => "Successfully created Schedule.",
+              :fail => "Failed to create Schedule."
 
-    respond_to do |format|
-      if request.xhr?
-        format.html {render :partial => 'presentations/social_box'}
-      else
-        format.html { redirect_to @like.presentation }
-      end
-    end
+    respond_with @presentation, :success_action => 'presentations/social_box'
   end
 
   # PUT /likes/1/unschedulize
   def unschedulize
     @like = Like::Schedule.find(params[:id])
-    if @like.unschedulize
-      flash[:notice] = "Successfully removed Schedule."
-    else
-      flash[:error] = "Failed to removed Schedule."
-    end
     @presentation = @like.presentation
+    set_flash @like.unschedulize,
+              :success => "Successfully removed Schedule.",
+              :fail => "Failed to removed Schedule."
 
-    respond_to do |format|
-      if request.xhr?
-        format.html {render :partial => 'presentations/social_box'}
-      else
-        format.html { redirect_to @like.presentation }
-      end
-    end
+    respond_with @presentation, :success_action => 'presentations/social_box'
   end
 
   # DELETE /likes/1
@@ -146,19 +114,12 @@ class LikesController < ApplicationController
   def destroy
     @like = Like::Like.in_conference(current_conference).
             where(:user_id => current_user.id).find(params[:id])
-    @like.destroy
     @presentation = @like.presentation
+    
+    set_flash @like.destroy, :success => "Like was successfully removed.",
+                             :fail => "Failed to remove Like."
 
-    respond_to do |format|
-      flash[:notice] = "Like was successfully removed."
-      format.html {
-        if request.xhr?
-          render :partial => 'presentations/social_box'
-        else
-          redirect_to @like.presentation, :notice => "「いいね！」を外しました"
-        end
-      }
-    end
+    respond_with @presentation, :success_action => 'presentations/social_box'
   end
 
   # POST /likes/vote

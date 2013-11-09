@@ -65,7 +65,7 @@ class PrivateMessagesController < ApplicationController
   def destroy
     @private_message = PrivateMessage.find(params[:id])
     @private_message.destroy
-    if @private_message.destoryed?
+    if @private_message.destroyed?
       flash[:notice] = "Private Message was successfully destroyed."
     else
       flash[:error] = "Failed to delete private message."

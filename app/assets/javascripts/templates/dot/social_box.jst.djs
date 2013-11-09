@@ -1,8 +1,27 @@
 <div class="social_box" data-ajax="/presentations/{{= it.presentation_id }}/social_box" data-expiry="{{= it.expiry }}" id="presentation_{{= it.presentation_id }}_social_box">
 	{{? it.user_id }}
 		<div class="like_box">
+			<div class="social_stats">
+				{{? it.comments_count > 0}} {{= it.comments_count }} comments{{?}}
+				{{? it.likes_count > 0}}
+				  {{= it.likes_count }} likes&nbsp;
+					<a href="/presentations/{{= it.presentation_id }}/likes" class="button icon arrowright" style="padding: 0.2em 0.7em;" data-ks-insert-response=true data-remote=true>view likes</a>
+				{{?}}
+			</div>
+			<div class="list_likes" id="likes_presentation_{{= it.presentation_id}}"></div>
 			<div class="like" id="like_button_{{= it.presentation_id }}">
-				{{= it.like_button }}
+				<span class="social_controls">
+					{{? it.like_id }}				
+						{{? it.scheduled }}
+						  <a href="/likes/{{= it.like_id }}/unschedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">remove from my schedule</a>
+						{{??}}
+						  <a href="/likes/{{= it.like_id }}//schedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">add to my schedule</a>
+						  <a href="/likes/{{= it.like_id }}" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="delete" data-remote="true" rel="nofollow">unlike</a>
+						{{?}}
+					{{??}}
+					  <a href="/likes?like%5Bpresentation_id%5D={{= it.presentation_id }}" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="post" data-remote="true" rel="nofollow">like</a>
+					{{?}}
+				</span>
 			</div>
 		</div>
 		{{? it.voter }}
@@ -31,4 +50,26 @@
 		{{?}}
 	{{?}}
 </div>
-{{= it.modify_div}}
+{{ 
+	var addClass = [];
+	var removeClass = [];
+	var addClassString = "";
+	var removeClassString = "";
+	if(it.like_id) {
+		addClass.push("liked");
+  } else {
+    removeClass.push("liked");
+  }
+  if (it.scheduled) {
+  	addClass.push("scheduled");
+	} else {
+		removeClass.push("scheduled");
+  }
+	addClassString = addClass.join(' ');
+	removeClassString = removeClass.join(' ');
+	console.log("HOWDY " + it.presentation_id);
+	console.log(addClassString);
+	console.log(removeClassString);
+}}
+<div data-add-class="{{= addClassString }}" data-attributes-only=true data-remove-class="{{= removeClassString }}" id="session_details_presentation_{{= it.presentation_id}}"></div>
+<div data-add-class="{{= addClassString }}" data-attributes-only=true data-remove-class="{{= removeClassString }}" id="presentation_detail_{{= it.presentation_id}}"></div>

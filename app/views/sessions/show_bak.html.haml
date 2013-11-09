@@ -27,7 +27,7 @@
       - if !@session.organizers_string.blank?
         .chairs
           %span{:class => 'label'}= t('.chairs.label')
-          %div= @session.organizers_string && @session.organizers_string.split('|').join('</br>').html_safe
+          %div= @session.organizers_string && @session.organizers_string.split('|').join('<br />').html_safe
       - if can? :edit, Session
         = link_to "[edit]", ksp(edit_session_path(@session))
         %br/
