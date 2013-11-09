@@ -47,21 +47,24 @@ class CommentsController < ApplicationController
   # POST /comments.json
   def create
     @comment = Comment.new(params[:comment])
+    @comment.user = current_user
     @comment.conference_confirm = current_conference
 
     respond_to do |format|
       if @comment.save
         flash[:notice] = "コメントを作成しました"
         if request.xhr?
-          format.html { render :show }          
+          @presentation = @comment.presentation
+          format.html { render :partial => 'presentations/comments' }          
         else
           format.html { redirect_to @comment.presentation}
         end
       else
         # TODO: We need better error handling on Ajax
         flash[:error] = "コメントが作成できませんでした"
+        raise @comment.errors.inspect
         if request.xhr?
-          format.html { render :edit }          
+          format.js { render :js => "KSApp.notify('Failed to create comment')" }
         else
           @presentation = @comment.presentation
           format.html { render "presentations/show.g" }
@@ -104,5 +107,13 @@ class CommentsController < ApplicationController
         end
       }
     end
+  end
+
+  def reply
+    parent_comment = Comment.find(params[:id])
+    @comment = Comment.new
+    @comment.parent_id = parent_comment.id
+
+    respond_with @comment
   end
 end

@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'acts_as_list'
   s.add_dependency 'authlogic'
   s.add_dependency 'cancan'
+  s.add_dependency 'awesome_nested_set', '~>2.1.6'
 
   # For error_message_on and error_messages_for
   # I want to revisit this and see if we are still using it.

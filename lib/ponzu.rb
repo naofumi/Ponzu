@@ -13,6 +13,7 @@ require 'will_paginate'
 require 'acts_as_list'
 require 'authlogic'
 require 'cancan'
+require 'awesome_nested_set'
 
 require 'dynamic_form'
 

@@ -49,7 +49,7 @@ module Kamishibai
           "likes/(.+/)?my"
         ]
       elsif object.instance_of? Comment
-        base_string = "/presentations/#{object.presentation.id}"
+        base_string = "/presentations/#{object.presentation_id}"
         [
           "#{base_string}/comments"
         ]

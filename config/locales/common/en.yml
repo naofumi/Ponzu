@@ -231,6 +231,8 @@ en:
       title: "New Comment"
     index:
       title: "List Comments"
+    new_placeholder: "Write your comment here."
+    reply_placeholder: "Write your reply here."
   presentations:
     presentation_cancelled: "Presentation Cancelled"
     my:

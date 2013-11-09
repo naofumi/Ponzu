@@ -5,8 +5,12 @@ generic_comment:
   text: This is a generic comment
   user: generic_user
   conference_tag: generic_conference
+  lft: 1
+  rgt: 2
 comment_from_other_conference:
   presentation: presentation_from_other_conference
   text: Comment from other conference
   user: generic_user
   conference_tag: another_conference
+  lft: 3
+  rgt: 4

@@ -83,7 +83,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :comments
+  resources :comments do
+    member do
+      get 'reply'
+    end
+  end
 
   resources :presentation_groups
 

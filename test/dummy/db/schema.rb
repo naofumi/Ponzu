@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131025060345) do
+ActiveRecord::Schema.define(:version => 20131106043051) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -53,9 +53,16 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.integer  "presentation_id"
     t.text     "text"
     t.integer  "user_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "conference_tag"
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "child_count"
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "depth"
   end
 
   create_table "conferences", :force => true do |t|
@@ -85,7 +92,6 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.text     "en_text"
-    t.integer  "conference_id"
     t.string   "conference_tag"
   end
 
@@ -122,7 +128,6 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.string   "interest"
     t.string   "venue_phone"
     t.string   "owner_phone"
-    t.integer  "conference_id",  :null => false
     t.string   "conference_tag"
   end
 
@@ -242,7 +247,6 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.integer  "pin_top"
     t.integer  "pin_left"
     t.integer  "position"
-    t.integer  "conference_id",  :null => false
     t.string   "conference_tag"
   end
 
@@ -258,7 +262,6 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.string   "organizers_string_en"
     t.string   "organizers_string_jp"
     t.string   "type"
-    t.integer  "conference_id",                        :null => false
     t.string   "conference_tag"
   end
 
@@ -277,7 +280,6 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.string   "corresponding_email"
     t.boolean  "show_email",                           :default => false
     t.binary   "institutions"
-    t.integer  "conference_id",                                           :null => false
     t.string   "conference_tag"
   end
 
@@ -321,7 +323,6 @@ ActiveRecord::Schema.define(:version => 20131025060345) do
     t.integer  "author_id"
     t.string   "en_affiliation"
     t.string   "jp_affiliation"
-    t.integer  "conference_id",                                  :null => false
     t.string   "conference_tag"
   end
 
