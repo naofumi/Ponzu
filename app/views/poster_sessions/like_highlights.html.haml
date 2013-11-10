@@ -1,6 +1,6 @@
 = ks_element :id => "poster_like_highlights" do
   - if @likes.any?
-    - pg = @poster_grid = @likes.first.presentation.session.grid.new
+    - pg = grid_manager(current_conference).new
     - @likes.each do |l|
       = render :partial => 'poster_sessions/poster_highlight', 
                :locals => {:presentation => l.presentation, :pg => pg, :like => l}

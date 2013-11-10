@@ -6,10 +6,6 @@
 # We try to keep the configurations in one place. Still a work in progress.
 class Session::Poster < Session::Mappable
 
-  def self.grid_for_conference(conference)
-    "PosterGrid::#{conference.module_name}".constantize
-  end
-
   def poster_session_id
     number =~ /^(\d)(?:P|LBA)/
     $1

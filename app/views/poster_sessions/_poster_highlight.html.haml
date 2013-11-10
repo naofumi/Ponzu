@@ -1,4 +1,6 @@
-- grid = presentation.grid
+- gc = grid_converter(current_conference)
+- grid = gc.presentation_to_grid presentation
+
 - css_string = pg.cssify([grid])
 = content_tag :a, ' '.html_safe,
               :class => "poster_slot #{like.kind_of?(Like::Schedule) ? "scheduled" : ""}",

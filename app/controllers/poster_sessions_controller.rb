@@ -101,11 +101,10 @@ class PosterSessionsController < ApplicationController
                 in_conference(current_conference).
                 all_in_day(@show_date).all
 
-
     if current_user 
-      @likes = current_user.likes.includes(:presentation => {:session => :conference}).
+      @likes = current_user.likes.includes(:presentation).
                where("presentations.session_id" => @sessions)
-      @schedules = current_user && current_user.schedules.includes(:presentation => {:session => :conference}).
+      @schedules = current_user && current_user.schedules.includes(:presentation).
                where("presentations.session_id" => @sessions)
     else
       @likes = []

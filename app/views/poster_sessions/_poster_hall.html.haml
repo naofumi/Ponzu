@@ -1,8 +1,11 @@
 #poster_hall
-  - pg = @poster_grid = Session::Poster.grid_for_conference(current_conference).new
+  - pg = grid_manager(current_conference).new
+  - gc = grid_converter(current_conference)
+
   - @sessions.each do |s|
     - color_tag = @sessions.index(s).modulo(12)
-    - pg.cssify(s.grids).each do |box_css|
+    - grids = gc.presentations_to_grids(s.presentations)
+    - pg.cssify(grids).each do |box_css|
       = content_tag :a, "", :class => ["poster_row", "color_#{color_tag}", "session_#{s.id}"],
                   :href => ksp(s),
                   :style => "position:absolute;#{box_css}",

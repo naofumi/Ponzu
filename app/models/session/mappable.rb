@@ -40,9 +40,15 @@
 #    Implement as a subclass of PosterGrid. Set Session::Poster::GRID to this value which will
 #    so that it can be instantiated in the view.
 #
+# == Testing PosterNumberToGrid
+# 
+# We use the unit testing framework to ensure that our custom PosterNumberToGrid is 
+# generating the correct grid.
+#
 # == Testing the dynamic map
 #
 # The dynamic map can be tested via PosterSessionsController#show_test.
+# Check the URL to access this action in routes.rb.
 #
 # == The view
 #
@@ -65,7 +71,4 @@
 # Hopefully we shouldn't have to change the view for each conference.
 #
 class Session::Mappable < Session
-  def grids
-    presentations.map{|p| p.grids}.flatten.compact
-  end
 end
