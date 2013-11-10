@@ -1,5 +1,5 @@
 #poster_hall
-  - pg = @poster_grid = @sessions.first.grid.new
+  - pg = @poster_grid = Session::Poster.grid_for_conference(current_conference).new
   - @sessions.each do |s|
     - color_tag = @sessions.index(s).modulo(12)
     - pg.cssify(s.grids).each do |box_css|

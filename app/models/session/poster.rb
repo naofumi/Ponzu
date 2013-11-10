@@ -5,10 +5,8 @@
 #
 # We try to keep the configurations in one place. Still a work in progress.
 class Session::Poster < Session::Mappable
-  # GRID = "PosterGrid::#{Rails.configuration.conference_module}".constantize
-  # GRID = PosterGrid::Jsdb20_13
 
-  def grid
+  def self.grid_for_conference(conference)
     "PosterGrid::#{conference.module_name}".constantize
   end
 
