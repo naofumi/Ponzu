@@ -109,6 +109,15 @@ Rails.application.routes.draw do
       get 'container'
     end
   end
+
+  resources :booth_sessions do
+    member do
+      get 'like_highlights'
+      get 'list'
+      get 'list_highlights'
+      get 'show_test'
+    end    
+  end
   
   resources :timetable do
     member do
@@ -148,6 +157,7 @@ Rails.application.routes.draw do
       get 'download_full_day_pdf'
       put 'order_presentations_by_number'
       put 'set_presentation_duration'
+      get 'query'
     end
     collection do
       post 'batch_request_liked_sessions'

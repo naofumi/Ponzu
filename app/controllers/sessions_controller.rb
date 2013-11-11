@@ -65,6 +65,17 @@ class SessionsController < ApplicationController
     @presentations = @session.presentations.paginate(:page => params[:page], :per_page => 30)
   end
 
+  # List booth presentations specified by params[:booth_nums]
+  def query
+    @session = Session.in_conference(current_conference).
+                       find(params[:id])
+    @presentations = Presentation.in_conference(current_conference).
+                     where(:booth_num => params[:bns]).
+                     order(:booth_num).
+                     paginate(:page => params[:page], :per_page => 30)
+    device_selective_render :action => "show"
+  end
+
   # PUT /sessions/1/order_presentations_by_number
   def order_presentations_by_number
     @session = Session.in_conference(current_conference).

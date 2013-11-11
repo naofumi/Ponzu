@@ -1,0 +1,6 @@
+= ks_element :id => "booth_like_highlights" do
+  - if @likes.any?
+    - bgm = booth_mapper(current_conference).new
+    - @likes.each do |l|
+      - coords = bgm.coordinates_for_booth(l.presentation)
+      = link_to ' ', ksp(presentation_path(l.presentation)), :class => "#{@test ? 'test' : ''} booth_slot #{l.kind_of?(Like::Schedule) ? "scheduled" : ""}", :style => "left:#{coords[0]}px;top:#{coords[1]}px;width:#{coords[2]}px;height:#{coords[3]}px;"

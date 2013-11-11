@@ -264,7 +264,6 @@ module Import
              :jp_title => ur.title_jp,
              :jp_abstract => ur.jp_abstract,
              :en_abstract => ur.en_abstract,
-             :disclose_at => ur.disclose_at,
              :institutions => ur.institutions.map{|i| Institution.new(:en_name => i[:en_name],
                                                                       :jp_name => i[:jp_name])},
              :keywords => ur.keywords) {|submission|

@@ -32,7 +32,7 @@ class Presentation < ActiveRecord::Base
               :to => :submission
 
   attr_accessible :ends_at, :number, :session_id, :starts_at,
-                  :position, :submission_id, :cancel
+                  :position, :submission_id, :cancel, :booth_num
 
   belongs_to :submitter, :class_name => User
   has_many    :authorships, :through => :submission

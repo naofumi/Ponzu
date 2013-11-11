@@ -1,0 +1,8 @@
+#booth_hall
+  - bgm = booth_mapper(current_conference).new
+  - bgm.regions.each do |coords, booth_nums|
+    - left, top, width, height = coords[0], coords[1], (coords[2] - coords[0]), (coords[3] - coords[1])
+    = link_to " ", ksp(query_session_path(@sessions.first, :bns => booth_nums)), :style => "position:absolute;display:block;left:#{left}px;top:#{top}px;width:#{width}px;height:#{height}px"
+
+  - unless @dont_load_highlights
+    = ks_ajax_placeholder :id => "booth_like_highlights", "data-ajax" => like_highlights_booth_session_path(params[:id], :test => @test)

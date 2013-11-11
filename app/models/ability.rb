@@ -31,7 +31,7 @@ class Ability
     # guest user
     can :read, [Presentation, User, Room, GlobalMessage]
     can [:heading, :social_box, :comments, :related], Presentation
-    can [:show, :list, :like_highlights, :list_highlights], [Session::Poster, Session::TimeTableable]
+    can [:show, :list, :like_highlights, :list_highlights], [Session::Poster, Session::TimeTableable, Session::Booth]
     can [:destroy], [UserSession]
     can :read, [Presentation, Session, Room]
 

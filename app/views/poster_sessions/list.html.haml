@@ -20,4 +20,4 @@
           = link_to t('poster_sessions.sub_menu.show_as_list'), ksp(list_poster_session_path(@show_date.strftime('%Y-%m-%d'))), 
                     :class => ['ks_tab', "poster_#{@show_date.strftime('%Y-%m-%d')}_menu_list",  "button", "primary"]
 
-    = render :partial => "poster_list"
+    = render :partial => "poster_sessions/poster_list"

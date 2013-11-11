@@ -21,7 +21,7 @@ $liked: #ff8000;
   // border-radius: 10px;
 }
 
-.poster_slot {
+.poster_slot, .booth_slot {
   -mox-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
@@ -30,10 +30,22 @@ $liked: #ff8000;
   border-radius: 7px;
   border: solid 2px #FFF;
 
+  display: block;
   position:absolute;
   &.scheduled {
     background-color: $scheduled;
   }
+  &.test {
+    opacity: 0.4;
+  }
+}
+
+#booth_hall {
+  position: relative;
+  border-radius: 10px;
+  padding: 8px;
+  color: #333;
+  margin: 90px 10px;
 }
 
 #poster_hall {

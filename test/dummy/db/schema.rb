@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131106043051) do
+ActiveRecord::Schema.define(:version => 20131110104118) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(:version => 20131106043051) do
     t.string   "type"
     t.boolean  "cancel",                            :default => false
     t.string   "conference_tag"
+    t.string   "booth_num"
   end
 
   add_index "presentations", ["position"], :name => "index_presentations_on_position"

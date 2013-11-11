@@ -88,6 +88,15 @@ en:
     list:
       title: "Poster List %{day}"
 
+  booth_sessions:
+    sub_menu:
+      show_as_map: "Show as Map"
+      show_as_list: "Show as List"
+    show:
+      title: "Booth %{day}"
+    list:
+      title: "Booth List %{day}"
+
   private_messages:
     new:
       title: "New PM to Dr. %{to}"
