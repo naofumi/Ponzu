@@ -2,7 +2,7 @@
   <div class="panel session_header">
     <div class="number">{{= it.number }}</div>
     <div class="time">
-      <a href="#!_/{{= it.poster_timetable_path }}" onclick="KSScrollMemory.set({href: {{= '/' + it.poster_timetable_path }}, elementId: 'session_{{= it.id }}'})" class="button icon clock">
+      <a href="#!_{{= it.poster_timetable_path }}" onclick="KSScrollMemory.set({href: {{= '/' + it.poster_timetable_path }}, elementId: 'session_{{= it.id }}'})" class="button icon clock">
         {{= it.starts_at }} - {{= it.ends_at }}
       </a>
     </div>
