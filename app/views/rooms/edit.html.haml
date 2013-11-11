@@ -1,13 +1,13 @@
 =ks_element :id => "edit_room",
             :data => {:container => "ponzu_frame",
                       :"container-ajax" => static_path(:page => "ponzu_frame")} do
+  .panel
+    %h1 Editing room
 
-  %h1 Editing room
+    = render 'form'
 
-  = render 'form'
+    = link_to 'Show', ksp(@room)
+    |
+    = link_to 'Back', ksp(rooms_path)
 
-  = link_to 'Show', ksp(@room)
-  |
-  = link_to 'Back', ksp(rooms_path)
-
-  = render :partial => 'map', :locals => {:room => @room}
+    = render :partial => 'map', :locals => {:room => @room}
