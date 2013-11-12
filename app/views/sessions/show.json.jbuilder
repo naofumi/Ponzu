@@ -13,10 +13,10 @@ json.ends_at (@session.starts_at.beginning_of_day == @session.ends_at.beginning_
               l(@session.ends_at, :format => :month_day_time))
 json.organizers (@session.organizers_string ? @session.organizers_string.split('|') : [])
 json.paginator ks_will_paginate(@presentations)
-
+json.type @session.type && @session.type.parameterize.underscore
 json.room do
-  json.id @session.room.id
-  json.name @session.room.name
+  json.id @session.room && @session.room.id
+  json.name @session.room && @session.room.name
 end
 
 json.presentations @presentations.order("presentations.position ASC, presentations.number ASC").map{|p| p.id}

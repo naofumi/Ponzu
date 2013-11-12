@@ -3,7 +3,7 @@
 class Submission < ActiveRecord::Base
   attr_accessible :disclose_at, :en_abstract, :en_title, :jp_abstract, :jp_title, 
                   :main_author_id, :presenting_author_id, :submission_number,
-                  :institutions, :keywords, :type
+                  :institutions, :keywords, :type, :external_link
 
   has_many  :presentations, :inverse_of => :submission, :dependent => :destroy
 

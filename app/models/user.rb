@@ -434,7 +434,7 @@ class User < ActiveRecord::Base
 
   ## Roles for CanCan
   # add new roles on right end to preserve previous settings
-  ROLES = %w[admin user_moderator organizer voter]
+  ROLES = %w[admin user_moderator organizer voter sponsor]
   
   def roles=(roles)
     self.roles_mask = (roles & ROLES).map{|r| 2**ROLES.index(r)}.sum

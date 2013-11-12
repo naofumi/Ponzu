@@ -1,0 +1,46 @@
+<%= form_for(@presentation, :remote => true, 
+                            :html => { :id => "edit_presentation_#{@presentation.id}_page",
+                                       :data => {'ks-insert-response' => true,
+                                                 "invalidates-keys" => invalidated_paths(@presentation)}}) do |f| %>
+  <% if @presentation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@presentation.errors.count, "error") %> prohibited this session from being saved:</h2>
+
+      <ul>
+      <% @presentation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :submission_id %><br />
+    <%= @presentation.submission.title %>
+    <%#= f.text_field :submission_id %>
+  </div>
+  <div class="field">
+    <%= f.label :session_id %><br />
+    <%= @presentation.session.number %>: <%= @presentation.session.title %>
+    <%#= f.text_field :session_id %>
+  </div>
+  <div class="field">
+    <%= f.label :type %><br />
+    <%= f.select :type, Presentation.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true %>
+  </div>
+  <div class="field">
+    Display in <%= f.label :ad_category %><br />
+    <%= f.select(:ad_category, Session.in_conference(current_conference).collect{|e| [e.ad_category, e.ad_category] unless e.ad_category.blank?}.compact.uniq, :include_blank => true) %>
+  </div>
+  <div class="field">
+    <%= f.label :number %><br />
+    <%= f.text_field :number %>
+  </div>
+  <div class="field">
+    <%= f.label :booth_num %><br />
+    <%= f.text_field :booth_num %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

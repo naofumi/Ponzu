@@ -53,6 +53,10 @@ class Ability
       can [:vote, :my_votes], Like
     end
 
+    if user.role? :sponsor
+      can [:update], Submission
+    end
+
     if user.role? :organizer
       can [:likes_report, :votes_report], Like
       can :manage, GlobalMessage

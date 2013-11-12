@@ -1,6 +1,7 @@
 = form_for(@submission,
              :html => {:data => { :remote => true,
-                       :ks_insert_response => true}}) do |f|
+                                  :ks_insert_response => true,
+                                  "invalidates-keys" => invalidated_paths(@submission.presentations)}}) do |f|
   - if @submission.errors.any?
     #error_explanation
       %h2
@@ -16,7 +17,10 @@
   .field
     = f.label :submission_number
     %br/
-    = f.text_field :submission_number
+    - if can? :manage, Submission
+      = f.text_field :submission_number
+    - else
+      = @submission.submission_number
   .field
     = f.label :en_title
     %br/
@@ -27,25 +31,22 @@
     %br/
     = f.text_field :jp_title
   .field
+    = f.label :external_link
+    %br/
+    = f.text_field :external_link
+  .field
     = f.label :jp_abstract
     %br/
-    = f.text_area :jp_abstract
+    = f.text_area :jp_abstract, :style => "height:300px"
   .field
     = f.label :en_abstract
     %br/
-    = f.text_area :en_abstract
-  .field
-    = f.label :presenting_author_id
-    %br/
-    = f.number_field :presenting_author_id
-  .field
-    = f.label :main_author_id
-    %br/
-    = f.number_field :main_author_id
-  .field
-    = f.label :disclose_at
-    %br/
-    = f.datetime_select :disclose_at
+    = f.text_area :en_abstract, :style => "height:300px"
+  - if can? :manage, Submission
+    .field
+      = f.label :disclose_at
+      %br/
+      = f.datetime_select :disclose_at
 
     / The session_id field is used to automatically create a Presentation object
     / linking this Submission to a Session.

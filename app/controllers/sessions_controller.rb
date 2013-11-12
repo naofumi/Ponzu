@@ -170,7 +170,8 @@ class SessionsController < ApplicationController
   # POST /sessions.json
   def create
     type_name = params[:session].delete(:type)
-    @session = type_name.constantize.new(params[:session])
+    @session = Session.new(params[:session])
+    @session.type = type_name.constantize.to_s # constantize to sanitize
     @session.conference_confirm = current_conference
 
     set_flash @session.save,
@@ -184,8 +185,9 @@ class SessionsController < ApplicationController
   # PUT /sessions/1.json
   def update
     type_name = params[:session].delete(:type)
-    @session = type_name.constantize.in_conference(current_conference).
+    @session = Session.in_conference(current_conference).
                        find(params[:id])
+    @session.type = type_name.constantize.to_s # constantize to sanitize
 
     set_flash @session.update_attributes(params[:session]),
               :success => 'Session was successfully updated.',

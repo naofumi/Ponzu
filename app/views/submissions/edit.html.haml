@@ -1,70 +1,67 @@
 = ks_element :id => "edit_submissions",
              :data => {:container => "ponzu_frame",
                        :"container-ajax" => static_path("ponzu_frame")} do
+  .panel
+    %h1 Editing submission
 
-  %h1 Editing submission
+    %fieldset
+      %legend Submission will be presented at
+      %ul
+        - @submission.presentations.each do |p|
+          %li
+            = link_to "#{p.session.number} #{p.session.title}", ksp(:session_path, p.session)
+            = " as ##{p.number} on #{l(p.starts_at, :format => :month_day_time)}"
+            = " in Ad category '#{p.ad_category}'" if p.ad_category
+            = link_to "[show]", ksp(:presentation_path, p)
+            - if can? :manage, Submission
+              = link_to "[Edit presentation]", ksp(:edit_presentation_path, p)
+    %fieldset
+      %legend Submission Basic information
+      = render 'form'
 
-  %fieldset
-    %legend Submission will be presented at
-    %ul
-      - @submission.presentations.each do |p|
-        %li
-          = "Session:"
-          = link_to "#{p.session.number} #{p.session.title}", ksp(:edit_session_path, p.session)
-          = " as # #{p.number} on #{p.starts_at}"
-
-  %fieldset
-    %legend Submission Basic information
-    = render 'form'
-
-  %fieldset
-    %legend Author information
-    %table{:style => "width:100%"}
-      %tr
-        %td
-          = render :partial => "authorships/list", 
-                   :locals => {:authorships => @submission.authorships.order(:position)}
-          .dropbox{:style => "border: dotted 1px #666",
-                   :id => "new_authorship_drop",
-                   :data => {:action => drop_on_submission_authorships_path, 
-                             "ks_insert-response" => true,
-                             :method => "post",
-                             :params => "authorship[submission_id]=#{@submission.id}"}}
-            Drop authors here to create new Authorships
-          = link_to "Create new author for this submission",
-                    ksp(new_author_path(:initial_submission => @submission))
-        %td
-          - @submission.institutions.each_with_index do |inst, i|
-            = content_tag :div, "#{i + 1}) #{inst.name}", :class => "color_#{i}"
-          %div
-            = link_to "edit institutions", "Javascript:void(0)", :onclick => "kss.show(document.getElementById('institutions_form'));return false;"
-            :markdown
-              Institutions are stored in JSON format. 
-          #institutions_form{:style => "display:none"}
-            = form_for(@submission,
-               :html => {:data => { :remote => true,
-                         :ks_insert_response => true}}) do |f|
-              .field
-                - @submission.institutions.each_with_index do |inst, i|
-                  %div
-                    = i + 1
-                    )
+    - if can? :manage, Submission
+      %fieldset
+        %legend Author information
+        %table{:style => "width:100%"}
+          %tr
+            %td
+              = render :partial => "authorships/list", 
+                       :locals => {:authorships => @submission.authorships.order(:position)}
+              .dropbox{:style => "border: dotted 1px #666",
+                       :id => "new_authorship_drop",
+                       :data => {:action => drop_on_submission_authorships_path, 
+                                 "ks_insert-response" => true,
+                                 :method => "post",
+                                 :params => "authorship[submission_id]=#{@submission.id}"}}
+                Drop authors here to create new Authorships
+              = link_to "Create new author for this submission",
+                        ksp(new_author_path(:initial_submission => @submission))
+            %td
+              - @submission.institutions.each_with_index do |inst, i|
+                = content_tag :div, "#{i + 1}) #{inst.name}", :class => "color_#{i}"
+              %div
+                = link_to "edit institutions", "Javascript:void(0)", :onclick => "kss.show(document.getElementById('institutions_form'));return false;"
+                :markdown
+                  Institutions are stored in JSON format. 
+              #institutions_form{:style => "display:none"}
+                = form_for(@submission,
+                   :html => {:data => { :remote => true,
+                             :ks_insert_response => true}}) do |f|
+                  .field
+                    - @submission.institutions.each_with_index do |inst, i|
+                      %div
+                        = i + 1
+                        )
+                        En name: 
+                        = text_field_tag "submission[institutions][][en_name]", inst.en_name
+                        %br/
+                        Jp name:
+                        = text_field_tag "submission[institutions][][jp_name]", inst.jp_name
                     En name: 
-                    = text_field_tag "submission[institutions][][en_name]", inst.en_name
+                    = text_field_tag "submission[institutions][][en_name]", ""
                     %br/
                     Jp name:
-                    = text_field_tag "submission[institutions][][jp_name]", inst.jp_name
-                En name: 
-                = text_field_tag "submission[institutions][][en_name]", ""
-                %br/
-                Jp name:
-                = text_field_tag "submission[institutions][][jp_name]", ""
-              .actions
-                = f.submit
+                    = text_field_tag "submission[institutions][][jp_name]", ""
+                  .actions
+                    = f.submit
 
-
-
-
-  = link_to 'Show', ksp(@submission)
-  |
-  = link_to 'Back', ksp(submissions_path)

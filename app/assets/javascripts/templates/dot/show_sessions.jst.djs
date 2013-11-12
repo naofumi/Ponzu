@@ -1,14 +1,16 @@
 <div class="program orals" data-expiry="{{= it.expiry }}" data-container-ajax="/ponzu_frame" data-container="ponzu_frame" data-title="{{= it.head_title }}" id="session_detail_{{= it.id }}">
   <div class="panel session_header">
-    <div class="number">{{= it.number }}</div>
-    <div class="time">
-      <a href="#!_{{= it.poster_timetable_path }}" onclick="KSScrollMemory.set({href: {{= '/' + it.poster_timetable_path }}, elementId: 'session_{{= it.id }}'})" class="button icon clock">
-        {{= it.starts_at }} - {{= it.ends_at }}
-      </a>
-    </div>
-    <div class="room">
-      <a href="#!_/rooms/{{= it.room.id }}" class="button icon pin">{{= it.room.name }}</a>
-    </div>
+    {{? it.type != 'session_ad'}}
+      <div class="number">{{= it.number }}</div>
+      <div class="time">
+        <a href="#!_{{= it.poster_timetable_path }}" onclick="KSScrollMemory.set({href: {{= '/' + it.poster_timetable_path }}, elementId: 'session_{{= it.id }}'})" class="button icon clock">
+          {{= it.starts_at }} - {{= it.ends_at }}
+        </a>
+      </div>
+      <div class="room">
+        <a href="#!_/rooms/{{= it.room.id }}" class="button icon pin">{{= it.room.name }}</a>
+      </div>
+    {{?}}
     <div class="title">
       {{= it.title }}
     </div>

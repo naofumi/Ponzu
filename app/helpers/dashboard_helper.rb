@@ -110,8 +110,17 @@ module DashboardHelper
                      :poster_sessions_list
         end
       },
-      exhibition: {
-        href: ksp("/not_yet_ready")
+      exhibition: lambda {
+        if galapagos?
+          multientry_galapagos_button(t("dashboard.grid_button_titles.exhibition"), 
+                                      :list_booth_session_path, 
+                                      current_conference.dates_for('timetable'))
+        else
+          ios_button t("dashboard.grid_button_titles.exhibition"), 
+                   ksp(:booth_session_path, 
+                         to_date_string(current_conference.closest_date_for('time_table', Time.zone.now))),
+                     :exhibition
+        end
       },
       yoruzemi: lambda {
         if galapagos?

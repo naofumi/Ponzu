@@ -36,7 +36,9 @@ module Kamishibai
     # These are the paths that are invalidated when the form in submitted on the client.
     # These are set on the form DOM element itself.
     def invalidated_paths(object) # :doc:
-      paths = if object.instance_of? User
+      paths = if object.kind_of? Array
+        object.map{|o| invalidated_paths(o).split(' ') }.flatten.uniq
+      elsif object.instance_of? User
         result = [user_path(object), settings_user_path(object)]
         result.push(author_path(object.author.id)) if object.author
         result
@@ -64,6 +66,12 @@ module Kamishibai
           [meet_ups_ajax_dashboard_index_path]
       elsif object.instance_of? PrivateMessage
         [ "private_message" ]
+      elsif object.kind_of? Presentation
+        if object.persisted?
+          ["/presentations/#{object.id}"]
+        else
+          []
+        end
       else
         raise ('invalidation path not specified')
       end

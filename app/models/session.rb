@@ -1,6 +1,6 @@
 class Session < ActiveRecord::Base
   attr_accessible :en_title, :ends_at, :jp_title, :organizers_string_en, :organizers_string_jp, 
-                  :number, :room_id, :starts_at
+                  :number, :room_id, :starts_at, :ad_category
   belongs_to :room
   has_many   :presentations, :inverse_of => :session, :order => "position ASC, id ASC"
   before_destroy :validates_absence_of_presentations # in newer versions of Rails, we just add :dependent => :destroy

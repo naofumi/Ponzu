@@ -9,9 +9,16 @@
   = f.label :date
   = f.datetime_select :starts_at
   = presentation.respond_to?(:duration) && presentation.duration ? "#{(presentation.duration/60).to_i} min." : "-"
+  %br/
+  = f.label :ad_category
+  = f.select(:ad_category, Session.in_conference(current_conference).collect{|e| [e.ad_category, e.ad_category] unless e.ad_category.blank?}.compact.uniq, :include_blank => true)
+  %br/
   = f.check_box :cancel
   = f.label :cancel
+
+  %br/
   = f.submit
+  = link_to "[show]", ksp(presentation_path(presentation))
   = link_to "[delete]", 
             presentation_path(presentation), 
             :remote => true, 

@@ -41,6 +41,7 @@ class PresentationsController < ApplicationController
                         minimum_term_frequency 1
                         maximum_query_terms 100
                       }
+    @ads = Presentation::Ad.in_conference(current_conference).where(:ad_category => @presentation.session.ad_category)
   end
 
   def heading
@@ -67,7 +68,8 @@ class PresentationsController < ApplicationController
   # Presentations will be created by drag-drop of sessions and presentations.
   def create
     type_name = params[:presentation].delete(:type)
-    @presentation = type_name.contantize.new(params[:presentation])
+    @presentation = Presentation.new(params[:presentation])
+    @presentation.type = type_name.constantize.to_s #constantize will effectively sanitize the :type param
     @presentation.starts_at = @session.starts_at
     if url = params[:data_transfer]['text/plain']
       @presentation.submission =  if url =~ /submissions\/(\d+)/
@@ -96,8 +98,9 @@ class PresentationsController < ApplicationController
   # PUT /presentations/1.json
   def update
     type_name = params[:presentation].delete(:type)
-    @presentation = type_name.constantize.in_conference(current_conference).
+    @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
+    @presentation.type = type_name.constantize.to_s #constantize will effectively sanitize the :type param
     set_flash @presentation.update_attributes(params[:presentation]),
               :success => "Presentation was successfully updated",
               :fail => "Presentation failed to update"
@@ -110,6 +113,11 @@ class PresentationsController < ApplicationController
         format.html { render :partial => 'edit', :locals => {:presentation => @presentation} }
       end
     end
+  end
+
+  def edit
+    @presentation = Presentation.in_conference(current_conference).
+                                 find(params[:id])    
   end
 
   # DELETE /presentations/1

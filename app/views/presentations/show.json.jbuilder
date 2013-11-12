@@ -2,7 +2,8 @@ json.renderer do
   json.template "templates/dot/show_presentation"
   json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
 end
-json.abstract sanitize(@presentation.abstract)
+json.abstract (sanitize(@presentation.abstract) || "")
+json.external_link @presentation.submission.external_link
 json.number @presentation.number
 json.other_numbers (@presentation.submission.presentations - [@presentation]).map{|p| p.number}
 json.header_title strip_tags(@presentation.title)
@@ -16,13 +17,17 @@ json.disclose_abstract @presentation.disclose_abstract
 json.same_submission @presentation.presentations_belonging_to_same_submission.map{|p| p.id}
 json.same_authors @presentation.presentations_by_same_authors_but_different_submissions.map{|p| p.id}
 json.more_like_this @more_like_this.results.map{|p| p.id}
-json.can_edit can?(:edit, Presentation)
+json.ads @ads.map{|ad| ad.id}
+json.can_edit can?(:edit, Submission)
 json.submission_id @presentation.submission_id
+json.type @presentation.type && @presentation.type.parameterize.underscore
+json.poster_timetable_path @presentation.session.path(controller)
+
 
 json.room do
   room = @presentation.session.room
-  json.name room.name
-  json.id room.id
+  json.name room && room.name
+  json.id room && room.id
 end
 json.session do
   session = @presentation.session
@@ -34,7 +39,6 @@ json.authorships  @presentation.submission.authorships.order(:position).all,
 json.institutions @presentation.submission.institutions do |institution|
   json.name institution.name
 end
-json.abstract sanitize @presentation.abstract
 json.email_link render(:partial => "email_address", :formats => [:html])
 json.keywords @presentation.keywords
 

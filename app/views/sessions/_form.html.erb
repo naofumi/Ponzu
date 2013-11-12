@@ -35,6 +35,10 @@
     <%= f.select :type, Session.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true %>
   </div>
   <div class="field">
+    <%= f.label :ad_category %><br />
+    <%= f.text_field :ad_category %>
+  </div>
+  <div class="field">
     <%= f.label :en_title %><br />
     <%= f.text_field :en_title %>
   </div>

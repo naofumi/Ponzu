@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131110104118) do
+ActiveRecord::Schema.define(:version => 20131111041655) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20131110104118) do
     t.boolean  "cancel",                            :default => false
     t.string   "conference_tag"
     t.string   "booth_num"
+    t.string   "ad_category"
   end
 
   add_index "presentations", ["position"], :name => "index_presentations_on_position"
@@ -264,6 +265,7 @@ ActiveRecord::Schema.define(:version => 20131110104118) do
     t.string   "organizers_string_jp"
     t.string   "type"
     t.string   "conference_tag"
+    t.string   "ad_category"
   end
 
   create_table "submissions", :force => true do |t|
@@ -282,6 +284,7 @@ ActiveRecord::Schema.define(:version => 20131110104118) do
     t.boolean  "show_email",                           :default => false
     t.binary   "institutions"
     t.string   "conference_tag"
+    t.string   "external_link"
   end
 
   create_table "umin_rows", :force => true do |t|

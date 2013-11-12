@@ -3,7 +3,7 @@ json.renderer do
   json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
 end
 json.number @presentation.number
-json.title sanitize(@presentation.title)
+json.title sanitize(@presentation.title) || ""
 json.id @presentation.id
 json.starts_at l(@presentation.starts_at, :format => :month_day_time)
 json.cancel @presentation.cancel
@@ -12,3 +12,5 @@ json.authorships  @presentation.submission.authorships.order(:position).all,
 json.institutions @presentation.submission.institutions do |institution|
   json.name institution.name
 end
+
+json.type @presentation.type && @presentation.type.parameterize.underscore
