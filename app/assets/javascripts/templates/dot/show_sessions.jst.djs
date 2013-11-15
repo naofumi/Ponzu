@@ -17,7 +17,7 @@
     <div class="title">
       {{= it.title }}
     </div>
-    {{? it.organizers.length > 0 }}
+    {{? it.organizers && it.organizers.length > 0 }}
       <div class="chairs">
         <span class="label">Chairs</span>
         <div>
@@ -25,7 +25,7 @@
         </div>
       </div>
     {{?}}
-    {{? it.text.length > 0 }}
+    {{? it.text }}
       <div id="summary_description" class="summary_description {{= it.show_text ? 'show' : ''}}">
         {{= it.text }}
       </div>
