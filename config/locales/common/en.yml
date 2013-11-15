@@ -253,6 +253,7 @@ en:
       messages:
         no_presentations: |
           <p> We could not identify any of your presentations.</p>
+        please_notify_of_error: |
           <p> Please notify us if there are any presentations that you are an author of, but are not shown here.</p>
     show:
       title: "%{number} %{title}"

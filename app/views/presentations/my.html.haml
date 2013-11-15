@@ -21,3 +21,8 @@
   - else
     .panel
       != t(".messages.no_presentations")
+  .panel
+    != t(".messages.please_notify_of_error")
+    - support_email = current_conference.support_email
+    = mail_to support_email, support_email, :encode => "hex"
+

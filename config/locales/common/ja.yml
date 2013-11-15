@@ -253,7 +253,9 @@ ja:
       messages:
         no_presentations: |
           <p> あなたが共著者になっている発表が見つかりませんでした。</p>
+        please_notify_of_error: |
           <p> もし共著者になっているにも関わらず、ここに表示されていない発表がありましたらお知らせください。</p>
+          
     show:
       title: "%{number} %{title}"
       session_name: "Session %{number}"
@@ -426,7 +428,7 @@ ja:
       reports: レポート
       admin: Admin
     grid_button_titles:
-      welcome: 挨拶
+      welcome: ご挨拶
       announcements: 連絡事項
       search: 検索
       floor_plan: 会場図
