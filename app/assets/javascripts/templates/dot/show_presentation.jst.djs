@@ -90,8 +90,7 @@
       <div class="panel_title">Keywords</div>
       <div class="panel">
         {{~ it.keywords :keyword:index }}
-          <a href="#!_/search?query={{= encodeURIComponent(keyword) }}">{{= keyword}}</a>
-          {{? index != (it.keywords.length - 1)}}, {{?}}
+          <a href="#!_/search?query={{= encodeURIComponent(keyword) }}">{{= keyword}}</a>{{? index != (it.keywords.length - 1)}}, {{?}}
         {{~}}
       </div>
     {{?}}
