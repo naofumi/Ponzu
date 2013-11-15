@@ -1,4 +1,4 @@
-- cache ['v1', current_conference.id, I18n.local, @global_messages.first, can?(:manage, GlobalMessage), params[:page]] do
+- cache ['v1', current_conference.id, I18n.locale, @global_messages.first, can?(:manage, GlobalMessage), params[:page]] do
   = ponzu_frame :data => {:title => t('global_messages.announcements')} do
     .panel
       %h1= t('global_messages.announcements')

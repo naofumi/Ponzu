@@ -1,7 +1,7 @@
 - p = @presentation
 = ks_element :id => "session_details_presentation_#{p.id}",
              :class => ["panel", "presentation"] do
-  - cache ['v1', current_conference.id, I18n.local, p] do
+  - cache ['v1', current_conference.id, I18n.locale, p] do
     - unless p.cancel
       .time
         = l(p.starts_at, :format => :month_day_time)
