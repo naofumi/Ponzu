@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131115003312) do
+ActiveRecord::Schema.define(:version => 20131115111055) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -289,6 +289,7 @@ ActiveRecord::Schema.define(:version => 20131115003312) do
     t.binary   "institutions"
     t.string   "conference_tag"
     t.string   "external_link"
+    t.string   "speech_language"
   end
 
   create_table "umin_rows", :force => true do |t|

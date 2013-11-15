@@ -22,7 +22,12 @@ json.can_edit can?(:edit, Submission)
 json.submission_id @presentation.submission_id
 json.type @presentation.type && @presentation.type.parameterize.underscore
 json.poster_timetable_path @presentation.session.path(controller)
-
+if @presentation.submission.show_email
+  json.email @presentation.submission.corresponding_email
+end
+if @presentation.kind_of?(Presentation::Oral) && !@presentation.submission.speech_language.blank?
+  json.speech_language @presentation.submission.speech_language 
+end
 
 json.room do
   room = @presentation.session.room

@@ -55,8 +55,10 @@
     = f.text_field :corresponding_email
   .field
     = f.label :show_email
-    %br/
     = f.check_box :show_email
+  .field
+    = f.label :speech_language, "発表言語 ('en', 'ja')"
+    = f.select :speech_language, ['en', 'ja'], :include_blank => true
 
 
   - if can? :manage, Submission

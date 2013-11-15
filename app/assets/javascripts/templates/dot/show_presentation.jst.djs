@@ -60,6 +60,14 @@
       {{? it.external_link }}
         <a href="{{= it.external_link }}" target="external" class="button icon arrowright">External link</a>
       {{?}}
+      <div style="text-align:right">
+        {{? it.email }}
+          <a href="mailto:{{= it.email}}">{{= it.email}}</a>
+        {{?}}
+        {{? it.speech_language }}
+          {{= ViewHelper.speechLanguageIndicator(it.speech_language) }}
+        {{?}}
+      </div>
     {{??}}
       <h1>Cancelled</h1>
     {{?}}

@@ -11,9 +11,16 @@ ViewHelperConstructor = ->
 
     result
 
+  # language is a string like 'en', 'ja'
+  speechLanguageSelection = {en: "English Speech", ja: "日本語発表"}
+  speechLanguageIndicator = (language) ->
+    speechLanguageSelection[language]
+
+
   # public interface
 
   this.randomSelect = randomSelect
+  this.speechLanguageIndicator = speechLanguageIndicator
 
   return this
 
