@@ -1,0 +1,493 @@
+ja:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  time:
+    formats:
+      month_day: "%b%e日"
+      month_day_hour: "%b%e日 %H:00"
+      month_day_time: "%b%e日 %H:%M"
+  helpers:
+    submit:
+      meet_up:
+        create: "Create a new Yoruzemi with the above information." #"以上の内容で新しい夜の分科会を登録する"
+        update: "Update this Yoruzemi with the above information" #"以上の内容で夜ゼミを更新する"
+      user:
+        update: "Update settings"
+      private_message:
+        create: 'Send private message'
+
+  map: "Map"
+  search_field: "title, abst., name, email"
+  submit_search: "Search"
+  others: "Others"
+  presentation_search_results: "Presentations (%{hits})"
+  user_search_results: "Participants (%{hits})"
+  please_enter_search_term: "Please enter search term"
+  pre_imode_2_warning: "We are sorry but this browser is unsupported.<br>Are you using a pre-2009 iMode browser?"
+
+  print_message_header:
+    message: "Please download the PDF for better viewing."
+    
+  message_mailer:
+    private_message:
+      header: "You have received the following private message."
+      view_web: "View on website at %{link} (requires login)."
+    presentation_modified:
+      header: "Presentation %{number} was modified."
+      view_web: "View on website at %{link} (requires login)."
+    comment_added:
+      header: "New comment on presentation %{number}."
+      view_web: "View on website at %{link} (requires login)."
+  conferences:
+    index:
+      title: "List Conferences"
+    new:
+      title: "New Conference"
+    show:
+      title: "Show Conference"
+    edit:
+      title: "Edit Conference"
+  authors:
+    show:
+      title: "%{name}"
+    index:
+      title: "List of Authors"
+    edit:
+      title: "Edit Authors"
+    new:
+      title: "New Author"
+  global_messages:
+    announcements: Announcements
+    index:
+      title: Announcements
+    edit:
+      title: Edit Announcements
+    show:
+      title: Announcement
+    new:
+      title: New Announcement
+
+  user_sessions:
+    new:
+      title: Login
+
+  docs:
+
+  timetable:
+    show:
+      title: "%{date} timetable"
+  poster_sessions:
+    sub_menu:
+      show_as_map: "マップ表示"
+      show_as_list: "リスト表示"
+    show:
+      title: "Poster %{day}"
+    list:
+      title: "Poster List %{day}"
+
+  booth_sessions:
+    sub_menu:
+      show_as_map: "マップ表示"
+      show_as_list: "リスト表示"
+    show:
+      title: "Booth %{day}"
+    list:
+      title: "Booth List %{day}"
+
+  private_messages:
+    new:
+      title: "New PM to Dr. %{to}"
+      header: "Send new Private Message to Dr. %{to}"
+    index:
+      title: "List Private Messages"
+    warning:
+      warning_header: "Warning: Do not use for important messages."
+      warning_text: |
+        <p>
+          This private messages system allows you to communicate with conference participants without knowing their email addresses.
+        </p>
+        <p>
+          The message will be presented to the recipient when they open this conference system.
+        </p>
+    threads:
+      title: "Private Messages"
+      messages:
+        no_messages: No private messages yet.
+    conversation:
+      title: "PM with %{name}"
+      view_profile: "view profile"
+  # Old
+  room:
+    name: "Room %{number}"
+    click_image_to_enlarge: "Click image to enlarge"
+
+  rooms:
+    index:
+      title: "Room index"
+    new:
+      title: "New room"
+
+  authorships:
+    new:
+      title: "New Authorship"
+  sessions:
+    show:
+      title: "%{number} %{title}"
+      chairs:
+        label: "chairs"
+    new:
+      title: "New session"
+  submissions:
+    show:
+      title: "Show Submission"
+  users:
+    show:
+      title: "%{name}"
+    edit:
+      title: "Edit User"
+    index:
+      title: "List Users"
+    new:
+      title: "New User"
+    name_with_salutation: "Dr. %{name}"
+    settings: "User Settings"
+    login: "Login"
+    logout: "Logout"
+    greetings: "Welcome, Dr. %{name}"
+    send_message_to: "Send a private message to Dr. %{name}."
+    send_message: "Send a private message"
+    link_notes: "To reduce network load, we have linked to mobile sites where possible."
+    social_id_not_entered: "Is not a member of this service or information is not entered in this system."
+    imode_cookie_warning: |
+      Note) Please acknowledge that iMode phones with browsers prior to iMode Browser 2.0 (2009 summer) do not support cookies, and cannot log into this system.
+    login_benefits: |
+      Viewing abstracts, my schedule, comments, etc. require login.
+
+    login_id: "Login ID"
+    new_password: "New password"
+    new_password_confirm: "New password (confirm)"
+    settings:
+      title: 'User Settings'
+      title_for: "%{name}'s user settings"
+      en_name: "English Name"
+      email: "Email Address"
+      twitter: "Twitter"
+      facebook: "Facebook"
+      linkedin: "LinkedIn"
+      read_research_map: "Read & Researchmap"
+      other: "Other"
+      view_profile: "View your user profile"
+      placeholders:
+        email: "steve@mac.com"
+        twitter: "@cdarwin"
+        facebook: "https://www.facebook.com/zuck (profile page url)"
+        linkedin: "http://www.linkedin.com/in/***** (profile page url)"
+        read_research_map: "http://researchmap.jp/******** (profile page url)"
+        lab_url: 'e.g. lab URL'
+        pubmed_url: 'e.g. PubMed URL'
+        personal_blog_url: 'e.g. personal blog URL'
+        blank: ""
+      descriptions:
+        email: |
+          Used only to receive notifications from this system. 
+          <strong>We never display this on the web site.</strong><br />
+          If using a Keitai email account, please confirm that you can receive emails from 
+          "no-reply@castle104.com"
+        other: "Other links (e.g. URL for lab website, PubMed URL)"
+      panel_titles:
+        account_info: "Account Information"
+        your_name: "Your name"
+        additional_info: "Additional Information"
+        examples: "Examples"
+      # submit button labels in helpers: submit: users:
+
+  user_settings:
+    # old
+    # password: "password"
+    # please_update_default_password: "We strongly suggest that you change your password at least once after your first login."
+    # email_address_during_conference: "Your email address during the Conference"
+    # email_address: "email address"
+    # links: "Links About Yourself"
+    # user_link_title: "%{name}'s page"
+    # links_message: |
+    #   The following links will be displayed on %{link_to_user}, and will be disclosed.<br />
+    #   Please use them to enable participants to know more about you, and to make it easy for them to contact you.<br />
+    #   Otherwise, if you want to display links to supplementary material for you presentations, we suggest that you add comments to your presentations.
+    #   These comments will be displayed on the presentation page.<br />
+    # example: "i.e."
+    # twitter_link: "Twitter ID"
+    # facebook_link: "Facebook Profile"
+    # linked_in_link: "LinkedIn Public Profile"
+    # read_research_map_link: "ReaD & Researchmap Profile"
+    # other_links: "Other links"
+    # other_links_message: |
+    #   改行を入れて、複数指定可能。<br />
+    #   各行の最後の単語がURLと判断されます。<br />
+    #   例)<br/>
+    #   研究室ホームページ http://mdb.biophys.kyoto-u.ac.jp<br/>
+    #   切っても切ってもプラナリア http://www.amazon.co.jp/切っても切ってもプラナリア-阿形-清和/dp/4000052454<br/>
+    email_address_during_conference_message: |
+      We will send various notifications to the email address below.<br />
+  comments:
+    show:
+      title: "Show Comment"
+    edit: 
+      title: "Edit Comment"
+    new:
+      title: "New Comment"
+    index:
+      title: "List Comments"
+    new_placeholder: "ここにコメントを書いてください."
+    reply_placeholder: "Write your reply here."
+  presentations:
+    presentation_cancelled: "Presentation Cancelled"
+    my:
+      title: "My talks"
+      notifications:
+        comment_added: "Comment added on presentation %{number}"
+      panel_titles:
+        my_presentations: "My Presentations"
+      messages:
+        no_presentations: |
+          <p> あなたが共著者になっている発表が見つかりませんでした。</p>
+          <p> もし共著者になっているにも関わらず、ここに表示されていない発表がありましたらお知らせください。</p>
+    show:
+      title: "%{number} %{title}"
+      session_name: "Session %{number}"
+    index:
+      title: "List Presentations"
+    author: "author"
+    delete_comment: "delete comment"
+    summary: "summary"
+    comments: "コメント"
+    keywords: "キーワード"
+    same_submission: "same submission"
+
+    # old
+    pending_disclosure: "The abstract for the presentation will be disclosed on %{date}."
+    network_diagram: "Network Diagram of Presentation Similarities"
+    not_logged_in: |
+      <h4>We are sorry but we can only show abstracts to our conference participants.</h4>
+      <p>If you are participating in our conference but have not yet logged in to the current online program system, please proceed to the <a href="/login">Login screen</a>.</p>
+  likes:
+    like: "like"
+    unlike: "unlike"
+    add_to_my_schedule: "add to my schedule"
+    remove_from_my_schedule: "remove from my schedule"
+    like_is_required_to_schedulize: 'To add to your schedule, please "like" it first.'
+    liked: 'Liked'
+    scheduled: 'Scheduled'
+    my:
+      title: "My Likes"
+      menu:
+        posters: "Posters"
+      messages:
+        no_likes: "Presentations that you liked show up here."
+    my_schedule:
+      title: "My Schedule"
+      messages:
+        no_schedules: "Presentations that you add to your schedule show up here."
+    my_votes:
+      title: "My votes"
+      messages:
+        instructions: "" #override in conference specific if using votes
+    likes_report:
+      title: "Likes Report"
+    votes_report:
+      title: "Votes Report"
+    index:
+      title: List Likes
+    show:
+      title: Show Like
+  meet_ups:
+    index:
+      title: "Yoruzemi %{date}"
+    show:
+      title: "Yoruzemi: %{title}"
+    new:
+      title: "New Yoruzemi"
+    edit:
+      title: "Edit Yoruzemi"
+    buttons:
+      back_to_list: "Yoruzemis on %{date_string}"
+      click_here_to_attend_this_yorusemi: "I want to go"
+      click_here_to_cancel: "Click here to cancel your participation"
+      you_are_planning_to_attend_this_yorusemi: "I want to cancel"
+      you_get_notifications_if_you_register: "Registrants will be notified to the organizer, and will receive updates."
+      edit_button: "[Edit]"
+    fields:
+      starts_at_or_assembly_time: Start/Assembly time
+      restaurant_or_assembly_place: Restaurant/Assembly place
+      link: Links
+      organizer: Organizer
+      organizer_contact: Organizer contact
+      people_planning_to_participate: Planned participants
+      description: Description
+      title: Title
+      event_day: Date
+      event_starts_at: Time
+      venue: Place
+      link_to_venue: "Link to restaurant/assembly place"
+      organizer_contact: "Organizer contact info"
+    alerts:
+      do_you_really_want_to_cancel: "Do you really want to cancel your participation?"
+      confirm_participation: "If you register, you will receive updates on your dashboard."
+      confirm_delete_comment: "Are you sure you want to delete this comment?"
+    headers:
+      create_new_yoruzemi: "Create new Yoruzemi"
+    panel_titles:
+      summary: Summary
+      starts_at_or_assembly_time: "Start/Assembly time"
+      bar_or_assembly_place: "Bar/Assembly place"
+      related_links: "related links"
+      organizer_contact: "Organizer contact info"
+      list_of_yoruzemi: "List of Yoruzemi"
+    placeholders:
+      title: "Enter your Yoruzemi's title"
+      description: "What kind of people are coming, what kind of people are welcome, etc."
+      venue: "Enter the Restaurant/Assembly place"
+      link_to_venue: "Enter link to restaurant/assembly place if available"
+      organizer_contact: "Enter your mobile contact (phone number or email)"
+    # submit button labels in helpers: submit: meet_up:
+
+    # Old or unconfirmed
+    updates: "Updates for Bar sessions"
+    yorusemi_for: "Yoruzemi for %{date}"
+    starts_at: "Starts at"
+    undecided: "Un-decided"
+    comments: "Comments"
+    add_new_comment: "Add a new comment"
+    submit_comment: "Submit comment"
+    in_preparation: "in preparation"
+    lets_make_a_new_yorusemi: "夜ゼミを企画しよう!"
+    about_yorusemi: |
+      夜ゼミは学会参加者が企画し、研究者同士で集まって夜まで議論を続けるイベントです。
+    more: "[もっと詳しく]"
+    about_more: |
+      <li>Promotion: Bar Sessions will be prominently linked-to from the online program.</li>
+      <li>Access: This system is accessible from anywhere in the city with your PC, smartphone or even your feature phone.</li>
+      <li>Notifications: If you register you email address, participants will automatically receive notifications. Organizers can change restaurants without losing their participants.</li>
+      <li>Messages: You can send messages to participants even if you've lost their email addresses. Great for finding old acquaintences.</li>
+    empty_message: "No Yoruzemi have been registered for this day."
+    login_required: "Login required" #confirmed
+    login_is_required_to_participate: "Login is required to register online."
+  header:
+    home_page: "HOME"
+    oral_sessions: "Oral"
+    poster_sessions: "Posters"
+    meet_ups: "Bar sessions"
+    exhibition: "Exhibition"
+    reset_cache: "reset cache"
+    cache_was_cleared: "Successfully cleared the cache"
+  meet_up_comments:
+    edit:
+      title: "Edit meet up comment"
+    index:
+      title: "List meet up comments"
+    new:
+      title: "New meet up comment"
+    show:
+      title: "New meet up comment"
+  dashboard:
+    # Old
+    # mobile_usage: "Smartphone / Mobile Site"
+    # global_messages: "Announcements"
+    # presentation_feedback: "Your Feedback"
+    # recent_feedback: "Most recent feedback"
+    # your_presentations: "Your Presentations"
+    # my_schedule: "My Schedule"
+    # my_likes: "My Likes!"
+    # liked_and_scheduled_presentations: "My Schedule and Likes"
+    # private_messages: "Private Messages"
+    # my_bar_sessions: "My Bar Sessions"
+    # faqs: "FAQ"
+    # date_tab: "Dec. %{day}"
+    # you: "you"
+    # him_her: "him or her"
+    # program: "Program"
+    # orals: "%{date} Oral Sessions"
+    # orals_timetable: "%{date} Orals Timetable"
+    # orals_list: "%{date} Orals List"
+    # posters: "%{date} Poster Sessions"
+    # posters_map: "%{date} Posters on Map"
+    # posters_list: "%{date} Posters as List"
+    # my_information: "Your Information"
+    # program_abstracts: "Program / Abstracts"
+    # New
+    index:
+      title: "ダッシュボード"
+    panel_titles:
+      sessions: セッション
+      my_info: 私の情報
+      other: その他
+      reports: レポート
+      admin: Admin
+    grid_button_titles:
+      welcome: 挨拶
+      announcements: 連絡事項
+      search: 検索
+      floor_plan: 会場図
+      oral_sessions: 口頭発表
+      oral_sessions_list: 口頭発表リスト形式
+      poster_sessions: ポスター発表
+      poster_sessions_list: ポスター発表リスト形式
+      exhibition: 展示会
+      yoruzemi: 夜ゼミ
+      my_presentations: 私の発表
+      my_likes: 私のいいね！
+      my_schedule: 私の予定
+      my_votes: 私の投票
+      private_messages: メッセージ
+      instructions_for_presentations: Instruction for Presentations
+      venue_info: Venue info.
+      child_care: Child care
+      settings: 設定
+      download: ダウンロード
+      clear_cache: キャッシュ消去
+      switch_language: 言語切り替え
+      login: ログイン
+      logout: ログアウト
+      likes_report: Likes Report
+      votes_report: Votes Report
+      conference_home: 年会HP
+      pdf: PDFダウンロード
+      pdf_no_abstract: "All No Abst.<br />(1.4MB)"
+      pdf_with_abstract: "All With Abst.<br />(8.7MB)"
+      shimin: "市民講座<br />ランチョン<br />(0.4MB)"
+
+    admin_links:
+      manage_conferences: Manage Conferences
+      manage_submissions: Manage Submissions
+      manage_sessions: Manage Sessions
+      manage_authors: Manage Authors
+      manage_users: Manage Users
+      manage_rooms: Manage Rooms
+      rake_reports: Rake Reports
+      manage_global_messages: Manage Global Messages
+      manage_presentations: Manage Presentations
+      manage_messages: Manage Messages
+      manage_receipts: Manage Receipts
+      manage_participations: Manage Participations
+      manage_likes: Manage Likes
+      manage_authorships: Manage Authorships
+      manage_private_messages: Manage PrivateMessages
+      manage_meet_ups: Manage MeetUps
+      manage_comments: Manage Comments
+      manage_cache_version: Manage Cache version
+      show_poster_map_test: Show PosterMap test
+
+  static:
+    rake_reports:
+      title: Rake reports
+  search:
+    # new
+    index:
+      title: "Search for \"%{query}\""
+    # old
+    hit_users: '"%{query}" matched %{hits} people'
+    hit_presentations: '"%{query}" matched %{hits} presentations'
+    next: "Next page"
+    previous: "Previous page"

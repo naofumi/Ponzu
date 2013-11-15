@@ -14,16 +14,17 @@ module Kamishibai
     private
 
     def set_locale
-      I18n.locale = :en
-      # if cookies[:locale].blank?
-      #   cookies[:locale] = I18n.default_locale
-      # end
-      # I18n.locale = cookies[:locale]
+      available_locales = current_conference.available_locales
+      negotiated_locale = http_accept_language.compatible_language_from(available_locales)
+      if !cookies[:locale].blank? &&
+            available_locales.include?(cookies[:locale])
+        I18n.locale = cookies[:locale]
+      else
+        I18n.locale = negotiated_locale
+        cookies[:locale] = {value: negotiated_locale,
+                            expires: 3.months.from_now}
+      end
     end
 
-    # http://edgeguides.rubyonrails.org/i18n.html#setting-the-locale-from-the-client-supplied-information
-    # def extract_locale_from_accept_language_header
-    #   request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
-    # end
   end
 end

@@ -47,6 +47,9 @@ Gem::Specification.new do |s|
   # To use Jbuilder templates for JSON
   s.add_dependency 'jbuilder'
 
+  # HttpAcceptLanguage to get locale from browser settings
+  s.add_dependency 'http_accept_language'
+
   # For ePub output where we need to convert entities to UTF8
   # to get epubcheck to pass.
   s.add_dependency 'htmlentities'

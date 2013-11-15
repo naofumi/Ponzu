@@ -53,6 +53,14 @@
     (space delimited list. If set, all emails will be sent to these addresses only.
     Use until we are ready to send real users emails)
   .field
+    = label_tag :available_locales, "Locales supported ('en', 'ja', etc.)"
+    %br/
+    - 5.times do |i|
+      = text_field_tag "conference[available_locales][]", 
+                       @conference.available_locales[i],
+                       :style => "width: 100px"
+
+  .field
     = f.label :ks_cache_version
     = f.text_field :ks_cache_version
 

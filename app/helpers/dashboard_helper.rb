@@ -190,7 +190,7 @@ module DashboardHelper
         href: "Javascript:KSSqlCache.clear();localStorage.clear();sessionStorage.clear();alert('Cache cleared');location.reload();"
       },
       switch_language: {
-        href: ksp(:docs_path, "#{conference_tag}/child_care")
+        href: "Javascript:LocaleManager.toggle();location.reload();"
       },
       login: lambda {
         if current_user

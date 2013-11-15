@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20131111041655) do
     t.string   "conference_home_page_url"
     t.string   "ks_cache_version"
     t.string   "database_tag"
+    t.text     "available_locales"
   end
 
   create_table "conversations", :force => true do |t|

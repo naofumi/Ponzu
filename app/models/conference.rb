@@ -1,10 +1,12 @@
 class Conference < ActiveRecord::Base
   attr_accessible :dates, :module_name, :support_email, :name, :tag, 
                   :database_tag, :subdomain, :send_all_emails_to, :icons, 
-                  :conference_home_page_url, :ks_cache_version
+                  :conference_home_page_url, :ks_cache_version,
+                  :available_locales
   include SimpleSerializer
   serialize_single :dates, :typecaster => :remove_blank_from_conference_dates
   serialize_single :icons, :typecaster => :remove_blank_from_icons
+  serialize_array  :available_locales, :typecaster => :remove_blank_from_locales
 
   has_many :users, :foreign_key => :conference_tag, 
            :primary_key => :database_tag, :dependent => :restrict
@@ -46,6 +48,10 @@ class Conference < ActiveRecord::Base
       icons[key] = icons[key].select{|e| !e.blank?}
     end
     return icons
+  end
+
+  def remove_blank_from_locales(locales)
+    locales.select{|l| !l.blank?}
   end
 
 end

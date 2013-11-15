@@ -26,7 +26,8 @@
 # 
 # The argument to +:typecaster+ is a symbol to a callback function. The
 # callback function is a filter that takes the input and converts it to 
-# the suitable form.
+# the suitable form. We only do this in the input, because if the input
+# is OK, then we shouldn't have to change stuff on the output.
 #
 # Provide +:sort:+ with a Proc if you want to sort the output of the getter.
 # +:sort => Proc.new{|a, b| b <=> a}+

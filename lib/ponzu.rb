@@ -26,6 +26,8 @@ require 'rails_autolink'
 
 require 'jbuilder'
 
+require 'http_accept_language'
+
 require 'htmlentities'
 
 require 'redcarpet'
