@@ -26,8 +26,7 @@
     %fieldset
       %legend All Authorships
       = render :partial => "authorships", :object => @author.authorships
-      .dropbox{:style => "border: dotted 2px #333; height: 100px;background-color: #AAA;margin-top:10px;",
-               :data => {:action => replace_author_path(@author),
+      .dropbox{:data => {:action => replace_author_path(@author),
                          :method => 'post',
                          :'ks-insert-response' => 'true'}}
         Drop Submissions here to re-associate Author-Submissions

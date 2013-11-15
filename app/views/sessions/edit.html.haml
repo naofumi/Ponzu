@@ -38,7 +38,7 @@
       %br/
       = render :partial => "presentations/list", 
                :locals => {:presentations => @session.presentations}
-      #new_presentation_drop.dropbox{:style => "border: 1px  dotted #444;min-height: 50px", 
+      #new_presentation_drop.dropbox{
                              :data => {:action => "#{presentations_path()}", 
                                        :method => "post",
                                        :params => "presentation[session_id]=#{@session.id}",

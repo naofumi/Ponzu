@@ -27,8 +27,7 @@
             %td
               = render :partial => "authorships/list", 
                        :locals => {:authorships => @submission.authorships.order(:position)}
-              .dropbox{:style => "border: dotted 1px #666",
-                       :id => "new_authorship_drop",
+              .dropbox{:id => "new_authorship_drop",
                        :data => {:action => drop_on_submission_authorships_path, 
                                  "ks_insert-response" => true,
                                  :method => "post",

@@ -17,7 +17,7 @@
         %td{:style => "width:50%"}
           = render :partial => "authorships/list", 
                    :locals => {:authorships => @submission.authorships.order(:position)}
-          .dropbox{:style => "border: dotted 1px #666"}
+          .dropbox
             Drop authors here to create new Authorships
         %td
           - @submission.institutions.each_with_index do |inst, i|
