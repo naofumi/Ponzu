@@ -6,8 +6,8 @@ json.abstract (sanitize(@presentation.abstract) || "")
 json.external_link @presentation.submission.external_link
 json.number @presentation.number
 json.other_numbers (@presentation.submission.presentations - [@presentation]).map{|p| p.number}
-json.header_title strip_tags(@presentation.title)
-json.title sanitize(@presentation.title)
+json.header_title strip_tags(@presentation.title) || ""
+json.title sanitize(@presentation.title) || ""
 json.id @presentation.id
 json.next_id @presentation.next.id if @presentation.next
 json.previous_id @presentation.previous.id if @presentation.previous
