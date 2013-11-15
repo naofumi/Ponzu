@@ -16,7 +16,7 @@
 -#            all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at
 -#            current_user && current_user.id
 - all_likes = Like.where(:presentation_id => @presentation)
-- cache ["v0", 
+- cache ["v0", current_conference.id, I18n.local, 
          "presentations/social_box", 
          @presentation.id, 
          all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,

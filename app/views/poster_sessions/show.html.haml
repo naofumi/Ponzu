@@ -1,4 +1,4 @@
-- cache ['poster_session_v2', @sessions.max_by{|s| s.updated_at}, @show_date] do
+- cache ['poster_session_v2', current_conference.id, I18n.local, @sessions.max_by{|s| s.updated_at}, @show_date] do
   = ponzu_frame :id => ["poster", params[:id]],
                 :class => "backdrop",
                 :title_args => {:day => l(@show_date, :format => :month_day)} do
