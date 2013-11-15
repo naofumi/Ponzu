@@ -5,6 +5,8 @@ end
 json.id @session.id
 json.number @session.number
 json.title sanitize(@session.title)
+json.show_text @session.show_text
+json.text sanitize(@session.text)
 json.head_title strip_tags(@session.title)
 json.poster_timetable_path @session.path(controller)
 json.starts_at l(@session.starts_at, :format => :month_day_time)
@@ -14,6 +16,7 @@ json.ends_at (@session.starts_at.beginning_of_day == @session.ends_at.beginning_
 json.organizers (@session.organizers_string ? @session.organizers_string.split('|') : [])
 json.paginator ks_will_paginate(@presentations)
 json.type @session.type && @session.type.parameterize.underscore
+json.can_edit can?(:edit, Session)
 json.room do
   json.id @session.room && @session.room.id
   json.name @session.room && @session.room.name

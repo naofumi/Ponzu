@@ -56,6 +56,25 @@
     <%= f.label :organizers_string_jp %><br />
     <%= f.text_field :organizers_string_jp %>
   </div>
+  <div class="field">
+    <%= f.label :jp_text %><br />
+    <%= f.text_area :jp_text, :style => "height:150px" %>
+  </div>
+  <div class="field">
+    <%= f.label :en_text %><br />
+    <%= f.text_area :en_text, :style => "height:150px" %>
+  </div>
+  <div class="field">
+    <p>
+      "show text"がオンになっていると、セッションの説明文（en_text, jp_text)が最初から表示される。
+      オフになっていたら、ユーザがボタンを押さないと表示されない（スマートフォンで邪魔にならないように）。
+    </p>
+    <%= f.check_box :show_text %>
+    <%= f.label :show_text %>
+  </div>
+
+
+
   <div class="actions">
     <%= f.submit %>
   </div>

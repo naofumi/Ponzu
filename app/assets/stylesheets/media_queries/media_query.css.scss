@@ -127,6 +127,20 @@ body:after {
       hyphens: auto;
     }
   }
+
+  .summary_description {
+    display: none;
+    &.show {
+      display: block;
+    }
+  }
+  .show_summary_button_wrapper {
+    display: block;
+    &.hide {
+      display: none;
+    }
+  }
+
 }
 
 // Up till smaller than iPhone

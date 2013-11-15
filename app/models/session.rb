@@ -9,6 +9,7 @@ class Session < ActiveRecord::Base
   validates_presence_of :number
   validates_uniqueness_of :number, :scope => :conference_tag
   locale_selective_reader :title, :en => :en_title, :ja => :jp_title
+  locale_selective_reader :text, :en => :en_text, :ja => :jp_text
   locale_selective_reader :organizers_string, :en => :organizers_string_en, :ja => :organizers_string_jp
 
 
