@@ -121,7 +121,7 @@
     {{?}}
 
     {{? it.same_authors.length > 0}}
-      <div class="panel_title no_print">Other presentations by same authors</div>
+      <div class="panel_title no_print">Other presentations by the same authors</div>
       <div class="panel paneled_list no_print">
         {{~ it.same_authors :presentation_id:index }}
           <a href="#!_/presentations/{{= presentation_id }}">
