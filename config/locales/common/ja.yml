@@ -60,15 +60,15 @@ ja:
     new:
       title: "New Author"
   global_messages:
-    announcements: Announcements
+    announcements: 連絡事項
     index:
-      title: Announcements
+      title: 連絡事項
     edit:
-      title: Edit Announcements
+      title: 連絡事項を編集
     show:
-      title: Announcement
+      title: 連絡事項
     new:
-      title: New Announcement
+      title: 新しい連絡事項
 
   user_sessions:
     new:
