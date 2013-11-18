@@ -1,2 +1,2 @@
-class Presentation::Forum < Presentation::TimeTableable
+class Presentation::Forum < Presentation::Oral
 end

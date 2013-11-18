@@ -1,2 +1,2 @@
-class Presentation::Luncheon < Presentation::TimeTableable
+class Presentation::Luncheon < Presentation::Oral
 end

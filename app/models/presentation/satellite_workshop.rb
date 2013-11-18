@@ -1,2 +1,2 @@
-class Presentation::SatelliteWorkshop < Presentation::TimeTableable
+class Presentation::SatelliteWorkshop < Presentation::Oral
 end

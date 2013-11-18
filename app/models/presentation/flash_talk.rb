@@ -1,2 +1,2 @@
-class Presentation::FlashTalk < Presentation::TimeTableable
+class Presentation::FlashTalk < Presentation::Oral
 end

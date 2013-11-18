@@ -1,2 +1,2 @@
-class Presentation::Symposium < Presentation::TimeTableable
+class Presentation::Symposium < Presentation::Oral
 end

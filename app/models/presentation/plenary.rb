@@ -1,2 +1,2 @@
-class Presentation::Plenary < Presentation::TimeTableable
+class Presentation::Plenary < Presentation::Oral
 end
