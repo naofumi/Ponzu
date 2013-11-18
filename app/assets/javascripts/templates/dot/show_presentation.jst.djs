@@ -77,16 +77,18 @@
     {{?}}
   </div>
   {{? !it.cancelled }}
-    <div class="presentation panel">
-      <div data-ajax="/presentations/{{= it.id}}/social_box" data-expiry="86400" id="presentation_{{= it.id}}_social_box"></div>
-    </div>
-    <div class='panel_title no_print comments {{= it.type }}'>COMMENTS</div>
-      <div class='presentation panel no_print comments {{= it.type }}'>
-        <div id='comments'>
-          <div class="" data-ajax="/presentations/{{= it.id}}/comments" data-expiry="86400" id="presentation_{{= it.id}}_comments">
+    {{? it.user_id }}
+      <div class="presentation panel">
+        <div data-ajax="/presentations/{{= it.id}}/social_box" data-expiry="86400" id="presentation_{{= it.id}}_social_box"></div>
+      </div>
+      <div class='panel_title no_print comments {{= it.type }}'>COMMENTS</div>
+        <div class='presentation panel no_print comments {{= it.type }}'>
+          <div id='comments'>
+            <div class="" data-ajax="/presentations/{{= it.id}}/comments" data-expiry="86400" id="presentation_{{= it.id}}_comments">
+          </div>
         </div>
       </div>
-    </div>
+    {{?}}
     {{? it.same_submission.length > 0}}
       <div class="panel_title no_print">Same submission</div>
       <div class="panel paneled_list no_print">

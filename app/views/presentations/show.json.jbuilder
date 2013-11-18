@@ -19,10 +19,11 @@ json.same_authors @presentation.presentations_by_same_authors_but_different_subm
 json.more_like_this @more_like_this.results.map{|p| p.id}
 json.ads @ads.map{|ad| ad.id}
 json.can_edit can?(:edit, Submission)
+json.user_id current_user && current_user.id
 json.submission_id @presentation.submission_id
 json.type @presentation.type && @presentation.type.parameterize.underscore
 json.poster_timetable_path @presentation.session.path(controller)
-if @presentation.submission.show_email
+if @presentation.submission.show_email && current_user
   json.email @presentation.submission.corresponding_email
 end
 if @presentation.kind_of?(Presentation::Oral) && !@presentation.submission.speech_language.blank?
@@ -44,7 +45,6 @@ json.authorships  @presentation.submission.authorships.order(:position).all,
 json.institutions @presentation.submission.institutions do |institution|
   json.name institution.name
 end
-json.email_link render(:partial => "email_address", :formats => [:html])
 json.keywords @presentation.keywords
 
 related_submissions = (@presentation.submission.submissions_by_same_authors - [@presentation.submission]).compact

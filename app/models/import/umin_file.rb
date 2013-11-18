@@ -86,7 +86,9 @@ module Import
        :session_room_en_location, :session_number, :session_starts_at,
        :session_ends_at, :session_en_title, :session_jp_title, :organizers_string_en,
        :organizers_string_jp, :session_type, :presentation_type, :starts_at,
-       :number_string, :authors]
+       :number_string, :authors, :presenting_author_email, :presenting_author_email_show?,
+       :presentation_language
+     ]
     end
   end
 
