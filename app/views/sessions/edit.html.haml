@@ -38,9 +38,8 @@
       %br/
       = render :partial => "presentations/list", 
                :locals => {:presentations => @session.presentations}
-      #new_presentation_drop.dropbox{
-                             :data => {:action => "#{presentations_path()}", 
-                                       :method => "post",
-                                       :params => "presentation[session_id]=#{@session.id}",
-                                       :"ks-insert-response" => 'true'}}
+      #new_presentation_drop.dropbox{ :data => {:action => "#{presentations_path()}", 
+                                                :method => "post",
+                                                :params => "presentation[session_id]=#{@session.id}",
+                                                :"ks-insert-response" => 'true'}}
         Drop Submission or Presentation here from a different window to add to this Session
