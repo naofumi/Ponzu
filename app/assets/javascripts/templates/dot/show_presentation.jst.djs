@@ -62,10 +62,14 @@
       {{?}}
       <div style="text-align:right">
         {{? it.email }}
-          <a href="mailto:{{= it.email}}">{{= it.email}}</a>
+          <span class="corresponding_email">
+            <a href="mailto:{{= it.email}}">{{= it.email}}</a>
+          </span>
         {{?}}
         {{? it.speech_language }}
-          {{= ViewHelper.speechLanguageIndicator(it.speech_language) }}
+          <span class="speech_language">
+            {{= ViewHelper.speechLanguageIndicator(it.speech_language) }}
+          </span>
         {{?}}
       </div>
     {{??}}

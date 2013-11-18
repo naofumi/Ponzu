@@ -12,7 +12,7 @@ ViewHelperConstructor = ->
     result
 
   # language is a string like 'en', 'ja'
-  speechLanguageSelection = {en: "English Speech", ja: "日本語発表"}
+  speechLanguageSelection = {en: "In English", ja: "日本語発表"}
   speechLanguageIndicator = (language) ->
     speechLanguageSelection[language]
 
