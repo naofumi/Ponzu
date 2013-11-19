@@ -19,7 +19,10 @@
                                   :ends_at => s.ends_at, 
                                   :row => @rooms.index(s.room))
     - color_tag = "color_#{i.modulo(12)}"
-    = link_to ksp(session_path(s)), :class => ["session", color_tag, "session_#{s.id}"], 
+    = link_to ksp(session_path(s)), :class => ["session", 
+                                               color_tag, 
+                                               "session_#{s.id}", 
+                                               s.type.parameterize.underscore], 
                 :id => "session_#{s.id}", :style => style_string do
       %span.time
         = s.number
