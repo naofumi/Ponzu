@@ -41,7 +41,9 @@ class PresentationsController < ApplicationController
                         minimum_term_frequency 1
                         maximum_query_terms 100
                       }
-    @ads = Presentation::Ad.in_conference(current_conference).where(:ad_category => @presentation.session.ad_category)
+    @ads = Presentation::Ad.in_conference(current_conference).
+                            where(:ad_category => @presentation.session.ad_category).
+                            select{|ad| !ad.title.blank?}
   end
 
   def heading
