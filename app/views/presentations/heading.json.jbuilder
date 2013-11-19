@@ -12,5 +12,8 @@ json.authorships  @presentation.submission.authorships.order(:position).all,
 json.institutions @presentation.submission.institutions do |institution|
   json.name institution.name
 end
+if @presentation.kind_of? Presentation::Art
+  json.art_thumb asset_path("#{current_conference.tag}/art/thumbs/#{@presentation.number}.jpg")
+end
 
 json.type @presentation.type && @presentation.type.parameterize.underscore

@@ -51,4 +51,9 @@ related_submissions = (@presentation.submission.submissions_by_same_authors - [@
 json.related related_submissions do |rs|
   json.id rs.id
 end
+
+if @presentation.kind_of? Presentation::Art
+  json.art asset_path("#{current_conference.tag}/art/web/#{@presentation.number}.jpg")
+end
+
 json.javascript "cssSet('#{highlight_authors_css(nil, [], @presentation.authors)}');"

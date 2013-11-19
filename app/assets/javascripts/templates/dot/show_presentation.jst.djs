@@ -76,6 +76,9 @@
       <h1>Cancelled</h1>
     {{?}}
   </div>
+  {{? it.art }}
+    <a href="{{= it.art}}"><img src="{{= it.art}}" style="width: 100%" class="art"></a>
+  {{?}}
   {{? !it.cancelled }}
     {{? it.user_id }}
       <div class="presentation panel">
