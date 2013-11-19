@@ -1,6 +1,9 @@
 # encoding: UTF-8
 
 class PonzuController < ActionController::Base
+  # Ponzu::MultiConference must be included first because
+  # other filters use current_conference
+  include Ponzu::MultiConference
   include Kamishibai::Controller
   include Kamishibai::DeviceSupport
   include Kamishibai::LocaleSupport
@@ -8,7 +11,6 @@ class PonzuController < ActionController::Base
   include Kamishibai::Menu
   include Kamishibai::Flash
   # include ConferenceStrings #deprecated
-  include Ponzu::MultiConference
 
   protect_from_forgery
 

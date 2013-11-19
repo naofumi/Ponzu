@@ -3,12 +3,13 @@ module Ponzu
 		def self.included(base)
 			base.helper_method :conference_module, :conference_tag, 
 				                 :current_conference, :conference_name
+			base.before_filter :redirect_unless_conference_found
     end
 
 		private
 
 		def current_conference
-			@current_conference ||= Conference.find_by_subdomain!(request.subdomain)
+			@current_conference ||= Conference.find_by_subdomain(request.subdomain)
 		end
 
 		def conference_module
@@ -25,6 +26,11 @@ module Ponzu
 
 		def conference_subdomain
 			current_conference.subdomain
+		end
+
+		def redirect_unless_conference_found
+			redirect_to "/#{request.subdomain}" unless current_conference
+			return false
 		end
 
 	end
