@@ -58,7 +58,7 @@
         {{= it.abstract }}
       </div>
       {{? it.external_link }}
-        <a href="{{= it.external_link }}" target="external" class="button icon arrowright">External link</a>
+        <a href="{{= it.external_link }}" target="external" class="button icon arrowright">Link</a>
       {{?}}
       <div style="text-align:right">
         {{? it.email }}
