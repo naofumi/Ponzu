@@ -27,6 +27,6 @@
         = s.room.name
         %br/
       %span.title
-        = s.title
+        = s.title.html_safe
   = ks_ajax_placeholder :id => "like_highlights_#{params[:id]}",
                         :data => {:ajax => like_highlights_timetable_path(params[:id])}
