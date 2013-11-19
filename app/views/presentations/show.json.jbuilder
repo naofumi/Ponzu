@@ -45,7 +45,7 @@ json.authorships  @presentation.submission.authorships.order(:position).all,
 json.institutions @presentation.submission.institutions do |institution|
   json.name institution.name
 end
-json.keywords @presentation.keywords
+json.keywords @presentation.keywords.select{|k| !k.blank?}
 
 related_submissions = (@presentation.submission.submissions_by_same_authors - [@presentation.submission]).compact
 json.related related_submissions do |rs|
