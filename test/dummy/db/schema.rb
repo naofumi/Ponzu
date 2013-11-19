@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131115111055) do
+ActiveRecord::Schema.define(:version => 20131119142436) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -270,6 +270,7 @@ ActiveRecord::Schema.define(:version => 20131115111055) do
     t.text     "jp_text"
     t.text     "en_text"
     t.boolean  "show_text"
+    t.string   "redirect_to"
   end
 
   create_table "submissions", :force => true do |t|

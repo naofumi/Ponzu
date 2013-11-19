@@ -58,6 +58,10 @@ class SessionsController < ApplicationController
   def show
     @session = Session.in_conference(current_conference).
                        find(params[:id])
+    if !@session.redirect_to.blank?
+      device_selective_redirect @session.redirect_to
+      return
+    end
     @menu = @session.is_poster? ? :posters : :sessions
 
     @show_date = @session.starts_at
