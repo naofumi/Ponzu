@@ -29,7 +29,7 @@ module Ponzu
 		end
 
 		def redirect_unless_conference_found
-			redirect_to "/#{request.subdomain}" unless current_conference
+			redirect_to "/#{request.subdomain}/index.html" unless current_conference
 			return false
 		end
 
