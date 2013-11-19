@@ -1,7 +1,7 @@
 module I18nHelper
 	def t(*args)
 		if args.last.kind_of? Hash
-			args.last.merge(:namespace => current_conference.tag) unless args.last[:namespace]
+			args.last.merge!(:namespace => current_conference.tag) unless args.last[:namespace]
 		else
 			if respond_to? :current_conference
 				args.push({:namespace => current_conference.tag})

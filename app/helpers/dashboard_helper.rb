@@ -71,6 +71,9 @@ module DashboardHelper
       search: {
         href: ksp(:search_index_path)
       },
+      project: {
+        href: ksp(:docs_path, "#{conference_tag}/project")
+      },
       floor_plan: {
         href: t('external_urls.map').html_safe,
       },
