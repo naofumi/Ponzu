@@ -4,10 +4,6 @@
 - left = tt.left_position_for_time now
 
 #entries
-  .now_cursor{ :style => "top:20px;left:#{left.to_i}px;height:#{tt.total_height.to_i}px;",
-               "data-initial-left" => left.to_i,
-               "data-width_per_minute" => tt.width_per_minute}
-    = image_tag('ponzu/yellow_clock.png', :style => "width:30px;position:absolute;top:-55px;left:-15px;")
   - labeled_hours.each do |hour|
     - time = @show_date.change(:hour => hour)
     .header{:style => tt.header_css(time)}
