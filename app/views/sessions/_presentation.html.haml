@@ -3,7 +3,7 @@
 %div{:id => "session_details_presentation_#{p.id}",
      :class => ["panel", "presentation",
                 "#{current_user_likes_this(p) ? ' liked' : ''}"]}
-  - cache ['v1', current_conference.id, I18n.locale, 'session_presentation', p] do
+  - cache ['v1', current_conference, I18n.locale, 'session_presentation', p] do
     .time
       = starts_at_ends_at_combo p, :month_day_time
     .number

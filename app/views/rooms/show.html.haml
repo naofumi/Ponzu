@@ -1,4 +1,4 @@
-- cache ["v1", current_conference.id, I18n.locale, @room, can?(:edit, Room)] do
+- cache ["v1", current_conference, I18n.locale, @room, can?(:edit, Room)] do
   = ks_element :id => ["room", @room.id],
                :class => "program",
                :data => {:title => "JSDB: #{@room.name}",

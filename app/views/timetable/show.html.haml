@@ -1,4 +1,4 @@
-- cache ['v1', current_conference.id, I18n.locale, 'timetable_v1', @sessions.max_by{|s| s.updated_at}, @show_date] do
+- cache ['v1', current_conference, I18n.locale, 'timetable_v1', @sessions.max_by{|s| s.updated_at}, @show_date] do
   = ponzu_frame :id => ["timetable", params[:id]],
                 :title_args => {:date => l(@show_date, :format => :month_day)} do
     .fixed_sub_header.radio_button_set.button-group

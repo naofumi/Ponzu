@@ -1,4 +1,4 @@
-- cache ["v4.2", current_conference.id, I18n.locale, "dashboard", Time.zone.now.strftime("%Y%m%d"), !!current_user, current_user && current_user.roles] do
+- cache ["v4.2", current_conference, I18n.locale, "dashboard", Time.zone.now.strftime("%Y%m%d"), !!current_user, current_user && current_user.roles] do
   = ponzu_frame :id => "dashboard" do
     #splash
       %h1

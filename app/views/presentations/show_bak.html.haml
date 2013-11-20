@@ -1,6 +1,6 @@
 = ponzu_frame :title_args => {:title => @presentation.cancel ? t('presentations.presentation_cancelled') : strip_tags(@presentation.title),
                               :number => @presentation.number} do
-  - cache ['v1', current_conference.id, I18n.locale, @presentation, !!current_user, can?(:edit, Presentation)] do
+  - cache ['v1', current_conference, I18n.locale, @presentation, !!current_user, can?(:edit, Presentation)] do
     .presentation.panel
       .presentation_header
         %span
