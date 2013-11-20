@@ -34,8 +34,8 @@
   {{~}}
 </div>
 
-<form accept-charset="UTF-8" action="/comments" class="new_comment" data-invalidates-keys="/presentations/9/comments" data-ks-insert-response="" data-remote="true" id="new_comment" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="fGy3fqsDr9uTCHb60b5BEW3DDQl15qAmuApv2PdzLAI="></div>  <input id="comment_user_id" name="comment[user_id]" type="hidden">
-  <input id="comment_presentation_id" name="comment[presentation_id]" type="hidden" value="9">
+<form accept-charset="UTF-8" action="/comments" class="new_comment" data-invalidates-keys="/presentations/{{= it.presentation_id }}/comments" data-ks-insert-response="" data-remote="true" id="new_comment" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="fGy3fqsDr9uTCHb60b5BEW3DDQl15qAmuApv2PdzLAI="></div>  <input id="comment_user_id" name="comment[user_id]" type="hidden">
+  <input id="comment_presentation_id" name="comment[presentation_id]" type="hidden" value="{{= it.presentation_id }}">
   <input id="comment_parent_id" name="comment[parent_id]" type="hidden">
   <textarea id="comment_text" name="comment[text]" placeholder="Write your comment here."></textarea>
   <br>

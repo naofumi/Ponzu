@@ -8,7 +8,8 @@ class MessageMailer < ActionMailer::Base
     mail(:to => email_addresses(@to), 
          :from => email_sender_address(@to),
          :subject => I18n.t('message_mailer.private_message.subject', 
-                            :name => @obj.en_name, :namespace => @conference.tag))
+                            :name => @obj.en_name, 
+                            :namespace => @conference.tag))
   end
 
   def presentation_modified(options)
@@ -17,7 +18,9 @@ class MessageMailer < ActionMailer::Base
     @conference = conference(@to)
     mail(:to => email_addresses(@to), 
          :from => email_sender_address(@to),
-         :subject => I18n.t('message_mailer.presentation_modified.subject', :number => @obj.number))
+         :subject => I18n.t('message_mailer.presentation_modified.subject', 
+                            :number => @obj.number,
+                            :namespace => @conference.tag))
   end
 
   # Here, :to is a list of Authors instead of a list of Users.
@@ -27,7 +30,9 @@ class MessageMailer < ActionMailer::Base
     @conference = conference(@to)
     mail(:to => email_addresses(@to),
          :from => email_sender_address(@to),
-         :subject => I18n.t('message_mailer.comment_added.subject', :number => @obj.presentation.number))
+         :subject => I18n.t('message_mailer.comment_added.subject', 
+                            :number => @obj.presentation.number,
+                            :namespace => @conference.tag))
   end
 
   private
