@@ -41,7 +41,8 @@ json.session do
   json.number session.number
 end
 json.authorships  @presentation.submission.authorships.order(:position).all,
-                  :author_id, :is_presenting_author, :affiliations, :name
+                  :author_id, :is_presenting_author, :affiliations, :name,
+                  :looking_for_partner?, :looking_for_job?, :looking_for_person?
 json.institutions @presentation.submission.institutions do |institution|
   json.name institution.name
 end

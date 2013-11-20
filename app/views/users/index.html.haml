@@ -29,6 +29,7 @@
       %th En name
       %th Jp aff
       %th En aff
+      %th email
       %th Aff
       %th
       %th
@@ -41,6 +42,7 @@
         %td= user.author && user.author.en_name
         %td= user.jp_affiliation
         %td= user.en_affiliation
+        %td= user.email
         %td= user.author && user.author.all_unique_affiliations.to_a.join('<br>').html_safe
         %td= link_to 'Show', ksp(user)
         %td= link_to 'Edit', ksp(edit_user_path(user))

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131119142436) do
+ActiveRecord::Schema.define(:version => 20131120052941) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20131119142436) do
     t.string   "type"
     t.integer  "score",           :default => 0
     t.string   "conference_tag"
+    t.boolean  "is_secret",       :default => false
   end
 
   create_table "meet_up_comments", :force => true do |t|
@@ -334,6 +335,18 @@ ActiveRecord::Schema.define(:version => 20131119142436) do
     t.string   "en_affiliation"
     t.string   "jp_affiliation"
     t.string   "conference_tag"
+    t.text     "jp_profile"
+    t.text     "en_profile"
+    t.boolean  "email_notifications",         :default => true
+    t.boolean  "school_search"
+    t.boolean  "acad_job_search"
+    t.boolean  "corp_job_search"
+    t.boolean  "school_avail"
+    t.boolean  "acad_job_avail"
+    t.boolean  "corp_job_avail"
+    t.boolean  "male_partner_search"
+    t.boolean  "female_partner_search"
+    t.boolean  "job_available"
   end
 
   add_index "users", ["en_name"], :name => "index_users_on_en_name"

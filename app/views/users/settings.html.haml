@@ -37,6 +37,56 @@
             = f.label :jp_name, "Japanese Name"
           .col-2-3
             = f.text_field :jp_name
+      .panel_title= "Profile"
+      .panel
+        .grid
+          .col-1-3
+            = f.label :en_profile, "Profile in English"
+          .col-2-3
+            = f.text_area :en_profile, :style => "height: 100px"
+        .grid
+          .col-1-3
+            = f.label :jp_profile, "Profile in Japanese"
+          .col-2-3
+            = f.text_area :jp_profile, :style => "height: 100px"
+
+      .panel_title= "求職中"
+      .panel
+        %div{:style => "display: inline-block;"}
+          = f.check_box :school_search
+          = f.label :school_seach, "大学院"
+        %div{:style => "display: inline-block;"}
+          = f.check_box :acad_job_search
+          = f.label :acad_job_search, "アカデミア"
+        %div{:style => "display: inline-block;"}
+          = f.check_box :corp_job_search
+          = f.label :corp_job_search, "企業"
+      .panel_title= "人材募集中"
+      .panel
+        %div{:style => "display: inline-block;"}
+          = f.check_box :school_avail
+          = f.label :school_avail, "大学院"
+        %div{:style => "display: inline-block;"}
+          = f.check_box :acad_job_avail
+          = f.label :acad_job_avail, "アカデミア"
+        %div{:style => "display: inline-block;"}
+          = f.check_box :corp_job_avail
+          = f.label :corp_job_avail, "企業"
+      .panel_title= "恋人募集中"
+      .panel
+        %div{:style => "display: inline-block;"}
+          = f.check_box :male_partner_search
+          = f.label :male_partner_search, "彼氏"
+        %div{:style => "display: inline-block;"}
+          = f.check_box :female_partner_search
+          = f.label :female_partner_search, "彼女"
+
+
+      .panel_title= "スケジュールメール通知"
+      .panel
+        %div{:style => "display: inline-block;"}
+          = f.check_box :email_notifications
+          = f.label :email_notifications, "メール通知"
 
       .panel_title= t '.panel_titles.additional_info'
       .panel

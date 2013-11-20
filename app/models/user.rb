@@ -52,7 +52,11 @@ class User < ActiveRecord::Base
                   :en_affiliation, :jp_affiliation, :author_id,
                   :email, :login, :password, :password_confirmation,
                   :read_global_messages, :registration_id_in_umin, :email_in_umin,
-                  :roles, :whitelisted_by, :whitelisted_at, :whitelisted
+                  :roles, :whitelisted_by, :whitelisted_at, :whitelisted,
+                  :jp_profile, :en_profile, :email_notifications, 
+                  :school_search, :acad_job_search, :corp_job_search,
+                  :school_avail, :acad_job_avail, :corp_job_avail,
+                  :male_partner_search, :female_partner_search
   has_many :likes, :inverse_of => :user, :dependent => :restrict, :class_name => "Like::Like"
   has_many :schedules, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict, :class_name => "Like::Schedule"
   # has_many  :likes, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict
@@ -72,6 +76,7 @@ class User < ActiveRecord::Base
 
   locale_selective_reader :name, :en => :en_name, :ja => :jp_name
   locale_selective_reader :affiliation, :en => :en_affiliation, :ja => :jp_affiliation
+  locale_selective_reader :profile, :en => :en_profile, :ja => :jp_profile
 
   include SimpleMessaging
   include SimpleSerializer

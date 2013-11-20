@@ -8,4 +8,15 @@ module UsersHelper
     end
     result.join(join_string).html_safe
   end
+
+  def consolidated_info(users, method)
+    result = []
+    users.each do |u|
+      value = u.send(method)
+      if !value.blank?
+        result << value
+      end
+    end
+    result
+  end
 end

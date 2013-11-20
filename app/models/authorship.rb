@@ -45,6 +45,19 @@ class Authorship < ActiveRecord::Base
     Author.frequency_in(authorships.map{|au| au.submission})
   end
 
+  def looking_for_job?
+    author.looking_for_job?
+  end
+
+  def looking_for_person?
+    author.looking_for_person?
+  end
+
+  def looking_for_partner?
+    author.looking_for_partner?
+  end
+
+
   private
 
   def reset_whitelist_of_user

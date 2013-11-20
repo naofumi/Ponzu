@@ -13,13 +13,14 @@
 				<span class="social_controls">
 					{{? it.like_id }}				
 						{{? it.scheduled }}
-						  <a href="/likes/{{= it.like_id }}/unschedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">remove from my schedule</a>
+						  <a href="/likes/{{= it.like_id }}/unschedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">remove from my {{= it.secret ? 'secret ' : ''}} schedule</a>
 						{{??}}
-						  <a href="/likes/{{= it.like_id }}//schedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">add to my schedule</a>
-						  <a href="/likes/{{= it.like_id }}" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="delete" data-remote="true" rel="nofollow">unlike</a>
+						  <a href="/likes/{{= it.like_id }}//schedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">add to my {{= it.secret ? 'secret ' : ''}}schedule</a>
+						  <a href="/likes/{{= it.like_id }}" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="delete" data-remote="true" rel="nofollow">{{= it.secret ? 'secret ' : ''}}unlike</a>
 						{{?}}
 					{{??}}
 					  <a href="/likes?like%5Bpresentation_id%5D={{= it.presentation_id }}" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="post" data-remote="true" rel="nofollow">like</a>
+					  <a href="/likes?like%5Bpresentation_id%5D={{= it.presentation_id }}&like%5Bis_secret%5D=1" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="post" data-remote="true" rel="nofollow">secret like</a>
 					{{?}}
 				</span>
 			</div>

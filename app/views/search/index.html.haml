@@ -7,7 +7,7 @@
       - if params[:query].blank?
         .panel
           = t('please_enter_search_term')
-      - elsif @presentations.results.empty? && @users.results.empty?
+      - elsif (!@presentations || @presentations.results.empty?) && (!@users || @users.results.empty?)
         .panel
           = "No results for '#{params[:query]}'"
       - else

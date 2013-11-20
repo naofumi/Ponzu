@@ -15,6 +15,8 @@
 // require jquery_ujs
 //= require_tree .
 
+alert('現在 Internet Explorer 8でうまく動作しなくなっております。現在、原因を調査中ですので、もうしばらくお待ちください。Internet Explorer 9以上、もしくはFirefox, Chromeでは問題なく動作しています。');
+
 document.getElementsByClassName = function(className){
 	return $('.' + className).get();
 }

@@ -76,7 +76,7 @@
 class Like < ActiveRecord::Base
   include SingleTableInheritanceMixin
 
-  attr_accessible :presentation_id, :user_id, :scheduled, :type
+  attr_accessible :presentation_id, :user_id, :scheduled, :type, :is_secret
   validates_presence_of :presentation_id
   validates_presence_of :user_id
   validates_uniqueness_of :presentation_id, :scope => [:user_id, :type]

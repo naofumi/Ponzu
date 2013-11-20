@@ -9,8 +9,9 @@ if current_user
 
   like = like_for_current_user_and_presentation(@presentation)
   json.like_id like && like.id
+  json.secret like && like.is_secret
   json.scheduled like.kind_of?(Like::Schedule)
-  json.likes_count @presentation.likes.size
+  json.likes_count @presentation.likes.where(:is_secret => false).size
   like ||= @presentation.likes.build # We always need a like object to calculate invalidated_paths
   json.invalidated_paths invalidated_paths(like)
 

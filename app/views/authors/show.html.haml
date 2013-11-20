@@ -24,6 +24,9 @@
       = link_to t('users.send_message_to', :name => @author.name), 
                 ksp(new_private_message_path(:to_id => @author.users)),
                 :class => "send_message_button"
+    .panel_title profile
+    .panel
+      = render :partial => "users/profile", :locals => {:users => @author.users}
     .panel_title links
     .panel
       = render :partial => "users/links", :locals => {:users => @author.users}

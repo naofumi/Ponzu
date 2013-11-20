@@ -177,6 +177,29 @@ class Author < ActiveRecord::Base
   def has_common_coauthor_with(other_authors)
   end
 
+  def looking_for_job?
+    !!users.detect{|u| 
+      u.school_search || 
+      u.acad_job_search ||
+      u.corp_job_search
+    }
+  end
+
+  def looking_for_person?
+    !!users.detect{|u| 
+      u.school_avail || 
+      u.acad_job_avail ||
+      u.corp_job_avail
+    }
+  end
+
+  def looking_for_partner?
+    !!users.detect{|u| 
+      u.male_partner_search || 
+      u.female_partner_search
+    }
+  end
+
   private
 
   def either_en_name_or_jp_name_must_be_present

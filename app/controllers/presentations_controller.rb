@@ -143,7 +143,7 @@ class PresentationsController < ApplicationController
   def likes
     @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
-    @likes = @presentation.likes.includes(:user).order("created_at DESC")
+    @likes = @presentation.likes.where(:is_secret => false).includes(:user).order("created_at DESC")
 
     respond_with @presentation
   end
