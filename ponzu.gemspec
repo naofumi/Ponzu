@@ -19,7 +19,11 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.3"
 
   # For IE support
-  s.add_dependency "jquery-rails"
+  # This version loads jquery 1.7.2
+  # Newer versions of this gem (i.e. 3.0.4) load
+  # jquery 1.10.2 which doesn't work with IE8
+  # We fix jquery-rails at 2.0.2
+  s.add_dependency "jquery-rails", "2.0.2"
 
   # There was a problem with the 0.3.11 version
   # so we downgraded it.
