@@ -1,4 +1,4 @@
-json.cache! ['v2', current_conference, I18n.locale, @presentation] do
+json.cache! ['v2', current_conference, I18n.locale, "/presentation/heading/", @presentation] do
   json.renderer do
     json.template "templates/dot/heading_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
