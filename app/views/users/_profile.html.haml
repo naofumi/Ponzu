@@ -4,32 +4,32 @@
 %div{:style => "margin-top: 20px"}
   - if !(consolidated_info(users, :school_search).empty?)
     %div
-      %span.spade_out
+      %span.club_out
         &nbsp;
       大学院を探しています。
   - if !(consolidated_info(users, :acad_job_search).empty?)
     %div
-      %span.spade_out
+      %span.club_out
         &nbsp;
       アカデミック職を探しています。
   - if !(consolidated_info(users, :corp_job_search).empty?)
     %div
-      %span.spade_out
+      %span.club_out
         &nbsp;
       企業での就職を探しています。
   - if !(consolidated_info(users, :school_avail).empty?)
     %div
-      %span.spade_in
+      %span.club_in
         &nbsp;
       大学院生を募集しています。
   - if !(consolidated_info(users, :acad_job_avail).empty?)
     %div
-      %span.spade_in
+      %span.club_in
         &nbsp;
       アカデミアで人材募集しています。
   - if !(consolidated_info(users, :corp_job_avail).empty?)
     %div
-      %span.spade_in
+      %span.club_in
         &nbsp;
       企業で人材募集しています。
 
