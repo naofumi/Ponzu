@@ -52,15 +52,8 @@ class PresentationsController < ApplicationController
                     find(params[:id])
     set_menu(@presentation.is_poster? ? :posters : :sessions)
     restrict_disclosure(@presentation)
-    @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
-                        with(:conference_tag).equal_to(current_conference.database_tag)
-                        fields :en_abstract, :en_title, :jp_abstract, :jp_title
-                        minimum_word_length 3
-                        boost_by_relevance true
-                        paginate :per_page => 10
-                        minimum_term_frequency 1
-                        maximum_query_terms 100
-                      }
+    # Move @more_like_this to inside the cache because slow
+
     @ads = Presentation::Ad.in_conference(current_conference).
                             where(:ad_category => @presentation.session.ad_category).
                             select{|ad| !ad.title.blank?}
