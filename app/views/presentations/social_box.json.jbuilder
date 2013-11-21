@@ -43,6 +43,14 @@ json.cache! ["v1", current_conference, I18n.locale,
 
     comments = @presentation.comments
     json.comments_count comments.inject(comments.size){|memo, c| memo + c.child_count.to_i}
+
+    if can?(:vote, Like)
+      json.voter can?(:vote, Like)
+      vote = @vote || 
+             current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
+             current_user.votes.build(:presentation_id => @presentation.id)
+      json.score vote.score
+    end
     # json.like_button render(:partial => 'likes/like_button', :formats => [:html],
     #                         :locals =>{ :presentation => @presentation })
 
@@ -55,10 +63,3 @@ json.cache! ["v1", current_conference, I18n.locale,
   end
 end
 
-if can?(:vote, Like)
-  json.voter can?(:vote, Like)
-  vote = @vote || 
-         current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
-         current_user.votes.build(:presentation_id => @presentation.id)
-  json.score vote.score
-end
