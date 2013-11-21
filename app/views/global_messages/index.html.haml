@@ -2,17 +2,17 @@
   = ponzu_frame :data => {:title => t('global_messages.announcements')} do
     .panel
       %h1= t('global_messages.announcements')
-    = ks_will_paginate
-    - if can? :manage, GlobalMessage
-      = link_to "[new]", ksp(new_global_message_path)
+      = ks_will_paginate
+      - if can? :manage, GlobalMessage
+        = link_to "[new]", ksp(new_global_message_path)
 
-    - @global_messages.each do |m|
-      = time_in_list_for m
-      .panel
-        %div= sanitize m.text
-        - if can? :manage, GlobalMessage
-          = link_to "[edit]", ksp(edit_global_message_path m)
-          |
-          = link_to "[delete]", global_message_path(m), :remote => true, :method => :delete, :confirm => "Are you sure you want to delete this Announcement?"
+      - @global_messages.each do |m|
+        = time_in_list_for m
+        .panel
+          %div= sanitize m.text
+          - if can? :manage, GlobalMessage
+            = link_to "[edit]", ksp(edit_global_message_path m)
+            |
+            = link_to "[delete]", global_message_path(m), :remote => true, :method => :delete, :confirm => "Are you sure you want to delete this Announcement?"
 
-      = render :partial => 'layouts/biokaimono'
+        = render :partial => 'layouts/biokaimono'
