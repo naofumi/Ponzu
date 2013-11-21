@@ -30,7 +30,7 @@
   <table>
     <tr>
       <th></th>
-      <th>User</th>
+      <th style="width:100px">User</th>
       <th>Author</th>
     </tr>
     <tr>
@@ -52,7 +52,7 @@
         <% end if author %>
         <div class="field">
           <%= f.label :author_id %>: 
-          <%= f.text_field :author_id, :style => "width: 100px" %>
+          <%= f.text_field :author_id, :style => "width: 500px" %>
           <%= link_to "link", ksp(author), :target => "author" %>
         </div>
       </td>

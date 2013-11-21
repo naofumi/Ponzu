@@ -108,7 +108,7 @@ class UsersController < ApplicationController
       flash[:error] = "Failed to update user."
     end
 
-    respond_with @user
+    respond_with @user, :location => edit_user_path(@user)
   end
 
   # DELETE /users/1

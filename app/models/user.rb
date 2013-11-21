@@ -437,6 +437,14 @@ class User < ActiveRecord::Base
     save!
   end
 
+  def author_id=(string)
+    if string =~ /authors\/(\d+)/
+      self[:author_id] = $1
+    else
+      self[:author_id] = string
+    end
+  end
+
   ## Roles for CanCan
   # add new roles on right end to preserve previous settings
   ROLES = %w[admin user_moderator organizer voter sponsor]
