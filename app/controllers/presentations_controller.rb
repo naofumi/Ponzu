@@ -164,24 +164,6 @@ class PresentationsController < ApplicationController
   def social_box
     @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
-    respond_to do |format|
-      if request.xhr?
-        # format.html {
-        #   render :partial => 'presentations/social_box'          
-        # }
-        format.json {
-          render 'presentations/social_box'
-        }
-      else
-        format.html {
-          # if request.xhr?
-          #   render :partial => 'presentations/social_box'
-          # else
-            render
-          # end
-        }
-      end
-    end
   end
   
   # Only available for PC, not galapagos
