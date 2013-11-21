@@ -19,7 +19,7 @@
 all_likes = Like.in_conference(current_conference).where(:presentation_id => @presentation)
 
 json.cache! ["v1", current_conference, I18n.locale, 
-             "presentations/social_box", 
+             "presentations/social_box/json", 
              @presentation.id, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
              all_likes.size,
@@ -55,8 +55,10 @@ json.cache! ["v1", current_conference, I18n.locale,
   end
 end
 
-json.voter can?(:vote, Like)
-vote = @vote || 
-       current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
-       current_user.votes.build(:presentation_id => @presentation.id)
-json.score vote.score
+if can?(:vote, Like)
+  json.voter can?(:vote, Like)
+  vote = @vote || 
+         current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
+         current_user.votes.build(:presentation_id => @presentation.id)
+  json.score vote.score
+end
