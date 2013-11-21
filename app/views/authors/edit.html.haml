@@ -22,7 +22,8 @@
     %fieldset
       %legend この著者にひも付いている学会参加者 (User)
       - @author.users.each do |u|
-        = link_to "#{u.en_name} (#{u.jp_name}): #{u.en_affiliation} (#{u.jp_affiliation})", ksp(u)
+        = link_to "#{u.en_name} (#{u.jp_name}): #{u.en_affiliation} (#{u.jp_affiliation})", 
+                  ksp(edit_user_path(u))
     %fieldset
       %legend All Authorships
       = render :partial => "authorships", :object => @author.authorships

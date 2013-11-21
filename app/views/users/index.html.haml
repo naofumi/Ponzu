@@ -1,53 +1,60 @@
 = ponzu_frame :id => "users_index" do
-  %h1 Listing users
+  .panel
+    %h1 Listing users
 
-  = form_tag users_path, :method => :get, 
-                         :remote => true,
-                         :data => {'ks-insert_response' => true}  do
-    = text_field_tag :query, params[:query], 
-          :placeholder => "ユーザ検索", :style => "font-size: 20px;width: 15em"
-    = submit_tag "検索実行"
+    = form_tag users_path, :method => :get, 
+                           :remote => true,
+                           :data => {'ks-insert_response' => true}  do
+      = text_field_tag :query, params[:query], 
+            :placeholder => "ユーザ検索", :style => "font-size: 20px;width: 15em"
+      = submit_tag "検索実行"
 
-  = ks_will_paginate
-  = link_to "Gray users", ksp(users_path(:gray => 1))
-  |
-  = link_to "Has Author", ksp(users_path(:has_author => 1))
-  |
-  = link_to "Has no Author", ksp(users_path(:has_no_author => 1))
-  |
-  = link_to "All users", ksp(users_path())
-  %table
-    %tr
-      %th{:colspan => 2} User
-      %th{:colspan => 2} Author
-      %th{:colspan => 2} User
-      %th Author
-    %tr
-      %th Jp name
-      %th En name
-      %th Jp name
-      %th En name
-      %th Jp aff
-      %th En aff
-      %th email
-      %th Aff
-      %th
-      %th
-      %th
-    - @users.each do |user|
+    = ks_will_paginate
+    = link_to "Gray users", ksp(users_path(:gray => 1))
+    |
+    = link_to "Has Author", ksp(users_path(:has_author => 1))
+    |
+    = link_to "Has no Author", ksp(users_path(:has_no_author => 1))
+    |
+    = link_to "All users", ksp(users_path())
+    %table
       %tr
-        %td= user.jp_name
-        %td= user.en_name
-        %td= user.author && user.author.jp_name
-        %td= user.author && user.author.en_name
-        %td= user.jp_affiliation
-        %td= user.en_affiliation
-        %td= user.email
-        %td= user.author && user.author.all_unique_affiliations.to_a.join('<br>').html_safe
-        %td= link_to 'Show', ksp(user)
-        %td= link_to 'Edit', ksp(edit_user_path(user))
-        %td=# link_to 'Destroy', user, confirm: 'Are you sure?', method: :delete
-  %br/
-  = ks_will_paginate
+        %th{:colspan => 2} User
+        %th{:colspan => 3} Author
+        %th{:colspan => 3} User
+        %th Author
+        %th User
+        %th Author
+      %tr
+        %th{:width => 100} Jp name
+        %th{:width => 100} En name
+        %th cnt
+        %th{:width => 100} Jp name
+        %th{:width => 100} En name
+        %th Jp aff
+        %th En aff
+        %th email
+        %th Aff
+        %th
+        %th
+      - @users.each do |user|
+        %tr
+          %td= user.jp_name
+          %td= user.en_name
+          %td= user.author && user.author.users.count
+          %td= user.author && user.author.jp_name
+          %td= user.author && user.author.en_name
+          %td= user.jp_affiliation
+          %td= user.en_affiliation
+          %td= user.email
+          %td
+            - user.author && user.author.unique_affiliation_combos.sort.each do |combo|
+              %div{style: "border-bottom: dotted 2px #888"}= highlight(combo, institution_phrases, highlighter: '<span class="highlight">\1</span>')
+          %td
+            = link_to 'Edit', ksp(edit_user_path(user)), :target => "_blank"
+          %td
+            = user.author && link_to('Edit', ksp(edit_author_path(user.author)), :target => "_blank")
+    %br/
+    = ks_will_paginate
 
-  = link_to 'New User', ksp(new_user_path)
+    = link_to 'New User', ksp(new_user_path)

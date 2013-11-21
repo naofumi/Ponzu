@@ -18,10 +18,10 @@ class UsersController < ApplicationController
   def index
     authorize! :see_other, User
     if params[:query].blank?
-      @users = User.paginate(:page => params[:page], :per_page => 30)
+      @users = User.in_conference(current_conference).order("users.id").paginate(:page => params[:page], :per_page => 30)
     else
       tokens = params[:query].split(/ |　/)
-      @users = User.paginate(:page => params[:page], :per_page => 30)
+      @users = User.in_conference(current_conference).order("users.id").paginate(:page => params[:page], :per_page => 30)
       tokens.each do |t|
         @users = @users.where("jp_name LIKE ? OR en_name LIKE ?", "%#{t}%", "%#{t}%")
       end
