@@ -100,7 +100,8 @@ class LikesController < ApplicationController
 
   # PUT /likes/1/unschedulize
   def unschedulize
-    @like = Like::Schedule.find(params[:id])
+    @like = Like::Schedule.in_conference(current_conference).
+            where(:user_id => current_user.id).find(params[:id])
     @presentation = @like.presentation
     set_flash @like.unschedulize,
               :success => "Successfully removed Schedule.",
