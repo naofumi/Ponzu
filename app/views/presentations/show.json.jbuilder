@@ -1,4 +1,14 @@
+
 json.cache! ['v2', current_conference, I18n.locale, "/presentation/", @presentation, !!current_user, can?(:edit, Presentation)] do
+  @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
+                      with(:conference_tag).equal_to(current_conference.database_tag)
+                      fields :en_abstract, :en_title, :jp_abstract, :jp_title
+                      minimum_word_length 3
+                      boost_by_relevance true
+                      paginate :per_page => 10
+                      minimum_term_frequency 1
+                      maximum_query_terms 100
+                    }
   json.renderer do
     json.template "templates/dot/show_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
