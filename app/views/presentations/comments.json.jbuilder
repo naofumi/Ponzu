@@ -12,5 +12,5 @@ json.comments @presentation.comments.order("rgt DESC") do |comment|
   json.created_at l(comment.created_at, :format => :month_day_time)
   json.user_name comment.user.name
   json.user_id comment.user.id
-  json.text auto_link(comment.text)
+  json.text sanitize(auto_link(comment.text))
 end

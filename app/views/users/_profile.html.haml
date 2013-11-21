@@ -1,6 +1,6 @@
 - if !(consolidated_info(users, :profile).empty?)
   %div
-    = consolidated_info(users, :profile).join('<br />').html_safe
+    = sanitize consolidated_info(users, :profile).join('<br />').html_safe
 %div{:style => "margin-top: 20px"}
   - if !(consolidated_info(users, :school_search).empty?)
     %div
