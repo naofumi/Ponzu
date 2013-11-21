@@ -1,5 +1,5 @@
 <div class="social_box" data-ajax="/presentations/{{= it.presentation_id }}/social_box" data-expiry="{{= it.expiry }}" id="presentation_{{= it.presentation_id }}_social_box">
-	{{? it.user_id }}
+	{{? it.logged_in }}
 		<div class="like_box">
 			<div class="social_stats">
 				{{? it.comments_count > 0}} {{= it.comments_count }} comments{{?}}

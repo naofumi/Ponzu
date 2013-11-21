@@ -23,7 +23,7 @@ json.cache! ["v1", current_conference, I18n.locale,
              @presentation.id, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
              all_likes.size,
-             current_user && current_user.id] do
+             !!current_user] do
   json.renderer do
     json.library "dot"
     json.template "templates/dot/social_box"
@@ -31,7 +31,7 @@ json.cache! ["v1", current_conference, I18n.locale,
   end
   if current_user
   	json.presentation_id @presentation.id
-  	json.user_id current_user.id
+  	json.logged_in !!current_user
 
     like = like_for_current_user_and_presentation(@presentation)
     json.like_id like && like.id
@@ -46,11 +46,6 @@ json.cache! ["v1", current_conference, I18n.locale,
     # json.like_button render(:partial => 'likes/like_button', :formats => [:html],
     #                         :locals =>{ :presentation => @presentation })
 
-  	json.voter can?(:vote, Like)
-  	vote = @vote || 
-  	       current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
-  	       current_user.votes.build(:presentation_id => @presentation.id)
-  	json.score vote.score
     # Highlight liked
     # css_class = [("scheduled" if schedule_for_current_user_and_presentation(@presentation)),
     #                ("liked" if like_for_current_user_and_presentation(@presentation))].compact
@@ -59,3 +54,9 @@ json.cache! ["v1", current_conference, I18n.locale,
     #                                                                             remove_class: remove_css_class.join(' ')}
   end
 end
+
+json.voter can?(:vote, Like)
+vote = @vote || 
+       current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
+       current_user.votes.build(:presentation_id => @presentation.id)
+json.score vote.score
