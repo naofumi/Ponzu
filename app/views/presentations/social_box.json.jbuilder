@@ -23,7 +23,7 @@ json.cache! ["v1", current_conference, I18n.locale,
              @presentation.id, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
              all_likes.size,
-             !!current_user] do
+             current_user] do
   json.renderer do
     json.library "dot"
     json.template "templates/dot/social_box"
