@@ -1,4 +1,5 @@
 class ConferencesController < ApplicationController
+  authorize_resource
   respond_to :html, :js
   include Kamishibai::ResponderMixin
 
