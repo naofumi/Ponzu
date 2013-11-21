@@ -1,3 +1,23 @@
+# Monkey patch just for logger info
+class JbuilderTemplate < Jbuilder  
+  def cache!(key=nil, options={}, &block)
+    if @context.controller.perform_caching
+      if ::Rails.cache.exist?(_cache_key(key)).inspect
+        ::Rails.logger.info "Read fragment from JSON"
+      end
+      value = ::Rails.cache.fetch(_cache_key(key), options) do
+        ::Rails.logger.info "Write fragment from JSON"
+        _scope { yield self }
+      end
+
+      _merge(value)
+    else
+      yield
+    end
+  end
+end
+
+
 class PresentationsController < ApplicationController  
   authorize_resource
   protect_from_forgery :except => :batch_request_likes
