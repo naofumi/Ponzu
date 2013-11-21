@@ -3,7 +3,7 @@ json.cache! ['v2', current_conference, I18n.locale, "/comments/", @presentation,
     json.template "templates/dot/comments_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
   end
-  json.user_id current_user.id
+  json.user_id current_user && current_user.id
   json.presentation_id @presentation.id
   authors = @presentation.authors.compact
   json.comments @presentation.comments.order("rgt DESC") do |comment|
