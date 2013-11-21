@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131121073850) do
+ActiveRecord::Schema.define(:version => 20131121093116) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20131121073850) do
 
   add_index "authorships", ["author_id"], :name => "index_authorships_on_author_id"
   add_index "authorships", ["submission_id", "author_id"], :name => "index_authorships_on_submission_id_and_author_id"
+  add_index "authorships", ["submission_id", "position"], :name => "index_authorships_on_submission_id_and_position"
 
   create_table "chairs", :force => true do |t|
     t.integer  "user_id"
@@ -65,6 +66,8 @@ ActiveRecord::Schema.define(:version => 20131121073850) do
     t.integer  "depth"
   end
 
+  add_index "comments", ["presentation_id"], :name => "index_comments_on_presentation_id"
+
   create_table "conferences", :force => true do |t|
     t.string   "name"
     t.string   "module_name"
@@ -81,6 +84,8 @@ ActiveRecord::Schema.define(:version => 20131121073850) do
     t.string   "database_tag"
     t.text     "available_locales"
   end
+
+  add_index "conferences", ["subdomain"], :name => "index_conferences_on_subdomain"
 
   create_table "conversations", :force => true do |t|
     t.string   "subject",    :default => ""
@@ -109,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20131121073850) do
   end
 
   add_index "likes", ["conference_tag", "presentation_id"], :name => "index_likes_on_conference_tag_and_presentation_id"
+  add_index "likes", ["presentation_id", "is_secret", "type"], :name => "index_likes_on_presentation_id_and_is_secret_and_type"
   add_index "likes", ["user_id", "type"], :name => "index_likes_on_user_id_and_type"
 
   create_table "meet_up_comments", :force => true do |t|
@@ -210,8 +216,10 @@ ActiveRecord::Schema.define(:version => 20131121073850) do
     t.string   "ad_category"
   end
 
+  add_index "presentations", ["conference_tag", "ad_category", "type"], :name => "index_presentations_on_conference_tag_and_ad_category_and_type"
   add_index "presentations", ["position"], :name => "index_presentations_on_position"
   add_index "presentations", ["session_id"], :name => "index_presentations_on_session_id"
+  add_index "presentations", ["submission_id"], :name => "index_presentations_on_submission_id"
 
   create_table "receipts", :force => true do |t|
     t.integer  "receiver_id"
