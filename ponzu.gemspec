@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails_autolink'
 
   # To use Jbuilder templates for JSON
-  s.add_dependency 'jbuilder'
+  s.add_dependency 'jbuilder', "~> 1.5.2"
 
   # HttpAcceptLanguage to get locale from browser settings
   s.add_dependency 'http_accept_language'
