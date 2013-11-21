@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131121044558) do
+ActiveRecord::Schema.define(:version => 20131121073850) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20131121044558) do
     t.boolean  "is_secret",       :default => false
   end
 
+  add_index "likes", ["conference_tag", "presentation_id"], :name => "index_likes_on_conference_tag_and_presentation_id"
   add_index "likes", ["user_id", "type"], :name => "index_likes_on_user_id_and_type"
 
   create_table "meet_up_comments", :force => true do |t|
