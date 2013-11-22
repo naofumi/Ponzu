@@ -4,43 +4,43 @@
 %div{:style => "margin-top: 20px"}
   - if !(consolidated_info(users, :school_search).empty?)
     %div
-      %span.club_out
+      %span.club_out{:style => "display:inline-block;"}
         &nbsp;
       大学院を探しています。
   - if !(consolidated_info(users, :acad_job_search).empty?)
     %div
-      %span.club_out
+      %span.club_out{:style => "display:inline-block;"}
         &nbsp;
       アカデミック職を探しています。
   - if !(consolidated_info(users, :corp_job_search).empty?)
     %div
-      %span.club_out
+      %span.club_out{:style => "display:inline-block;"}
         &nbsp;
       企業での就職を探しています。
   - if !(consolidated_info(users, :school_avail).empty?)
     %div
-      %span.club_in
+      %span.club_in{:style => "display:inline-block;"}
         &nbsp;
       大学院生を募集しています。
   - if !(consolidated_info(users, :acad_job_avail).empty?)
     %div
-      %span.club_in
+      %span.club_in{:style => "display:inline-block;"}
         &nbsp;
       アカデミアで人材募集しています。
   - if !(consolidated_info(users, :corp_job_avail).empty?)
     %div
-      %span.club_in
+      %span.club_in{:style => "display:inline-block;"}
         &nbsp;
       企業で人材募集しています。
 
 %div{:style => "margin-top: 20px"}
   - if !(consolidated_info(users, :male_partner_search).empty?)
     %div
-      %span.heart
+      %span.heart{:style => "display:inline-block;"}
         &nbsp;
       彼氏募集中です。
   - if !(consolidated_info(users, :female_partner_search).empty?)
     %div
-      %span.heart
+      %span.heart{:style => "display:inline-block;"}
         &nbsp;
       彼女募集中です。
