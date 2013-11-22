@@ -68,9 +68,6 @@
   }
 	addClassString = addClass.join(' ');
 	removeClassString = removeClass.join(' ');
-	console.log("HOWDY " + it.presentation_id);
-	console.log(addClassString);
-	console.log(removeClassString);
 }}
 <div data-add-class="{{= addClassString }}" data-attributes-only=true data-remove-class="{{= removeClassString }}" id="session_details_presentation_{{= it.presentation_id}}"></div>
 <div data-add-class="{{= addClassString }}" data-attributes-only=true data-remove-class="{{= removeClassString }}" id="presentation_detail_{{= it.presentation_id}}"></div>

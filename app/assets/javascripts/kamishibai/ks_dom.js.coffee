@@ -92,7 +92,6 @@ window.KSDomConstructor = () ->
         
         console.log("Convert JSON respose to HTML with template " + json.renderer.template)
         data = JST[json.renderer.template](json)
-        console.log(data)
         # dust.render json.renderer.template, json, (err, html) ->
         #   callback(html)
       catch e
