@@ -19,4 +19,23 @@ module UsersHelper
     end
     result
   end
+
+  # These should be moved to the model
+  def name_is_same(user, author)
+    return false unless user && author
+    name_is_same = (!user.jp_name.blank? && user.jp_name == author.jp_name) ||
+                   (!user.en_name.blank? && user.en_name == author.en_name)
+
+  end
+
+  def email_affiliation_match(user, author)
+    return false unless user && author
+    email_affiliation_match = user.email.split(/[^0-9^a-z^A-Z]/).
+                              select{|token| 
+                                token.size > 4 && 
+                                author.unique_affiliation_combos.to_a.join(' ').match(/#{token}/i)}
+    puts "#{user.name} #{author.name}"
+    puts email_affiliation_match.inspect
+    return !email_affiliation_match.empty?
+  end
 end

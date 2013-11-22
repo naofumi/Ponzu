@@ -38,16 +38,18 @@
         %th
         %th
       - @users.each do |user|
+        - name_same_class = name_is_same(user, user.author) ? "name_same" : ""
+        - affiliation_same_class = email_affiliation_match(user, user.author) ? "affiliation_same" : ""
         %tr
-          %td= user.jp_name
-          %td= user.en_name
-          %td= user.author && user.author.users.count
-          %td= user.author && user.author.jp_name
-          %td= user.author && user.author.en_name
-          %td= user.jp_affiliation
-          %td= user.en_affiliation
-          %td= user.email
-          %td
+          %td{:class => name_same_class}= user.jp_name
+          %td{:class => name_same_class}= user.en_name
+          %td{:class => name_same_class}= user.author && user.author.users.count
+          %td{:class => name_same_class}= user.author && user.author.jp_name
+          %td{:class => name_same_class}= user.author && user.author.en_name
+          %td{:class => affiliation_same_class}= user.jp_affiliation
+          %td{:class => affiliation_same_class}= user.en_affiliation
+          %td{:class => affiliation_same_class}= user.email
+          %td{:class => affiliation_same_class}
             - user.author && user.author.unique_affiliation_combos.sort.each do |combo|
               %div{style: "border-bottom: dotted 2px #888"}= highlight(combo, institution_phrases, highlighter: '<span class="highlight">\1</span>')
           %td
