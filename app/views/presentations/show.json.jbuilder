@@ -1,5 +1,4 @@
-
-json.cache! ['v2', current_conference, I18n.locale, "/presentation/", @presentation, !!current_user, can?(:edit, Presentation)] do
+json.cache! ['v3', current_conference, I18n.locale, "/presentation/", @presentation, !!current_user, can?(:edit, Presentation)] do
   @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
                       with(:conference_tag).equal_to(current_conference.database_tag)
                       fields :en_abstract, :en_title, :jp_abstract, :jp_title
@@ -52,8 +51,7 @@ json.cache! ['v2', current_conference, I18n.locale, "/presentation/", @presentat
     json.number session.number
   end
   json.authorships  @presentation.submission.authorships.order(:position).all,
-                    :author_id, :is_presenting_author, :affiliations, :name,
-                    :looking_for_partner?, :looking_for_job?, :looking_for_person?
+                    :author_id, :is_presenting_author, :affiliations, :name
   json.institutions @presentation.submission.institutions do |institution|
     json.name institution.name
   end

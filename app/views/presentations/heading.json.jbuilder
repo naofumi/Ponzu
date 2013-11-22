@@ -1,4 +1,4 @@
-json.cache! ['v2', current_conference, I18n.locale, "/presentation/heading/", @presentation] do
+json.cache! ['v3', current_conference, I18n.locale, "/presentation/heading/", @presentation] do
   json.renderer do
     json.template "templates/dot/heading_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
@@ -9,8 +9,7 @@ json.cache! ['v2', current_conference, I18n.locale, "/presentation/heading/", @p
   json.starts_at l(@presentation.starts_at, :format => :month_day_time)
   json.cancel @presentation.cancel
   json.authorships  @presentation.submission.authorships.order(:position).all,
-                    :author_id, :is_presenting_author, :affiliations, :name,
-                    :looking_for_partner?, :looking_for_job?, :looking_for_person?
+                    :author_id, :is_presenting_author, :affiliations, :name
   json.institutions @presentation.submission.institutions do |institution|
     json.name institution.name
   end

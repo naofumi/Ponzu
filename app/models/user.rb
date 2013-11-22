@@ -57,6 +57,10 @@ class User < ActiveRecord::Base
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
                   :male_partner_search, :female_partner_search
+  PERSONAL_FIELDS = %w(login_count, failed_login_count, last_request_at, current_login_at,
+                      last_login_at, current_login_ip, last_login_ip, crypted_password,
+                      password_salt, persistence_token, perishable_token, roles_mask,
+                      email_notifications)
   has_many :likes, :inverse_of => :user, :dependent => :restrict, :class_name => "Like::Like"
   has_many :schedules, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict, :class_name => "Like::Schedule"
   # has_many  :likes, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict
@@ -67,7 +71,16 @@ class User < ActiveRecord::Base
   has_many  :meet_ups, :through => :participations, :dependent => :restrict
   has_many  :meet_up_comments, :inverse_of => :user, :dependent => :restrict
   has_one   :registrant, :foreign_key => :registration_id, :primary_key => :login, :inverse_of => :user, :dependent => :restrict
-  belongs_to  :author, :inverse_of => :users, :touch => true # Touch to update author page (add private message link)
+
+  belongs_to  :author, :inverse_of => :users
+  # Fields which don't affect how user information is displayed to other users.
+  # Updates to these fields will not touch #author and will not invalidate
+  # the caches depending on #author.
+  def after_save(record)
+    if !(record.changed_attributes.keys - PERSONAL_FIELDS).empty?
+      record.author.touch
+    end
+  end
 
   validates_presence_of :en_name, :if => Proc.new {|user| user.jp_name.blank? }
 

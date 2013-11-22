@@ -41,6 +41,10 @@ module Kamishibai
       elsif object.instance_of? User
         result = [user_path(object), settings_user_path(object)]
         result.push(author_path(object.author.id)) if object.author
+        # Invalidate due to possible change in flags
+        object.author && object.author.presentations.each do |p|
+          result.push "/presentations/#{p.id}/social_box"
+        end
         result
       elsif object.kind_of? Like
         base_string = "/presentations/#{object.presentation.id}"

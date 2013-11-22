@@ -1,6 +1,12 @@
+# Includes everything that needs a quick expiry.
+# That is everything social and also includes author flags.
+#
 # Cache keys are the @presentation, current_user and
 # anything that changes any Like belonging to the @presentation (incl. other users)
 # so that we can update counts.
+#
+# Since we now also change author flags, we also add @presentation.authors to the 
+# keys.
 #
 # We don't share the cache between different users because we
 # would have to specify each single attribute of User which
@@ -12,17 +18,16 @@
 # (will it include all descendants of Like?)
 #
 # all_likes = Like.where(:presentation_id => @presentation)
-# Cache keys @presentation.id,
-#            all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at
-#            current_user && current_user.id
 
 all_likes = Like.in_conference(current_conference).where(:presentation_id => @presentation)
+@presentation.authors
 
 json.cache! ["v1", current_conference, I18n.locale, 
              "presentations/social_box/json", 
              @presentation.id, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
              all_likes.size,
+             @presentation.authors, # If any of the authors' users has changed a flag
              current_user] do
   json.renderer do
     json.library "dot"
@@ -51,15 +56,20 @@ json.cache! ["v1", current_conference, I18n.locale,
              current_user.votes.build(:presentation_id => @presentation.id)
       json.score vote.score
     end
-    # json.like_button render(:partial => 'likes/like_button', :formats => [:html],
-    #                         :locals =>{ :presentation => @presentation })
 
-    # Highlight liked
-    # css_class = [("scheduled" if schedule_for_current_user_and_presentation(@presentation)),
-    #                ("liked" if like_for_current_user_and_presentation(@presentation))].compact
-    # remove_css_class = ["scheduled", "liked"] - css_class
-    # json.modify_div ks_modify_elements "session_details_presentation_#{@presentation.id}" => {add_class: css_class.join(' '),
-    #                                                                             remove_class: remove_css_class.join(' ')}
+
+    author_styles = @presentation.authors.inject(Hash.new) do |memo, a|
+      memo[a.id] = []
+      memo[a.id] << :looking_for_job if a.looking_for_job?
+      memo[a.id] << :looking_for_person if a.looking_for_person?
+      memo[a.id] << :looking_for_partner if a.looking_for_partner?
+      memo
+    end
+    json.author_styles do
+      author_styles.each do |id, classes|
+        next if classes.empty?
+        json.set! "author_#{id}", classes
+      end
+    end
   end
 end
-

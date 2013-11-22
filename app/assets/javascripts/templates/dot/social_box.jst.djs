@@ -71,3 +71,15 @@
 }}
 <div data-add-class="{{= addClassString }}" data-attributes-only=true data-remove-class="{{= removeClassString }}" id="session_details_presentation_{{= it.presentation_id}}"></div>
 <div data-add-class="{{= addClassString }}" data-attributes-only=true data-remove-class="{{= removeClassString }}" id="presentation_detail_{{= it.presentation_id}}"></div>
+{{
+	for (var key in it.author_styles) {
+		classes = it.author_styles[key];
+		var authorElements = document.querySelectorAll('.' + key);
+		for (var i = 0; i < authorElements.length; i++) {
+		  var author = authorElements[i];
+		  for (var c = 0; c < classes.length; c++) {
+		    kss.addClass(author, classes[c]);
+		  };
+		};
+	}
+}}

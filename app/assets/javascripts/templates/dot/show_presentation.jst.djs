@@ -41,7 +41,7 @@
       <h1>{{= it.title }}</h1>
       <div class="authors">
         {{~ it.authorships :authorship:index}}
-          <span class="author_{{= authorship.author_id}}">{{? authorship.is_presenting_author }}○{{?}}{{? authorship['looking_for_partner?'] }}<span class="heart">&nbsp;</span>{{?}}{{? authorship['looking_for_job?'] }}<span class="club_out">&nbsp;</span>{{?}}{{? authorship['looking_for_person?'] }}><span class="club_in">&nbsp;</span>{{?}}<a href="#!_/authors/{{= authorship.author_id}}">{{= authorship.name}}</a>{{? index != (it.authorships.length - 1)}},{{?}}<sup>{{= authorship.affiliations.join(',') }}</sup></span>
+          <span class="author_{{= authorship.author_id}}">{{? authorship.is_presenting_author }}○{{?}}<span class="heart">&nbsp;</span><span class="club_out">&nbsp;</span><span class="club_in">&nbsp;</span><a href="#!_/authors/{{= authorship.author_id}}">{{= authorship.name}}</a>{{? index != (it.authorships.length - 1)}},{{?}}<sup>{{= authorship.affiliations.join(',') }}</sup></span>
         {{~}}
       </div>
       <div class="institutions">
