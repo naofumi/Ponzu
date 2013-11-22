@@ -29,10 +29,12 @@ module UsersHelper
   end
 
   def email_affiliation_match(user, author)
+    minimal_token_size = 3
+    
     return false unless user && author
     email_affiliation_match = user.email.split(/[^0-9^a-z^A-Z]/).
                               select{|token| 
-                                token.size > 4 && 
+                                token.size >= minimal_token_size && 
                                 author.unique_affiliation_combos.to_a.join(' ').match(/#{token}/i)}
     puts "#{user.name} #{author.name}"
     puts email_affiliation_match.inspect
