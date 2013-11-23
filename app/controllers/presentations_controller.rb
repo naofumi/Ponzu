@@ -54,9 +54,13 @@ class PresentationsController < ApplicationController
     restrict_disclosure(@presentation)
     # Move @more_like_this to inside the cache because slow
 
-    @ads = Presentation::Ad.in_conference(current_conference).
-                            where(:ad_category => @presentation.session.ad_category).
-                            select{|ad| !ad.title.blank?}
+    if !@presentation.session.ad_category.blank?
+      @ads = Presentation::Ad.in_conference(current_conference).
+                              where(:ad_category => @presentation.session.ad_category).
+                              select{|ad| !ad.title.blank?}
+    else
+      @ads = []
+    end
   end
 
   def heading
