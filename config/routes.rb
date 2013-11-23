@@ -176,6 +176,7 @@ Rails.application.routes.draw do
       post 'create_comment'
       get 'related'
       get 'heading'
+      put 'change_ad_category'
     end
     collection do
       get 'my'

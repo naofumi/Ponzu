@@ -50,6 +50,7 @@ class Presentation < ActiveRecord::Base
 
   validates_presence_of :session
   validates_presence_of :submission
+  validates_presence_of :starts_at
   validate     :start_and_end_should_be_within_session_ranges
 
   # after_save   :notify_likers_of_changes

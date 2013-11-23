@@ -224,6 +224,14 @@ class PresentationsController < ApplicationController
     end
   end
 
+  def change_ad_category
+    @presentation = Presentation.in_conference(current_conference).find(params[:id])
+    verify_ownership(@presentation)
+    @presentation.update_attributes(:ad_category => params[:presentation][:ad_category])
+
+    respond_with @presentation, :location => edit_submission_path(@presentation.submission)
+  end
+
   private
 
   # return nil if we exceed MAXIMUM_NUMBER_OF_PRESENTATIONS_PER_BATCH
@@ -270,6 +278,14 @@ class PresentationsController < ApplicationController
       def presentation.disclose_abstract
         true
       end
+    end
+  end
+
+  def verify_ownership(presentation)
+    return true if can?(:manage, presentation)
+    unless current_user.author &&
+           presentation.submission.authors.include?(current_user.author)
+      raise CanCan::AccessDenied, "Current user cannot access."
     end
   end
 
