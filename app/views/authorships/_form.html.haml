@@ -16,7 +16,7 @@
       = f.label :submission_id
       = f.hidden_field :submission_id
       %br/
-      = link_to "#{@authorship.submission.jp_title} #{@authorship.submission.en_title}",
+      = link_to "#{@authorship.submission.submission_number}: #{@authorship.submission.jp_title} #{@authorship.submission.en_title}",
                 ksp(:edit_submission_path, @authorship.submission) if @authorship.submission
   %fieldset
     %legend Author information as shown on Presentation
