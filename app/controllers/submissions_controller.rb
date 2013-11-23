@@ -44,12 +44,14 @@ class SubmissionsController < ApplicationController
   def edit
     @submission = Submission.in_conference(current_conference).
                              find(params[:id])
+    verify_ownership(@submission)
   end
 
   # POST /submissions
   # POST /submissions.json
   def create
     @submission = Submission.new(params[:submission])
+    verify_ownership(@submission)
     @submission.conference_confirm = current_conference
     success = false
     Submission.transaction do
@@ -78,6 +80,7 @@ class SubmissionsController < ApplicationController
   def update
     @submission = Submission.in_conference(current_conference).
                              find(params[:id])
+    verify_ownership(@submission)
 
     respond_to do |format|
       if @submission.update_attributes(params[:submission])
@@ -98,5 +101,15 @@ class SubmissionsController < ApplicationController
     @submission.destroy
 
     respond_with @submission
+  end
+
+  private
+
+  def verify_ownership(@submission)
+    return true if can?(:manage, @submission)
+    unless current_user.author &&
+           @submission.authors.include?(current_user.author)
+      raise CanCan::AccessDenied, "Current user cannot access."
+    end
   end
 end
