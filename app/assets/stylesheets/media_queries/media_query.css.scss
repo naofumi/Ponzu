@@ -58,7 +58,11 @@ body:after {
 }
 
 // For all below 480px. iPhones to Larger phones
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 480px),
+       // for landscape on phones
+       only screen and (max-height: 480px) {
+  // http://stackoverflow.com/questions/6094324/iphone-ipod-prevent-font-size-changing
+  html,body { -webkit-text-size-adjust:none; }
   .pdf_links {
     display: none;
   }
