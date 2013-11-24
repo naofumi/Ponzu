@@ -90,7 +90,7 @@ class Session < ActiveRecord::Base
 
   # as array
   def organizers
-    organizers_string.blank? ? organizers_string.split('|') : []
+    !organizers_string.blank? ? organizers_string.split('|') : []
   end
 
   private
