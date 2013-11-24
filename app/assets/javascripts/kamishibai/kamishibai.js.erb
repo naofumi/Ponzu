@@ -106,6 +106,8 @@ function Kamishibai() {
   // Switch to the page as specified by the hash in window.location.
   this.changePageByHash = function(animate){
     if (!setHashIfBlank()) {
+      if (ga)
+        ga('send', 'pageview', {'location': window.location.href});
       KSController.handleHashChange();
     };
   }
