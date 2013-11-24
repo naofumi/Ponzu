@@ -27,20 +27,18 @@
     <div style="clear:both"></div>
   </div>
   <div class="presentation panel {{= it.type }}" id="presentation_detail_{{= it.id}}">
-    <div style="clear:both">
-      <span class="number">
-        {{= it.number }}
-        {{? it.other_numbers.length > 0 }}
-          <span class="same_presentations">({{= it.other_numbers.join(', ')}})</span>
-        {{?}}
-      </span>
-      {{? it.can_edit }}<a href="#!_/submissions/{{= it.submission_id }}/edit">[edit]</a>{{?}}
-      <span class="time">
-        {{= it.starts_at }}
-      </span>
-    </div>
+    <span class="number">
+      {{= it.number }}
+      {{? it.other_numbers.length > 0 }}
+        <span class="same_presentations">({{= it.other_numbers.join(', ')}})</span>
+      {{?}}
+    </span>
+    {{? it.can_edit }}<a href="#!_/submissions/{{= it.submission_id }}/edit">[edit]</a>{{?}}
+    <span class="time">
+      {{= it.starts_at }}
+    </span>
     {{? !it.cancel }}
-      <h1>{{= it.title }}</h1>
+      <h1 style="clear:both">{{= it.title }}</h1>
       <div class="authors">
         {{~ it.authorships :authorship:index}}
           <span class="author_{{= authorship.author_id}}">{{? authorship.is_presenting_author }}○{{?}}<span class="heart">&nbsp;</span><span class="club_out">&nbsp;</span><span class="club_in">&nbsp;</span><a href="#!_/authors/{{= authorship.author_id}}">{{= authorship.name}}</a>{{? index != (it.authorships.length - 1)}},{{?}}<sup>{{= authorship.affiliations.join(',') }}</sup></span>

@@ -3,16 +3,14 @@
     <img src="{{= it.art_thumb }}" class="thumb">
   {{?}}
   <div class="{{= it.type }}">
-    <div style="clear:both">
-      <div class="time">
-        {{= it.starts_at }}
-      </div>
-      <div class="number">
-        {{= it.number }}
-      </div>
+    <div class="time">
+      {{= it.starts_at }}
+    </div>
+    <div class="number">
+      {{= it.number }}
     </div>
     {{? !it.cancel }}
-      <div class="title">
+      <div class="title" style="clear:both">
         {{= it.title }}
       </div>
       <div class="authors">
