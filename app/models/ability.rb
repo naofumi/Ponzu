@@ -56,6 +56,7 @@ class Ability
     if user.role? :sponsor
       can [:update], Submission
       can [:change_ad_category], Presentation
+      can :clear, Kamishibai::Cache
     end
 
     if user.role? :organizer
