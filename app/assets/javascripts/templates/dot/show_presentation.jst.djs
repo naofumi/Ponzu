@@ -27,16 +27,18 @@
     <div style="clear:both"></div>
   </div>
   <div class="presentation panel {{= it.type }}" id="presentation_detail_{{= it.id}}">
-    <span class="number">
-      {{= it.number }}
-      {{? it.other_numbers.length > 0 }}
-        <span class="same_presentations">({{= it.other_numbers.join(', ')}})</span>
-      {{?}}
-    </span>
-    {{? it.can_edit }}<a href="#!_/submissions/{{= it.submission_id }}/edit">[edit]</a>{{?}}
-    <span class="time">
-      {{= it.starts_at }}
-    </span>
+    <div style="clear:both">
+      <span class="number">
+        {{= it.number }}
+        {{? it.other_numbers.length > 0 }}
+          <span class="same_presentations">({{= it.other_numbers.join(', ')}})</span>
+        {{?}}
+      </span>
+      {{? it.can_edit }}<a href="#!_/submissions/{{= it.submission_id }}/edit">[edit]</a>{{?}}
+      <span class="time">
+        {{= it.starts_at }}
+      </span>
+    </div>
     {{? !it.cancel }}
       <h1>{{= it.title }}</h1>
       <div class="authors">
