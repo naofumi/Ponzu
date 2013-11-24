@@ -1,4 +1,6 @@
-json.cache! ['v1', current_conference, I18n.locale, "/sessions/", @session, can?(:edit, Session), params[:page]] do
+json.cache! ['v1', current_conference, I18n.locale, 
+             @session, params[:bns],
+             can?(:edit, Session), params[:page]] do
   json.renderer do
     json.template "templates/dot/show_sessions"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
