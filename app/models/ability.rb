@@ -42,7 +42,7 @@ class Ability
       can [:destroy, :create], Comment
       can [:settings, :update_settings, :edit_name, :update_name], User
       can :edit_own_settings, User
-      can [:download_pdf, :download_full_day_pdf, :download_full_pdf], Session
+      can [:download_pdf, :download_full_day_pdf, :download_full_pdf, :download_pdf_by_name], Session
       can [:create, :destroy, :by_day, :schedulize, :unschedulize, :my, :my_schedule], Like
       can [:create, :update, :participate], MeetUp
       can [:create, :destroy], MeetUpComment

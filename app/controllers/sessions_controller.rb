@@ -24,11 +24,22 @@ class SessionsController < ApplicationController
   # Nginx.conf has sendfile on by default.
   # For rails, I think that I simply have to uncomment in config/production.rb
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  #
+  # We download different files based on locale
   def download_pdf
     @session = Session.find(params[:id])
-    send_file("#{Rails.root}/indesign_auto_pdfs/#{conference_tag}/#{@session.number}_en.pdf",
-              :filename => "#{conference_tag}_#{@session.number}.pdf",
+    send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{@session.number}_#{I18n.locale}.pdf",
+              :filename => "#{conference_tag}_#{@session.number}_#{I18n.locale}.pdf",
               :disposition => "inline")
+  end
+
+  # We should really have a dedicated PDF download controller for this.
+  # This is also locale aware
+  def download_pdf_by_name
+    name = params[:name].sub(/\W/, "_") # sanitize
+    send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{name}_#{I18n.locale}.pdf",
+              :filename => "#{conference_tag}_#{name}_#{I18n.locale}.pdf",
+              :disposition => "inline")    
   end
 
   def download_full_day_pdf
@@ -39,13 +50,13 @@ class SessionsController < ApplicationController
     day = session_number[0,1]
     headers['X-Accel-Buffering'] = "no"
     headers['Content-Length'] = File.size("#{Rails.root}/indesign_auto_pdfs/#{day}_#{locale}.pdf").to_s
-    send_file("#{Rails.root}/indesign_auto_pdfs/#{day}_#{locale}.pdf",
+    send_file("#{Rails.root}/system/private_pdfs/#{day}_#{locale}.pdf",
               :filename => "#{conference_tag}-day-#{day}_#{locale}.pdf",
               :disposition => "attachment")
   end
 
   def download_full_pdf
-    file_path = "#{Rails.root}/indesign_auto_pdfs/#{conference_tag}_all.pdf"
+    file_path = "#{Rails.root}/system/private_pdfs/#{conference_tag}_all.pdf"
     headers['X-Accel-Buffering'] = "no"
     headers['Content-Length'] = File.size(file_path).to_s
     send_file(file_path,

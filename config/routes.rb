@@ -162,6 +162,7 @@ Rails.application.routes.draw do
     collection do
       post 'batch_request_liked_sessions'
       get 'download_full_pdf'
+      get 'download_pdf_by_name'
     end
   end
 
