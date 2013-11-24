@@ -16,7 +16,7 @@ json.cache! ['v1', current_conference, I18n.locale,
   json.ends_at (@session.starts_at.beginning_of_day == @session.ends_at.beginning_of_day ? 
                 @session.ends_at.strftime("%H:%M") : 
                 l(@session.ends_at, :format => :month_day_time))
-  json.organizers (@session.organizers_string ? @session.organizers_string.split('|') : [])
+  json.organizers @session.organizers
   json.paginator ks_will_paginate(@presentations)
   json.type @session.type && @session.type.parameterize.underscore
   json.can_edit can?(:edit, Session)

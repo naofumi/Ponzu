@@ -88,6 +88,11 @@ class Session < ActiveRecord::Base
     end
   end
 
+  # as array
+  def organizers
+    organizers_string.blank? ? organizers_string.split('|') : []
+  end
+
   private
 
   def validates_absence_of_presentations
