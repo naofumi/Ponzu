@@ -8,17 +8,7 @@
       %legend Submission will be presented at
       %ul
         - @submission.presentations.each do |p|
-          %li
-            = link_to "#{p.session.number} #{p.session.title}", ksp(:session_path, p.session)
-            = " as ##{p.number} on #{l(p.starts_at, :format => :month_day_time)}"
-            = " in Ad category '#{p.ad_category}'" if p.ad_category
-            = link_to "[show]", ksp(:presentation_path, p)
-            - if can? :manage, Submission
-              = link_to "[Edit presentation]", ksp(:edit_presentation_path, p)
-            - if p.type == 'Presentation::Ad' && can?(:change_ad_category, Presentation)
-              = form_for p, :url => change_ad_category_presentation_path(p), :method => :put, :remote => true do |f|
-                = f.select(:ad_category, Session.in_conference(current_conference).order(:ad_category).collect{|e| [e.ad_category, e.ad_category] unless e.ad_category.blank?}.compact.uniq, :include_blank => true)
-                = f.submit "Change Ad Category"
+          = render :partial => 'presentations/single_line_edit', :locals => {:p => p}
 
     %fieldset
       %legend Submission Basic information

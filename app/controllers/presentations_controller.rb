@@ -227,9 +227,13 @@ class PresentationsController < ApplicationController
   def change_ad_category
     @presentation = Presentation.in_conference(current_conference).find(params[:id])
     verify_ownership(@presentation)
-    @presentation.update_attributes(:ad_category => params[:presentation][:ad_category])
-
-    respond_with @presentation, :location => edit_submission_path(@presentation.submission)
+    if @presentation.update_attributes(:ad_category => params[:presentation][:ad_category])
+      flash[:notice] = "Category successfully changed"
+    else
+      flash[:error] = "Error"
+    end
+    device_selective_render :partial => "single_line_edit", :locals => {:p => @presentation}
+    # respond_with @presentation, :location => edit_submission_path(@presentation.submission)
   end
 
   private
