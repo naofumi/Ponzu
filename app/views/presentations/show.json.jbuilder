@@ -1,5 +1,5 @@
 json.cache! ['v3', current_conference, I18n.locale, "/presentation/", 
-             @presentation, current_user && current_user.roles] do
+             @presentation, !!current_user, current_user && current_user.roles] do
   @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
                       with(:conference_tag).equal_to(current_conference.database_tag)
                       fields :en_abstract, :en_title, :jp_abstract, :jp_title
