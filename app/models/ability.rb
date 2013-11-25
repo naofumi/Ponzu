@@ -63,6 +63,8 @@ class Ability
       can [:likes_report, :votes_report], Like
       can :manage, GlobalMessage
       can :clear, Kamishibai::Cache
+      can [:update, :moderate], Submission
+      can [:change_ad_category, :moderate], Presentation
     end
 
     if user.role? :user_moderator

@@ -286,7 +286,7 @@ class PresentationsController < ApplicationController
   end
 
   def verify_ownership(presentation)
-    return true if can?(:manage, presentation)
+    return true if can?(:moderate, presentation)
     unless current_user.author &&
            presentation.submission.authors.include?(current_user.author)
       raise CanCan::AccessDenied, "Current user cannot access."

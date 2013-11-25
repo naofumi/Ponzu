@@ -106,7 +106,7 @@ class SubmissionsController < ApplicationController
   private
 
   def verify_ownership(submission)
-    return true if can?(:manage, submission)
+    return true if can?(:moderate, submission)
     unless current_user.author &&
            submission.authors.include?(current_user.author)
       raise CanCan::AccessDenied, "Current user cannot access."
