@@ -3,6 +3,11 @@
 class SendPresentationAlerts
   NOTIFY_TIME = 15 # notify at NOTIFY_TIME (secs) before presentation starts_at
 
+  begin
+    include SendPresentationAlertsExtensions
+  rescue
+  end
+
   # Provide the time as string. (useful for testing)
   # Defaults to Time.now.
   def self.perform(time = "2013-12-03 9:00:00 +0900")
