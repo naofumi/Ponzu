@@ -5,9 +5,11 @@
         <a href="#!_/sessions/{{= it.session.id }}" class="button arrowleft icon">{{= it.session.number }}</a>
       </span>
       {{? !(it.type == 'presentation_ad')}}
-        <span>
-          <a href="#!_/rooms/{{= it.room.id }}" class="button pin icon">{{= it.room.name}}</a>
-        </span>
+        {{? it.room && it.room.id }}
+          <span>
+            <a href="#!_/rooms/{{= it.room.id }}" class="button pin icon">{{= it.room.name}}</a>
+          </span>
+        {{?}}
         <span>
           <a href="#!_{{= it.poster_timetable_path }}" onclick="KSScrollMemory.set({href: {{= '/' + it.poster_timetable_path }}, elementId: 'session_{{= it.id }}'})" class="button icon pin">
             {{? (it.type == 'presentation_poster' || it.type == 'presentation_booth')}}

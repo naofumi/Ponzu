@@ -64,7 +64,11 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/",
   end
 
   if @presentation.kind_of? Presentation::Art
-    json.art asset_path("#{current_conference.tag}/art/web/#{@presentation.number}.jpg")
+    begin
+      json.art asset_path("#{current_conference.tag}/art/web/#{@presentation.number}.jpg")
+    rescue Sprockets::Helpers::RailsHelper::AssetPaths::AssetNotPrecompiledError
+      json.art asset_path("#{current_conference.tag}/art/web/empty.jpg")
+    end
   end
 
   json.javascript "cssSet('#{highlight_authors_css(nil, [], @presentation.authors)}');"

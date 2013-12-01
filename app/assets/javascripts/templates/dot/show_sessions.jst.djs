@@ -10,9 +10,11 @@
           {{= it.starts_at }} - {{= it.ends_at }}
         </a>
       </div>
-      <div class="room">
-        <a href="#!_/rooms/{{= it.room.id }}" class="button icon pin">{{= it.room.name }}</a>
-      </div>
+      {{? it.room && it.room.id }}
+        <div class="room">
+          <a href="#!_/rooms/{{= it.room.id }}" class="button icon pin">{{= it.room.name }}</a>
+        </div>
+      {{?}}
     {{?}}
     <div class="title">
       {{= it.title }}

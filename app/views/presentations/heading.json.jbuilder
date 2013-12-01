@@ -14,7 +14,10 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/heading/", @p
     json.name institution.name
   end
   if @presentation.kind_of? Presentation::Art
-    json.art_thumb asset_path("#{current_conference.tag}/art/thumbs/#{@presentation.number}.jpg")
+    begin
+      json.art_thumb asset_path("#{current_conference.tag}/art/thumbs/#{@presentation.number}.jpg")
+    rescue Sprockets::Helpers::RailsHelper::AssetPaths::AssetNotPrecompiledError
+    end
   end
 
   json.type @presentation.type && @presentation.type.parameterize.underscore
