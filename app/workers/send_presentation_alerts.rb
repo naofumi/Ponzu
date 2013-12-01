@@ -29,6 +29,7 @@ class SendPresentationAlerts
     # Checks Schedule#email_alert_sent so that we don't send alerts twice.
     presentations = Presentation::TimeTableable.includes(:schedules).
                       where("? <= starts_at AND starts_at <= ?", time, starts_at_from)
+    emails_sent = []
     presentations.each do |p|
       schedules = p.schedules.select{|s| !s.email_alert_sent && s.user.email_notifications}
       schedules.each do |s|
@@ -39,12 +40,24 @@ class SendPresentationAlerts
         recipient = s.user
         p.send_email(:receivers => [recipient], :mailer_method => :presentation_alert)
         s.update_column(:email_alert_sent, true)
+        emails_sent << "#{p.starts_at.to_formatted_s(:short)} #{p.number} #{recipient.email}"
         puts "Presentation Alert Email sent out for #{p.session.number} - #{p.number}: to user #{recipient.email}"
         Rails.logger.info("Presentation Alert Email sent out for #{p.session.number} - #{p.number}: to user #{recipient.email}")
       end
-
     end
     puts "Presentation Alert batch job end: #{Time.zone.now.strftime('%Y-%m-%d %H:%M:%S')}"
+    if defined?(:admin_users_to_notify)
+      body = <<BODY
+<h4>#{time.to_formatted_s(:short)} -> #{starts_at_from.to_formatted_s(:short)}</h4>
+<p>
+#{emails_sent.join("<br>\n")}
+</p>
+BODY
+      sender_obj = admin_users_to_notify.first
+      sender_obj.send_email(:receivers => admin_users_to_notify,
+                            :mailer_method => :admin_emails_sent_notification,
+                            :body => body)
+    end
   end
 
 end

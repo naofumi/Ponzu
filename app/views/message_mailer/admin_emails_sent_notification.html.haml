@@ -1,0 +1,11 @@
+!!! 5
+%head
+  %meta(content="text/html; charset=UTF-8" http-equiv="Content-Type")/
+  %body
+    = header_image
+    %h4
+      Emails sent:
+    %div{:style => body_style}
+      = sanitize @body
+    %p
+      = mail_footer

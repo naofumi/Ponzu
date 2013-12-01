@@ -8,7 +8,7 @@ class MessageMailer < ActionMailer::Base
     mail(:to => email_addresses(@to), 
          :from => email_sender_address(@to),
          :subject => I18n.t('message_mailer.private_message.subject', 
-                            :name => @obj.en_name, 
+                            :name => @obj.name(:en), 
                             :namespace => @conference.tag))
   end
 
@@ -41,10 +41,19 @@ class MessageMailer < ActionMailer::Base
     @conference = conference(@to)
     mail(:to => email_addresses(@to), 
          :from => email_sender_address(@to),
-         :subject => "EMAIL ALERT")
-         # :subject => I18n.t('message_mailer.presentation_alert.subject', 
-         #                    :number => @obj.number,
-         #                    :namespace => @conference.tag))
+         :subject => I18n.t('message_mailer.presentation_alert.subject',
+                            :namespace => @conference.tag,
+                            :number => @obj.number,
+                            :time => @obj.starts_at.to_formatted_s(:short)))
+  end
+
+  def admin_emails_sent_notification(options)
+    @to, @subject, @body, @obj = options[:to], options[:subject], options[:body], options[:obj]
+    @bootloader_path = default_bootloader_path(@obj)
+    @conference = conference(@to)
+    mail(:to => email_addresses(@to), 
+         :from => email_sender_address(@to),
+         :subject => "Emails sent notification")
   end
 
   private
@@ -53,7 +62,7 @@ class MessageMailer < ActionMailer::Base
     [objects].flatten.first.conference
   end
 
-  def email_sender_address(objects)
+  def email_sender_address(objects = nil)
     "#{conference(objects).tag}-no-reply@castle104.com"
   end
 
