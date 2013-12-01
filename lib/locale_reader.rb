@@ -31,10 +31,24 @@ module LocaleReader
     #   locale_selective_reader :abstract, 
     #                           :ja => :jp_abstract, :en => :en_abstract, 
     #                           :zap_gremlins => true
+    #
+    # will define
+    # 
+    # #title : this method returns either en_title or jp_title
+    # #abstract : this method returns either en_abstract or jp_abstract
+    #
+    # The +attribute_name+ method can also be called with a locale
+    # symbol, which allows you to customize the
+    # preferred locale irrespective or I18n.locale
+    #
+    # You can therefore call
+    # title(:en)
+    # To get en_title preferrably if available.
     def locale_selective_reader(attribute_name, options)
-      define_method attribute_name do
+      define_method attribute_name do |*args|
+        args ||= []
         should_zap_gremlins = options.delete(:zap_gremlins)
-        raw = choose_by_locale(options)
+        raw = choose_by_locale(options, args)
         if should_zap_gremlins
           raw && raw.gsub(regexp, '')
         else
@@ -51,7 +65,8 @@ module LocaleReader
     string && string.gsub(regexp, '')
   end
 
-  def choose_by_locale(options)
+
+  def choose_by_locale(options, args)
     raise "value for :en locale is a requirement" unless options[:en]
     raise "value for :ja locale is a requirement" unless options[:ja]
     stash = {}
@@ -59,7 +74,7 @@ module LocaleReader
       stash[key] = send(value)
     end
 
-    case I18n.locale
+    case args[0] || I18n.locale
     when :ja
       !stash[:ja].blank? ? stash[:ja] : stash[:en]
     when :en
