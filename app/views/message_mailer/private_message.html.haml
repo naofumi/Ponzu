@@ -2,14 +2,14 @@
 %head
   %meta(content="text/html; charset=UTF-8" http-equiv="Content-Type")/
   %body
-    %h3
-      = t('message_mailer.private_message.header', :namespace => @conference.tag)
-    %blockquote
+    = header_image
+    %h4
+      = t('message_mailer.private_message.header', :from => @obj.name(:en), :namespace => @conference.tag)
+    %div{:style => body_style}
       = sanitize @body
     %p
       = t('message_mailer.private_message.view_web', 
-          :link => ksp_and_galapagos_email_links(conversation_private_messages_path(:with => @obj)),
-          :namespace => @conference.tag)
+          :link => linkify(ksp_email_link(conversation_private_messages_path(:with => @obj))),
+          :namespace => @conference.tag).html_safe
     %p
       = mail_footer
-    

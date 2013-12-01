@@ -1,12 +1,17 @@
 <%= t('message_mailer.comment_added.header', 
-    :number => @obj.presentation.number,
     :namespace => @conference.tag) %>
-<%= "#{sanitize @obj.presentation.title}" %>
 
-"<%= strip_tags @obj.text %>"
+<%= @obj.presentation.number %>
+<%= @obj.presentation.title(:en) %>
+<%= @obj.presentation.title(:jp) %>
+
+Comment:
+<%= sanitize @obj.text %>
+
+
 
 <%= t('message_mailer.comment_added.view_web', 
-    :link => ksp_and_galapagos_email_links(presentation_path(@obj.presentation)),
+    :link => ksp_email_link(presentation_path(@obj.presentation)),
     :namespace => @conference.tag) %>
     
 <%= mail_footer %>

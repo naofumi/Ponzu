@@ -2,15 +2,29 @@
 %head
   %meta(content="text/html; charset=UTF-8" http-equiv="Content-Type")/
   %body
-    %h3
-      = t('message_mailer.presentation_alert.header', 
-          :time => @obj.starts_at.to_formatted_s(:short),
-          :number => @obj.number,
+    = header_image
+    %h4
+      = t('message_mailer.presentation_alert.header',
           :namespace => @conference.tag)
-    %blockquote
-      = sanitize @body
+    %div{:style => body_style}
+      %b= "#{@obj.session.number} - #{@obj.number}"
+      %p
+        = @obj.title(:en)
+        %br/
+        = @obj.title(:jp)
+      %p
+        %b Starts at: 
+        = @obj.starts_at.to_formatted_s(:short)
+      %p
+        %b Room:
+        = @obj.session.room && @obj.session.room.name(:en)
+      %p
+        %b Location:
+        = @obj.session.room && @obj.session.room.location(:en)
+
     %p
-      = t('message_mailer.presentation_alert.view_web', :namespace => @conference.tag, :link => "")
+      = t('message_mailer.presentation_alert.view_web', 
+          :link => linkify(ksp_email_link(@obj)),
+          :namespace => @conference.tag).html_safe
     %p
       = mail_footer
-    

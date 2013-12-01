@@ -33,17 +33,20 @@ ja:
     
   message_mailer:
     private_message:
-      header: "You have received the following private message."
-      view_web: "View on website at %{link} (requires login)."
+      subject: "Message from %{name}"
+      header: "%{from} wrote..."
+      view_web: "View and reply from %{link} (requires login)."
     presentation_modified:
       header: "Presentation %{number} was modified."
-      view_web: "View on website at %{link} (requires login)."
+      view_web: "View at %{link} (requires login)."
     comment_added:
-      header: "New comment on presentation %{number}."
-      view_web: "View on website at %{link} (requires login)."
+      subject: "New comment on your presentation %{number}."
+      header: "New comment on your presentation."
+      view_web: "View at %{link} (requires login)."
     presentation_alert:
-      header: "Presentation %{number} starts at %{time}."
-      view_web: "View on website at %{link} (requires login)."
+      subject: "My Schedule Reminder %{number} starts at %{time}."
+      header: "My Schedule Reminder"
+      view_web: "View at %{link} (requires login)."
   conferences:
     index:
       title: "List Conferences"
