@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131121093116) do
+ActiveRecord::Schema.define(:version => 20131130232359) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -104,13 +104,14 @@ ActiveRecord::Schema.define(:version => 20131121093116) do
   create_table "likes", :force => true do |t|
     t.integer  "presentation_id"
     t.integer  "user_id"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
-    t.boolean  "scheduled",       :default => false, :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.boolean  "scheduled",        :default => false, :null => false
     t.string   "type"
-    t.integer  "score",           :default => 0
+    t.integer  "score",            :default => 0
     t.string   "conference_tag"
-    t.boolean  "is_secret",       :default => false
+    t.boolean  "is_secret",        :default => false
+    t.boolean  "email_alert_sent", :default => false
   end
 
   add_index "likes", ["conference_tag", "presentation_id"], :name => "index_likes_on_conference_tag_and_presentation_id"
