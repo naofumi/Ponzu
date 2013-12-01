@@ -1,3 +1,3 @@
 module Ponzu
-  VERSION = "0.0.5.39"
+  VERSION = "0.0.6.0"
 end
