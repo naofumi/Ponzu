@@ -1,0 +1,16 @@
+!!! 5
+%head
+  %meta(content="text/html; charset=UTF-8" http-equiv="Content-Type")/
+  %body
+    %h3
+      = t('message_mailer.presentation_alert.header', 
+          :time => @obj.starts_at.to_formatted_s(:short),
+          :number => @obj.number,
+          :namespace => @conference.tag)
+    %blockquote
+      = sanitize @body
+    %p
+      = t('message_mailer.presentation_alert.view_web', :namespace => @conference.tag, :link => "")
+    %p
+      = mail_footer
+    

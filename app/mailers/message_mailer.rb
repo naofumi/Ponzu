@@ -35,6 +35,18 @@ class MessageMailer < ActionMailer::Base
                             :namespace => @conference.tag))
   end
 
+  def presentation_alert(options)
+    @to, @subject, @body, @obj = options[:to], options[:subject], options[:body], options[:obj]
+    @bootloader_path = default_bootloader_path(@obj)
+    @conference = conference(@to)
+    mail(:to => email_addresses(@to), 
+         :from => email_sender_address(@to),
+         :subject => "EMAIL ALERT")
+         # :subject => I18n.t('message_mailer.presentation_alert.subject', 
+         #                    :number => @obj.number,
+         #                    :namespace => @conference.tag))
+  end
+
   private
 
   def conference(objects)
@@ -52,7 +64,7 @@ class MessageMailer < ActionMailer::Base
     if !conference.send_all_emails_to.blank?
       conference.send_all_emails_to.split(' ')
     else
-      objects.map{|o| o.email}.uniq.compact
+      objects.map{|o| o.email unless o.email.blank?}.uniq.compact
     end
   end
 

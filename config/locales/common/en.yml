@@ -41,6 +41,9 @@ en:
     comment_added:
       header: "New comment on presentation %{number}."
       view_web: "View on website at %{link} (requires login)."
+    presentation_alert:
+      header: "Presentation %{number} starts at %{time}."
+      view_web: "View on website at %{link} (requires login)."
   conferences:
     index:
       title: "List Conferences"

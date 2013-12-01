@@ -1,0 +1,8 @@
+<%= t('message_mailer.presentation_alert.header', :namespace => @conference.tag) %>
+
+<%= sanitize @body %>
+
+<%= t('message_mailer.presentation_alert.view_web', 
+    :namespace => @conference.tag) %>
+    
+<%= mail_footer %>
