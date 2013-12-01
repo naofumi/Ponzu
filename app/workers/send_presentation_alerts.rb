@@ -10,7 +10,7 @@ class SendPresentationAlerts
 
   # Provide the time as string. (useful for testing)
   # Defaults to Time.now.
-  def self.perform(time = "2013-12-03 9:00:00 +0900")
+  def self.perform(time = nil)
     puts "Presentation Alert batch job start: #{Time.zone.now.strftime('%Y-%m-%d %H:%M:%S')}"
     if time
       time = Time.zone.parse(time)
