@@ -17,7 +17,7 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/heading/", @p
     begin
       json.art_thumb asset_path("#{current_conference.tag}/art/thumbs/#{@presentation.number}.jpg")
     rescue Sprockets::Helpers::RailsHelper::AssetPaths::AssetNotPrecompiledError
-      json.art_thumb asset_path("#{current_conference.tag}/art/thumbs/empty.jpg")
+      json.art_thumb asset_path("#{current_conference.tag}/art/thumbs/empty.png")
     end
   end
 
