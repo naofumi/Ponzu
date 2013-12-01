@@ -440,6 +440,21 @@ module SimpleMessaging
     end
   end
 
+  def send_email(options)
+    subject, body, receivers, mailer_method = 
+             options[:subject], options[:body], options[:receivers], options[:mailer_method]
+    if mailer_method
+      mailable_receivers = receivers.select{|r| r.respond_to?(:email) && !r.email.blank?}
+      if !mailable_receivers.empty?
+        MessageMailer.send(mailer_method,
+                           :to => mailable_receivers, 
+                           :subject => subject, 
+                           :body => body,
+                           :obj => self).deliver
+      end
+    end
+  end
+
   private
 
   # Creates Message and Receipt objects to fulfill #send_message.
@@ -458,18 +473,4 @@ module SimpleMessaging
     return message
   end
 
-  def send_email(options)
-    subject, body, receivers, mailer_method = 
-             options[:subject], options[:body], options[:receivers], options[:mailer_method]
-    if mailer_method
-      mailable_receivers = receivers.select{|r| r.respond_to?(:email) && !r.email.blank?}
-      if !mailable_receivers.empty?
-        MessageMailer.send(mailer_method,
-                           :to => mailable_receivers, 
-                           :subject => subject, 
-                           :body => body,
-                           :obj => self).deliver
-      end
-    end
-  end
 end
