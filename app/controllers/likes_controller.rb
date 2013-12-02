@@ -89,11 +89,23 @@ class LikesController < ApplicationController
 
   # PUT /likes/1/schedulize
   def schedulize
-    @like = Like::Like.find(params[:id])
+    @like = Like::Like.where(:user_id => current_user.id).find(params[:id])
     @presentation = @like.presentation
     set_flash @like.schedulize,
               :success => "Successfully created Schedule.",
               :fail => "Failed to create Schedule."
+
+    respond_with @presentation, :success_action => 'presentations/social_box'
+  end
+
+  def secretify
+    @like = Like.where(:user_id => current_user.id).find(params[:id])
+    @presentation = @like.presentation
+    secret_status = params[:revoke] ? false : true
+    message = secret_status ? "concealed" : "revealed"
+    set_flash @like.update_attribute(:is_secret, secret_status),
+              :success => "Successfully #{message}.",
+              :fail => "Failed to #{message}."
 
     respond_with @presentation, :success_action => 'presentations/social_box'
   end

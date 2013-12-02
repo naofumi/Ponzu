@@ -13,9 +13,14 @@
 				<span class="social_controls">
 					{{? it.like_id }}				
 						{{? it.scheduled }}
-						  <a href="/likes/{{= it.like_id }}/unschedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">remove from my {{= it.secret ? 'secret ' : ''}} schedule</a>
+						  <a href="/likes/{{= it.like_id }}/unschedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">remove {{= it.secret ? 'secret ' : ''}} schedule</a>
+						  {{? it.secret }}
+							  <a href="/likes/{{= it.like_id }}/secretify?revoke=1" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">like</a>
+							{{??}}
+							  <a href="/likes/{{= it.like_id }}/secretify" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow">unlike (make secret)</a>
+							{{?}}
 						{{??}}
-						  <a href="/likes/{{= it.like_id }}//schedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow" title="Secret Likes and Secret Schedules are invisible from the authors.">add to my {{= it.secret ? 'secret ' : ''}}schedule</a>
+						  <a href="/likes/{{= it.like_id }}/schedulize" class="button icon clock" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="put" data-remote="true" rel="nofollow" title="Secret Likes and Secret Schedules are invisible from the authors.">add to {{= it.secret ? 'secret ' : ''}}schedule</a>
 						  <a href="/likes/{{= it.like_id }}" class="button icon like" data-invalidates-keys="{{= it.invalidated_paths }}" data-ks-insert-response data-method="delete" data-remote="true" rel="nofollow">{{= it.secret ? 'secret ' : ''}}unlike</a>
 						{{?}}
 					{{??}}

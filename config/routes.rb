@@ -59,6 +59,7 @@ Rails.application.routes.draw do
       get 'my_schedule'
       put 'schedulize'
       put 'unschedulize'
+      put 'secretify'
     end
   end
 
