@@ -4,7 +4,7 @@
     .search_result_search_field
       = render :partial => "layouts/search_box"
     %div
-      - if params[:query].blank?
+      - if params[:query].blank? && params[:flag].blank?
         .panel
           = t('please_enter_search_term')
       - elsif (!@presentations || @presentations.results.empty?) && (!@users || @users.results.empty?)

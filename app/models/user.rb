@@ -119,6 +119,17 @@ class User < ActiveRecord::Base
   end
   
 
+  def flags
+    result = []
+    [ :school_search, :acad_job_search, :corp_job_search,
+      :school_avail, :acad_job_avail, :corp_job_avail,
+      :male_partner_search, :female_partner_search].each do |attribute|
+      result << attribute if self[attribute]
+    end
+    puts result.inspect
+    result
+  end
+
   searchable :ignore_attribute_changes_of => [User.attribute_names - 
       %w(en_name jp_name twitter_id facebook_id linkedin_id read_research_map_id other_links
          email login)].flatten.map{|a| a.to_sym} do
@@ -126,6 +137,7 @@ class User < ActiveRecord::Base
 
     string :conference_tag
 
+    string :flags, :multiple => true, :stored => true
     # TODO: use Submission to do this.
     # text :authorship_affiliations do
     #   author && author.authorships.includes(:submissions).map {|au|

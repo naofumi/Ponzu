@@ -466,6 +466,7 @@ ja:
       pdf_no_abstract: "All No Abst.<br />(1.4MB)"
       pdf_with_abstract: "All With Abst.<br />(8.7MB)"
       shimin: "市民講座<br />ランチョン<br />(0.4MB)"
+      flags: "フラグ検索"
 
     admin_links:
       manage_conferences: Manage Conferences

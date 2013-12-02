@@ -221,6 +221,9 @@ module DashboardHelper
       pdf_with_abstract: {
         href: download_full_pdf_sessions_path,
         class: 'pdf'
+      },
+      flags: {
+        href: ksp(:docs_path, "#{conference_tag}/flags")
       }
 
 
