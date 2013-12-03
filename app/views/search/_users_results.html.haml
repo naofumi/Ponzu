@@ -3,7 +3,7 @@
     - if !params[:query].blank?
       = t('search.hit_users', :query => params[:query], :hits => @users.total)
     - else
-      = params[:flag] && params[:flag].humanize
+      = params[:flag] && t("flags.#{params[:flag]}")
   .panel.paneled_list.presentation
     = ks_will_paginate @users.results, :params => {:type => :users}
     = render :partial => "users"

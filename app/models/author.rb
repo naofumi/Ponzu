@@ -74,6 +74,8 @@ class Author < ActiveRecord::Base
 
     string :conference_tag
 
+    string :in_categories, :multiple => true, :stored => true
+
     # TODO: use Submission to do this.
     # text :authorship_affiliations do
     #   author && author.authorships.includes(:submissions).map {|au|
@@ -91,6 +93,24 @@ class Author < ActiveRecord::Base
   def find_conference
     submissions.first.conference
   end
+
+  # Return the categories (session ad_categories)
+  # in which the author has presentations.
+  #
+  # categories are reverse sorted by frequency.
+  def in_categories
+    result = {}
+    presentations.includes(:session).each do |p|
+      category = p.session && p.session.ad_category
+      unless category.blank?
+        result[category] ||= 0
+        result[category] += 1 
+      end
+    end
+    result.sort_by{|cat, freq| freq}.reverse.
+           map{|cat, freq| cat}.compact
+  end
+
 
   # Takes an array of objects, each of which
   # responds to an #authors method.

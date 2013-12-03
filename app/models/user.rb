@@ -126,7 +126,6 @@ class User < ActiveRecord::Base
       :male_partner_search, :female_partner_search].each do |attribute|
       result << attribute if self[attribute]
     end
-    puts result.inspect
     result
   end
 
@@ -138,6 +137,13 @@ class User < ActiveRecord::Base
     string :conference_tag
 
     string :flags, :multiple => true, :stored => true
+    string :in_categories, :multiple => true, :stored => true do
+      if author
+        author.in_categories
+      else
+        []
+      end
+    end
     # TODO: use Submission to do this.
     # text :authorship_affiliations do
     #   author && author.authorships.includes(:submissions).map {|au|

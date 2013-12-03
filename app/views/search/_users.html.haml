@@ -1,7 +1,11 @@
-- @users && @users.results.each do |u|
+- @users && @users.each_hit_with_result.each do |hit, u|
   = link_to ksp(u) do
     = highlight(u.name, params[:query])
     %span.user_type= u.kind_of?(Author) ? "Author" : "Participant"
     .institutions
       = "(#{u.affiliation})" if u.kind_of?(User) && !u.affiliation.blank?
       = "(#{u.all_unique_affiliations.first})" if u.kind_of?(Author)
+    .in_categories
+      - if in_categories = hit.stored(:in_categories)
+        %span.category_title= t(".in_categories")
+        = in_categories.map{|c| "\"#{t(".categories.#{c}")}\"" unless c.blank?}.compact.join(", ")
