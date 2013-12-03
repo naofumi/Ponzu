@@ -19,4 +19,4 @@
     %strong Other #{i + 1}:
     - link =~ /^http(s?):\/\//
     - url = "http#{$1}://#{link.sub(/^https?:\/\//, '')}"
-    = link_to url, url
+    = link_to truncate(url), url
