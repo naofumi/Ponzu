@@ -13,7 +13,7 @@ class PosterSessionsController < ApplicationController
   end
 
   set_kamishibai_expiry [:show, :list] => 24 * 60 * 60,
-                        [:like_highlights, :list_highlights] => 60
+                        [:like_highlights, :list_highlights] => 24 * 60 * 60
 
   def container
     render :layout => false
