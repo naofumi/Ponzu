@@ -20,9 +20,8 @@
 # all_likes = Like.where(:presentation_id => @presentation)
 
 all_likes = Like.in_conference(current_conference).where(:presentation_id => @presentation)
-@presentation.authors
 
-json.cache! ["v1", current_conference, I18n.locale, 
+json.cache! ["v2", current_conference, I18n.locale, 
              "presentations/social_box/json", 
              @presentation.id, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
@@ -35,19 +34,15 @@ json.cache! ["v1", current_conference, I18n.locale,
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
   end
   if current_user
-  	json.presentation_id @presentation.id
+
+    # Stuff that depends on current_user
   	json.logged_in !!current_user
 
-    like = like_for_current_user_and_presentation(@presentation)
+    like = current_user && all_likes.detect{|l| l.user_id == current_user.id}
     json.like_id like && like.id
     json.secret like && like.is_secret
     json.scheduled like.kind_of?(Like::Schedule)
-    json.likes_count @presentation.likes.where(:is_secret => false).size
-    like ||= @presentation.likes.build # We always need a like object to calculate invalidated_paths
-    json.invalidated_paths invalidated_paths(like)
 
-    comments = @presentation.comments
-    json.comments_count comments.inject(comments.size){|memo, c| memo + c.child_count.to_i}
 
     if can?(:vote, Like)
       json.voter can?(:vote, Like)
@@ -57,18 +52,32 @@ json.cache! ["v1", current_conference, I18n.locale,
       json.score vote.score
     end
 
+    # stuff that doesn't depend on current_user
+    json.cache! ["v1", current_conference, I18n.locale,
+                 "presentations/social_box/json/fixed",
+                 @presentation.id,
+                 all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
+                 all_likes.size,
+                 @presentation.authors] do
+      json.presentation_id @presentation.id
+      json.likes_count all_likes.select{|l| l.is_secret == false}.size
+      like ||= @presentation.likes.build # We always need a like object to calculate invalidated_paths
+      json.invalidated_paths invalidated_paths(like)
+      comments = @presentation.comments
+      json.comments_count comments.inject(comments.size){|memo, c| memo + c.child_count.to_i}
 
-    author_styles = @presentation.authors.inject(Hash.new) do |memo, a|
-      memo[a.id] = []
-      memo[a.id] << :looking_for_job if a.looking_for_job?
-      memo[a.id] << :looking_for_person if a.looking_for_person?
-      memo[a.id] << :looking_for_partner if a.looking_for_partner?
-      memo
-    end
-    json.author_styles do
-      author_styles.each do |id, classes|
-        next if classes.empty?
-        json.set! "author_#{id}", classes
+      author_styles = @presentation.authors.includes(:users).inject(Hash.new) do |memo, a|
+        memo[a.id] = []
+        memo[a.id] << :looking_for_job if a.looking_for_job?
+        memo[a.id] << :looking_for_person if a.looking_for_person?
+        memo[a.id] << :looking_for_partner if a.looking_for_partner?
+        memo
+      end
+      json.author_styles do
+        author_styles.each do |id, classes|
+          next if classes.empty?
+          json.set! "author_#{id}", classes
+        end
       end
     end
   end
