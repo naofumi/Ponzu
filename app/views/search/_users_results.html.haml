@@ -4,6 +4,15 @@
       = t('search.hit_users', :query => params[:query], :hits => @users.total)
     - else
       = params[:flag] && t("flags.#{params[:flag]}")
+  -if params[:flag] && (params[:category] || @users.total > 40)
+    .panel
+      - categories = ["all", "A 分子構造・生命情報", "B 分子・複合体の機能",
+      "C 細胞の構造と機能", "D 発生と再生および神経科学", "E 疾患生物学", "F 分子生物学的方法論、技術", "G その他"]
+      - categories.each do |category|
+        - category_string = category
+        - category = nil if category == "all"
+        - selected_class = (params[:category] == category) ? "primary" : ""
+        = link_to t("search.users.categories.#{category_string}"), ksp(search_index_path(:flag => params[:flag], :category => category)), :class => ["button", selected_class]
   .panel.paneled_list.presentation
     = ks_will_paginate @users.results, :params => {:type => :users}
     = render :partial => "users"

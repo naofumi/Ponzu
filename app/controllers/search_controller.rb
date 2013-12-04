@@ -48,6 +48,7 @@ class SearchController < ApplicationController
 			@users = Sunspot.search(User) do
 				with(:conference_tag).equal_to(current_conference.database_tag)
 				with :flags, params[:flag]
+				with :in_categories, params[:category] if params[:category]
 				paginate :page => params[:page], :per_page => 20
 			end
 		end
