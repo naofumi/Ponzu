@@ -113,6 +113,7 @@ class CommentsController < ApplicationController
     parent_comment = Comment.find(params[:id])
     @comment = Comment.new
     @comment.parent_id = parent_comment.id
+    @comment.user = current_user
 
     respond_with @comment
   end

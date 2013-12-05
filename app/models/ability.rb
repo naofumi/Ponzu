@@ -39,7 +39,7 @@ class Ability
       # logged in user
       can :read, [User]
       can [:view_abstract, :my, :likes, :create_comment], Presentation
-      can [:destroy, :create], Comment
+      can [:destroy, :create, :reply], Comment
       can [:settings, :update_settings, :edit_name, :update_name], User
       can :edit_own_settings, User
       can [:download_pdf, :download_full_day_pdf, :download_full_pdf, :download_pdf_by_name], Session

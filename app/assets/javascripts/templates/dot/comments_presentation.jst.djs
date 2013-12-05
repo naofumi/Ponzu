@@ -14,7 +14,7 @@
       <div class='comment_header'>
         <div class='time_box'>
           {{= comment.created_at }}
-          <a href="#!_/comments/{{= comment.id }}/reply" class="button comment icon" data-remote=true data-ks-insert-response=true>Reply</a>
+          <a href="/comments/{{= comment.id }}/reply" class="button comment icon" data-remote=true data-ks-insert-response=true>Reply</a>
         </div>
         <a href="#!_/users/{{= comment.user_id}}">{{= comment.user_name}}</a>
         {{? comment.is_author }}
@@ -29,7 +29,7 @@
           {{?}}
         </div>
       </div>
-      <div id="reply_to_{{= comment.id}} "></div>
+      <div id="reply_to_{{= comment.id}}"></div>
     </div>
   {{~}}
 </div>
