@@ -53,15 +53,13 @@ json.cache! ["v2", current_conference, I18n.locale,
     end
 
     # stuff that doesn't depend on current_user
-    authors = @presentation.authors.includes(:users)
-    users = authors.map{|a| a.users}.flatten
+    authors = @presentation.authors
     json.cache! ["v1", current_conference, I18n.locale,
                  "presentations/social_box/json/fixed",
                  @presentation.id,
                  all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
                  all_likes.size,
-                 authors,
-                 users] do
+                 authors] do
       json.presentation_id @presentation.id
       json.likes_count all_likes.select{|l| l.is_secret == false}.size
       like ||= @presentation.likes.build # We always need a like object to calculate invalidated_paths
