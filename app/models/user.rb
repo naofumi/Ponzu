@@ -57,10 +57,10 @@ class User < ActiveRecord::Base
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
                   :male_partner_search, :female_partner_search
-  PERSONAL_FIELDS = %w(login_count, failed_login_count, last_request_at, current_login_at,
-                      last_login_at, current_login_ip, last_login_ip, crypted_password,
-                      password_salt, persistence_token, perishable_token, roles_mask,
-                      email_notifications)
+  PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
+                      last_login_at current_login_ip last_login_ip crypted_password
+                      password_salt persistence_token perishable_token
+                      email_notifications login_activated_at)
   has_many :likes, :inverse_of => :user, :dependent => :restrict, :class_name => "Like::Like"
   has_many :schedules, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict, :class_name => "Like::Schedule"
   # has_many  :likes, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict
@@ -129,9 +129,10 @@ class User < ActiveRecord::Base
     result
   end
 
-  searchable :ignore_attribute_changes_of => [User.attribute_names - 
-      %w(en_name jp_name twitter_id facebook_id linkedin_id read_research_map_id other_links
-         email login)].flatten.map{|a| a.to_sym} do
+  SOLR_IGNORE_ATTRIBUTES = PERSONAL_FIELDS
+  # TODO: We sometimes add attributes to users, so the index
+  #       should we should write authlogic attributes here.
+  searchable :ignore_attribute_changes_of => SOLR_IGNORE_ATTRIBUTES.map{|a| a.to_sym} do
     text :jp_name, :en_name, :twitter_id, :email, :login
 
     string :conference_tag
