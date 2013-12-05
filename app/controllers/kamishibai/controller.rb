@@ -360,7 +360,7 @@ module Kamishibai
       #   end
       #
       # This means that the #index action response will be cached for 5 minutes
-      # and the #show action will be cached for 60 minutes. All other actions,
+      # and the #show action will be cached for 60 seconds. All other actions,
       # i.e. #edit, #create, #update, #new, #destroy, will not be cached.
       def set_kamishibai_expiry(expiry_hash) # :doc:
         expiry_hash.each do |methods, expiry_value|
