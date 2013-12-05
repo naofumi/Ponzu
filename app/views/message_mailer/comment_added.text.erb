@@ -5,7 +5,7 @@
 <%= @obj.presentation.title(:en) %>
 <%= @obj.presentation.title(:jp) %>
 
-Comment:
+<%= "Comment from: #{@obj.user && @obj.user.name}" %>
 <%= sanitize @obj.text %>
 
 

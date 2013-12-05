@@ -13,7 +13,7 @@
         %br/
         = @obj.presentation.title(:jp)
       %p
-        %b Comment:
+        %b= "Comment from: #{@obj.user && @obj.user.name}"
         %br/
         = sanitize @obj.text
     %p
