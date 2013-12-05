@@ -45,6 +45,9 @@ class SearchController < ApplicationController
 				end
 			end
 		elsif params[:flag]
+			# Users can change flags during the conference
+			# so we shouldn't cache in the browser for long
+			@expiry = 1
 			@users = Sunspot.search(User) do
 				with(:conference_tag).equal_to(current_conference.database_tag)
 				with :flags, params[:flag]
