@@ -1,5 +1,6 @@
 module Kamishibai
   module LocaleSupport
+
     
     def self.included(base)
       base.before_filter :set_locale
@@ -20,8 +21,8 @@ module Kamishibai
             available_locales.include?(cookies[:locale])
         I18n.locale = cookies[:locale]
       else
-        I18n.locale = negotiated_locale
-        cookies[:locale] = {value: negotiated_locale,
+        I18n.locale = negotiated_locale ? negotiated_locale : available_locales.first
+        cookies[:locale] = {value: I18n.locale,
                             expires: 3.months.from_now}
       end
     end
