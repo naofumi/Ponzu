@@ -66,8 +66,6 @@ class ConferencesController < ApplicationController
     @conference = Conference.find(params[:id])
     @conference.destroy
 
-    respond_to do |format|
-      format.html { redirect_to conferences_url }
-    end
+    respond_with @conference
   end
 end

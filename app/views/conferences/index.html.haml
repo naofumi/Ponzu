@@ -17,8 +17,8 @@
               |
               = link_to "Edit", ksp(:edit_conference_path, conference)
               |
-              = link_to "Destroy", :remote => true, :method => :delete,
-                                   :confirm => 'Are you sure?'
+              = link_to "Destroy", conference, :remote => true, :method => :delete,
+                                   :confirm => 'Conferences with Users cannot be destroyed. Destroying Conferences does not delete associated data.'
               |
               = link_to 'View', conference_root(conference)
             %td= conference.module_name
