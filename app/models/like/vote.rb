@@ -1,3 +1,5 @@
+require_relative '../like'
+
 class Like::Vote < Like
   attr_accessible :score
 

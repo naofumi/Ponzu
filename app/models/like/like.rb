@@ -1,4 +1,6 @@
 # http://stackoverflow.com/questions/9807827/preventing-warning-toplevel-constant-b-referenced-by-ab-with-namespaced-cla
+require_relative '../like'
+
 class Like::Like < Like
   def schedulize
     update_attribute('type', 'Like::Schedule')
