@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131130232359) do
+ActiveRecord::Schema.define(:version => 20131229073453) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -66,7 +66,11 @@ ActiveRecord::Schema.define(:version => 20131130232359) do
     t.integer  "depth"
   end
 
+  add_index "comments", ["depth"], :name => "index_comments_on_depth"
+  add_index "comments", ["lft"], :name => "index_comments_on_lft"
+  add_index "comments", ["parent_id"], :name => "index_comments_on_parent_id"
   add_index "comments", ["presentation_id"], :name => "index_comments_on_presentation_id"
+  add_index "comments", ["rgt"], :name => "index_comments_on_rgt"
 
   create_table "conferences", :force => true do |t|
     t.string   "name"
