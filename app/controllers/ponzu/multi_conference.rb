@@ -8,8 +8,21 @@ module Ponzu
 
 		private
 
+		# Detects the current conference by subdomain.
+		# If in development or test environment, 
+		# it will return the first conference if one 
+		# corresponding to the subdomain is not found.
+		# This allows us to use domain names like localhost
+		# during development.
+		# 
+		# In reality, when we are seriously developing, we are unlikely
+		# to use this feature. It's mostly to allow enthusiasts to
+		# check out the open source version.
 		def current_conference
-			@current_conference ||= Conference.find_by_subdomain(request.subdomain)
+			@current_conference ||= begin
+				Conference.find_by_subdomain(request.subdomain) ||
+				((Rails.env == "development" || Rails.env == "test") && Conference.first )
+			end
 		end
 
 		def conference_module
