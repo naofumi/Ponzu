@@ -4,6 +4,7 @@
 /**
  * Unobtrusive scripting adapter for no JS framework
  * From https://github.com/jjbuckley/rails-ujs/blob/master/src/rails.js
+ * https://github.com/bjjb/rails-ujs
  * Modified for use within Kamishibai by Naofumi
  */
 
