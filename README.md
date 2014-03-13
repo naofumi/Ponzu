@@ -15,6 +15,10 @@ Ponzu is implemented as a Rails Engine. This allows you to quickly
 get the basic functionality of Ponzu and modify it to your specific
 needs.
 
+## Wiki
+
+More information is available in the [Wiki](https://bitbucket.org/castle104/ponzu/wiki/).
+
 ## How to use
 
 Below is a brief description of the steps required to create a new
@@ -43,15 +47,9 @@ examine the PonzuDemo repository for more detail.
 5. Run migrations
    <code>bundle exec rake db:migrate</code>
 6. Run seed tasks to create the administrator account
-   ----------
 7. Customize the CSS
-8. Add Javascript
-   Ponzu transitions between pages using a scheme very similar to
-   the turbolinks gem and the pjax gem. Any Javascript that doesn't
-   work with these gems is highly unlikely to work out of the box.
-9. Remove public/index.html
-10. Remove app/views/layout/application.html.erb
-11. Generate Indesign files.
+8. Remove public/index.html
+9. Remove app/views/layout/application.html.erb
 
 ## Configuration
 
