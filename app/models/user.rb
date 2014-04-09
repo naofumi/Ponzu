@@ -96,6 +96,10 @@ class User < ActiveRecord::Base
   serialize_array :other_links
   
   acts_as_authentic do |c|
+    # upgrading crypto algorithms http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic/
+    c.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha512,
+    c.crypto_provider = Authlogic::CryptoProviders::SCrypt # the new default for Authlogic
+
     # https://gist.github.com/436707/
     
     # c.merge_validates_format_of_login_field_options({:unless => :login_not_set?})

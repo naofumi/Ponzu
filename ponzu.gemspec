@@ -78,4 +78,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'oj'
   # s.add_dependency 'yajl-ruby'
 
+  # The new version of authlogic (probably 3.4) uses SCrypt instead of SHA512.
+  # Hence we need these gems.
+  # To transition, we use the #transition_from_crypto_providers method
+  # http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic/
+  # https://github.com/binarylogic/authlogic/commit/083a95ca59c2610b3071f0ff70c3cb3666e17e86
+  s.add_dependency 'bcrypt', '~> 3.1.7'
+  s.add_dependency 'scrypt', '~> 1.2.1'
+
 end
