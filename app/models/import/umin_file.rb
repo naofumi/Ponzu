@@ -175,28 +175,20 @@ module Import
 
     # Import Authors from the UMIN file
     #
-    # There will be cases where we will end up with Authors without
-    # any Authorships. For example, we might have changed an Authors name
-    # and run a subsequent Import. Otherwise, a new author might
-    # have been added in a Umin file, but since that submission already
-    # had some Authorships assigned, we didn't generate Authorships automatically
-    # and Author didn't get assigned.
+    # Author objects validate the presense of at least one submission.
     #
-    # In these cases, the new, modified version will end up in the unassigned
-    # Authors. We can check these with #diff.
+    # If we rerun `import_authors` after modifying an authors name so
+    # that the `nayose_find_and_create` method can no longer identify the
+    # author, then a new Author object will be created. This Author object
+    # will be associated with a Submission object by creating a new Authorship
+    # object.
     #
-    # Although we don't need to be too concerned with this, I think it's a good
-    # idea in general to not let cruft accumulate because it can cause 
-    # unexpected behaviour. We should remove them in the #delete_unlinked_authors
-    # method.
-    #
-    # As long as we keep this in mind, #import_authors is non-destructive, meaning
-    # that it won't tread upon any Nayose that we did manually. It is safe
-    # to put it into a rake dependency.
+    # Therefore, #import_authors won't tread on Nayose per-se, but it will
+    # create unwanted Authorships. We should check these after we rerun `import_authors`.
     def import_authors
       Author.transaction do
         authors_each do |author, submission_number|
-          # Authors validate presence of at least on submission.
+          # Authors validate presence of at least one submission.
           # For the author import phase, we simply add the submission
           # we found when we first created the author.
           # Nayose will be done when we import_authorships
@@ -300,7 +292,7 @@ module Import
       Submission.transaction do
         umin_rows_each do |ur|
           # Find depending objects
-          submission_obj = Submission.find_by_submission_number(ur.submission_number)
+          submission_obj = Submission.find_by_submission_number_and_conference_tag(ur.submission_number, @conference.database_tag)
           raise "No submission in DB for submission_number: #{ur.submission_number}" unless submission_obj
           # TODO:
           # Since we now create authorships on Author object creation,
@@ -336,7 +328,8 @@ module Import
     # Unlinked Authors are not really Authors anymore ("author" implies that they have at least one Authorship)
     # so we should delete them.
     def delete_unlinked_authors
-      unlinked_author_ids = Author.select('authors.id, count(authorships.id) as authorships_count').
+      unlinked_author_ids = Author.in_conference(@conference.database_tag).
+                                  select('authors.id, count(authorships.id) as authorships_count').
                                   joins("LEFT OUTER JOIN authorships ON authorships.author_id = authors.id").
                                   group("authors.id").having("authorships_count = 0").map{|a| a.id}
       Authorship.transaction do
@@ -409,8 +402,8 @@ module Import
       Presentation.transaction do
         umin_rows_each do |ur|
           # Find depending objects
-          submission_obj = Submission.find_by_submission_number(ur.submission_number)
-          session_obj = Session.find_by_number(ur.session_number)
+          submission_obj = Submission.in_conference(@conference).find_by_submission_number(ur.submission_number)
+          session_obj = Session.in_conference(@conference).find_by_number(ur.session_number)
           raise "No submission in DB for submission_number: #{ur.submission_number}" unless submission_obj
           raise "No session in DB for submission_number: #{ur.session_number}" unless session_obj
           # Create new objects
