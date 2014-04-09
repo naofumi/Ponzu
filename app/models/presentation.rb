@@ -63,21 +63,22 @@ class Presentation < ActiveRecord::Base
   LIKE_SHOW_LIMIT = 500
 
   include ActionView::Helpers::SanitizeHelper
+  include StringCleanser
 
   searchable :unless => proc {|model| !model.session} do
     text :jp_abstract, :stored => true, :more_like_this => true do
-      strip_tags(jp_abstract) unless cancel
+      strip_non_xml_chars(strip_tags(jp_abstract)) unless cancel
     end
     # On more_like_this 
     # http://cephas.net/blog/2008/03/30/how-morelikethis-works-in-lucene/
     text :en_abstract, :stored => true, :more_like_this => true do
-      strip_tags(en_abstract) unless cancel
+      strip_non_xml_chars(strip_tags(en_abstract)) unless cancel
     end
     text :en_title, :stored => true, :more_like_this => true do
-      strip_tags(en_title) unless cancel
+      strip_non_xml_chars(strip_tags(en_title)) unless cancel
     end
     text :jp_title, :stored => true, :more_like_this => true do
-      strip_tags(jp_title) unless cancel
+      strip_non_xml_chars(strip_tags(jp_title)) unless cancel
     end
     text :number, :stored => true
     text :session_number, :stored => true do
