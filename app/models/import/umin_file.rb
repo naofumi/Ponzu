@@ -537,7 +537,7 @@ module Import
     def umin_file_lines_each # :doc:
       puts "Reading from #{@file}" unless Rails.env == 'test'
       CSV.foreach(@file, col_sep:"\t", encoding:"UTF-16LE:UTF-8") do |row|
-        yield row.to_csv("\t")
+        yield row.to_csv(col_sep:"\t")
       end
     end
   end
