@@ -513,6 +513,7 @@ module Import
       unless obj.persisted?
         puts "Failed to save #{obj.class} due to #{obj.errors.full_messages}"
         puts obj.inspect
+        raise "ERROR: Failed to save due to failed validations"
         puts "---------"
       end
     end
