@@ -68,7 +68,7 @@ Gem::Specification.new do |s|
   # https://github.com/jamifsud/sprockets-dotjs
   # http://olado.github.io/doT/
   #
-  # Specify git source in gemspec is described below
+  # How to specify git source in gemspec is described below
   # http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
   s.add_dependency 'sprockets-dotjs'
 
