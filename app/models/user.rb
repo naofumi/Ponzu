@@ -56,7 +56,8 @@ class User < ActiveRecord::Base
                   :jp_profile, :en_profile, :email_notifications, 
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
-                  :male_partner_search, :female_partner_search
+                  :male_partner_search, :female_partner_search,
+                  :submission_info
   PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
                       last_login_at current_login_ip last_login_ip crypted_password
                       password_salt persistence_token perishable_token
