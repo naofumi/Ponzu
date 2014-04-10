@@ -17,15 +17,21 @@
     = link_to "Has no Author", ksp(users_path(:has_no_author => 1))
     |
     = link_to "All users", ksp(users_path())
+    %ul
+      %li 黄色ということは、名前が一致しているということ。
+      %li 青色ということはメールアドレスのドメイン名のどれか（緑で表示）が、所属名とマッチすること。
+      %li 特別な理由がない限り（ミドルネームとか）、黄色は出るはず。青であれば、メールアドレスの確認によりUserとAuthorの所属はほぼ間違いなくマッチしている。青でないものは、所属名を見て同じかどうかを判断する。
+      %li "Has no Authors"の著者のうち、実は発表している人がいるかどうかも確認
     %table
       %tr
-        %th{:colspan => 2} User
+        %th{:colspan => 3} User
         %th{:colspan => 3} Author
         %th{:colspan => 3} User
         %th Author
         %th User
         %th Author
       %tr
+        %th Submission
         %th{:width => 100} Jp name
         %th{:width => 100} En name
         %th cnt
@@ -39,19 +45,21 @@
         %th
       - @users.each do |user|
         - name_same_class = name_is_same(user, user.author) ? "name_same" : ""
-        - affiliation_same_class = email_affiliation_match(user, user.author) ? "affiliation_same" : ""
+        - email_affiliation_matches = email_affiliation_match(user, user.author)
+        - affiliation_same_class = !email_affiliation_matches.empty? ? "affiliation_same" : ""
         %tr
+          %td= user.submission_info
           %td{:class => name_same_class}= user.jp_name
           %td{:class => name_same_class}= user.en_name
           %td{:class => name_same_class}= user.author && user.author.users.count
           %td{:class => name_same_class}= user.author && user.author.jp_name
           %td{:class => name_same_class}= user.author && user.author.en_name
           %td{:class => affiliation_same_class}= user.jp_affiliation
-          %td{:class => affiliation_same_class}= user.en_affiliation
-          %td{:class => affiliation_same_class}= user.email
+          %td{:class => affiliation_same_class}= highlight(user.en_affiliation || "", institution_phrases, highlighter: '<span class="highlight">\1</span>')
+          %td{:class => affiliation_same_class}= highlight(user.email, email_affiliation_matches, highlighter: '<font color=green>\1</font>')
           %td{:class => affiliation_same_class}
             - user.author && user.author.unique_affiliation_combos.sort.each do |combo|
-              %div{style: "border-bottom: dotted 2px #888"}= highlight(combo, institution_phrases, highlighter: '<span class="highlight">\1</span>')
+              %div{style: "border-bottom: dotted 2px #888"}= highlight(highlight(combo, institution_phrases, highlighter: '<span class="highlight">\1</span>'), email_affiliation_matches, highlighter: '<font color=green>\1</font>')
           %td
             = link_to 'Edit', ksp(edit_user_path(user)), :target => "_blank"
           %td

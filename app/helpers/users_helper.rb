@@ -23,21 +23,23 @@ module UsersHelper
   # These should be moved to the model
   def name_is_same(user, author)
     return false unless user && author
-    name_is_same = (!user.jp_name.blank? && user.jp_name == author.jp_name) ||
-                   (!user.en_name.blank? && user.en_name == author.en_name)
+    name_is_same = (!user.jp_name.blank? && !author.jp_name.blank? && user.jp_name.downcase == author.jp_name.downcase) ||
+                   (!user.en_name.blank? && !author.en_name.blank? && user.en_name.downcase == author.en_name.downcase)
 
   end
 
+  # Splits an email address domain into tokens.
+  # Returns an array of tokens that were found in the Authors #unique_affiliation_combos
   def email_affiliation_match(user, author)
     minimal_token_size = 3
     
-    return false unless user && author
-    email_affiliation_match = user.email.split(/[^0-9^a-z^A-Z]/).
+    return [] unless user && author
+    email_affiliation_match = user.email.sub(/^.+@/, '').split(/[^0-9^a-z^A-Z]/).
                               select{|token| 
                                 token.size >= minimal_token_size && 
                                 author.unique_affiliation_combos.to_a.join(' ').match(/#{token}/i)}
     puts "#{user.name} #{author.name}"
     puts email_affiliation_match.inspect
-    return !email_affiliation_match.empty?
+    return email_affiliation_match
   end
 end
