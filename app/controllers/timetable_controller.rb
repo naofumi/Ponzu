@@ -23,7 +23,8 @@ class TimetableController < ApplicationController
                   in_conference(current_conference).
                   includes(:room).all
 
-    respond_with @sessions
+    # respond_with currently doesnt work with JSON requests.
+    # respond_with @sessions
   end
 
   def list
