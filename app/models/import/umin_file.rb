@@ -270,39 +270,19 @@ module Import
 
     # Import Authorships from the UMIN file
     #
-    # This import can cause problems with any prior Nayose so we must be careful. 
+    # Due to the complexity involved with Authorships,
+    # we can't ensure non-destructiveness.
     #
-    # We will never renew the Authorship assignments if a Submission already
-    # has at least one author assigned. This is because we might have overridden
-    # automatic Nayose with manual Nayose.
-    #
-    # In this is the case, then automatic Nayose will screw the Authorships.
-    # For example, we might have split the Authors because there were two authors
-    # with the same name. If we do an automatic Nayose after that, it might
-    # modify the assignment with the wrong author.
-    #
-    # There might be legitimate cases where the authors data might have
-    # changed. We should list these up separately in a rake task for example.
-    # One thing we could do is to regenerate a string of Authors from the Authorships
-    # and compare that to the stuff in the Umin File.
-    #
-    # If we *do* want to reload the Authorships from the UMIN file, then we 
-    # should simply delete all associated Authorships.
+    # Always check for newly updated Authorships after running.
     def link_authors_and_submissions_creating_authorships
       Submission.transaction do
         umin_rows_each do |ur|
+
           # Find depending objects
           submission_obj = Submission.find_by_submission_number_and_conference_tag(ur.submission_number, @conference.database_tag)
+
           raise "No submission in DB for submission_number: #{ur.submission_number}" unless submission_obj
-          # TODO:
-          # Since we now create authorships on Author object creation,
-          # we can't use the authorships count to determine if we
-          # should overwrite or not.
-          # Instead, we will count the affiliations on each author
-          # and update if it is zero.
-          #
-          # next if submission_obj.authorships.size > 0
-          ur.authors.each.with_index do |author, position|
+          ur.authors.each.with_index do |author, index|
             # Find depending objects
             author_obj = Author.nayose_find({:en_name => author[:en_name], 
                                              :jp_name => author[:jp_name]},
@@ -310,10 +290,7 @@ module Import
             raise "No author in DB for en_name: #{author[:en_name].inspect}, jp_name: #{author[:jp_name].inspect}" unless author_obj
             # Create new objects
             as = Authorship.in_conference(@conference).find_or_create_by_author_id_and_submission_id(author_obj.id, submission_obj.id)
-            # If the Authorships have been updated after initial creation
-            # during Author creation.
-            next if as.affiliations.size > 0
-            as.update_attributes!(:position => position,
+            as.update_attributes!(:position => index + 1, # acts_as_list starts with position 1
                                   :is_presenting_author => author[:is_presenting_author],
                                   :en_name => author[:en_name],
                                   :jp_name => author[:jp_name],

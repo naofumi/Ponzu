@@ -92,7 +92,7 @@ class AuthorshipsController < ApplicationController
                      unordered_authorships.detect{|ua| ua.id == as_id.to_i}}
     Authorship.transaction do
       @authorships.each_with_index do |as, i|
-        as.position = i
+        as.position = i + 1 # acts_as_list starts with position 1
         as.save!
       end
     end
