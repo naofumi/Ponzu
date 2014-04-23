@@ -135,8 +135,13 @@ class User < ActiveRecord::Base
   end
 
   SOLR_IGNORE_ATTRIBUTES = PERSONAL_FIELDS
-  # TODO: We sometimes add attributes to users, so the index
-  #       should we should write authlogic attributes here.
+  # Since Authlogic changes attributes related to login info, we
+  # ideally want to ignore `updated_at`. However, we also use
+  # `updated_at` for russian-doll caching so we need it to 
+  # update the SOLR cache.
+  #
+  # Our current compromise is to NOT ignore `updated_at`. This
+  # means that we are updating SOLR cache unnecessarily.
   searchable :ignore_attribute_changes_of => SOLR_IGNORE_ATTRIBUTES.map{|a| a.to_sym} do
     text :jp_name, :en_name, :twitter_id, :email, :login
 
