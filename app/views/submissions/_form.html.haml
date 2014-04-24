@@ -45,7 +45,7 @@
   .field
     = f.label :keywords
     %br/
-    - 5.times do |i|
+    - 8.times do |i|
       = text_field_tag "submission[keywords][]", 
                        @submission.keywords && @submission.keywords[i]
       %br/
