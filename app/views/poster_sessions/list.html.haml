@@ -1,10 +1,10 @@
 - cache ['poster_session_v2', current_conference, I18n.locale, @sessions.max_by{|s| s.updated_at}, @show_date] do
   = ponzu_frame :id => ["poster_list", params[:id]],
-                :class => "backdrop",
+                :class => "backdrop poster_list",
                 :title_args => {:day => l(@show_date, :format => :month_day)} do
     .fixed_sub_header
       %div
-        .radio_button_set.button-group
+        .radio_button_set.button-group.date_buttons
           - current_conference.dates_for('presentation/poster').each do |date|
             - date_string = to_date_string(date)
             = link_to l(date, :format => :month_day), 
@@ -14,7 +14,7 @@
                                  "button",
                                  date_string == params[:id] ? "primary" : nil]
       %div
-        .radio_button_set.button-group
+        .radio_button_set.button-group.type_buttons
           = link_to t('poster_sessions.sub_menu.show_as_map'), ksp(poster_session_path(@show_date.strftime('%Y-%m-%d'))), 
                     :class => ['ks_tab', "poster_#{@day}_menu_map",  "button"]
           = link_to t('poster_sessions.sub_menu.show_as_list'), ksp(list_poster_session_path(@show_date.strftime('%Y-%m-%d'))), 
