@@ -125,6 +125,10 @@ module DashboardHelper
                      :exhibition
         end
       },
+      exhibition_external: {
+        href: t('external_urls.exhibition').html_safe,
+        class: 'exhibition'
+      },
       yoruzemi: lambda {
         if galapagos?
           multientry_galapagos_button(t("dashboard.grid_button_titles.yoruzemi"), 
