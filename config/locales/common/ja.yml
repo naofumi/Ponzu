@@ -208,6 +208,9 @@ ja:
         your_name: "Your name"
         additional_info: "Additional Information"
         examples: "Examples"
+      notifications:
+        email_notifications: "メール通知"
+        email_schedule_notifications: "スケジュール通知"
       # submit button labels in helpers: submit: users:
 
   user_settings:

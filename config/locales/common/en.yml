@@ -208,6 +208,9 @@ en:
         your_name: "Your name"
         additional_info: "Additional Information"
         examples: "Examples"
+      notifications:
+        email_notifications: "Email notifications"
+        email_schedule_notifications: "Schedule notifications"
       # submit button labels in helpers: submit: users:
 
   user_settings:
