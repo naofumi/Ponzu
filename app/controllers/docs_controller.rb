@@ -1,5 +1,5 @@
 class DocsController < ApplicationController
-  layout "docs"
+  # layout "docs"
   set_kamishibai_expiry [:show] => 24 * 60 * 60
   @@action_sanitize_regex = /[^0-9a-zA-Z_-]/
 
