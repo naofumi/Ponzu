@@ -2,6 +2,8 @@ class DocsController < ApplicationController
   # We used to use this controller for tests so we have
   # a "docs" layout. We don't use it here so we change it.
   layout "application"
+  # This allows us to use docs_controller for full HTML responses (not XHR)
+  before_filter :ignore_default_kamishibai_hash_tag
   set_kamishibai_expiry [:show] => 24 * 60 * 60
   @@action_sanitize_regex = /[^0-9a-zA-Z_-]/
 
