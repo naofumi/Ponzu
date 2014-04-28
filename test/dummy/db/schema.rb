@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140410015626) do
+ActiveRecord::Schema.define(:version => 20140428030940) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20140410015626) do
     t.string   "ks_cache_version"
     t.string   "database_tag"
     t.text     "available_locales"
+    t.string   "timetable_hour_labels"
   end
 
   add_index "conferences", ["subdomain"], :name => "index_conferences_on_subdomain"

@@ -12,8 +12,8 @@ module TimeTableHelper
       
       TimeTable.new :width_per_hour => width_per_hour,
              :height_per_entry => height_per_entry,
-             :ranges => [@show_date.change(:hour => 8, :min => 00)..
-                           @show_date.change(:hour => 21, :min => 00)],
+             :ranges => [@show_date.change(:hour => current_conference.timetable_hours.first, :min => 00)..
+                           @show_date.change(:hour => current_conference.timetable_hours.last, :min => 00)],
              :range_left_margins => [50],
              :number_of_rooms => @rooms.size,
              :header_height => 30, 

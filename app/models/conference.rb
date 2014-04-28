@@ -2,7 +2,7 @@ class Conference < ActiveRecord::Base
   attr_accessible :dates, :module_name, :support_email, :name, :tag, 
                   :database_tag, :subdomain, :send_all_emails_to, :icons, 
                   :conference_home_page_url, :ks_cache_version,
-                  :available_locales
+                  :available_locales, :timetable_hour_labels
   include SimpleSerializer
   serialize_single :dates, :typecaster => :remove_blank_from_conference_dates
   serialize_single :icons, :typecaster => :remove_blank_from_icons
@@ -31,6 +31,14 @@ class Conference < ActiveRecord::Base
       icons[key_as_string].map{|i| i.to_sym}
     else
       []
+    end
+  end
+
+  def timetable_hours
+    if timetable_hour_labels
+      JSON.parse(timetable_hour_labels)
+    else
+      [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     end
   end
 

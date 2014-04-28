@@ -21,6 +21,10 @@
     = f.label :subdomain
     %br/
     = f.text_field :subdomain
+  .field
+    = f.label :timetable_hour_labels, "Timetable hour labels (default [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])"
+    %br/
+    = f.text_field :timetable_hour_labels
   - ['time_table', 'presentation/poster', 'meet_up'].each do |type|
     .field
       = label_tag :type, "#{type}"
