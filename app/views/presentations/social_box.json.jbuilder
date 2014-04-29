@@ -19,7 +19,7 @@
 #
 # all_likes = Like.where(:presentation_id => @presentation)
 
-all_likes = Like.in_conference(current_conference).where(:presentation_id => @presentation)
+all_likes = ::Like::Like.in_conference(current_conference).where(:presentation_id => @presentation)
 
 json.cache! ["v2", current_conference, I18n.locale, 
              "presentations/social_box/json", 
