@@ -47,9 +47,12 @@ json.cache! ["v2", current_conference, I18n.locale,
     if can?(:vote, Like)
       json.voter can?(:vote, Like)
       vote = @vote || 
-             current_user.votes.detect{|v| v.presentation_id == @presentation.id } || 
-             current_user.votes.build(:presentation_id => @presentation.id)
-      json.score vote.score
+             current_user.votes.detect{|v| v.presentation_id == @presentation.id }
+      if vote
+        json.score vote.score
+      else
+        json.score 0
+      end
     end
 
     # stuff that doesn't depend on current_user

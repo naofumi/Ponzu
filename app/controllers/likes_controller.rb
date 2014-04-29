@@ -70,8 +70,9 @@ class LikesController < ApplicationController
 
   def my_votes
     # @votes = current_user.votes
-    @unique_votes = current_user.votes.where(:score => Like::Vote::UNIQUE)
-    @excellent_votes = current_user.votes.where(:score => Like::Vote::EXCELLENT)
+    vote_class = "Like::Vote::#{current_conference.module_name}".constantize
+    @unique_votes = current_user.votes.where(:score => "#{vote_class}::UNIQUE".constantize)
+    @excellent_votes = current_user.votes.where(:score => "#{vote_class}::EXCELLENT".constantize)
   end
   # POST /likes
   # POST /likes.json
@@ -139,37 +140,49 @@ class LikesController < ApplicationController
   # Very hackish
   def vote
     Like.transaction do
-      @vote = current_user.votes.find_by_presentation_id(params[:like][:presentation_id]) ||
-              false
-      @presentation = Presentation.find(params[:like][:presentation_id])
-      if Time.zone.now > Time.zone.parse("2013-05-31 12:00")
-        flash[:error] = "Cannot vote. Voting closed on 31st, May, 12:00."
+      unless @vote = current_user.votes.find_by_presentation_id(params[:like][:presentation_id])
+        @vote = "Like::Vote::#{current_conference.module_name}".constantize.
+                  new(params[:like].merge(:user_id => current_user.id))
       else
-        if params[:like][:score] == "0"
-          @vote.destroy if @vote
-          @vote = false # Because we use @vote in the response render
-          flash[:notice] = "Successfully retracted vote."
-        else
-          if current_user.author && @presentation.authors.include?(current_user.author)
-            flash[:error] = "Cannot vote to own presentation"
-          else
-            @vote = current_user.votes.create(params[:like]) unless @vote
-            if @vote.update_attributes(params[:like].merge(:user_id => current_user.id))
-              flash[:notice] = "Successfully submitted vote."
-            else
-              flash[:error] ||= "Failed to submit vote."
-            end
-          end
-        end
+        @vote.update_attributes(params[:like].merge(:user_id => current_user.id))
       end
-    end
-    respond_to do |format|
-      if request.xhr?
-        format.html {render :partial => 'presentations/social_box'}
+      @vote.conference_confirm = current_conference
+      @presentation = @vote.presentation
+
+      if @vote.score == 0 && @vote.persisted?
+        @vote.destroy
+        flash[:notice] = "Successfully retracted vote."
+      elsif @vote.save
+        flash[:notice] = "Successfully submitted vote."
       else
-        format.html { redirect_to @presentation }
+        flash[:error] = @vote.errors.full_messages
+        @vote = false
       end
+      # @vote = current_user.votes.find_by_presentation_id(params[:like][:presentation_id]) ||
+      #         false
+      # @presentation = Presentation.in_conference(current_conference).find(params[:like][:presentation_id])
+      # if Time.zone.now > Time.zone.parse("2014-05-31 12:00")
+      #   flash[:error] = "Cannot vote. Voting closed on 31st, May, 12:00."
+      # else
+      #   if params[:like][:score] == "0"
+      #     @vote.destroy if @vote
+      #     @vote = false # Because we use @vote in the response render : Use @vote.destroyed? instead
+      #     flash[:notice] = "Successfully retracted vote."
+      #   else
+      #     if current_user.author && @presentation.authors.include?(current_user.author)
+      #       flash[:error] = "Cannot vote to own presentation"
+      #     else
+      #       @vote = current_user.votes.create(params[:like]) unless @vote
+      #       if @vote.update_attributes(params[:like].merge(:user_id => current_user.id))
+      #         flash[:notice] = "Successfully submitted vote."
+      #       else
+      #         flash[:error] ||= "Failed to submit vote."
+      #       end
+      #     end
+      #   end
+      # end
     end
+    respond_with @presentation, :success_action => 'presentations/social_box'
   end
 
   def likes_report
@@ -196,15 +209,16 @@ class LikesController < ApplicationController
   end
 
   def votes_report
-    @number_of_all_users = User.count
-    @total_number_of_voters = User.with_role('voter').count
-    @number_of_voters_who_havent_voted = User.with_role('voter').includes(:votes).where('likes.id IS NULL').count
-    @top_excellents = Like::Vote.select("likes.*, count(*) as count, presentations.submission_id as submission_id").joins(:presentation).
-                                 where(:score => Like::Vote::EXCELLENT).group('presentations.submission_id').order('count(*) DESC').limit(10)
-    @number_of_excellent_votes = Like::Vote.where(:score => Like::Vote::EXCELLENT).count
-    @top_uniques = Like::Vote.select("likes.*, count(*) as count, presentations.submission_id as submission_id").joins(:presentation).
-                                 where(:score => Like::Vote::UNIQUE).group('presentations.submission_id').order('count(*) DESC').limit(10)
-    @number_of_unique_votes = Like::Vote.where(:score => Like::Vote::UNIQUE).count
+    vote_class = "Like::Vote::#{current_conference.module_name}".constantize
+    @number_of_all_users = User.in_conference(current_conference).count
+    @total_number_of_voters = User.in_conference(current_conference).with_role('voter').count
+    @number_of_voters_who_havent_voted = User.in_conference(current_conference).with_role('voter').includes(:votes).where('likes.id IS NULL').count
+    @top_excellents = Like::Vote.in_conference(current_conference).select("likes.*, count(*) as count, presentations.submission_id as submission_id").joins(:presentation).
+                                 where(:score => "#{vote_class}::EXCELLENT".constantize).group('presentations.submission_id').order('count(*) DESC').limit(10)
+    @number_of_excellent_votes = Like::Vote.in_conference(current_conference).where(:score => "#{vote_class}::EXCELLENT".constantize).count
+    @top_uniques = Like::Vote.in_conference(current_conference).select("likes.*, count(*) as count, presentations.submission_id as submission_id").joins(:presentation).
+                                 where(:score => "#{vote_class}::UNIQUE".constantize).group('presentations.submission_id').order('count(*) DESC').limit(10)
+    @number_of_unique_votes = Like::Vote.in_conference(current_conference).where(:score => "#{vote_class}::UNIQUE".constantize).count
     
   end
 
