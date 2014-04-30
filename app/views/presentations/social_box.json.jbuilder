@@ -54,6 +54,15 @@ json.cache! ["v2", current_conference, I18n.locale,
         json.score 0
       end
     end
+    if vote_class
+      json.scores vote_class.const_get(:SCORE_DESCRIPTIONS).keys.reverse
+      json.score_labels vote_class.const_get(:SCORE_DESCRIPTIONS).keys.
+                                   map{|k| vote_class.const_get(:SCORE_DESCRIPTIONS)[k]}
+    else
+      json.scores []
+      json.score_labels []
+    end
+
 
     # stuff that doesn't depend on current_user
     authors = @presentation.authors

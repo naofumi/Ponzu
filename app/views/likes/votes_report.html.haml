@@ -14,42 +14,25 @@
           = @number_of_voters_who_havent_voted
           \/
           = @total_number_of_voters
-    .panel_title= "Uniques"
-    .panel
-      %dl
-        %dt Total Number of Uniques
-        %dd
-          = @number_of_unique_votes
-        %dt List of Uniques
-        %dd
-          %ol
-            - @top_uniques.each do |v|
-              - s = Submission.find(v.submission_id)
-              %li
-                = s.title
-                (
-                - s.presentations.each do |p|
-                  = link_to p.number, ksp(p)
-                  = ', ' unless p == s.presentations.last
-                \:
-                = "#{pluralize v.count, "vote"} total" 
-                )
-    .panel
-      %dl
-        %dt Total Number of Excellents
-        %dd
-          = @number_of_excellent_votes
-        %dt List of Excellents
-        %dd
-          %ol
-            - @top_excellents.each do |v|
-              - s = Submission.find(v.submission_id)
-              %li
-                = sanitize s.title
-                (
-                - s.presentations.each do |p|
-                  = link_to p.number, ksp(p)
-                  = ', ' unless p == s.presentations.last
-                \:
-                = "#{pluralize v.count, "vote"} total" 
-                )
+    - @score_descriptions.each do |score, label|
+      - next if score == 0
+      .panel_title= label
+      .panel
+        %dl
+          %dt= "Total Number of #{label}"
+          %dd
+            = @number_of_votes_for_score[score]
+          %dt= "List of #{label}"
+          %dd
+            %ol
+              - @top_rankers_for_score[score].each do |v|
+                - s = Submission.find(v.submission_id)
+                %li
+                  = s.title
+                  (
+                  - s.presentations.each do |p|
+                    = link_to p.number, ksp(p)
+                    = ', ' unless p == s.presentations.last
+                  \:
+                  = "#{pluralize v.count, "vote"} total" 
+                  )

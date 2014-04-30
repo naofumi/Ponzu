@@ -37,18 +37,12 @@
 						<form accept-charset="UTF-8" action="/likes/vote" class="new_like" data-invalidates-keys="/presentations/{{= it.presentation_id }}/social_box like_highlights list_highlights likes/(.+/)?my" data-ks-insert-response="" data-remote="true" id="presentation_{{= it.presentation_id }}_new_like" method="post">
 							<div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
 							<input id="presentation_{{= it.presentation_id }}_like_presentation_id" name="like[presentation_id]" type="hidden" value="{{= it.presentation_id }}">
-							<span>
-								<input {{? it.score === 1 }}checked{{?}} id="presentation_{{= it.presentation_id }}_like_score_1" name="like[score]" type="radio" value="1">
-								<label for="presentation_{{= it.presentation_id }}_like_score_1">Excellent!</label>
-							</span>
-							<span>
-								<input {{? it.score === 2 }}checked{{?}} id="presentation_{{= it.presentation_id }}_like_score_2" name="like[score]" type="radio" value="2">
-								<label for="presentation_{{= it.presentation_id }}_like_score_2">Unique!</label>
-							</span>
-							<span>
-								<input {{? it.score === 0 }}checked{{?}} id="presentation_{{= it.presentation_id }}_like_score_0" name="like[score]" type="radio" value="0">
-								<label for="presentation_{{= it.presentation_id }}_like_score_0">No Vote</label>
-							</span>
+							{{~ it.scores :score:index}}
+								<span>
+									<input {{? it.score === score }}checked{{?}} id="presentation_{{= it.presentation_id }}_like_score_{{= score }}" name="like[score]" type="radio" value="{{= score }}">
+									<label for="presentation_{{= it.presentation_id }}_like_score_{{= score }}">{{= it.score_labels[score] }}</label>
+								</span>
+							{{~}}
 						</form>
 					</span>
 				</div>
