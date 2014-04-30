@@ -20,12 +20,14 @@
 # all_likes = Like.where(:presentation_id => @presentation)
 
 all_likes = ::Like::Like.in_conference(current_conference).where(:presentation_id => @presentation)
+@vote = @vote || current_user.votes.detect{|v| v.presentation_id == @presentation.id }
 
 json.cache! ["v2", current_conference, I18n.locale, 
              "presentations/social_box/json", 
              @presentation.id, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
              all_likes.size,
+             @vote,
              @presentation.authors, # If any of the authors' users has changed a flag
              current_user] do
   json.renderer do
@@ -46,10 +48,8 @@ json.cache! ["v2", current_conference, I18n.locale,
 
     if can?(:vote, Like)
       json.voter can?(:vote, Like)
-      vote = @vote || 
-             current_user.votes.detect{|v| v.presentation_id == @presentation.id }
-      if vote
-        json.score vote.score
+      if @vote
+        json.score @vote.score
       else
         json.score 0
       end
