@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140430011614) do
+ActiveRecord::Schema.define(:version => 20140430051556) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(:version => 20140430011614) do
     t.string   "conference_tag"
     t.string   "booth_num"
     t.string   "ad_category"
+    t.boolean  "votable",                           :default => false
   end
 
   add_index "presentations", ["conference_tag", "ad_category", "type"], :name => "index_presentations_on_conference_tag_and_ad_category_and_type"

@@ -78,6 +78,7 @@ json.cache! ["v2", current_conference, I18n.locale,
       json.invalidated_paths invalidated_paths(like)
       comments = @presentation.comments
       json.comments_count comments.inject(comments.size){|memo, c| memo + c.child_count.to_i}
+      json.votable @presentation.votable
 
       author_styles = authors.inject(Hash.new) do |memo, a|
         memo[a.id] = []

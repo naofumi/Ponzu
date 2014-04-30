@@ -30,7 +30,7 @@
 				</span>
 			</div>
 		</div>
-		{{? it.voter }}
+		{{? it.voter && it.votable }}
 			<div class="vote_box">
 				<div class="like" id="vote_button_{{= it.presentation_id }}">
 					<span class="social_controls">
