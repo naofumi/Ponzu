@@ -180,13 +180,11 @@ class LikesController < ApplicationController
     @top_likes = Presentation.
                    in_conference(current_conference).
                    select('presentations.*, count(*) as count').
-                   joins(:session => :conference). #INNER JOIN??
                    joins(:likes).group('presentations.id').
                    order('count(*) DESC').limit(50)
     @top_schedules = Presentation.
                        in_conference(current_conference).
                        select('presentations.*, count(*) as count').
-                       joins(:session => :conference). #INNER JOIN??
                        joins(:schedules).group('presentations.id').
                        order('count(*) DESC').limit(50)
   end
