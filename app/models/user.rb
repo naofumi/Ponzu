@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
                   :male_partner_search, :female_partner_search,
-                  :submission_info
+                  :submission_info, :other_attributes
   PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
                       last_login_at current_login_ip last_login_ip crypted_password
                       password_salt persistence_token perishable_token
@@ -95,6 +95,7 @@ class User < ActiveRecord::Base
   include SimpleMessaging
   include SimpleSerializer
   serialize_array :other_links
+  serialize_single :other_attributes
   
   acts_as_authentic do |c|
     # upgrading crypto algorithms http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic/
@@ -507,6 +508,16 @@ class User < ActiveRecord::Base
     role_query_mask = 2**User::ROLES.index(role)
     where("roles_mask & ? != 0", role_query_mask)
   }
+
+  ## Other attributes
+  def attribute_for(attribute_symbol)
+    attribute_symbol = attribute_symbol.to_s
+    if other_attributes && other_attributes[attribute_symbol]
+      return other_attributes[attribute_symbol]
+    else
+      return nil
+    end
+  end
 
 
   # Interface for mailboxer

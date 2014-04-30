@@ -34,6 +34,7 @@ class Ability
     can [:show, :list, :like_highlights, :list_highlights, :query], [Session::Poster, Session::TimeTableable, Session::Booth, Session]
     can [:destroy], [UserSession]
     can :read, [Presentation, Session, Room]
+    can [:notifications], Conference
 
     if !user.new_record?
       # logged in user

@@ -31,3 +31,4 @@
         = render :partial => "button_grid", 
             :locals => {:types => current_conference.icons_as_sym('admin_icons')}
       = render :partial => "admin_links"
+    = ks_ajax_placeholder :id => "notifications", "data-ajax" => notifications_conferences_path, :style => "position:absolute; top: 0; left: 50%;width: 320px;margin-left: -160px;z-index: 100;"

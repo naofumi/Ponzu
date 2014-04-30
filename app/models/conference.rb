@@ -14,6 +14,8 @@ class Conference < ActiveRecord::Base
   # Scope users by Conference
   authenticates_many :user_sessions
 
+  attr_accessor :delegate
+
   # We prefer to use Submissions.in_conference(current_conference)
   # instead of current_conference.submissions in the controller.
   # This allows us to use the same query regardless of object
@@ -24,6 +26,16 @@ class Conference < ActiveRecord::Base
   # has_many :rooms, :inverse_of => :conference, :dependent => :restrict
   # has_many :global_messages, :inverse_of => :conference, :dependent => :restrict
   include ConferenceDates
+
+  after_initialize :initialize_conference
+
+  def initialize_conference
+    begin
+      self.delegate = "Conference::#{module_name}".constantize.new
+    rescue NameError
+      self.delegate = nil
+    end
+  end
 
   # Converts the unserialized icons (strings) into symbols
   def icons_as_sym(key_as_string)

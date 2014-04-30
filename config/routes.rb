@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :conferences
+  resources :conferences do
+    collection do
+      get :notifications
+      post :delegate
+    end
+  end
 
   resources :messages
 

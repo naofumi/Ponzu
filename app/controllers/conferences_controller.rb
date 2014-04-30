@@ -45,6 +45,21 @@ class ConferencesController < ApplicationController
     respond_with @conference
   end
 
+  def notifications
+    # current_user.update_attributes(:other_attributes => {:voter_eligible => true}) if current_user
+    if current_conference.delegate
+      @notifications = current_conference.delegate.notifications_for_user(current_user)
+    end
+  end
+
+  def delegate
+    if current_conference.delegate
+      @response = current_conference.delegate.received_request_for_user(current_user, params)
+    end
+
+    js_redirect('/')
+  end
+
   def ks_cache_version
     
   end

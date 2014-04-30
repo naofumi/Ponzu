@@ -146,8 +146,11 @@
       </p>
     <% end %>
   </div>
-  
-  
+  <div class="field">
+    <%= f.label :other_attributes %><br />
+    <%= @user.other_attributes.inspect %>
+  </div>
+    
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140428030940) do
+ActiveRecord::Schema.define(:version => 20140430011614) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -365,6 +365,7 @@ ActiveRecord::Schema.define(:version => 20140428030940) do
     t.boolean  "female_partner_search"
     t.boolean  "job_available"
     t.string   "submission_info"
+    t.text     "other_attributes"
   end
 
   add_index "users", ["author_id"], :name => "index_users_on_author_id"
