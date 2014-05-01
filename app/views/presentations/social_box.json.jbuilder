@@ -24,7 +24,7 @@ all_likes = ::Like::Like.in_conference(current_conference).where(:presentation_i
 
 json.cache! ["v2", current_conference, I18n.locale, 
              "presentations/social_box/json", 
-             @presentation.id, 
+             @presentation, 
              all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
              all_likes.size,
              @vote,
@@ -68,7 +68,7 @@ json.cache! ["v2", current_conference, I18n.locale,
     authors = @presentation.authors
     json.cache! ["v1", current_conference, I18n.locale,
                  "presentations/social_box/json/fixed",
-                 @presentation.id,
+                 @presentation,
                  all_likes.any? && all_likes.max_by{|p| p.updated_at}.updated_at,
                  all_likes.size,
                  authors] do
