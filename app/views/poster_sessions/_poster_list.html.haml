@@ -9,7 +9,6 @@
         %span{:class => ["color_f_#{color_tag}", "poster_range", "session_#{session.id}"]}
           = Array.new(presentations.size).map{|i| "●"}.join('').html_safe
       %span.time
-        = "#{session.starts_at.strftime('%H:%M')}-#{session.ends_at.strftime('%H:%M')}"
         = session.room.name
         = "#{presentations.first.number} - #{presentations.last.number}"
       %br/
