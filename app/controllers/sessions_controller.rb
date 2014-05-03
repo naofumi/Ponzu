@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
               :disposition => "inline")
   end
 
-  # We should really have a dedicated PDF download controller for this.
+  # names are sanitized
   # This is also locale aware
   def download_pdf_by_name
     name = params[:name].sub(/\W/, "_") # sanitize

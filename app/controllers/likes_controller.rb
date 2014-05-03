@@ -139,7 +139,9 @@ class LikesController < ApplicationController
   end
 
   # POST /likes/vote
-  # Very hackish
+  # Votes are very conference-specific. Requirements and logic will
+  # be vastly different for each conference. We therefore
+  # always use a conference-specific subclass for the Vote model.
   def vote
     Like.transaction do
       unless @vote = current_user.votes.find_by_presentation_id(params[:like][:presentation_id])
