@@ -3,6 +3,7 @@ module Kamishibai
 
     
     def self.included(base)
+      base.before_filter :set_default_locale
       base.before_filter :set_locale
 
       base.extend(ClassMethods)
@@ -24,6 +25,18 @@ module Kamishibai
         I18n.locale = negotiated_locale ? negotiated_locale : available_locales.first
         cookies[:locale] = {value: I18n.locale,
                             expires: 3.months.from_now}
+      end
+    end
+
+    # The default locale is the locale used when 
+    # the :locale cookie is not yet set.
+    #
+    # The `set_locale` method uses the locale in the
+    # browser settings, but sometimes we want to override that.
+    def set_default_locale
+      puts "SHIT #{current_conference.config_hash.inspect}"
+      if !cookies[:locale] && default_locale = current_conference.config(:default_locale)
+        cookies[:locale] = default_locale
       end
     end
 
