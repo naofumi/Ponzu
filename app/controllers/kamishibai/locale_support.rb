@@ -34,7 +34,6 @@ module Kamishibai
     # The `set_locale` method uses the locale in the
     # browser settings, but sometimes we want to override that.
     def set_default_locale
-      puts "SHIT #{current_conference.config_hash.inspect}"
       if !cookies[:locale] && default_locale = current_conference.config(:default_locale)
         cookies[:locale] = default_locale
       end
