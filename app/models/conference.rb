@@ -54,6 +54,25 @@ class Conference < ActiveRecord::Base
     end
   end
 
+  # Instead of storing all configuration information in the database,
+  # we are thinking of moving stuff to YAML files in "/config/conferences/[conference_tag]".
+  # This is because we want flexible configuration without migrating the database.
+  # Also, storing stuff that we won't change in the database is rather nonsense.
+  def config(config_symbol)
+    if config_hash[tag]
+      config_hash[tag][config_symbol.to_s]
+    else
+      nil
+    end
+  end
+
+  def config_hash
+    @@config_hash ||= begin
+      yaml_path = File.join(Rails.root, "config", "conferences.yml")
+      Psych.load_file(yaml_path)
+    end
+  end
+
   private
 
   def remove_blank_from_conference_dates(dates)
