@@ -159,18 +159,7 @@ kss.addEventListener(document, 'ajaxSuccess', function(event){
   if (target && 
       target.hasAttribute('data-ks-insert-response') && data) {
     console.log('Insert response because data-ks-insert-response was set');
-    KSController.processAjaxSuccess(data, 'success', event.xhr, event.ajaxOptions.url)
-  }
-})
-
-kss.addEventListener(document, 'cachedAjaxSuccess', function(event){
-  var data = event.data;
-  var target = event.target;
-  // var target = event.target && kss.closestByTagName(event.target, 'form', true);
-  if (target && 
-      target.hasAttribute('data-ks-insert-response') && data) {
-    console.log('Insert response because data-ks-insert-response was set');
-    KSController.processAjaxSuccess(data, 'success', event.xhr, event.ajaxOptions.url)
+    KSController.insertAjaxIntoDom(data, 'success', event.xhr, event.ajaxOptions.url)
   }
 })
 

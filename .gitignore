@@ -8,3 +8,5 @@ test/dummy/.sass-cache
 test/dummy/solr/data
 database.yml
 Gemfile.lock
+test/dummy/node_modules
+npm-debug.log

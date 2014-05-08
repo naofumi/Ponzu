@@ -1,3 +1,19 @@
+# == KSCache concept
+#
+# KSCache wraps ks_ajax with a cache management layer. This is
+# similar to how fragment caching works in Ruby-on-Rails.
+# 
+# By using KSCache.cachedAjax instead of KSAjax.ajax, you transparently
+# get the benefits of a caching.
+#
+# One difference to note is that KSCache will return 
+# a "cachedAjaxSuccess" event when
+# a value has successfully been recovered, either from the network
+# or from the cache.
+#
+# Note that a successful Ajax response will fire the
+# "ajaxSuccess" event.
+#
 # == How Kamishibai Cache is designed.
 #
 # Kamishibai Cache should behave as follows;
@@ -16,6 +32,33 @@
 # Also, if we timeout from any Ajax request, we immediately send a timeout
 # to all other current Ajax requests and prevent ajax sending of future request.
 # The idea is to fallback to cache.
+#
+# Redesign of Kashibai Cache behaviour.
+#
+# 1. If there is nothing in the cache, then we fire an Ajax request.
+#    a. If we get a response, then all is good.
+#    b. If we don't get a response, we show an error page.
+# 2. If we have data in the cache (regardless of expiry status), we
+#    return the cached data immediately.
+#    If it is expired data, then we fire an Ajax request but we make
+#    sure that the response will not trigger a page transition but will
+#    simply replace any elements that are already in the DOM.
+#    a. If we get a response, then all is good.
+#    b. If we timeout, then the online status is set to "unstable".
+# 3. If we have valid data in the cache, we never fire an Ajax request,
+#    but use the cached data immediately.
+# 4. The success and complete handlers will be called when data is
+#    available in the cache, and after a network response returns fresh data.
+#    The `cachedAjaxSuccess` and `cachedAjaxComplete` methods do the same.
+#    If a network request to update the cached value has been sent, the
+#    callback for that request will have `secondRequestToUpdateCache` set to true
+#    on the xhr object. You can modify behaviour based on this value.
+# 5. The `ajaxSuccess` and `ajaxComplete` methods are only called after
+#    a network response.
+#
+# Because of this design, callbacks to insert content into the DOM should
+# use the `cachedAjaxSuccess` callback or the success handler. `ajaxSuccess`
+# callbacks are used less frequently.
 KSCacheConstructor = ->
   # Defaults
   networkTestInterval = 120 # seconds : Deprecated?
@@ -44,11 +87,14 @@ KSCacheConstructor = ->
   #   If we find a cached value that has expired, set the timeoutInterval
   #   to this value (which is normally shorter). This is because we have
   #   can display the cached value, so we don't have to wait so long.
+  #
+  # If the response has come out of the cache, then xhr.fromCache will
+  # be set to true in the callback.
   cachedAjax = (options) ->
     # Wrap success callback so that we additionally send
     # a 'cachedAjaxSuccess' on success.
-    options.success = successCallbackWithCachedAjaxSuccessEvent(options, options.success)
-
+    options.success = addCachedAjaxSuccessEventToCallback(options, options.success)
+    options.complete = addCachedAjaxCompleteEventToCallback(options, options.complete)
     if !options.method || options.method.toUpperCase() isnt 'GET'
       # Non 'GET' methods will not be cached
       # We should actually put this outside of the callback.
@@ -61,25 +107,52 @@ KSCacheConstructor = ->
 
         resetTimeoutIntervalIfCacheInvalid(options, cachedValue, cacheHasExpired)
 
-        if cachedValue is null || (cacheHasExpired && !KSNetworkStatus.unstable())
+        if cachedValue is null #|| (cacheHasExpired && !KSNetworkStatus.unstable())
           # Attempt Ajax if network is stable and the cache has expired.
-          if cachedValue is null
-            console.log 'cache miss for ' + url
-          else if cacheHasExpired
-            console.log('cache expired for ' + url)
+          # if cachedValue is null
+          console.log 'cache miss for ' + url
+          # else if cacheHasExpired
+            # console.log('cache expired for ' + url)
 
-          options.success = successCallbackOnAjax(options, options.success)
-          options.timeout = timeoutCallback(options, cachedValue, options.success)
-          options.error = errorCallbackOnAjax(options, cachedValue, options.success)
+          # wrap the callbacks for Ajax Success to additionally
+          # store the results in cache.
+          # Set xhr.secondRequestToUpdateCache to false so
+          # that callbacks will treat the response as the first
+          # request (will transition to it)
+          options.success = storeInCacheAndRunCallback(options, options.success, {secondRequestToUpdateCache: false})
 
           console.log('send ajax for ' + url);
           KSAjax.ajax(options);
         else
-          console.log('cache hit for ' + url)
-          KSApp.debug('cache hit for ' + url)
-
+          # Call callback with cached values
+          pseudoXhr = {responseText: cachedValue, fromCache: true}
           if options.success
-            options.success(cachedValue, 'success')
+            options.success(cachedValue, 'success', pseudoXhr)
+          if options.complete
+            options.complete(pseudoXhr, 'success')
+
+          if cacheHasExpired
+            console.log('cache expired for ' + url)
+
+            # The second ajax request should only update DOM elements,
+            # and should not trigger a page transition.
+            # This wrapper stores the results into the cache.
+            # Also sets xhr.secondRequestToUpdateCache to true so
+            # that callbacks will treat the response as the second
+            # request (will update but not transition)
+            options.success = storeInCacheAndRunCallback(options, options.success, {secondRequestToUpdateCache: true})
+            # timeouts should do nothing for the second request
+            options.timeout = () ->
+              return
+            # errors should do nothing for the second request
+            options.error = () ->
+              return
+
+            console.log('send ajax to update cache for ' + url);
+            KSAjax.ajax(options);          
+          else
+            console.log('cache hit for ' + url)
+            KSApp.debug('cache hit for ' + url)
   
   resetTimeoutIntervalIfCacheInvalid = (options, cachedValue, cacheHasExpired) ->
     if options.timeoutIntervalIfExpiredCacheFound
@@ -88,15 +161,24 @@ KSCacheConstructor = ->
       delete options.timeoutIntervalIfExpiredCacheFound
     options
 
-
-  successCallbackWithCachedAjaxSuccessEvent = (options, originalCallback) ->
+  # TODO: Combine addCachedAjaxSuccessEventToCallback and addCachedAjaxCompleteEventToCallback
+  addCachedAjaxSuccessEventToCallback = (options, originalCallback) ->
     (data, textStatus, xhr) ->
-      kss.sendEvent('cachedAjaxSuccess', options.callbackContext,
+      callbackContext = options.callbackContext || document.body
+      kss.sendEvent('cachedAjaxSuccess', callbackContext,
                     {data: data, ajaxOptions: options, xhr: xhr})
       if typeof(originalCallback) is 'function'
         originalCallback(data, textStatus, xhr)
 
-  successCallbackOnAjax = (options, originalCallback) ->
+  addCachedAjaxCompleteEventToCallback = (options, originalCallback) ->
+    (xhr, textStatus) ->
+      callbackContext = options.callbackContext || document.body
+      kss.sendEvent('cachedAjaxComplete', callbackContext,
+                    {ajaxOptions: options, xhr: xhr})
+      if typeof(originalCallback) is 'function'
+        originalCallback(xhr, textStatus)
+
+  storeInCacheAndRunCallback = (options, originalCallback, callbackModifier) ->
     (data, textStatus, xhr) ->
       cacheExpiry = options.expires || getExpiryDate(data) || defaultCacheExpiry
       if cacheExpiry
@@ -104,78 +186,9 @@ KSCacheConstructor = ->
         console.log('store key: ' + options.url + ' into cache with expiry: ' + cacheExpiry + ' seconds');
       else
         console.log('will not store: ' + options.url + ' into cache because no expiry set')
+      xhr.secondRequestToUpdateCache = callbackModifier.secondRequestToUpdateCache || false
       if typeof(originalCallback) is 'function'
         originalCallback(data, textStatus, xhr)
-
-  timeoutCallback = (options, fallbackValue, successCallback) ->
-    (xhr) ->
-      if fallbackValue
-        # Silently fail if we have a fallback value.
-        # KSNetworkStatus will send KSOnlineIndicator a request to
-        # show the network status.
-        successCallback(fallbackValue, 'success')
-      else
-        KSApp.notify('Network timed out. Cannot display URL: ' + options.url)
-        console.log('Network timed out. Cannot display URL: ' + options.url)
-        # We show an error page instead of showing the same current page.
-        # Without this, the URL will change but the page will be the same,
-        # which is confusing for the user.
-        successCallback(timeoutErrorHtml, "timeout")
-
-  timeoutErrorHtml = """
-                     <div id="error_msg" data-title="Error: Network timed-out">
-                       <div class="dialog" id="error_msg">
-                         <h1>The network request timed-out</h1>
-                         <p>
-                           We could not get a response from the server in time,
-                           and we do not have a cached version to show.
-                           The network may be unstable or the server congested.
-                         </p>
-                         <p>
-                           Please try again later.
-                         </p>
-                       </div>
-                     </div>
-                     """
-
-  errorWithoutResponseText = (status) ->
-    """
-    <div id="error_msg" data-title="Error: #{status}">
-      <div class="dialog" id="error_msg">
-        <h1>Error: #{status}</h1>
-        <p>
-          We are sorry but we failed to get a response from the server, 
-          and we do not have a cached version to show.
-        </p>
-        <p>
-          Please try again later.
-        </p>
-      </div>
-    </div>
-    """
-
-  errorCallbackOnAjax = (options, fallbackValue, successCallback) ->
-    (xhr, textStatus) ->
-      return false if xhr.timedOut # We don't need to respond to errors if the
-                                   # error was caused by timeout.
-      if fallbackValue
-        KSApp.notify(textStatus + ' error. Display previous page.')
-        console.log(textStatus + ' error. Display previous page.')
-        successCallback(fallbackValue, 'success')
-      else
-        KSApp.notify(textStatus + ' error. Cannot display URL: ' + options.url)
-        console.log(textStatus + ' error. Cannot display URL: ' + options.url)
-        successCallback(errorPage(xhr, options.url, textStatus), textStatus)
-      return false # Don't raise error event
-
-  # Display error in the browser
-  errorPage = (xhr, url, textStatus) ->
-    bodyInner = KSDom.extractBodyTag(xhr.responseText)
-    if bodyInner
-      return "<div id='error_msg' data-ks_loaded class='page' data-title='" + textStatus + "'>" + 
-            bodyInner + "</div>"
-    else
-      return errorWithoutResponseText(textStatus)
 
   # Due to differences in url encoding methods, " "(space) can
   # be either '+' or '%20'.

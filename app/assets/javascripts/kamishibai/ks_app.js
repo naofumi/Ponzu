@@ -1,4 +1,9 @@
+// Display status messages (flash).
+// Also get's the user_id
 window.KSApp = function(){
+  // Messages to be shown in a message dialog (flash) are
+  // sent through the 'X-Message-Type', 'X-Message'
+  // custom headers.
   kamishibai.beforeInitialize(function(){
     kss.addEventListener(document, 'ajaxComplete', function(event) {
       var msg = JSON.parse(event.xhr.getResponseHeader('X-Message'));
@@ -13,6 +18,7 @@ window.KSApp = function(){
 
   function notify(string) {
     var noticeElement = document.getElementsByClassName('notice')[0];
+    if (!noticeElement) {return};
     if (string)
       noticeElement.innerHTML = string;
       // $('.notice').html(string);
@@ -26,19 +32,9 @@ window.KSApp = function(){
     }
   }
 
-  function status(string) {
-    var statusElement = document.getElementsByClassName('status')[0];
-    if (string)
-      statusElement.innerHTML = string;
-    if (statusElement.innerHTML) {
-      kss.show(noticeElement, true);
-    } else {
-      kss.hide(noticeElement);
-    }
-  }
-
   function errors(string) {
     var errorsElement = document.getElementsByClassName('error')[0];
+    if (!errorsElement) {return};
     if (string)
       errorsElement.innerHTML = string;
       // $('.notice').html(string);

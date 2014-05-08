@@ -23,13 +23,13 @@
 
 KSCompositorConstructor = () ->
 
-  # Set each element in array to 'show'. If it is an element inside a container
-  # as determined by the presence of 'data-container', then hide siblings so
-  # that the element is the only one in the container that is shown.
+  # Set each element in array to 'show'. 
   showAll = (elements) ->
     for element in elements
       kss.show(element)
-
+  # If it is an element inside a container
+  # as determined by the presence of 'data-container', then hide siblings so
+  # that the element is the only one in the container that is shown.
   trimVisibilityWithinContainersToSingleChild = (elements) ->
     for element in elements
       if element.hasAttribute('data-container')
@@ -59,6 +59,8 @@ KSCompositorConstructor = () ->
     else
       return toElement
 
+  # Calculate the fromElements, which are basically 
+  # siblings of the toElement which are DIV tags.
   calculateFromElements = (toElement) ->
     if kss.hasClass(toElement, 'page')
       # Since we must allow elements other than pages as direct children of 'body',
@@ -67,7 +69,7 @@ KSCompositorConstructor = () ->
                       kss.hasClass(node, 'page') && 
                       node.id isnt 'splashscreen'
     else
-      # For sub-elements, all siblings for the toElement are fromElements.
+      # For sub-elements, all visible siblings of the toElement are fromElements.
       # We don't need to filter.
       filter = (node) -> true
     kss.siblings toElement, (node) ->
@@ -92,6 +94,16 @@ KSCompositorConstructor = () ->
         kss.hide fromElement
       callback and callback();
 
+  # We remove nodes that are unnecessary for the current display
+  # after a transition is finished.
+  # 
+  # The criteria for removing nodes is as follows (all must apply);
+  # 1. The node has a data-ks_loaded attribute, which indicates
+  #    that it was loaded via Ajax and is not a part of the bootloader.
+  # 2. The node comes from a different resource URL than the current URL.
+  #    We probably don't need this restriction.
+  # 3. Is not a decendant of toElement.
+  # 4. Is currently invisible.
   removeUnecessaryNodes = (toElement) ->
     allLoadedElements = Array.prototype.slice.call(document.querySelectorAll('[data-ks_loaded]'))
     allLoadedDescendantsOfToElement = Array.prototype.slice.call(toElement.querySelectorAll('[data-ks_loaded]'))
@@ -124,6 +136,8 @@ KSCompositorConstructor = () ->
     callback && callback();
 
   # Shows the toElement.
+  # This is the public interface for the KSCompositor object.
+  #
   # Returns the highestHiddenAncestor of the toElement, which
   # is equal to the portion of the screen that will be redrawn (redrawArea).
   showElement = (toElement, animate, callback) ->
@@ -142,7 +156,7 @@ KSCompositorConstructor = () ->
       cleanUpAfterShowElement(toElement, callback)
 
     setTitle(originalTarget)
-    KSHistory.push()
+    KSHistory.push() # This shouldn't be here because History is independent from DOM
     kss.sendEvent('ks:aftershown', toElement, {toElement: toElement})
 
     return toElement;

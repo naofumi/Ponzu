@@ -86,4 +86,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'bcrypt', '~> 3.1.7'
   s.add_dependency 'scrypt', '~> 1.2.1'
 
+  # Use qunit-rails in testing
+  s.add_development_dependency 'qunit-rails'
+
 end

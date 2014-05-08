@@ -1,3 +1,25 @@
+# Basic Ajax management modeled after the jQuery API.
+#
+# Features;
+# 1. Timeout management.
+# 2. Evaluate Javascript contained in custom 'X-JS' header.
+# 3. Evaluate Javascript if content-type is "javascript" (same as jQuery).
+# 4. 'Accept' header is optimized for Kamishibai.
+#
+# Timeout management is tricky, and has a lot of room for improvement.
+# We currently do the following (in #setTimeoutCallback);
+# 1. We kill all currently running Ajax requests. #abortAndTimeoutAllAjax
+#
+# In actual use though, the handling of slow HTTP requests should actually 
+# be quite different.
+#
+# 1. If fallback content is available, then timeout should be very quick.
+# 2. If fallback content is not available, then timeout should be quite slow.
+# 3. However, when the user makes an action that results in an Ajax request,
+#    then, previous Ajax requests should be aborted immediately to make way for the new
+#    requests. User actions could be detected by hashChange events or rails_ujs.
+#    The largest issue I have with slow responses is that the browser doesn't 
+#    respond to hashChange, etc. if there are many Ajax requests in the queue.
 KSAjaxConstructor = ->
   allAjaxRequests = {}
   defaultTimeout = 5000
@@ -9,13 +31,9 @@ KSAjaxConstructor = ->
     # jQuery uses the options.type to specify the method, but we prefer options.method.
     method = (options.method || options.type || "post").toUpperCase()
     data = options.data || null; # Only accepts URI encoded string, not objects.
-    # Add CSRF parameter
-    if method && method != "GET" && KSRails
-      data += "&" + KSRails.csrfParam() + "=" + KSRails.csrfToken()
 
     async = options.async || true
     options.timeoutInterval = timeoutInterval = options.timeoutInterval || defaultTimeout
-    timeout = options.timeout
     # callbackContext = options.callbackContext || document.body; # The object on which the callbacks will be targeted
 
     xhr = new XMLHttpRequest()
@@ -30,7 +48,7 @@ KSAjaxConstructor = ->
       setTimeoutCallback(xhr, options, timeoutInterval)
     
     readyStateCallback = (event) ->
-      ajaxReadyStateChangeHander(event, options, timeoutInterval)
+      ajaxReadyStateChangeHandler(event, options, timeoutInterval)
       true
 
     xhr.addEventListener('readystatechange', readyStateCallback, false)
@@ -63,8 +81,9 @@ KSAjaxConstructor = ->
                         # regular error handling if it was a timeout
     xhr.abort()
     clearTimeout(xhr.timeoutTimer)
+    # Run the ajaxOptions.timeout callback
     if typeof(ajaxOptions.timeout) is 'function'
-      ajaxOptions.timeout(xhr)
+      ajaxOptions.timeout(xhr, ajaxOption)
     kss.sendEvent 'ajaxTimeout', callbackContext(ajaxOptions), 
       xhr: xhr,
       ajaxOptions: ajaxOptions,
@@ -72,8 +91,9 @@ KSAjaxConstructor = ->
     delete allAjaxRequests[ajaxOptions.url];
     KSNetworkStatus.timedOut()
 
-  ajaxReadyStateChangeHander = (event, ajaxOptions, timeoutInterval) ->
+  ajaxReadyStateChangeHandler = (event, ajaxOptions, timeoutInterval) ->
     xhr = event.target
+    return unless xhr
     textStatus = xhr.statusText
     sendEventFlag = true
     if xhr.readyState is 4
@@ -89,29 +109,30 @@ KSAjaxConstructor = ->
       data = processResponse(xhr)
       status = getAjaxStatus(xhr)
       if status is "success"
-        # processAjaxResponse(xhr, callbackContext);
         if typeof(ajaxOptions.success) is 'function'
-          ajaxOptions.success(data, textStatus, xhr)
+          ajaxOptions.success(data, "success", xhr)
         kss.sendEvent 'ajaxSuccess', callbackContext(ajaxOptions), 
           xhr: xhr, 
           data: data, 
           ajaxOptions: ajaxOptions
+
       else if status is "redirect"
         # Don't do anything special on redirect
       else
         # Error
         # TODO: We have error handling in KSCache, KSAjax and
         # in ks_event_listeners.js. We need to clean this up.
-        if typeof(ajaxOptions.error) is 'function'
-          sendEventFlag = ajaxOptions.error(xhr, status, "")
-        if sendEventFlag isnt false
+        if !xhr.timeOut # This is set for aborted XHR requests due to timeout.
+                        # We don't need to handle errors for these.
+          if typeof(ajaxOptions.error) is 'function'
+            ajaxOptions.error(xhr, status, textStatus)
           kss.sendEvent 'ajaxError', callbackContext(ajaxOptions),
             xhr: xhr, 
             ajaxOptions: ajaxOptions, 
             errorMessage: status
       
       if typeof(ajaxOptions.complete) is 'function'
-        ajaxOptions.complete(xhr, textStatus)
+        ajaxOptions.complete(xhr, status)
       kss.sendEvent 'ajaxComplete', callbackContext(ajaxOptions),
         xhr: xhr, 
         ajaxOptions: ajaxOptions
