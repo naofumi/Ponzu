@@ -42,6 +42,8 @@ KSAjaxConstructor = ->
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.setRequestHeader('Accept', 'text/html, application/json;q=0.9, text/javascript;q=0.8')
+    if method isnt "GET"
+      xhr.setRequestHeader('X-CSRF-Token', KSRails.csrfToken())
 
     # timeoutInterval == 0 for no timeoutInterval
     if async && timeoutInterval > 0

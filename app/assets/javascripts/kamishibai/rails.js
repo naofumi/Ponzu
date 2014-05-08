@@ -1,12 +1,10 @@
-// We currently only handle Success
-// We should create a new AJAX function and do the work there.
-
 /**
  * Unobtrusive scripting adapter for no JS framework
  * From https://github.com/jjbuckley/rails-ujs/blob/master/src/rails.js
  * https://github.com/bjjb/rails-ujs
- * Modified for use within Kamishibai by Naofumi
+ * Heavily modified for use within Kamishibai by Naofumi
  */
+ // Also read ks_rails_ujs_responders.js
 
 new function(e) {
   var ajaxLoadTimeout = 20000; // ms
@@ -52,14 +50,6 @@ new function(e) {
           form.style.visibility = 'hidden';
           document.body.appendChild(form);
         }
-        // Either way, it needs the CSRF token
-        if (!form[KSRails.csrfParam()] && form.getAttribute('method').toUpperCase() != 'GET') {
-          var field = document.createElement('input');
-          field.type = 'hidden';
-          field.name = KSRails.csrfParam();
-          field.value = KSRails.csrfToken();
-          form.appendChild(field);
-        }
       }
 
       var method;
@@ -104,7 +94,6 @@ new function(e) {
           }
         }
 
-        // Manage success in callbacks.
         KSCache.cachedAjax({
           url: urlWithData,
           data: data,
@@ -121,9 +110,6 @@ new function(e) {
   kss.addEventListener(window, 'load', this);
   kss.addEventListener(window, 'click', this);
   kss.addEventListener(window, 'submit', this);
-  // window.addEventListener('load', this, false);
-  // window.addEventListener('click', this, false);
-  // window.addEventListener('submit', this, false);
 }();
 
 // form-serialize from http://code.google.com/p/form-serialize/source/browse/trunk/serialize-0.2.js
