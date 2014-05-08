@@ -1,6 +1,13 @@
 module 'KSCache.cachedAjax test', 
   setup: ->
     localStorage.clear()
+    # How sinon works;
+    # When a xhr request is made using `new XMLHttpRequest()`,
+    # sinon creates a new FakeXMLHttpRequest object.
+    # On creation, the `onCreate(xhr)` method is called.
+    # We use the onCreate method to provide a handle for the xhr objects.
+    # We set the response body, etc. using this handle.
+    # The actual request is probably only send when we run an assertion.
     this.xhr = sinon.useFakeXMLHttpRequest()
     requests = this.requests = []
     xhrOnCreateSpy = this.xhrOnCreateSpy = sinon.spy()
@@ -10,7 +17,7 @@ module 'KSCache.cachedAjax test',
   teardown: ->
     this.xhr.restore()
 
-test 'cachedAjax success with no expiry', ->
+test 'cachedAjax success with nothing in cache', ->
   successHandler = sinon.spy()
   addEventListener 'ajaxSuccess', successHandler
   completeHandler = sinon.spy()
@@ -49,8 +56,15 @@ test 'cachedAjax success with no expiry', ->
   ok this.xhrOnCreateSpy.calledOnce, "Fake XHR called once"
 
 
-asyncTest 'cachedAjax success with expiry', ->
+asyncTest 'cachedAjax success with valid cache', ->
   responseString = '<div class="page" data-title="a title" id="test_id" data-expiry=60>hello</div>'
+
+  KSCache.cachedAjax
+    url: "/some/article"
+    method: "get"
+  equal this.requests.length, 1, "request set"
+  this.requests[0].respond 200, { "Content-Type": "text/html" },
+                                 responseString
 
   successHandler = sinon.spy()
   addEventListener 'ajaxSuccess', successHandler
@@ -60,13 +74,6 @@ asyncTest 'cachedAjax success with expiry', ->
   addEventListener 'cachedAjaxComplete', cachedCompleteHandler
   completeHandler = sinon.spy()
   addEventListener 'ajaxComplete', completeHandler
-
-  KSCache.cachedAjax
-    url: "/some/article"
-    method: "get"
-  equal this.requests.length, 1, "request set"
-  this.requests[0].respond 200, { "Content-Type": "text/html" },
-                                 responseString
 
   successInsideCacheSpy = sinon.spy()
   completeInsideCacheSpy = sinon.spy()
@@ -82,13 +89,63 @@ asyncTest 'cachedAjax success with expiry', ->
 
   ok successInsideCacheSpy.calledOnce, "Success callback called inside cached response"
   ok completeInsideCacheSpy.calledOnce, "Complete callback called inside cached response"
-  ok successHandler.calledOnce, "ajaxSuccess event raised only once for network request"
-  ok completeHandler.calledOnce, "ajaxComplete event raised only once for network request"
-  ok cachedSuccessHandler.calledTwice, "cachedAjaxSuccess event raised twice for each response"
-  ok cachedCompleteHandler.calledTwice, "cachedAjaxComplete event raised twice for each response"
+  ok !successHandler.called, "ajaxSuccess event not called because cached"
+  ok !completeHandler.called, "ajaxComplete event not called because cached"
+  ok cachedSuccessHandler.calledOnce, "cachedAjaxSuccess event raised once for cached result"
+  ok cachedCompleteHandler.calledOnce, "cachedAjaxComplete event raised once for cached result"
   ok this.xhrOnCreateSpy.calledOnce, "Fake XHR called once for network request"
 
   start()
+
+test 'cachedAjax success with expired cache item', ->
+  responseString = '<div class="page" data-title="a title" id="test_id" data-expiry=1>hello</div>'
+
+  KSCache.cachedAjax
+    url: "/some/article"
+    method: "get"
+  this.requests[0].respond 200, { "Content-Type": "text/html" },
+                                 responseString
+
+  successHandler = sinon.spy()
+  addEventListener 'ajaxSuccess', successHandler
+  cachedSuccessHandler = sinon.spy()
+  addEventListener 'cachedAjaxSuccess', cachedSuccessHandler
+  cachedCompleteHandler = sinon.spy()
+  addEventListener 'cachedAjaxComplete', cachedCompleteHandler
+  completeHandler = sinon.spy()
+  addEventListener 'ajaxComplete', completeHandler
+
+  successInsideCacheSpy = sinon.spy()
+  completeInsideCacheSpy = sinon.spy()
+
+  that = this
+  setTimeout ->
+    KSCache.cachedAjax
+      url: "/some/article"
+      success: ->
+        successInsideCacheSpy()
+      complete: ->
+        completeInsideCacheSpy()
+      method: "get"
+    equal that.requests.length, 2, "second request set"
+    that.requests[1].respond 200, { "Content-Type": "text/html" },
+                                   responseString    
+  , 2000
+  
+  stop()
+  
+  # How to write async manually
+  # http://jxck.hatenablog.com/entry/20100721/1279681676
+  setTimeout ->
+    start()
+    ok successInsideCacheSpy.calledTwice, "Success callback called twice inside cached response"
+    ok completeInsideCacheSpy.calledTwice, "Complete callback called twice inside cached response"
+    ok successHandler.calledOnce, "ajaxSuccess event raised once for network request"
+    ok completeHandler.calledOnce, "ajaxComplete event raised once for network request"
+    ok cachedSuccessHandler.calledTwice, "cachedAjaxSuccess event raised twice"
+    ok cachedCompleteHandler.calledTwice, "cachedAjaxComplete event raised twice"
+    ok that.xhrOnCreateSpy.called, "Fake XHR called once for network request"
+  , 3000
 
 asyncTest '404 Error handling', ->
   successHandler = sinon.spy()
@@ -108,11 +165,11 @@ asyncTest '404 Error handling', ->
   equal this.requests.length, 1, "request set"
   this.requests[0].respond 404, { "Content-Type": "text/html" }, ""
 
-  ok cachedSuccessHandler.calledOnce, "cachedAjaxSuccess event raised once"
-  ok !cachedCompleteHandler.called, "cachedAjaxComplete event raised"
-  ok !successHandler.called, "ajaxSuccess event raised once"
-  ok !completeHandler.called, "ajaxComplete event raised once"
-  ok errorHandler.calledOnce, "ajaxError event not raised for at this point for ks_cache_version.html"
+  ok !cachedSuccessHandler.called, "cachedAjaxSuccess event not raised"
+  ok cachedCompleteHandler.called, "cachedAjaxComplete event raised"
+  ok !successHandler.called, "ajaxSuccess event not raised"
+  ok completeHandler.called, "ajaxComplete event raised once"
+  ok errorHandler.calledOnce, "ajaxError event raised"
 
   start()
   return
