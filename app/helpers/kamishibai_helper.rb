@@ -64,11 +64,7 @@ module KamishibaiHelper
     raise("#{__method__} must have an :id") unless options[:id]
     options = normalize_page_options(options)
 
-    if Rails.configuration.kamishibai_cache
-      expiry = options[:data][:expiry] || options[:'data-expiry'] || @expiry || Kamishibai::Cache::DEFAULT_EXPIRY
-    else
-      expiry = 0
-    end
+    expiry = options[:data][:expiry] || options[:'data-expiry'] || @expiry || Kamishibai::Cache::DEFAULT_EXPIRY
     options[:data][:expiry] = expiry
 
     content_tag(:div, options, nil, true, &block)    
