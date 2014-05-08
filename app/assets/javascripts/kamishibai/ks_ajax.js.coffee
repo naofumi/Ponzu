@@ -126,10 +126,10 @@ KSAjaxConstructor = ->
                         # We don't need to handle errors for these.
           if typeof(ajaxOptions.error) is 'function'
             ajaxOptions.error(xhr, status, textStatus)
-            kss.sendEvent 'ajaxError', callbackContext(ajaxOptions),
-              xhr: xhr, 
-              ajaxOptions: ajaxOptions, 
-              errorMessage: status
+          kss.sendEvent 'ajaxError', callbackContext(ajaxOptions),
+            xhr: xhr, 
+            ajaxOptions: ajaxOptions, 
+            errorMessage: status
       
       if typeof(ajaxOptions.complete) is 'function'
         ajaxOptions.complete(xhr, status)
