@@ -18,6 +18,9 @@ class StaticController < ApplicationController
   end
 
   def layout
+    if request.fullpath == root_path && set_manifest
+      @set_manifest = true
+    end
     if galapagos?
       redirect_to dashboard_index_path
     else

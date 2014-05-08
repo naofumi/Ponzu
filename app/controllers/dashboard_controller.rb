@@ -41,22 +41,10 @@ class DashboardController < ApplicationController
     headers['Pragma'] = "no-cache"
     headers['Expires'] = "Wed, 11 Jan 1984 05:00:00 GMT"
     headers['Content-Type'] = "text/cache-manifest"
-    if current_user
-      # We can't use #smartphone? because we haven't set params[:device]
-      if device_scope_by_user_agent == SMARTPHONE_URL_SCOPE
-        render "cache_manifest.s", :layout => false
-      else
-        render :layout => false
-      end
-    else
-      render "cache_manifest_clear_explicit", :layout => false
-    end
+    render :layout => false
   end
 
   def index
-    if request.fullpath == root_path && current_user && set_manifest
-      @set_manifest = true
-    end
     respond_to do |format|
       format.html {
         device_selective_render

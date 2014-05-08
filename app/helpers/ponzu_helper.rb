@@ -4,18 +4,8 @@ module PonzuHelper
   include ConferenceStrings
 
   def manifest_attribute
-    # We want to make the manifest_path locale agonistic.
-    # However, all other URL automatically append the :locale param
-    # with ApplicationController#default_url.
-    # Hence we need to do custom path generation.
-    manifest_path = case device_scope_by_user_agent
-                   when ApplicationController::SMARTPHONE_URL_SCOPE
-                      "/s/manifest"
-                   else
-                      "/manifest"
-                   end
-    @set_manifest ? "manifest='#{manifest_path}'" : ""
-    # @set_manifest ? "manifest='#{manifest_path}'" : "manifest='/dummy_manifest'"
+    manifest_path =  "/manifest"
+    @set_manifest ? "manifest='#{manifest_path}.appcache'".html_safe : ""
   end
 
   # Use to add comments to the HTML to
