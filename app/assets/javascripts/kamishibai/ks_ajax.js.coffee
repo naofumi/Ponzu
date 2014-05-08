@@ -83,7 +83,7 @@ KSAjaxConstructor = ->
     clearTimeout(xhr.timeoutTimer)
     # Run the ajaxOptions.timeout callback
     if typeof(ajaxOptions.timeout) is 'function'
-      ajaxOptions.timeout(xhr, ajaxOption)
+      ajaxOptions.timeout(xhr, ajaxOptions)
     kss.sendEvent 'ajaxTimeout', callbackContext(ajaxOptions), 
       xhr: xhr,
       ajaxOptions: ajaxOptions,
