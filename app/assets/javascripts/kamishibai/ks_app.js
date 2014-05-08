@@ -32,17 +32,6 @@ window.KSApp = function(){
     }
   }
 
-  function status(string) {
-    var statusElement = document.getElementsByClassName('status')[0];
-    if (string)
-      statusElement.innerHTML = string;
-    if (statusElement.innerHTML) {
-      kss.show(noticeElement, true);
-    } else {
-      kss.hide(noticeElement);
-    }
-  }
-
   function errors(string) {
     var errorsElement = document.getElementsByClassName('error')[0];
     if (!errorsElement) {return};
