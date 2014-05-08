@@ -1,5 +1,5 @@
 Dummy::Application.routes.draw do
-  mount Qunit::Rails::Engine => '/qunit'
+  mount QUnit::Rails::Engine => '/qunit'
 
   match 'cache_test' => 'cache_test#index', :as => :cache_test
 
