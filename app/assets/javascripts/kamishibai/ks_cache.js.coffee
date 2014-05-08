@@ -47,6 +47,18 @@
 #    b. If we timeout, then the online status is set to "unstable".
 # 3. If we have valid data in the cache, we never fire an Ajax request,
 #    but use the cached data immediately.
+# 4. The success and complete handlers will be called when data is
+#    available in the cache, and after a network response returns fresh data.
+#    The `cachedAjaxSuccess` and `cachedAjaxComplete` methods do the same.
+#    If a network request to update the cached value has been sent, the
+#    callback for that request will have `secondRequestToUpdateCache` set to true
+#    on the xhr object. You can modify behaviour based on this value.
+# 5. The `ajaxSuccess` and `ajaxComplete` methods are only called after
+#    a network response.
+#
+# Because of this design, callbacks to insert content into the DOM should
+# use the `cachedAjaxSuccess` callback or the success handler. `ajaxSuccess`
+# callbacks are used less frequently.
 KSCacheConstructor = ->
   # Defaults
   networkTestInterval = 120 # seconds : Deprecated?
