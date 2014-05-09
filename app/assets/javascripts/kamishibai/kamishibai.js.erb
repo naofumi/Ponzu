@@ -108,7 +108,7 @@ function Kamishibai() {
   // blank.
   this.changePageByHash = function(options){
     if (!setHashIfBlank()) {
-      if (ga)
+      if ((typeof ga != 'undefined') && ga)
         ga('send', 'pageview', {'location': window.location.href});
       KSController.handleHashChange(options);
     };
