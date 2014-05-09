@@ -166,8 +166,12 @@ class PresentationsController < ApplicationController
   end
 
   def social_box
-    @presentation = Presentation.in_conference(current_conference).
-                                 find(params[:id])
+    if current_user
+      @presentation = Presentation.in_conference(current_conference).
+                                   find(params[:id])
+    else
+      render nothing: true
+    end
   end
   
   # Only available for PC, not galapagos
