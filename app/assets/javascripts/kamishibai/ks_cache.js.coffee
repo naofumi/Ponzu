@@ -103,7 +103,7 @@ KSCacheConstructor = ->
       url = options.url = normalizedUrl(options.url)
       delete options.forceReload # forceReload is Deprecated. Make sure we remove it.
 
-      pageCache().get url, (cachedValue, cacheHasExpired)->
+      pageCache().getRaw url, (cachedValue, cacheHasExpired)->
 
         resetTimeoutIntervalIfCacheInvalid(options, cachedValue, cacheHasExpired)
 
@@ -140,7 +140,7 @@ KSCacheConstructor = ->
             # Also sets xhr.secondRequestToUpdateCache to true so
             # that callbacks will treat the response as the second
             # request (will update but not transition)
-            options.success = storeInCacheAndRunCallback(options, options.success, {secondRequestToUpdateCache: true})
+            options.success = storeInCacheAndRunCallback(options, options.success, {secondRequestToUpdateCache: true, cachedValue:cachedValue})
             # timeouts should do nothing for the second request
             options.timeout = () ->
               return
@@ -186,6 +186,8 @@ KSCacheConstructor = ->
         console.log('store key: ' + options.url + ' into cache with expiry: ' + cacheExpiry + ' seconds');
       else
         console.log('will not store: ' + options.url + ' into cache because no expiry set')
+      if data is callbackModifier.cachedValue
+        xhr.noChange = true  
       xhr.secondRequestToUpdateCache = callbackModifier.secondRequestToUpdateCache || false
       if typeof(originalCallback) is 'function'
         originalCallback(data, textStatus, xhr)

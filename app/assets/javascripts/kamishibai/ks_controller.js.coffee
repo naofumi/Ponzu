@@ -147,7 +147,10 @@ KSControllerConstructor = ->
       method: "get"
       dataType: 'html'
       success: (data, textStatus, xhr) ->
-        insertAjaxIntoDom(data, textStatus, xhr, resourceUrl, callback)
+        if !xhr.noChange
+          insertAjaxIntoDom(data, textStatus, xhr, resourceUrl, callback)
+        else
+          console.log("will not insert data into dom because content identical to cache:" + resourceUrl)
       error: (xhr, textStatus, errorThrown) ->
         if showErrorAsNotification
           KSApp.notify("Load failed: " + resourceUrl + textStatus + "<br />" + errorThrown)
