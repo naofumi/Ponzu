@@ -190,8 +190,9 @@ function KSSupport() {
 
   this.removeClass = function(element, name) {
     if (self.hasClass(element, name)) {
-      var newClassName = kss.trim((" " + element.className + " ").
-                          replace(/[\t\n\r]/, " ").replace(" " + name + " ", ' '));
+      var newClassName = (" " + element.className + " ").
+                          replace(/[\t\n\r]/, " ").replace(" " + name + " ", ' ').
+                          trim();
       element.setAttribute("class", newClassName);
     }
   }
@@ -204,16 +205,17 @@ function KSSupport() {
     }
   }
 
-  // http://blog.stevenlevithan.com/archives/faster-trim-javascript
-  this.trim = function(str) {
-  	var result;
-  	if (String.prototype.trim) {
-  		result = str.trim(str);
-  	} else {
-  		result = str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-  	}
-  	return ((result === null) ? "" : result);
-  }
+  // // http://blog.stevenlevithan.com/archives/faster-trim-javascript
+  // // I'm not sure when result would be null. so I'm just leaving it here.
+  // this.trim = function(str) {
+  // 	var result;
+  // 	if (String.prototype.trim) {
+  // 		result = str.trim(str);
+  // 	} else {
+  // 		result = str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  // 	}
+  // 	return ((result === null) ? "" : result);
+  // }
 
   // Redirect. Used from Rails controllers in response to an update or create
   // for POST-to-redirect CRUD patterns. Only reads the hash fragment.
