@@ -85,25 +85,26 @@ window.KSDomConstructor = () ->
     # But we should really consider webworkers.
     # However, even Android Jelly Bean doesn't support it.
     setTimeout () ->
-      try
-        # We can't tell if its JSON or a string, so we try to parse anyway.
-        # TODO: We should look at the response code
-        json = if typeof data is "object"
-          # lscache automatically parses JSON data so
-          # we come here when we read from cache
-          data
-        else
-          JSON.parse(data)
-        console.log("Convert JSON respose to HTML with template " + json.renderer.template)
-        data = JST[json.renderer.template](json)
-        # dust.render json.renderer.template, json, (err, html) ->
-        #   callback(html)
-      catch e
-        # If we can't parse, it's probably because it isn't an object
-        # We don't think about it too much.
-        console.log("Error parsing JSON")
-        console.log(data)
-        console.log(e)
+      # When the response has no body (render :nothing),
+      # we don't even try to parse JSON.
+      unless data.trim().length is 0
+        try
+          # We can't tell if its JSON or a string, so we try to parse anyway.
+          # TODO: We should look at the response code
+          json = if typeof data is "object"
+            data
+          else
+            JSON.parse(data)
+          console.log("Convert JSON respose to HTML with template " + json.renderer.template)
+          data = JST[json.renderer.template](json)
+        catch e
+          # If we can't parse, it's probably because it isn't an object
+          # We don't think about it too much.
+          console.log("Error parsing JSON. Probably HTML response")
+          console.log(data)
+          console.log(e)
+      else
+        console.log("No data in response.")
       callback(data)
     , 0
 
