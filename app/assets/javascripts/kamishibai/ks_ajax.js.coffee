@@ -53,6 +53,7 @@ KSAjaxConstructor = ->
       ajaxReadyStateChangeHandler(event, options, timeoutInterval)
       true
 
+    console.log("added readystateChange event handler for " + url)
     xhr.addEventListener('readystatechange', readyStateCallback, false)
     xhr.send(data)
     allAjaxRequests[url] = xhr
@@ -65,7 +66,7 @@ KSAjaxConstructor = ->
   #
   # Then set the timeout timer.
   setTimeoutCallback = (xhr, ajaxOptions, timeoutInterval) ->
-    console.log('set timeout interval to ' + timeoutInterval + 'ms for ' + ajaxOptions.url)
+    console.log('set timeout interval to ' + timeoutInterval + 'ms for Ajax request for ' + ajaxOptions.url)
     xhr.abortAndTimeoutAllAjax = ->
       console.log("Timed out: Ajax request to " + ajaxOptions.url)
       abortAndTimeoutXhr(xhr, ajaxOptions)

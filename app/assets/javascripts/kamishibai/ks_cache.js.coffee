@@ -148,7 +148,7 @@ KSCacheConstructor = ->
             options.error = () ->
               return
 
-            console.log('send ajax to update cache for ' + url);
+            console.log('send ajax to update cache for ' + url + '(we will display cached contents before receiving response)');
             KSAjax.ajax(options);          
           else
             console.log('cache hit for ' + url)

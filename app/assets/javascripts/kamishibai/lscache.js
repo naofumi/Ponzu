@@ -134,7 +134,7 @@ var lscache = function() {
   function touchLru(key) {
     var timeString = currentTime().toString(EXPIRY_RADIX);
     try { 
-      console.log('set LRU for key ' + key + ' to ' + timeString);
+      console.log('touch cache: set LRU for key ' + key + ' to ' + timeString);
       setItem(lruKey(key), timeString);
     } catch(e) {
       if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {

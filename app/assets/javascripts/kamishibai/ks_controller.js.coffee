@@ -141,7 +141,7 @@ KSControllerConstructor = ->
     showTimeoutAsNotification = options.showTimeoutAsNotification
     showTimeoutAsPage = options.showTimeoutAsPage
 
-    console.log('loadResourceUrl ' + resourceUrl)
+    console.log('prepare to loadResourceUrl ' + resourceUrl + ' using cachedAjax.')
     requestHistoryForSingleHashChangeEvent[resourceUrl] = true
     KSCache.cachedAjax
       method: "get"
