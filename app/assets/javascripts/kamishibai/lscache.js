@@ -38,7 +38,8 @@ var lscache = function() {
   // expiration date radix (set to Base-36 for most space savings)
   var EXPIRY_RADIX = 10;
 
-  // time resolution in seconds
+  // time resolution in milliseconds.
+  // 1000 means that all times are in seconds
   var EXPIRY_UNITS = 1000;
 
   // ECMAScript max Date (epoch + 1e8 days)
@@ -98,7 +99,7 @@ var lscache = function() {
   }
 
   /**
-   * Returns the number of minutes since the epoch.
+   * Returns the number of EXPIRY_UNITS since the epoch.
    * @return {number}
    */
   function currentTime() {
@@ -219,7 +220,7 @@ var lscache = function() {
   return {
 
     /**
-     * Stores the value in localStorage. Expires after specified number of minutes.
+     * Stores the value in localStorage. Expires after specified number of EXPIRY_UNITS.
      * If localStorage quota is exceeded, remove least-recently-used (LRU) 
      * items to make space.
      * @param {string} key
@@ -373,6 +374,34 @@ var lscache = function() {
         callback && callback(value, hasExpired)
         return value;
       }
+    },
+
+    // This is the same as `get` except that we don't parse JSON data.
+    // Since all Kamishibai needs to do is store strings, we use this
+    // more often.
+    getRaw: function(key, callback) {
+      if (!supportsStorage()) return callback(null, null);
+
+      // Get Expiry data
+      var exprKey = expirationKey(key);
+      var expr = getItem(exprKey);
+      var hasExpired;
+      if (expr) {
+        var expirationTime = parseInt(expr, EXPIRY_RADIX);
+
+        if (currentTime() >= expirationTime)
+          hasExpired = true;
+      }
+
+      // Tries to de-serialize stored value if its an object, and returns the normal value otherwise.
+      var value = getItem(key);
+
+      if (value) {
+        touchLru(key);
+      }
+
+      callback && callback(value, hasExpired)
+      return value;
     },
 
     /**
