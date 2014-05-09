@@ -1,4 +1,21 @@
-module 'Kamishibai Cache test'
+module 'Kamishibai Cache test',
+  setup: ->
+
+  teardown: ->
+
+asyncTest 'lscache set and get for valid value', ->
+  lscache.set "the_key", "the_value", 1, ->
+    lscache.get "the_key", (value, hasExpired) ->
+      start()
+      equal value, "the_value", "set value and get value match"
+      equal hasExpired, undefined, "hasExpired is false"
+
+asyncTest 'lscache set and get for expired value', ->
+  lscache.set "the_key", "the_value", -1, ->
+    lscache.get "the_key", (value, hasExpired) ->
+      start()
+      equal value, "the_value", "set value and get value match"
+      equal hasExpired, true, "hasExpired is true"
 
 
 
