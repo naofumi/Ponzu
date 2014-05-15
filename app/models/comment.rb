@@ -6,7 +6,7 @@
 class Comment < ActiveRecord::Base
   attr_accessible :presentation_id, :text, :user_id, :parent_id
   acts_as_nested_set :counter_cache => :child_count, :order_column => "rgt DESC"
-  belongs_to  :presentation, :inverse_of => :comments
+  belongs_to  :presentation, :inverse_of => :comments, :touch => true
   belongs_to  :user, :inverse_of => :comments
   before_validation :fill_presentation_id_from_parent_id
   validates_presence_of :presentation_id, :user_id, :text
