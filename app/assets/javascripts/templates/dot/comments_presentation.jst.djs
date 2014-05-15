@@ -25,7 +25,7 @@
         {{= comment.text }}
         <div class="close_box">
           {{? it.user_id == comment.user_id }}
-            <a href="/comments/{{= comment.id }}" data-method="delete" data-remote=true data-confirm="Are you sure you want to delete this comment?" rel="nofollow" data-ks-insert-response=true>delete comment</a>
+            <a href="/comments/{{= comment.id }}" data-method="delete" data-remote=true data-confirm="Are you sure you want to delete this comment?" rel="nofollow" data-invalidates-keys="/presentations/{{= it.presentation_id }}/comments" data-ks-insert-response=true>delete comment</a>
           {{?}}
         </div>
       </div>
