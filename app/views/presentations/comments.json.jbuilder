@@ -1,4 +1,4 @@
-json.cache! ['v2', current_conference, I18n.locale, "/comments/", @presentation, @comments, !!current_user, can?(:edit, Presentation)] do
+json.cache! ['v2', current_conference, I18n.locale, "/comments/", @presentation, !!current_user, can?(:edit, Presentation)] do
   json.renderer do
     json.template "templates/dot/comments_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
@@ -10,6 +10,7 @@ json.cache! ['v2', current_conference, I18n.locale, "/comments/", @presentation,
     json.id comment.id
     json.is_author authors.include?(comment.user.author)
     json.depth comment.ancestors.size
+    json.is_leaf comment.leaf?
     json.created_at l(comment.created_at, :format => :month_day_time)
     json.user_name comment.user.name
     json.user_id comment.user.id

@@ -1,4 +1,4 @@
-<div class="social_box" data-ajax="/presentations/{{= it.presentation_id }}/social_box" data-expiry="{{= it.expiry }}" id="presentation_{{= it.presentation_id }}_social_box">
+<div class="social_box" data-ajax="/presentations/{{= it.presentation_id }}/social_box" id="presentation_{{= it.presentation_id }}_social_box">
 	{{? it.logged_in }}
 		<div class="like_box">
 			<div class="social_stats">

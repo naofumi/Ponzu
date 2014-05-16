@@ -65,6 +65,7 @@ module KamishibaiHelper
     options = normalize_page_options(options)
 
     expiry = options[:data][:expiry] || options[:'data-expiry'] || @expiry || Kamishibai::Cache::DEFAULT_EXPIRY
+    
     options[:data][:expiry] = expiry
 
     content_tag(:div, options, nil, true, &block)    
