@@ -1,4 +1,4 @@
-<div data-expiry="{{= it.expiry }}" id="session_details_presentation_{{= it.id }}">
+<div id="session_details_presentation_{{= it.id }}">
   {{? it.art_thumb }}
     <img src="{{= it.art_thumb }}" class="thumb">
   {{?}}

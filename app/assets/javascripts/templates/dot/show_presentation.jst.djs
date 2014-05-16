@@ -1,4 +1,4 @@
-<div data-container-ajax="/ponzu_frame" data-container="ponzu_frame" data-expiry="{{= it.expiry }}" id="show_presentation_{{= it.id }}" data-title="{{= it.number }}: {{= it.header_title}}">
+<div data-container-ajax="/ponzu_frame" data-container="ponzu_frame" id="show_presentation_{{= it.id }}" data-title="{{= it.number }}: {{= it.header_title}}">
   <div class="presentation panel {{= it.type }}">
     <div class="presentation_header">
       <span>
@@ -91,7 +91,7 @@
       <div class='panel_title no_print comments {{= it.type }}'>COMMENTS</div>
         <div class='presentation panel no_print comments {{= it.type }}'>
           <div id='comments'>
-            <div class="" data-ajax="/presentations/{{= it.id}}/comments" data-expiry="86400" id="presentation_{{= it.id}}_comments">
+            <div class="" data-ajax="/presentations/{{= it.id}}/comments" id="presentation_{{= it.id}}_comments">
           </div>
         </div>
       </div>

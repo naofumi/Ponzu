@@ -1,4 +1,4 @@
-<div data-expiry="{{= it.expiry }}" id="presentation_{{= it.presentation_id }}_comments">
+<div id="presentation_{{= it.presentation_id }}_comments">
   <form accept-charset="UTF-8" action="/comments" class="new_comment" data-invalidates-keys="/presentations/{{= it.presentation_id }}/comments" data-ks-insert-response="" data-remote="true" id="new_comment" method="post">
     <div style="margin:0;padding:0;display:inline">
       <input name="utf8" type="hidden" value="✓">
