@@ -76,8 +76,7 @@ json.cache! ["v2", current_conference, I18n.locale,
       json.likes_count all_likes.select{|l| l.is_secret == false}.size
       like ||= @presentation.likes.build # We always need a like object to calculate invalidated_paths
       json.invalidated_paths invalidated_paths(like)
-      comments = @presentation.comments
-      json.comments_count comments.inject(comments.size){|memo, c| memo + c.child_count.to_i}
+      json.comments_count @presentation.comments.count
       json.votable @presentation.votable
 
       author_styles = authors.inject(Hash.new) do |memo, a|
