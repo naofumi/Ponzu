@@ -55,7 +55,8 @@ class CommentsController < ApplicationController
         flash[:notice] = "コメントを作成しました"
         if request.xhr?
           @presentation = @comment.presentation
-          format.html { render :partial => 'presentations/comments' }          
+          format.json { render 'presentations/comments'}
+          # format.html { render :partial => 'presentations/comments' }          
         else
           format.html { redirect_to @comment.presentation}
         end
@@ -97,15 +98,19 @@ class CommentsController < ApplicationController
   def destroy
     @comment = current_user.comments.
                in_conference(current_conference).find(params[:id])
-    @presentation = @comment.presentation
     @comment.destroy
+    
+    if @comment.destroyed?
+      flash[:notice] = 'Comment deleted'
+    else
+      flash[:error] = "Failed to delete comment. #{@comment.errors.full_messages}"
+    end
 
+    @presentation = @comment.presentation
     respond_to do |format|
-      format.html{
-        if request.xhr?
-          render :partial => 'presentations/comments'
-        end
-      }
+      if request.xhr?
+        format.json { render 'presentations/comments'}
+      end
     end
   end
 

@@ -5,12 +5,17 @@
 # parent object set to the original Comment (or the parent_id to the original Comment id).
 class Comment < ActiveRecord::Base
   attr_accessible :presentation_id, :text, :user_id, :parent_id
+  # Placing before_destroy before acts_as_nested_set to ensure that 
+  # child comments aren't destroyed even if validation error occurs.
+  # Not sure if necessary though.
+  before_destroy :dont_destroy_if_has_children
   acts_as_nested_set :counter_cache => :child_count, :order_column => "rgt DESC"
   belongs_to  :presentation, :inverse_of => :comments, :touch => true
   belongs_to  :user, :inverse_of => :comments
   before_validation :fill_presentation_id_from_parent_id
   validates_presence_of :presentation_id, :user_id, :text
   after_create :notify_authors_of_comment
+
   # Deprecate: We won't need it here because we will move 
   # mail body rendering to ActionMailer, where it belongs.
   include ActionView::Helpers::TextHelper
@@ -30,6 +35,13 @@ class Comment < ActiveRecord::Base
   def fill_presentation_id_from_parent_id
     if parent_id && !presentation_id
       self.presentation_id = parent.presentation_id
+    end
+  end
+
+  def dont_destroy_if_has_children
+    unless leaf?
+      errors.add :base, "Cannot delete because this has replies."
+      return false
     end
   end
 

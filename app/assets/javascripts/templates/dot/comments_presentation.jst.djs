@@ -10,10 +10,10 @@
     <button class="comment_submit button icon comment" name="button" type="submit">Submit comment</button>
   </form>
   {{~ it.comments :comment:index}}
-    <div class='comment depth_{{= comment.depth }}' data-container="presentations_{{= it.presentation_id }}_comments" id="comment_{{= comment.id }}">
+    <div class='comment comment_box depth_{{= comment.depth }}' data-container="presentations_{{= it.presentation_id }}_comments" id="comment_{{= comment.id }}">
       <div class='comment_header'>
         <div class='time_box'>
-          {{= comment.created_at }}
+          <span style="margin-right:10px;">{{= comment.created_at }}</span>
           <a href="/comments/{{= comment.id }}/reply" class="button comment icon" data-remote=true data-ks-insert-response=true>Reply</a>
         </div>
         <a href="#!_/users/{{= comment.user_id}}">{{= comment.user_name}}</a>
@@ -24,8 +24,8 @@
       <div style="clear:both">
         {{= comment.text }}
         <div class="close_box">
-          {{? it.user_id == comment.user_id }}
-            <a href="/comments/{{= comment.id }}" data-method="delete" data-remote=true data-confirm="Are you sure you want to delete this comment?" rel="nofollow" data-invalidates-keys="/presentations/{{= it.presentation_id }}/comments" data-ks-insert-response=true>delete comment</a>
+          {{? it.user_id == comment.user_id && comment.is_leaf }}
+            <a href="/comments/{{= comment.id }}" data-method="delete" data-remote=true data-confirm="Are you sure you want to delete this comment?" rel="nofollow" data-invalidates-keys="/presentations/{{= it.presentation_id }}/comments" data-ks-insert-response=true class="button icon trash">delete comment</a>
           {{?}}
         </div>
       </div>
