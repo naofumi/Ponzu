@@ -1,9 +1,10 @@
-json.cache! ['v2', current_conference, I18n.locale, "/comments/", @presentation, !!current_user, can?(:edit, Presentation)] do
+json.user_id current_user && current_user.id
+
+json.cache! ['v2', current_conference, I18n.locale, "/comments/", @presentation] do
   json.renderer do
     json.template "templates/dot/comments_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
   end
-  json.user_id current_user && current_user.id
   json.presentation_id @presentation.id
   authors = @presentation.authors.compact
   json.comments @presentation.comments.order("rgt DESC") do |comment|
