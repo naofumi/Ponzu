@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   end
 
   set_kamishibai_expiry [:show, :batch_request_liked_sessions] => 24 * 60 * 60,
-                        [:social_box, :poster_social_box] => 1 * 60
+                        [:social_box, :poster_social_box] => 1
 
 
   # GET /sessions

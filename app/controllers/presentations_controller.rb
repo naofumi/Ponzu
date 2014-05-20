@@ -26,7 +26,7 @@ class PresentationsController < ApplicationController
   default_menu :sessions
 
   set_kamishibai_expiry [:heading, :show, :related, :batch_request_likes] => 24 * 60 * 60,
-                        [:social_box, :likes, :comments, :my] => 60
+                        [:social_box, :likes, :comments, :my] => 1
 
   respond_to :html, :js
   include Kamishibai::ResponderMixin

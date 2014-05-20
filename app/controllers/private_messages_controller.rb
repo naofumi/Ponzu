@@ -6,7 +6,7 @@ class PrivateMessagesController < ApplicationController
   include Kamishibai::ResponderMixin
   include PrivateMessageHelpers::Helpers
 
-  set_kamishibai_expiry [:threads, :conversation] => 60
+  set_kamishibai_expiry [:threads, :conversation] => 1
 
 
   def new

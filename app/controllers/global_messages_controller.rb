@@ -3,7 +3,7 @@ class GlobalMessagesController < ApplicationController
   respond_to :html, :js
   include Kamishibai::ResponderMixin
 
-  set_kamishibai_expiry [:index] => 5 # Store in cache for 5 seconds
+  set_kamishibai_expiry [:index] => 1 # Store in cache for 1 second
 
   # GET /global_messages
   # GET /global_messages.json

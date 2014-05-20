@@ -3,16 +3,12 @@ class MeetUpsController < ApplicationController
   respond_to :html, :js
   include Kamishibai::ResponderMixin
 
-  set_kamishibai_expiry [:index, :show] => 60
+  set_kamishibai_expiry [:index, :show] => 1
 
   before_filter do |c|
     @menu = :meet_ups
-    # @expiry = 5 * 60 # seconds
   end
 
-  set_kamishibai_expiry [ :index, 
-                          :show] => 5 * 60
-  
   # GET /meet_ups
   # GET /meet_ups.json
   def index

@@ -5,7 +5,7 @@ class LikesController < ApplicationController
   respond_to :html, :js
   include Kamishibai::ResponderMixin
 
-  set_kamishibai_expiry [:my, :my_schedule, :my_votes] => 60
+  set_kamishibai_expiry [:my, :my_schedule, :my_votes] => 1
 
 
   # GET /likes

@@ -2,7 +2,7 @@ class SearchController < ApplicationController
 	respond_to :html, :js
 	include Kamishibai::ResponderMixin
 
-  set_kamishibai_expiry [:index] => 1 * 60 * 60
+  set_kamishibai_expiry [:index] => 1
 
 	before_filter do |c|
 	  @menu = :sessions
