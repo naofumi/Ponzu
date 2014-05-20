@@ -12,5 +12,6 @@
 //
 //= require_tree ../kamishibai/
 //= require_tree ../shims/
+//= require_tree ../templates/helpers
 //= require_tree ../templates/dot
 //= require_tree ../common/
