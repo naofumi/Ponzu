@@ -148,7 +148,8 @@ KSAjaxConstructor = ->
     # TODO: We might have to hand 300, 304 responses (not changed)
     if xhr.status is 200 || window.location.href.indexOf("http") is -1
       return "success"
-    else if xhr.status is 303 || xhr.status is 302
+    else if xhr.status is 303 || xhr.status is 302 || xhr.status is 333
+      # status 333 is custom for Kamishibai. Read Kamishibai::Controller for details
       return "redirect"
     else if xhr.status is 404
       return "404 file not found at url"

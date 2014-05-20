@@ -486,7 +486,17 @@ module Kamishibai
     # calling <tt>kss.redirect</tt> which will change location.href
     # accordingly, and fire a hashChange event.
     #
-    # The status code will be 303.
+    # The status code will be 333.
+    #
+    # The reason we use 333 is because according to the W3C standard
+    # for XMLHttpRequest Level 1, status codes of 301, 302, 303, 307, or 308
+    # are automatically redirect by the browser. This standard is not
+    # followed well, and most browsers don't redirect unless the Location header
+    # is set (that's why in previous versions of Kamishibai, we used 303).
+    # However, IE11 has an issue with this. 
+    # To prevent any futher issues, we will use 333 for Kamishibai js redirect.
+    # 333 is unused as far as I know.
+    # http://www.askapache.com/htaccess/apache-status-code-headers-errordocument.html
     def js_redirect(path) # :doc:
       path = url_for(path) unless path.kind_of? String
       js = "kss.redirect('#{escape_javascript path}');"
@@ -502,6 +512,9 @@ module Kamishibai
       # the server. That's not what we mean by our #js_redirect.
       response.headers.delete("Location")
 
+      # The rationale for using status_code 333 is given above in
+      # the comments for this method.
+      #
       # jQuery automatically redirects whenever the status is
       # 301, 302, 303, 307 and raises an error whenever the final
       # status is not from 200 <= status < 300 or 304.
@@ -512,7 +525,7 @@ module Kamishibai
       # When we send a status:200, the back button
       # will come back to the redirect page instead of 
       # the page before. We can't help this.
-      status_code = uses_jquery? ? 200 : 303
+      status_code = uses_jquery? ? 200 : 333
 
       render :js => js, :status => status_code
     end
