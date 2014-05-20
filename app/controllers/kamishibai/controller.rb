@@ -376,7 +376,7 @@ module Kamishibai
 
     # Sets the csrf_token in a cookie that is accessible
     # from Javascript. Required to use csrf protection
-    # in apps that cache the +head+ tag.
+    # in apps that cache the +head+ tag in the html body like Kamishibai.
     #
     # This is set as a #before_filter in Kamishibai::Controller
     # and you will rarely have to set it yourself.

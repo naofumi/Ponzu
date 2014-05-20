@@ -205,6 +205,10 @@ KSCacheConstructor = ->
 
 
   getExpiryDate = (data)->
+    # We need to get the expiry before we have a chance to 
+    # parse JSON. Therefore, we use regular expressions to get
+    # the expiry info. This should work with both HTML responses
+    # and JSON responses.
     match = data.match(/data-expiry\s*=\s*['"]?(\d*)['"]?/) || 
             data.match(/\"expiry\"\s*:\s*(\d*)/)
     if match && match[1]

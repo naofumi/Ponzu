@@ -144,7 +144,7 @@ window.KSDomConstructor = () ->
   replaceInnerHtml = (domElement, dslElement) ->
     # Any attributes set on the page will be preserved and not
     # replaced with the Ajax response contents.
-    console.log('replacing DOM element id ' + domElement.id + ' with ajax data')   
+    console.log('replacing inner content of DOM element id ' + domElement.id + ' with ajax data')   
     domElement.innerHTML = dslElement.innerHTML
     return domElement
 

@@ -35,6 +35,10 @@ KSCacheVersionConstructor = ->
       KSCookie.create('cache_version', currentVersion, 360) # 360 days
 
   resetCache = ->
+    # We probably need a destructive cache clear
+    # and a invalidation one.
+    # We use the destructive one when the html and JS has changed.
+    # We use the invalidation when only data has changed.
     KSSqlCache.clear()
     localStorage.clear()
 
