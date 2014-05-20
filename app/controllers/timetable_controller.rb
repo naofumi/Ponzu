@@ -77,7 +77,8 @@ class TimetableController < ApplicationController
                  where('presentations.starts_at' => @show_date.beginning_of_day..@show_date.end_of_day).
                  timetableable
     else
-      @likes = []
+      render nothing: true
+      return
     end
 
     respond_with @likes

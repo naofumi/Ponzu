@@ -85,7 +85,8 @@ class PosterSessionsController < ApplicationController
       @schedules = current_user.schedules.includes(:presentation).
                                where("presentations.session_id" => @sessions)
     else
-      @likes, @schedules = [], []
+      render nothing:true
+      return
     end
 
     respond_with @sessions
@@ -107,8 +108,8 @@ class PosterSessionsController < ApplicationController
       @schedules = current_user && current_user.schedules.includes(:presentation).
                where("presentations.session_id" => @sessions)
     else
-      @likes = []
-      @schedules = []
+      render nothing: true
+      return
     end
 
     respond_with @sessions

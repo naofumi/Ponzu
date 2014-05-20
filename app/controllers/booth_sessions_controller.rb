@@ -59,7 +59,8 @@ class BoothSessionsController < ApplicationController
       @schedules = current_user.schedules.includes(:presentation).
                                where("presentations.session_id" => @sessions)
     else
-      @likes, @schedules = [], []
+      render nothing: true
+      return
     end
     device_selective_render :action => 'poster_sessions/list_highlights'
   end
