@@ -128,9 +128,13 @@ KSCompositorConstructor = () ->
   # 4. Reset transition selector.
   # 5. Remove unnecessary nodes from DOM
   cleanUpAfterShowElement = (toElement, callback) ->
-    setTimeout -> 
-      KSPageState.revert()
-    , 0
+    # Removed timeout because on iPhone 4,
+    # you could see it scroll up and then back down
+    # and it was slow.
+    KSPageState.revert()
+    # setTimeout -> 
+    #   KSPageState.revert()
+    # , 0
     KSTransitionSelector.resetEffect();
     removeUnecessaryNodes(toElement)
     callback && callback();
