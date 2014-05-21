@@ -1,7 +1,9 @@
 CACHE MANIFEST
-# In production, we version the manifest by time.
-# We currently have one version per day.
+# In development, we version the manifest by time so that it is always fresh.
+# In production, we currently use the path so that the release directory set by capistrano
+# will be used. As a result, the manifest will be reset each time we deploy a new version.
 # Version: <%= (Rails.env == "production" || true) ? File.dirname(__FILE__) : Time.now %>
+# Version tag two:
 # iPhone does not respect the version. Must manually request reload.
 # <%= render :partial => "manifest_version_snippet" %>
 

@@ -37,11 +37,17 @@ class DashboardController < ApplicationController
   #
   # TODO: Move this to its own controller
   def cache_manifest
-    headers['Cache-Control'] = "max-age=0, no-cache, no-store, must-revalidate"
-    headers['Pragma'] = "no-cache"
-    headers['Expires'] = "Wed, 11 Jan 1984 05:00:00 GMT"
-    headers['Content-Type'] = "text/cache-manifest"
-    render :layout => false
+    if set_manifest
+      headers['Cache-Control'] = "max-age=0, no-cache, no-store, must-revalidate"
+      headers['Pragma'] = "no-cache"
+      headers['Expires'] = "Wed, 11 Jan 1984 05:00:00 GMT"
+      headers['Content-Type'] = "text/cache-manifest"
+      render :layout => false
+    else
+      # A 404 will mark the appcache as obsolete and
+      # delete the appcache.
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   def index
