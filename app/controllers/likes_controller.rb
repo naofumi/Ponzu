@@ -47,6 +47,10 @@ class LikesController < ApplicationController
                timetableable.
                presentation_on(@date)
     end
+    respond_to do |format|
+      format.json {}
+      # format.html {}
+    end
   end
 
   def my_schedule

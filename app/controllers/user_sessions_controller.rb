@@ -1,6 +1,6 @@
 class UserSessionsController < ApplicationController
   authorize_resource :except => [:new, :create, :switch]
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
   before_filter :ignore_default_kamishibai_hash_tag
   
@@ -31,6 +31,7 @@ class UserSessionsController < ApplicationController
     # in the current case, we have to rerun it because
     # we have changed the user_id in this action.
     # user_id_in_cookie(@user_session.record)
+
     respond_with @user_session, :location => "/"
 
     # if @user_session.save
