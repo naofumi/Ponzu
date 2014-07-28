@@ -13,9 +13,11 @@ json.cache! ['v1', current_conference, I18n.locale,
   json.head_title strip_tags(@session.title)
   json.poster_timetable_path @session.path(controller)
   json.starts_at l(@session.starts_at, :format => :month_day_time)
+  json.starts_at_raw @session.starts_at
   json.ends_at (@session.starts_at.beginning_of_day == @session.ends_at.beginning_of_day ? 
                 @session.ends_at.strftime("%H:%M") : 
                 l(@session.ends_at, :format => :month_day_time))
+  json.ends_at_raw @session.ends_at
   json.organizers @session.organizers
   json.paginator ks_will_paginate(@presentations)
   json.type @session.type && @session.type.parameterize.underscore
