@@ -63,6 +63,13 @@ class PresentationsController < ApplicationController
     end
   end
 
+  def batch
+    @presentations = Presentation.in_conference(current_conference) #.limit(100)
+    @presentations.map{|p| restrict_disclosure(p)}
+    @ads = []
+
+  end
+
   def heading
     @presentation = Presentation.in_conference(current_conference).
                     find(params[:id])

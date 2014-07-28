@@ -189,6 +189,7 @@ Rails.application.routes.draw do
       get 'my'
       post 'sort'
       post 'batch_request_likes'
+      get 'batch'
     end
   end
 
