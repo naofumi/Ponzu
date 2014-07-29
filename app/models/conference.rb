@@ -31,7 +31,10 @@ class Conference < ActiveRecord::Base
 
   def initialize_conference
     begin
-      self.delegate = "Conference::#{module_name}".constantize.new
+      # module_name will not exist for new conference.
+      if module_name
+        self.delegate = "Conference::#{module_name}".constantize.new
+      end
     rescue NameError
       self.delegate = nil
     end
