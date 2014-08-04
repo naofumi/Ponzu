@@ -12,6 +12,4 @@
       * Select Affiliations for the author. Editing the affiliations can be done on the Submission page.
     = render 'form'
 
-    = link_to 'Show', @authorship
-    |
-    = link_to 'Delete', @authorship, :method => :delete, :confirm => "!!! DELETE !!!", :remote => true
+    = link_to 'Delete authorship', @authorship, :method => :delete, :confirm => "Are you sure you want to delete this authorship?", :remote => true

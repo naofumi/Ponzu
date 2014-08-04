@@ -53,7 +53,7 @@ class SubmissionsController < ApplicationController
     @submission = Submission.new(params[:submission])
     verify_ownership(@submission)
     @submission.conference_confirm = current_conference
-    success = false
+    # success = false
     Submission.transaction do
       begin
         @submission.save!
@@ -64,15 +64,15 @@ class SubmissionsController < ApplicationController
                                                :submission_id => @submission.id,
                                                :starts_at => session.starts_at)
         end    
-        success = true
+        # success = true
         flash[:notice] = "Submission was successfully created."
       rescue
-        success = false
+        # success = false
         flash[:error] = "Failed to create submission."
       end
     end
 
-    respond_with @submission
+    respond_with @submission, :success_action => :back
   end
 
   # PUT /submissions/1
@@ -82,15 +82,27 @@ class SubmissionsController < ApplicationController
                              find(params[:id])
     verify_ownership(@submission)
 
-    respond_to do |format|
-      if @submission.update_attributes(params[:submission])
-        flash[:notice] = "Submission was successfully updated."
-        format.html { render action: "edit" }
-      else
-        flash[:error] = "Failed to update Submission."
-        format.html { render action: "edit" }
-      end
+    if @submission.update_attributes(params[:submission])
+      flash[:notice] = "Submission was successfully updated."
+    else
+      flash[:error] = "Failed to update Submission."
     end
+
+    respond_with @submission, :success_action => :back
+  end
+
+  def update_institutions
+    @submission = Submission.in_conference(current_conference).
+                             find(params[:id])
+    verify_ownership(@submission)
+
+    if @submission.update_attributes(params[:submission])
+      flash[:notice] = "Submission was successfully updated."
+    else
+      flash[:error] = "Failed to update Submission."
+    end
+
+    respond_with @submission, :success_action => :edit
   end
 
   # DELETE /submissions/1

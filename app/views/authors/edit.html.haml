@@ -9,7 +9,7 @@
       |
       = link_to 'Authors list', ksp(authors_path), :target => "_author_list"
       |
-      = link_to 'delete', author_path(@author), :method => :delete, :remote => true, :confirm => "Are you sure?"
+      = link_to 'delete', author_path(@author), :method => :delete, :remote => true, :confirm => "Are you sure? Deleting the Author will also delete associated Authorships"
             
     %fieldset
       %legend 所属情報のまとめ

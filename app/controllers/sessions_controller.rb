@@ -192,7 +192,7 @@ class SessionsController < ApplicationController
               :success => 'Session was successfully created.',
               :fail => 'Failed to create Session.'
 
-    respond_with @session
+    respond_with @session, :success_action => :back
   end
 
   # PUT /sessions/1
@@ -207,9 +207,7 @@ class SessionsController < ApplicationController
               :success => 'Session was successfully updated.',
               :fail => 'Failed to update Session.'
 
-    respond_with @session do |format| 
-      format.html{ render action: 'edit'}
-    end
+    respond_with @session, :success_action => :back
   end
 
   # DELETE /sessions/1

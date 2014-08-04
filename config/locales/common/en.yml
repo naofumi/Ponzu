@@ -146,6 +146,8 @@ en:
         label: "chairs"
     new:
       title: "New session"
+    edit:
+      title: "Edit session"
   submissions:
     show:
       title: "Show Submission"

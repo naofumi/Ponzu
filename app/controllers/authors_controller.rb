@@ -72,18 +72,12 @@ class AuthorsController < ApplicationController
     @author = Author.new(params[:author])
     @author.conference_confirm = current_conference
 
-    respond_to do |format|
-      if @author.save
-        flash[:notice] = "Author was successfully created"
-        if request.xhr?
-          format.js {js_redirect ksp(edit_author_path @author)}
-        else
-          format.html { redirect_to @author}
-        end
-      else
-        format.html { render action: "new" }
-      end
+    if @author.save
+      flash[:notice] = "Author was successfully created"
+    else
+      flash[:error] = "Failed to create Author"
     end
+    respond_with @author, :success_action => :back
   end
 
   # PUT /authors/1
@@ -92,27 +86,25 @@ class AuthorsController < ApplicationController
     @author = Author.find(params[:id])
     @author.conference_confirm = current_conference
 
-    respond_to do |format|
-      if @author.update_attributes(params[:author])
-        flash[:notice] = 'Author was successfully updated.'
-        if request.xhr?
-          format.html { render action: "edit"}
-        else
-          format.html { redirect_to @author }
-        end
-      else
-        format.html { render action: "edit" }
-      end
+    if @author.update_attributes(params[:author])
+      flash[:notice] = 'Author was successfully updated.'
+    else
+      flash[:error] = "Failed to update Author"
     end
+    respond_with @author, :success_action => :back
   end
 
   # DELETE /authors/1
   # DELETE /authors/1.json
   def destroy
     @author = Author.in_conference(current_conference).find(params[:id])
-    @author.destroy
+    if @author.destroy
+      flash[:notice] = "Author was successfully destroyed."
+    else
+      flash[:error] = "Failed to destroy Author #{@author.errors.full_messages}"
+    end
 
-    respond_with @author
+    respond_with @author, :success_action => :back, :action => :edit
   end
 
   def replace

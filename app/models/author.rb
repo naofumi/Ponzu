@@ -33,6 +33,10 @@ class Author < ActiveRecord::Base
 
   attr_accessor :initial_submission, :initial_authorship
 
+  before_validation :assign_initial_submission
+  before_validation :assign_initial_authorship
+  before_destroy :confirm_absence_of_authorships_before_destroy
+
   has_many  :users, :inverse_of => :author
   has_many  :authorships, :inverse_of => :author, :dependent => :destroy
   has_many  :submissions, :through => :authorships, :inverse_of => :authors
@@ -42,8 +46,6 @@ class Author < ActiveRecord::Base
   validate :either_en_name_or_jp_name_must_be_present
   validate :has_at_least_one_submission
 
-  before_validation :assign_initial_submission
-  before_validation :assign_initial_authorship
 
   include ConferenceRefer
   validates_conference_identity :authorships, :submissions#, :users, :presentations
@@ -240,6 +242,13 @@ class Author < ActiveRecord::Base
   def assign_initial_authorship
     if !initial_authorship.blank? && submissions.empty?
       self.authorships = [Authorship.find(initial_authorship)]
+    end
+  end
+
+  def confirm_absence_of_authorships_before_destroy
+    if self.authorships.size > 0
+      errors.add(:authorships, "must be empty before destroy")
+      return false
     end
   end
 end

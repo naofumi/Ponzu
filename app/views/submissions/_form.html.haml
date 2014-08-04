@@ -47,8 +47,8 @@
     %br/
     - 8.times do |i|
       = text_field_tag "submission[keywords][]", 
-                       @submission.keywords && @submission.keywords[i]
-      %br/
+                       @submission.keywords && @submission.keywords[i],
+                       style: "width: 200px"
   .field
     = f.label :corresponding_email
     %br/

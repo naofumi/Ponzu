@@ -5,42 +5,5 @@
   .panel
     %h1 Editing presentation
 
-    %fieldset
-      %legend Session basic information
-      = render 'form'
+    = render 'form'
 
-      = link_to 'Show', ksp(@presentation)
-      |
-      = link_to 'Back', ksp(presentations_path)
-
-    / %fieldset
-    /   %legend Presentations
-    /   :markdown
-    /     ### Usage
-    /       * Enter presentation numbers and times
-    /       * Drag to reorder presentations.
-    /       * Drag and drop a Session or Presentation
-    /         from another window to add a presentation
-    /       * To create a new presentation, you have to first create a new Submission.
-    /   = link_to "[new Submission linking to this Session]",
-    /             ksp(:new_submission_path, :session_id => @session)
-    /   |
-    /   = link_to "[reorder presentations by number]", 
-    /             order_presentations_by_number_session_path(@session),
-    /             :method => :put, :remote => :true, :data => {'ks-insert-response' => true}
-    /   |
-    /   = form_tag set_presentation_duration_session_path(@session),
-    /              :method => :put, :remote => :true, 
-    /              :data => {'ks-insert-response' => true} do
-    /     duration:
-    /     = number_field_tag(:duration, nil)
-    /     = submit_tag 'set all times'
-    /   %br/
-    /   = render :partial => "presentations/list", 
-    /            :locals => {:presentations => @session.presentations}
-    /   #new_presentation_drop.dropbox{:style => "border: 1px  dotted #444;min-height: 50px", 
-    /                          :data => {:action => "#{presentations_path()}", 
-    /                                    :method => "post",
-    /                                    :params => "presentation[session_id]=#{@session.id}",
-    /                                    :"ks-insert-response" => 'true'}}
-    /     Drop Submission or Presentation here from a different window to add to this Session

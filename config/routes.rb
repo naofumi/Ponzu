@@ -17,7 +17,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :submissions
+  resources :submissions do
+    member do
+      put :update_institutions
+    end
+  end
 
   resources :registrants do
     member do

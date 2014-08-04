@@ -86,7 +86,7 @@ KSSortableConstructor = () ->
       target = event.target
       sortables = target.querySelectorAll('[draggable]')
       sortable_ids = (idToNumbers sortable.id for sortable in sortables)
-      KSAjax.ajax 
+      KSCache.cachedAjax 
         method: 'post'
         url: sortableElement.getAttribute('data-action')
         callbackContext: sortableElement

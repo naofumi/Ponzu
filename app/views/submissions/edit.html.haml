@@ -5,7 +5,7 @@
     %h1 Editing submission
 
     %fieldset
-      %legend Submission will be presented at
+      %legend Submission will be presented
       %ul
         - @submission.presentations.each do |p|
           = render :partial => 'presentations/single_line_edit', :locals => {:p => p}
@@ -30,15 +30,16 @@
                 Drop authors here to create new Authorships
               = link_to "Create new author for this submission",
                         ksp(new_author_path(:initial_submission => @submission))
-            %td
-              - @submission.institutions.each_with_index do |inst, i|
-                = content_tag :div, "#{i + 1}) #{inst.name}", :class => "color_#{i}"
-              %div
-                = link_to "edit institutions", "Javascript:void(0)", :onclick => "kss.show(document.getElementById('institutions_form'));return false;"
-                :markdown
-                  Institutions are stored in JSON format. 
+            %td{style:"vertical-align:top"}
+              #institutions_list
+                %ol
+                  - @submission.institutions.each_with_index do |inst, i|
+                    = content_tag :li, "#{inst.en_name}<br />#{inst.jp_name}".html_safe, :class => "color_#{i}"
+                %div
+                  = link_to "edit institutions", "Javascript:void(0)", :onclick => "kss.show(document.getElementById('institutions_form'));kss.hide(document.getElementById('institutions_list'));return false;"
               #institutions_form{:style => "display:none"}
                 = form_for(@submission,
+                   :url => [:update_institutions, @submission],
                    :html => {:data => { :remote => true,
                              :ks_insert_response => true}}) do |f|
                   .field
@@ -46,16 +47,21 @@
                       %div
                         = i + 1
                         )
+                        %br
                         En name: 
                         = text_field_tag "submission[institutions][][en_name]", inst.en_name
                         %br/
                         Jp name:
                         = text_field_tag "submission[institutions][][jp_name]", inst.jp_name
-                    En name: 
-                    = text_field_tag "submission[institutions][][en_name]", ""
-                    %br/
-                    Jp name:
-                    = text_field_tag "submission[institutions][][jp_name]", ""
+                    %div
+                      = @submission.institutions.size + 1
+                      )
+                      %br
+                      En name: 
+                      = text_field_tag "submission[institutions][][en_name]", ""
+                      %br/
+                      Jp name:
+                      = text_field_tag "submission[institutions][][jp_name]", ""
                   .actions
                     = f.submit
 

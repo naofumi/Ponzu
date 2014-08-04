@@ -1,4 +1,28 @@
 #presentations_list.sortable{:data => {:action => "/presentations/sort", :"ks-insert-response" => 'true'}}
   - presentations.each do |p|
     %div{:draggable => "true", :id => "presentations_#{p.id}"}
-      = render :partial => 'presentations/edit', :locals => {:presentation => p}
+      = "#{p.position.to_i} ⇅"
+      Presentation
+      = p.number.blank? ? "No number" : p.number
+      from Submission
+      = link_to "\"#{p.title}\"", ksp(:edit_submission_path, p.submission)
+      %div{style:"padding-left:30px"}
+        %div{style:"border:solid 1px #888"}
+          %table
+            %tr
+              %th Type: 
+              %td #{p.type}
+              %th Starts at:
+              %td #{p.starts_at.to_formatted_s(:short)}
+            %tr
+              %th Duration:
+              %td
+                = p.respond_to?(:duration) && p.duration ? "#{(p.duration/60).to_i} min." : "-"
+              %th Ad Category:
+              %td #{p.ad_category}
+            %tr
+              %th Status:
+              %td
+                = p.cancel ? "Cancelled!!!!" : ""
+          %div{style:"text-align:right"}
+            = link_to "[edit]", ksp(edit_presentation_path(p))

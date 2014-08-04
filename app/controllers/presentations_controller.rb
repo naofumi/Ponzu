@@ -120,18 +120,17 @@ class PresentationsController < ApplicationController
     @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
     @presentation.type = type_name.constantize.to_s #constantize will effectively sanitize the :type param
-    set_flash @presentation.update_attributes(params[:presentation]),
-              :success => "Presentation was successfully updated",
-              :fail => "Presentation failed to update"
+    # set_flash @presentation.update_attributes(params[:presentation]),
+    #           :success => "Presentation was successfully updated",
+    #           :fail => "Presentation failed to update"
 
-    # We can't use #respond_with here because the response is a partial.
-    respond_to do |format|
-      if @presentation.errors.empty?
-        format.html { render :partial => "edit", :locals => {:presentation => @presentation} }
-      else
-        format.html { render :partial => 'edit', :locals => {:presentation => @presentation} }
-      end
+    if @presentation.update_attributes(params[:presentation])
+      flash[:notice] = "Presentation was successfully updated"
+    else 
+      flash[:error] = "Presentation failed to update"
     end
+
+    respond_with @presentation, :success_action => :back
   end
 
   def edit
@@ -217,12 +216,18 @@ class PresentationsController < ApplicationController
                                            find(params[:presentations_list])
     @presentations = params[:presentations_list].map{|p_id| 
                        unordered_presentations.detect{|up| up.id == p_id.to_i}}
-    Presentation.transaction do
-      @presentations.each_with_index do |p, i|
-        p.position = i
-        p.save!
+    begin
+      Presentation.transaction do
+        @presentations.each_with_index do |p, i|
+          p.position = i + 1
+          p.save!
+        end
       end
+      flash[:notice] = "Reordering succeeded"
+    rescue
+      flash[:error] = "Reordering failed"
     end
+
     respond_to do |format|
       format.html { render :partial => "list", :locals => {:presentations => @presentations}}
     end

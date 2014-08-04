@@ -2,7 +2,13 @@
   - authorships.each do |as|
     %div{:draggable => "true", :id => "authorship_#{as.id}"}
       ⇅
-      = as.name
+      %div{style:"display:inline-block;width:110px"}
+        Authorship:
+        = "◯" if as.is_presenting_author
+      = link_to "#{as.en_name} | #{as.jp_name}", ksp(:edit_authorship_path, as)
       != "(" + as.affiliations.map{|aff| content_tag :span, "#{aff}", 
                                          :class => "color_#{aff - 1}"}.join(', ') + ")"
-      = link_to "edit", ksp(:edit_authorship_path, as)
+      %div{style:"padding-left:20px"}
+        %div{style:"display:inline-block;width:110px"}
+          Author:
+        = link_to "#{as.author.en_name} | #{as.author.jp_name}", ksp(:edit_author_path, as.author)

@@ -71,7 +71,7 @@ class Session < ActiveRecord::Base
   def order_presentations_by_number
     Presentation.transaction do
       Presentation.where(:session_id => self.id).order(:number).each.with_index do |p, i|
-        errors.add(:base, p.errors.full_messages.join(', ')) unless p.update_attribute(:position, i)
+        errors.add(:base, p.errors.full_messages.join(', ')) unless p.update_attribute(:position, i + 1)
       end
     end
   end

@@ -65,24 +65,30 @@ class AuthorshipsController < ApplicationController
     @authorship = Authorship.in_conference(current_conference).find(params[:id])
     @authorship.conference_confirm = current_conference
 
-    respond_to do |format|
+    # respond_to do |format|
       if @authorship.update_attributes(params[:authorship])
         flash[:notice] = 'Authorship was successfully updated.'
-        format.html { render action: "edit" }
+        # format.html { render action: "edit" }
         # format.html { redirect_to @authorship, notice: 'Authorship was successfully updated.' }
       else
-        format.html { render action: "edit" }
+        flash[:error] = 'Failed to update Authorship.'
+        # format.html { render action: "edit" }
       end
-    end
+    # end
+    respond_with @authorship, :success_action => :back
   end
 
   # DELETE /authorships/1
   # DELETE /authorships/1.json
   def destroy
     @authorship = Authorship.in_conference(current_conference).find(params[:id])
-    @authorship.destroy
+    if @authorship.destroy
+      flash[:notice] = "Authorship was successfully destroyed."
+    else
+      flash[:error] = "Failed to destroy Authorship #{@authorship.errors.full_messages}"
+    end
 
-    respond_with @authorship
+    respond_with @authorship, :success_action => :back, :action => :edit
   end
 
   # POST /authorships

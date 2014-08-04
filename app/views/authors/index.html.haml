@@ -1,4 +1,4 @@
-= ponzu_frame :id_suffix => "page_#{params[:page] || 1}" do
+= ponzu_frame do
   .panel
     %h1 Listing authors
 
@@ -23,11 +23,5 @@
           %td= author.en_name
           %td
             = link_to 'Edit', ksp(edit_author_path(author))
-            |
-            = link_to 'Destroy', author, 
-                      confirm: 'Are you sure?', 
-                      method: :delete,
-                      data: {ks_insert_response: 'true'}
-
     = ks_will_paginate
 

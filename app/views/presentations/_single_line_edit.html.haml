@@ -1,8 +1,8 @@
 %li{:id => "single_line_edit_presentation_#{p}"}
-  = link_to "#{p.session.number} #{p.session.title}", ksp(:session_path, p.session)
-  = " as ##{p.number} on #{l(p.starts_at, :format => :month_day_time)}"
+  = link_to "Session #{p.session.number}: #{p.session.title}", ksp(:edit_session_path, p.session)
+  = " as ##{p.number} starting at #{l(p.starts_at, :format => :month_day_time)}"
   = " in Ad category '#{p.ad_category}'" if p.ad_category
-  = link_to "[show]", ksp(:presentation_path, p)
+  = link_to "[preview]", ksp(:presentation_path, p)
   - if can? :manage, Presentation
     = link_to "[Edit presentation]", ksp(:edit_presentation_path, p)
   - if p.type == 'Presentation::Ad' && can?(:change_ad_category, Presentation)

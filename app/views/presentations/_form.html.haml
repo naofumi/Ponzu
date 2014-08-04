@@ -1,0 +1,43 @@
+= form_for(@presentation, :remote => true, 
+                            :html => { :id => "edit_presentation_#{@presentation.id}_page",
+                                       :data => {'ks-insert-response' => true,
+                                                 "invalidates-keys" => invalidated_paths(@presentation)}}) do |f|
+  = render :partial => "layouts/error_messages", :locals => {:target => @presentation}
+  %table
+    %tr
+      %th Session: 
+      %td= link_to @presentation.session.title, ksp(:edit_session_path, @presentation.session)
+    %tr
+      %th Submission:
+      %td= link_to @presentation.submission.title, ksp(:edit_submission_path, @presentation.submission)
+    %tr
+      %th= f.label :type
+      %td= f.select :type, Presentation.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true
+    %tr
+      %th= f.label :date
+      %td= f.datetime_select :starts_at
+    %tr
+      %th= f.label :Duration
+      %td= @presentation.respond_to?(:duration) && @presentation.duration ? "#{(@presentation.duration/60).to_i} min." : "-"
+    %tr
+      %th= f.label :ad_category
+      %td= f.select(:ad_category, Session.in_conference(current_conference).collect{|e| [e.ad_category, e.ad_category] unless e.ad_category.blank?}.compact.uniq, :include_blank => true)
+    %tr
+      %th Booth Number
+      %td= f.text_field :booth_num
+    %tr
+      %th Status
+      %td
+        = f.check_box :cancel
+        = f.label :cancel
+  %div{style:"text-align:right"}
+    = f.submit
+    | 
+    = link_to "[preview]", ksp(presentation_path(@presentation))
+    | 
+    = link_to "[delete]", 
+              presentation_path(@presentation), 
+              :remote => true, 
+              :method => :delete, 
+              :data => {:ks_insert_response => 'true'},
+              :confirm => "Deleting will remove from Session but the Submission will remain."
