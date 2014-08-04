@@ -498,8 +498,12 @@ module Kamishibai
     # 333 is unused as far as I know.
     # http://www.askapache.com/htaccess/apache-status-code-headers-errordocument.html
     def js_redirect(path) # :doc:
-      path = url_for(path) unless path.kind_of? String
-      js = "kss.redirect('#{escape_javascript path}');"
+      if (path == :back) 
+        js = "window.history.back()"
+      else
+        path = url_for(path) unless path.kind_of? String
+        js = "kss.redirect('#{escape_javascript path}');"
+      end
       # We specifically set content_type because we
       # often use #js_redirect inside of a MIME block
       # that expects HTML.

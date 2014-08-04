@@ -396,7 +396,7 @@ module Kamishibai
       #
       # This is not how #render handles mimes. #render checks for the existence of the template
       # file for :html, but if it can't find one, then it looks for the next candidate in 
-      # controller.formats. #render_with calls #render, but it can't do it's magic because
+      # controller.formats. #render_with calls #render, but it can't do its magic because
       # controller.formats has been reduced to only the first format candidate.
       #
       # The reason for doing this is probably because in the #to_format method, they use
@@ -453,10 +453,16 @@ module Kamishibai
       end
     end
 
-    # Modified navigation_behavior to respond to the :success_action option
-    # if the request is xhr.
-    # :success_action will trigger the POST and render pattern instead
-    # of the POST and redirect pattern.
+    # In the default Responder, an error will render the default_action
+    # and a success will redirect_to the navigation_location (which
+    # can be set with the :location). 
+    #
+    # For AJAX requests, we often want to
+    # render instead of redirect. For this, we use the :success_action
+    # option. 
+    #
+    # Additionally, we often want to redirect back on success.
+    # This is done with :success_action => :back
     def navigation_behavior(error)
       if get?
         raise error
@@ -464,7 +470,13 @@ module Kamishibai
         render :action => default_action
       else
         if options[:success_action] && @controller.request.xhr?
-          render :action => options[:success_action]
+          if options[:success_action] == :back
+            # Use #send because #js_redirect is private
+            # controller.js_redirect :back
+            controller.send :js_redirect, :back
+          else
+            render :action => options[:success_action]
+          end
         else
           redirect_to navigation_location
         end
