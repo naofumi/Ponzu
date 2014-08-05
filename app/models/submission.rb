@@ -5,6 +5,8 @@ class Submission < ActiveRecord::Base
                   :main_author_id, :presenting_author_id, :submission_number,
                   :institutions, :keywords, :type, :external_link
 
+  before_destroy :confirm_absence_of_presentations_before_destroy
+
   has_many  :presentations, :inverse_of => :submission, :dependent => :destroy
 
 
@@ -91,6 +93,13 @@ class Submission < ActiveRecord::Base
               }.compact
     else
       return institutions_as_params
+    end
+  end
+
+  def confirm_absence_of_presentations_before_destroy
+    if self.presentations.size > 0
+      errors.add(:presentations, " must be empty before destroy")
+      return false
     end
   end
 end

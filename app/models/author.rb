@@ -247,7 +247,7 @@ class Author < ActiveRecord::Base
 
   def confirm_absence_of_authorships_before_destroy
     if self.authorships.size > 0
-      errors.add(:authorships, "must be empty before destroy")
+      errors.add(:authorships, " must be empty before destroy")
       return false
     end
   end
