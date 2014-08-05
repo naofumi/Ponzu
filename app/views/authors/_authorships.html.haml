@@ -5,19 +5,27 @@
     - @other_highlight_authors = author_appearances.authors_more_than_once(:excluing => @author)
 
   - authorships.each.with_index do |as, i|
-    = link_to ksp(:edit_authorship_path, as), :style => "border-bottom: dotted 2px #888;display:block;padding:10px 0;", :draggable => 'true' do
-      - s = as.submission
+    - s = as.submission
+    %div{:style => "border-bottom: dotted 2px #888;display:block;padding:10px 0;", :draggable => 'true'}
       %div
         %div
-          - s.presentations.each do |p|
-            %div    
-              = p.number
-              = p.starts_at && l(p.starts_at, :format => :month_day_hour)
-        %div
-          .title
-            = sanitize(s.title)
-          .authors
-            = authors_list(s, [@author], @other_highlight_authors, false, true, true)
-          .institutions
-            = render :partial => 'submissions/institution_list', 
-                       :locals => {:submission => s}
+          = link_to "[edit authorship]", ksp(:edit_authorship_path, as)
+          |
+          = link_to "[edit submission]", ksp(:edit_submission_path, s)
+        %b.title
+          = sanitize(s.title)
+        .authors
+          = authors_list(s, [@author], @other_highlight_authors, false, true, true)
+        .institutions
+          = render :partial => 'submissions/institution_list', 
+                     :locals => {:submission => s}
+      %b
+        Presented as;
+      %ul
+        - s.presentations.each do |p|
+          %li    
+            = p.number
+            in session
+            = "\"#{p.session.title}\""
+            on
+            = p.starts_at && l(p.starts_at, :format => :month_day_hour)

@@ -11,133 +11,150 @@
     </div>
   <% end %>
 
-
-  <% author = @user.author %>
-  <table>
-    <tr>
-      <th></th>
-      <th style="width:100px">User</th>
-      <th>Author</th>
-    </tr>
-    <tr>
-      <th>Jp name</th>
-      <td><%= @user.jp_name %></td>
-      <td><%= author && author.jp_name %></td>
-    </tr>
-    <tr>
-      <th>En name</th>
-      <td><%= @user.en_name %></td>
-      <td><%= author && author.en_name %></td>
-    </tr>
-    <tr>
-      <th>En aff.</th>
-      <td><%= @user.en_affiliation %></td>
-      <td rowspan="2">
-        <% author.all_unique_affiliations.each do |aff| %>
-          <%= aff %><br />
-        <% end if author %>
-        <div class="field">
-          <%= f.label :author_id %>: 
-          <%= f.text_field :author_id, :style => "width: 500px" %>
-          <%= link_to "link", ksp(author), :target => "author" %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>Jp aff.</th>
-      <td><%= @user.jp_affiliation %></td>
-    </tr>
-  </table>
-
-  <h3>Other author candidates</h3>
-  <% if Author.respond_to? :nayose_extreme_find_all_by %>
-    <% en_candidates = Author.nayose_extreme_find_all_by(:en_name, @user.en_name, current_conference) %>
-    <% jp_candidates = Author.nayose_extreme_find_all_by(:en_name, @user.en_name, current_conference) %>
-    <% (en_candidates + jp_candidates - [author]).uniq.each do |author| %>
-      <%= link_to "#{author.en_name} (#{author.jp_name})", ksp(author), :target => "author" %>
-      <br>
-    <% end %>
-  <% else %>
-    Author.nayose_extreme_find_all_by not implemented.
-    Maybe Nayose::Finders wasn't included into Author class.
-  <% end %>
-
-  <div class="field">
-    <%= f.label :jp_name %><br />
-    <%= f.text_field :jp_name %>
-  </div>
-  <div class="field">
-    <%= f.label :en_name %><br />
-    <%= f.text_field :en_name %>
-  </div>
-  <div class="field">
-    <%= f.label :jp_affiliation %><br />
-    <%= f.text_field :jp_affiliation %>
-  </div>
-  <div class="field">
-    <%= f.label :en_affiliation %><br />
-    <%= f.text_field :en_affiliation %>
-  </div>
-  <div class="field">
-    <%= f.label :email, "学会期間中の連絡用email (本システムからの通知はこっちに送られます)" %><br />
-    <%= f.text_field :email %>
-  </div>
-  パスワードを変更するときのみ入力
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
-  </div>
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation %>
-  </div>
-  <% if can? :whitelist, User %>
+  <fieldset>
+    <legend>Associated Author vs. User infomation</legend>
+    <% author = @user.author %>
     <div class="field">
-      <%= f.label :whitelisted %><br />
-      <%= f.text_field :whitelisted %>
+      <%= f.label :author_id %>: 
+      <%= f.text_field :author_id, :style => "width: 500px" %>
+      <%= link_to "link", ksp(author), :target => "author" %>
     </div>
-    <div class="field">
-      <%= f.label :whitelisted_by %><br />
-      <%= f.text_field :whitelisted_by %>
-    </div>
-    <div class="field">
-      <%= f.label :whitelisted_at %><br />
-      <%= f.text_field :whitelisted_at %>
-    </div>
-  <% end %>
-  <div class="field">
-    <%= f.label :twitter_id %><br />
-    <%= f.text_field :twitter_id %>
-  </div>
-  <div class="field">
-    <%= f.label :facebook_id %><br />
-    <%= f.text_field :facebook_id %>
-  </div>
-  <div class="field">
-    <%= f.label :linkedin_id %><br />
-    <%= f.text_field :linkedin_id %>
-  </div>
-  <div class="field">
-    <% if can? :manage, @user %>
-      <!-- dummy hidden field to handle cases where none are checked -->
-      <%= hidden_field_tag "user[roles][]", "dummy" %>
-      <%= f.label :roles %><br />
-      <p>
-        <% for role in User::ROLES %>
-          <div>
-            <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
-            <%= role %>
+    <table>
+      <tr>
+        <th></th>
+        <th style="width:100px">User</th>
+        <th>Author</th>
+      </tr>
+      <tr>
+        <th>Jp name</th>
+        <td><%= @user.jp_name %></td>
+        <td><%= author && author.jp_name %></td>
+      </tr>
+      <tr>
+        <th>En name</th>
+        <td><%= @user.en_name %></td>
+        <td><%= author && author.en_name %></td>
+      </tr>
+      <tr>
+        <th>En aff.</th>
+        <td><%= @user.en_affiliation %></td>
+        <td rowspan="2">
+          <% author.all_unique_affiliations.each do |aff| %>
+            <%= aff %><br />
+          <% end if author %>
+        </td>
+      </tr>
+      <tr>
+        <th>Jp aff.</th>
+        <td><%= @user.jp_affiliation %></td>
+      </tr>
+    </table>
+  </fieldset>
+
+  <fieldset>
+    <legend>Other author candidates by nayose_extreme_find_all_by</legend>
+    <% if Author.respond_to? :nayose_extreme_find_all_by %>
+      <% (Author.nayose_extreme_find_authors_for_user(@user) - [author]).uniq.each do |author| %>
+        <div style="border:solid 1px #888">
+          <%= "#{author.id}: #{author.en_name} (#{author.jp_name})" %> 
+          <%= link_to "[edit author]", ksp(:edit_author_path, author) %> | 
+          <%= link_to "[assign this author to this user]", assign_author_user_path(@user, :author => author), :method => :put, :remote => true, :"data-ks-insert-response" => true %>
+          <div style="margin-left:20px">
+            <% author.unique_affiliation_combos.sort.each do |combo| %>
+              <%= combo %>
+            <% end %>
           </div>
-        <% end %>
-      </p>
+        </div>
+      <% end %>
+    <% else %>
+      Author.nayose_extreme_find_all_by not implemented.
+      Maybe Nayose::Finders wasn't included into Author class.
     <% end %>
-  </div>
-  <div class="field">
-    <%= f.label :other_attributes %><br />
-    <%= @user.other_attributes.inspect %>
-  </div>
-    
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>User information</legend>
+    <div class="field">
+      <%= f.label :login, "参加登録ID (Login ID)" %><br />
+      <%= f.text_field :login %>
+    </div>
+    <div class="field">
+      <%= f.label :jp_name %><br />
+      <%= f.text_field :jp_name %>
+    </div>
+    <div class="field">
+      <%= f.label :en_name %><br />
+      <%= f.text_field :en_name %>
+    </div>
+    <div class="field">
+      <%= f.label :jp_affiliation %><br />
+      <%= f.text_field :jp_affiliation %>
+    </div>
+    <div class="field">
+      <%= f.label :en_affiliation %><br />
+      <%= f.text_field :en_affiliation %>
+    </div>
+    <div class="field">
+      <%= f.label :email, "学会期間中の連絡用email (本システムからの通知はこっちに送られます)" %><br />
+      <%= f.text_field :email %>
+    </div>
+    パスワードを変更するときのみ入力
+    <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password %>
+    </div>
+    <div class="field">
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation %>
+    </div>
+    <% if can? :whitelist, User %>
+      <div class="field">
+        <%= f.label :whitelisted %><br />
+        <%= f.text_field :whitelisted %>
+      </div>
+      <div class="field">
+        <%= f.label :whitelisted_by %><br />
+        <%= f.text_field :whitelisted_by %>
+      </div>
+      <div class="field">
+        <%= f.label :whitelisted_at %><br />
+        <%= f.text_field :whitelisted_at %>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= f.label :twitter_id %><br />
+      <%= f.text_field :twitter_id %>
+    </div>
+    <div class="field">
+      <%= f.label :facebook_id %><br />
+      <%= f.text_field :facebook_id %>
+    </div>
+    <div class="field">
+      <%= f.label :linkedin_id %><br />
+      <%= f.text_field :linkedin_id %>
+    </div>
+    <div class="field">
+      <% if can? :manage, @user %>
+        <!-- dummy hidden field to handle cases where none are checked -->
+        <%= hidden_field_tag "user[roles][]", "dummy" %>
+        <%= f.label :roles %><br />
+        <p>
+          <% for role in User::ROLES %>
+            <div>
+              <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
+              <%= role %>
+            </div>
+          <% end %>
+        </p>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= f.label :other_attributes %><br />
+      <%= @user.other_attributes.inspect %>
+    </div>
+      
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+  </fieldset>
 <% end %>

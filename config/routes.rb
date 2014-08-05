@@ -205,6 +205,7 @@ Rails.application.routes.draw do
       get 'edit_name'
       put 'update_name'
       get 'admin_panel'
+      put 'assign_author'
     end
     collection do
       get 'admin_search'

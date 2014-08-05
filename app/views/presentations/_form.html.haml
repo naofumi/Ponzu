@@ -14,7 +14,7 @@
       %th= f.label :type
       %td= f.select :type, Presentation.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true
     %tr
-      %th= f.label :date
+      %th= f.label :starts_at
       %td= f.datetime_select :starts_at
     %tr
       %th= f.label :Duration

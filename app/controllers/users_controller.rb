@@ -165,6 +165,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def assign_author
+    @user = User.in_conference(current_conference).find(params[:id])
+    @author = Author.in_conference(current_conference).find(params[:author])
+    if @user.update_attributes(:author => @author)
+      flash[:notice] = "Successfully assigned author to user."
+    else
+      flash[:error] = "Failed to assign author to user. #{@user.errors.full_messages}"
+    end
+    respond_with @user, :success_action => :edit
+  end
+
   def update_settings
     @user = current_user
     if @user.update_attributes(params[:user])

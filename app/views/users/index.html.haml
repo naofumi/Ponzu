@@ -34,9 +34,12 @@
         %th Submission
         %th{:width => 100} Jp name
         %th{:width => 100} En name
-        %th cnt
-        %th{:width => 100} Jp name
-        %th{:width => 100} En name
+        - if params[:has_no_author].blank?
+          %th cnt
+          %th{:width => 100} Jp name
+          %th{:width => 100} En name
+        - else
+          %th{:colspan => 3} Possible Author
         %th Jp aff
         %th En aff
         %th email
@@ -51,9 +54,17 @@
           %td= user.submission_info
           %td{:class => name_same_class}= user.jp_name
           %td{:class => name_same_class}= user.en_name
-          %td{:class => name_same_class}= user.author && user.author.users.count
-          %td{:class => name_same_class}= user.author && user.author.jp_name
-          %td{:class => name_same_class}= user.author && user.author.en_name
+          - if params[:has_no_author].blank?
+            %td{:class => name_same_class}= user.author && user.author.users.count
+            %td{:class => name_same_class}= user.author && user.author.jp_name
+            %td{:class => name_same_class}= user.author && user.author.en_name
+          - else
+            %td{:colspan => 3}
+              - if Author.respond_to? :nayose_extreme_find_all_by
+                - (Author.nayose_extreme_find_authors_for_user(user)).each do |a|
+                  = link_to "#{a.en_name} (#{a.jp_name})", ksp(:edit_user_path, a)
+              - else
+                Author.nayose_extreme_find_all_by not implemented. Maybe Nayose::Finders wasn't included into Author class.
           %td{:class => affiliation_same_class}= user.jp_affiliation
           %td{:class => affiliation_same_class}= highlight(user.en_affiliation || "", institution_phrases, highlighter: '<span class="highlight">\1</span>')
           %td{:class => affiliation_same_class}= highlight(user.email, email_affiliation_matches, highlighter: '<font color=green>\1</font>')

@@ -24,8 +24,7 @@
   .field
     = f.label :en_title
     %br/
-    = f.text_field :en_title, 
-                   :onchange => "document.getElementById('changed_alert').textContent = 'shit'"
+    = f.text_field :en_title
   .field
     = f.label :jp_title
     %br/
@@ -70,5 +69,7 @@
   / The session_id field is used to automatically create a Presentation object
   / linking this Submission to a Session.
   = hidden_field_tag :session_id, params[:session_id]
-  .actions
+  .actions{style:"text-align:right"}
     = f.submit
+    |
+    = link_to 'Destroy', @submission, confirm: 'Are you sure you want to destroy this submission?', method: :delete, remote: true
