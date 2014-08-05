@@ -14,8 +14,16 @@ module KamishibaiLayoutHelper
   # You can suffix the ID with options[:id_suffix]
   # You can also provide your own ID.
   # The default container will be "/ponzu_frame", but
-  # can be specified with the :container option. The ID
-  # of the container must be the same as the resource URL.
+  # can be specified with the :container option. 
+  # The ID of the container, if ommited, will automatically
+  # be set depending on the request.
+  #
+  # If the request is POST or PUT or the action is :new, :edit, :create
+  # or :update, the ID will be set to "form_".
+  #
+  # We haven't yet worked out what the ID should ideally be.
+  # The ID is important because in Kamishibai, we often redraw the
+  # whole frame in response to an AJAX request.
   def ponzu_frame options = {}, &block
     container_string = options.delete(:container) || "ponzu_frame"
     options[:id] ||= [default_id_for_action, options[:id_suffix]].compact.join('_')
@@ -39,7 +47,8 @@ module KamishibaiLayoutHelper
     # In new/edit/create/update, we will normally be working on a single
     # form. We should share the ID so the element will be replaced with each
     # action.
-    action = "form" if ["new", "edit", "create", "update"].include?(action)
+    action = "form" if ["new", "edit", "create", "update"].include?(action) ||
+                       request.post? || request.put?
     [action, controller, id].compact.join('_')
   end
 
