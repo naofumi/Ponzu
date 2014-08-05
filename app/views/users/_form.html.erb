@@ -11,20 +11,6 @@
     </div>
   <% end %>
 
-  <p>
-    <%= f.label :login, "参加登録ID (Login ID)" %><br />
-    <%= f.text_field :login %>
-  </p>
-  <p>
-    UMINデータ内の参加登録ID: <br />
-    <%= @user.registration_id_in_umin %>
-  </p>
-  <% if @user.registrant %>
-  <p>
-    初期パスワード: <br />
-    <%= @user.registrant.password %>
-  </p>  
-  <% end %>
 
   <% author = @user.author %>
   <table>

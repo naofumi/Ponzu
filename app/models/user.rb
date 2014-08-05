@@ -71,7 +71,6 @@ class User < ActiveRecord::Base
   has_many  :participations, :dependent => :destroy, :inverse_of => :user, :dependent => :restrict
   has_many  :meet_ups, :through => :participations, :dependent => :restrict
   has_many  :meet_up_comments, :inverse_of => :user, :dependent => :restrict
-  has_one   :registrant, :foreign_key => :registration_id, :primary_key => :login, :inverse_of => :user, :dependent => :restrict
 
   belongs_to  :author, :inverse_of => :users
   # Fields which don't affect how user information is displayed to other users.
