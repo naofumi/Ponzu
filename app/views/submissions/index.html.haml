@@ -18,9 +18,5 @@
           %td= submission.presentations.map{|p| p.number}.join(', ')
           %td= submission.title
           %td
-            = link_to 'Show', ksp(submission)
-            |
             = link_to 'Edit', ksp(edit_submission_path(submission))
-            |
-            = link_to 'Destroy', submission, confirm: 'Are you sure?', method: :delete, remote: true
     = link_to "New Submission", new_submission_path

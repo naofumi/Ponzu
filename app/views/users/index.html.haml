@@ -61,9 +61,9 @@
             - user.author && user.author.unique_affiliation_combos.sort.each do |combo|
               %div{style: "border-bottom: dotted 2px #888"}= highlight(highlight(combo, institution_phrases, highlighter: '<span class="highlight">\1</span>'), email_affiliation_matches, highlighter: '<font color=green>\1</font>')
           %td
-            = link_to 'Edit', ksp(edit_user_path(user)), :target => "_blank"
+            = link_to 'Edit', ksp(edit_user_path(user))
           %td
-            = user.author && link_to('Edit', ksp(edit_author_path(user.author)), :target => "_blank")
+            = user.author && link_to('Edit', ksp(edit_author_path(user.author)))
     %br/
     = ks_will_paginate
 

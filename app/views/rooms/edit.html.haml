@@ -6,8 +6,6 @@
 
     = render 'form'
 
-    = link_to 'Show', ksp(@room)
-    |
-    = link_to 'Back', ksp(rooms_path)
+    = link_to 'Preview', ksp(@room)
 
     = render :partial => 'map', :locals => {:room => @room}

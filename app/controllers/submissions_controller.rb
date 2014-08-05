@@ -110,9 +110,13 @@ class SubmissionsController < ApplicationController
   def destroy
     @submission = Submission.in_conference(current_conference).
                              find(params[:id])
-    @submission.destroy
+    if @submission.destroy
+      flash[:notice] = "Submission was successfully destroyed."
+    else
+      flash[:error] = "Failed to destroy Submission #{@submission.errors.full_messages}"
+    end
 
-    respond_with @submission
+    respond_with @submission, :success_action => :back, :action => :edit
   end
 
   private

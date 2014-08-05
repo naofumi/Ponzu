@@ -144,16 +144,13 @@ class PresentationsController < ApplicationController
   def destroy
     @presentation = Presentation.in_conference(current_conference).
                                  find(params[:id])
-    @session = @presentation.session
-    
-
-    set_flash @presentation.destroy,
-              :success => "Presentation destroyed",
-              :fail => "Failed to destroy presentation"
-    # We can't use #respond_with here because the response is a partial.
-    respond_to do |format|
-      format.html { render :partial => 'list', :locals => {:presentations => @session.presentations}}
+    if @presentation.destroy
+      flash[:notice] = "Presentation was successfully destroyed."
+    else
+      flash[:error] = "Failed to destroy Presentation #{@presentation.errors.full_messages}"
     end
+
+    respond_with @presentation, :success_action => :back, :action => :edit
   end
   
   def likes
