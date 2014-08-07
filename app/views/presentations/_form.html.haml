@@ -11,6 +11,9 @@
       %th Submission:
       %td= link_to @presentation.submission.title, ksp(:edit_submission_path, @presentation.submission)
     %tr
+      %th Presentation Number
+      %td= f.text_field :number
+    %tr
       %th= f.label :type
       %td= f.select :type, Presentation.descendants.map{|c| [c.to_s, c.to_s]}, :include_blank => true
     %tr

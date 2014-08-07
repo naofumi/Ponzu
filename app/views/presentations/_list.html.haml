@@ -10,19 +10,20 @@
         %div{style:"border:solid 1px #888"}
           %table
             %tr
+              %th Number: 
+              %td #{p.number}
               %th Type: 
               %td #{p.type}
+            %tr
               %th Starts at:
               %td #{p.starts_at.to_formatted_s(:short)}
-            %tr
               %th Duration:
               %td
                 = p.respond_to?(:duration) && p.duration ? "#{(p.duration/60).to_i} min." : "-"
-              %th Ad Category:
-              %td #{p.ad_category}
             %tr
               %th Status:
-              %td
-                = p.cancel ? "Cancelled!!!!" : ""
+              %td= p.cancel ? "Cancelled!!!!" : ""
+              %th Ad Category:
+              %td #{p.ad_category}
           %div{style:"text-align:right"}
             = link_to "[edit]", ksp(edit_presentation_path(p))
