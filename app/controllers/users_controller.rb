@@ -90,7 +90,7 @@ class UsersController < ApplicationController
       flash[:error] = 'Failed to create User.'
     end
 
-    respond_with @user
+    respond_with @user, :success_action => :edit
   end
 
   # PUT /users/1
@@ -108,7 +108,7 @@ class UsersController < ApplicationController
       flash[:error] = "Failed to update user."
     end
 
-    respond_with @user, :location => edit_user_path(@user)
+    respond_with @user, :success_action => :edit
   end
 
   # DELETE /users/1
@@ -123,7 +123,7 @@ class UsersController < ApplicationController
       flash[:error] = "Failed to delete user."
     end
 
-    respond_with @user, :location => users_path
+    respond_with @user, :success_action => :back
   end
 
   def settings
