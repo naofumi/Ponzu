@@ -35,7 +35,7 @@
         <span class="same_presentations">({{= it.other_numbers.join(', ')}})</span>
       {{?}}
     </span>
-    {{? it.can_edit }}<a href="#!_/submissions/{{= it.submission_id }}/edit">[edit]</a>{{?}}
+    {{? it.can_edit }}<a href="#!_/submissions/{{= it.submission_id }}/edit">[edit submission]</a> | <a href="#!_/presentations/{{= it.id }}/edit">[edit presentation]</a>{{?}}
     <span class="time">
       {{= it.starts_at }}
     </span>
