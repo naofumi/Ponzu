@@ -1,6 +1,6 @@
 class PosterSessionsController < ApplicationController
   authorize_resource :class => Session::Poster
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
   begin
     include PosterSessionTestAction

@@ -1,6 +1,6 @@
 class GlobalMessagesController < ApplicationController
   authorize_resource
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   set_kamishibai_expiry [:index] => 1 # Store in cache for 1 second

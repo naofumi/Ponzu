@@ -1,6 +1,6 @@
 class MeetUpsController < ApplicationController
   authorize_resource :except => [:index, :show]
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   set_kamishibai_expiry [:index, :show] => 1

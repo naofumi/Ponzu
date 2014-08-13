@@ -1,6 +1,6 @@
 class MeetUpCommentsController < ApplicationController
   authorize_resource :except => [:show]
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   before_filter do |c|

@@ -28,7 +28,7 @@ class PresentationsController < ApplicationController
   set_kamishibai_expiry [:heading, :show, :related, :batch_request_likes] => 24 * 60 * 60,
                         [:social_box, :likes, :comments, :my] => 1
 
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   # GET /presentations

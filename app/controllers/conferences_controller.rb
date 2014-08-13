@@ -1,6 +1,6 @@
 class ConferencesController < ApplicationController
   authorize_resource :except => [:ks_cache_version]
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   # GET /conferences

@@ -1,6 +1,6 @@
 class SubmissionsController < ApplicationController
   authorize_resource
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   # GET /submissions

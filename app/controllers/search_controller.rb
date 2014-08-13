@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-	respond_to :html, :js
+	respond_to :html, :js, :json
 	include Kamishibai::ResponderMixin
 
   set_kamishibai_expiry [:index] => 1

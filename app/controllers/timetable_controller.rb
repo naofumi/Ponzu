@@ -1,6 +1,6 @@
 class TimetableController < ApplicationController
   authorize_resource :class => Session::TimeTableable
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   before_filter do |c|

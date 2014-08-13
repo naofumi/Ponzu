@@ -2,7 +2,7 @@
 
 class LikesController < ApplicationController
   authorize_resource
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   set_kamishibai_expiry [:my, :my_schedule, :my_votes] => 1
@@ -80,6 +80,7 @@ class LikesController < ApplicationController
       @votes_for_score[score] = current_user.votes.where(:score => score)
     end
   end
+  
   # POST /likes
   # POST /likes.json
   def create

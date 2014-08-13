@@ -1,6 +1,6 @@
 class BoothSessionsController < ApplicationController
   authorize_resource :class => Session::Booth
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   begin

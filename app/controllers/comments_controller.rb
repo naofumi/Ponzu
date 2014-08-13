@@ -3,7 +3,7 @@ require 'rails_autolink'
 
 class CommentsController < ApplicationController
   authorize_resource
-  respond_to :html, :js
+  respond_to :html, :js, :json
   include Kamishibai::ResponderMixin
 
   set_kamishibai_expiry [:show] => 60
