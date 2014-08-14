@@ -69,22 +69,6 @@ class SessionsController < ApplicationController
   def show
     @session = Session.in_conference(current_conference).
                        find(params[:id])
-    # This redirection mucks up Ponzu Cocoa
-    # because Ponzu Cocoa doesn't expect a redirect.
-    # It just want's session JSON.
-    #
-    # In fact, from an API perspective, a redirect is completely the
-    # wrong approach. API's must be implementation agnostic.
-    # The redirect should be handled on the
-    # client side when the template is being rendered.
-    #
-    # I have fixed by doing the redirect in the Dot.js template
-    # but it might be better to not do redirects at all.
-    #
-    # if !@session.redirect_to.blank?
-    #   device_selective_redirect @session.redirect_to
-    #   return
-    # end
     @menu = @session.is_poster? ? :posters : :sessions
 
     @show_date = @session.starts_at

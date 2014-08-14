@@ -19,7 +19,8 @@
                                   :ends_at => s.ends_at, 
                                   :row => @rooms.index(s.room))
     - color_tag = "color_#{i.modulo(12)}"
-    = link_to ksp(session_path(s)), :class => ["session", 
+    - url = s.redirect_to.blank? ? session_path(s) : s.redirect_to
+    = link_to ksp(url), :class => ["session", 
                                                color_tag, 
                                                "session_#{s.id}", 
                                                s.type.parameterize.underscore], 
