@@ -33,19 +33,6 @@ class UserSessionsController < ApplicationController
     # user_id_in_cookie(@user_session.record)
 
     respond_with @user_session, :location => "/"
-
-    # if @user_session.save
-    #   flash[:notice] = "Successfully logged in."
-    #   redirect_to root_path
-    # else
-    #   if smartphone?
-    #     render "new.s", :layout => "layouts/smartphone"
-    #   elsif galapagos?
-    #     render_sjis "new.g", :layout => "layouts/galapagos"
-    #   else
-    #     render "new"
-    #   end
-    # end
   end
 
   # Switch users

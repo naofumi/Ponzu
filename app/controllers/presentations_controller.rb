@@ -67,7 +67,6 @@ class PresentationsController < ApplicationController
     @presentations = Presentation.in_conference(current_conference) #.limit(100)
     @presentations.map{|p| restrict_disclosure(p)}
     @ads = []
-
   end
 
   def heading
