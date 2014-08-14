@@ -27,5 +27,6 @@ json.cache! ['v1', current_conference, I18n.locale,
     json.name @session.room && @session.room.name
   end
 
+  json.redirect_to @session.redirect_to
   json.presentations @presentations.order("presentations.position ASC, presentations.number ASC").map{|p| p.id}
 end
