@@ -49,7 +49,7 @@ class PresentationsController < ApplicationController
   # GET /presentations/1.json
   def show
     @presentation = Presentation.in_conference(current_conference).
-                    find(params[:id])
+                                includes([{submission: :presentations}, :session]).find(params[:id])
     set_menu(@presentation.is_poster? ? :posters : :sessions)
     restrict_disclosure(@presentation)
     # Move @more_like_this to inside the cache because slow
