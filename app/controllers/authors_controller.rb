@@ -110,13 +110,14 @@ class AuthorsController < ApplicationController
   def replace
     @author = Author.in_conference(current_conference).find(params[:id])
     Authorship.transaction do
-      if url = params[:data_transfer]['text/plain']
-        logger.info "HOWDY"
-        logger.info url
-        url =~ /authorships\/(\d+)/
+      if params[:data_transfer]['text/html'] =~ /authorships\/(\d+)/
         @authorship = Authorship.in_conference(current_conference).find($1)
         @authorship.author = @author
-        @authorship.save!
+        if @authorship.save
+          flash[:notice] = "Authorship was successfully transfered"
+        else
+          flash[:error] = "Failed to transfer authorship"
+        end
       end
     end
 
