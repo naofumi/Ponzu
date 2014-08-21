@@ -1,6 +1,8 @@
 # Initialize in Kamishibai.initialize()
 # Inspiration from https://github.com/farhadi/html5sortable
 #
+# Concept:
+#
 # How to use
 #
 # 1. Create a wrapper with class="sortable". This can be ol, ul or a div or anything.
@@ -19,6 +21,12 @@ KSSortableConstructor = () ->
       e.getAttribute && e.getAttribute('draggable') is "true"
     , true
 
+  # Create a placeholder DOM object.
+  #
+  # Whenever an element is dragged over another
+  # draggable target, then the placeholder will 
+  # be inserted before the target and generate
+  # enough space to accomodate the initial element.
   placeholderFactory = (elementBeingDragged) ->
     tagName = elementBeingDragged.parentNode.tagName.toUpperCase()
     placeholder = if tagName is "OL" || tagName is "UL"
@@ -34,7 +42,7 @@ KSSortableConstructor = () ->
 
   insertPlaceholder = (draggable) ->
     if !placeholder.parentNode || 
-       (indexOfNodeInParent(draggable, draggable.parentNode) >= 
+       (indexOfNodeInParent(draggable, draggable.parentNode) > 
         indexOfNodeInParent(placeholder, placeholder.parentNode))
       # Same as insertAfter
       draggable.parentNode.insertBefore(placeholder, draggable.nextSibling)
@@ -45,6 +53,9 @@ KSSortableConstructor = () ->
 
     # When a drag is started, we set the instance variables to the appropriate
     # values. We also set the "text/html" payload of `event.dataTransfer`.
+    #
+    # If this drag-drop is intended as a sort (has sortableElement), 
+    # then we prepare for that as well.
     kss.addEventListener document, 'dragstart', (event) ->
       if (target = event.target) && target.getAttribute('draggable') is 'true'
         elementBeingDragged = target
@@ -53,9 +64,12 @@ KSSortableConstructor = () ->
         if sortableElement
           initialIndex = indexOfNodeInParent(target, sortableElement)
           kss.addClass target, 'sortable-dragging'
-        # target.style.opacity = '0.4'
         event.dataTransfer.effectAllowed = 'move'
         event.dataTransfer.setData('text/html', target.innerHTML)
+
+    kss.addEventListener document, 'drag', (event) ->
+      if (target = event.target) && target.getAttribute('draggable') is 'true'
+        kss.hide elementBeingDragged
 
     # The default behaviour when the draggable element is a URL is
     # to change window.location to that page. We suppress this here
@@ -70,16 +84,15 @@ KSSortableConstructor = () ->
     # element and add a placeHolder.
     kss.addEventListener document, 'dragenter', (event) ->
       if (target = event.target) && elementBeingDragged && (draggable = closestDraggable(target))
-        # Stuff to be done immediately after 'dragstart'
-        event.dataTransfer.dropEffect = 'move'
-        # kss.hide elementBeingDragged
-
-        kss.addClass draggable, 'sortable-dragover'
-        insertPlaceholder(draggable)
+        if sortableElement
+          event.dataTransfer.dropEffect = 'move'
+          kss.addClass draggable, 'sortable-dragover'
+          insertPlaceholder(draggable)
     
     kss.addEventListener document, 'dragleave', (event) ->
       if (target = event.target) && (draggable = closestDraggable(target))
-        kss.removeClass event.target, 'sortable-dragover'
+        if sortableElement
+          kss.removeClass event.target, 'sortable-dragover'
 
     kss.addEventListener document, 'dragend', (event) ->
       cleanup()
@@ -109,12 +122,27 @@ KSSortableConstructor = () ->
         data: ("#{sortableElement.id}[]=#{sortable_id}" for sortable_id in sortable_ids).join('&')
 
 
+    # Dropbox stuff
+    #
+    # When something is dropped onto a dropbox, the the `dropbox()` function
+    # will be called
+
     kss.addEventListener document, 'drop', (event) ->
       if (target = event.target) && kss.hasClass(target, 'dropbox')
         event.stopPropagation()
         event.preventDefault()
         dropbox(event)
+        kss.removeClass target, "drag-selected"
         return false
+
+    kss.addEventListener document, 'dragenter', (event) ->
+      if (target = event.target) && kss.hasClass(target, 'dropbox')
+        kss.addClass target, "drag-selected"
+
+    kss.addEventListener document, 'dragleave', (event) ->
+      if (target = event.target) && kss.hasClass(target, 'dropbox')
+        kss.removeClass target, "drag-selected"
+
 
   # returns the numeric value at the end of the string
   idToNumbers = (str) ->
@@ -146,7 +174,7 @@ KSSortableConstructor = () ->
     if target.hasAttribute('data-params')
       params.push target.getAttribute('data-params')
 
-    KSAjax.ajax
+    KSCache.cachedAjax
       method: method
       url: action
       callbackContext: target
