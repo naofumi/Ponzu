@@ -29,7 +29,8 @@
       = render :partial => "authorships", :object => @author.authorships
       .dropbox{:data => {:action => replace_author_path(@author),
                          :method => 'post',
-                         :'ks-insert-response' => 'true'}}
+                         :'ks-insert-response' => 'true',
+                         :'ks-ajax-on-drop' => 'true'}}
         Drop Submissions here to re-associate Author-Submissions
     :markdown
       ### 著者Authorを２人に分ける方法

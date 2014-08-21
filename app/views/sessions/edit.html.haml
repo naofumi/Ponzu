@@ -38,5 +38,6 @@
       #new_presentation_drop.dropbox{ :data => {:action => "#{presentations_path()}", 
                                                 :method => "post",
                                                 :params => "presentation[session_id]=#{@session.id}",
-                                                :"ks-insert-response" => 'true'}}
+                                                :"ks-insert-response" => 'true',
+                                                :"ks-ajax-on-drop" => 'true'}}
         Drop Submission or Presentation here from a different window to add to this Session

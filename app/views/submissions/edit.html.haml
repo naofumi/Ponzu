@@ -24,7 +24,8 @@
                        :locals => {:authorships => @submission.authorships.order(:position)}
               .dropbox{:id => "new_authorship_drop",
                        :data => {:action => drop_on_submission_authorships_path, 
-                                 "ks_insert-response" => true,
+                                 "ks-insert-response" => true,
+                                 "ks-ajax-on-drop" => true,
                                  :method => "post",
                                  :params => "authorship[submission_id]=#{@submission.id}"}}
                 Drop authors here to create new Authorships
