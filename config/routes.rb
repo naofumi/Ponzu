@@ -168,6 +168,7 @@ Rails.application.routes.draw do
       put 'order_presentations_by_number'
       put 'set_presentation_duration'
       get 'query'
+      put 'change_children_presentation_types'
     end
     collection do
       post 'batch_request_liked_sessions'

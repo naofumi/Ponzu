@@ -201,7 +201,9 @@ class SessionsController < ApplicationController
     type_name = params[:session].delete(:type)
     @session = Session.in_conference(current_conference).
                        find(params[:id])
-    @session.type = type_name.constantize.to_s # constantize to sanitize
+    if type_name
+      @session.type = type_name.constantize.to_s # constantize to sanitize
+    end
 
     set_flash @session.update_attributes(params[:session]),
               :success => 'Session was successfully updated.',
@@ -221,6 +223,28 @@ class SessionsController < ApplicationController
               :fail => "Session could not be destroyed."
 
     respond_with @session
+  end
+
+  def change_children_presentation_types
+    @session = Session.in_conference(current_conference).
+                       find(params[:id])
+    @presentations = @session.presentations
+    if !params[:child_presentation_type].blank?
+      @session.transaction do
+        begin          
+          @presentations.each do |p|
+            p.type = params[:child_presentation_type]
+            p.save!
+          end
+          flash[:success] = "GOOD JOB"
+        rescue
+          @session.errors.add(:base, " failed to set presentation type to #{params[:child_presentation_type]}")
+          flash[:error] = "OH NO!! #{@session.errors.full_messages}"
+        end
+      end
+    end
+
+    respond_with @session, :success_action => :edit, :action => :edit
   end
 
   def batch_request_liked_sessions

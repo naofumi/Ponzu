@@ -33,6 +33,14 @@
         = number_field_tag(:duration, nil)
         = submit_tag 'set all times'
       %br/
+      = form_tag change_children_presentation_types_session_path(@session), :method => :put, :remote => :true,
+                   :data => {'ks-insert-response' => true} do |f|
+        = label_tag :child_presentation_type, "Change the presentation type of all children."
+        = select_tag :child_presentation_type, 
+                 options_from_collection_for_select(Presentation.descendants, "to_s", "to_s"), 
+                 :include_blank => true
+        = submit_tag
+
       = render :partial => "presentations/list", 
                :locals => {:presentations => @session.presentations}
       #new_presentation_drop.dropbox{ :data => {:action => "#{presentations_path()}", 
