@@ -56,7 +56,7 @@ module Kamishibai
       when request.headers['HTTP_USER_AGENT'] =~ /applewebkit/i
         DESKTOP_URL_SCOPE
       when request.headers['HTTP_USER_AGENT'] =~ /gecko/i && # Firefox 10 and later
-           request.headers['HTTP_USER_AGENT'] =~ /Firefox\/(1|2)\d/i
+           request.headers['HTTP_USER_AGENT'] =~ /Firefox\/(1|2|3|4|5)\d/i
         DESKTOP_URL_SCOPE
       when request.headers['HTTP_USER_AGENT'] =~ /rv:1/i && # IE 11 and maybe later
         DESKTOP_URL_SCOPE
