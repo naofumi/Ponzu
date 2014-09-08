@@ -72,8 +72,11 @@ class Authorship < ActiveRecord::Base
 
   # params[authorships][affiliations][] will return an
   # array of strings, but we need to convert them into integers.
+  #
+  # Furthermore, this removes any blank strings which are used
+  # in a hidden field to circumvent the "value not sent if none-checked" issue.
   def convert_affiliations_to_integers(affiliations)
-    affiliations.map{|aff| aff.to_i}
+    affiliations.map{|aff| aff.to_i if !aff.blank?}.compact
   end
 
   # def submission_and_author_conferences_must_match

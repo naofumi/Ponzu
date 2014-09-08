@@ -40,6 +40,7 @@
       = f.label :affiliations
       - @authorship.submission.institutions.each_with_index do |inst, i|
         %div
+          = hidden_field_tag "authorship[affiliations][]", ""
           = check_box_tag "authorship[affiliations][]", i + 1, @authorship.affiliations.include?(i + 1)
           = "#{i + 1}) #{inst.name}"
     .actions
