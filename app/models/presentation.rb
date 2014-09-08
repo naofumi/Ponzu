@@ -28,7 +28,7 @@ class Presentation < ActiveRecord::Base
   delegate    :en_title, :jp_title, :main_author_id, :title,
               :disclose_at, :en_abstract, :jp_abstract, :abstract,
               :keywords, :corresponding_email, :show_email, :submission_number,
-              :institutions,
+              :institutions, :show_abstract_to_everybody,
               :to => :submission
 
   attr_accessible :ends_at, :number, :session_id, :starts_at,

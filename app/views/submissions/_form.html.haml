@@ -56,6 +56,9 @@
     = f.label :show_email
     = f.check_box :show_email
   .field
+    = f.label :show_abstract_to_everybody
+    = f.check_box :show_abstract_to_everybody
+  .field
     = f.label :speech_language, "発表言語 ('en', 'ja')"
     = f.select :speech_language, ['en', 'ja'], :include_blank => true
 

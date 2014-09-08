@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140430051556) do
+ActiveRecord::Schema.define(:version => 20140908022511) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -293,23 +293,24 @@ ActiveRecord::Schema.define(:version => 20140430051556) do
   end
 
   create_table "submissions", :force => true do |t|
-    t.string   "en_title",             :limit => 1000
-    t.string   "jp_title",             :limit => 1000
+    t.string   "en_title",                   :limit => 1000
+    t.string   "jp_title",                   :limit => 1000
     t.integer  "main_author_id"
     t.text     "jp_abstract"
     t.text     "en_abstract"
     t.integer  "presenting_author_id"
     t.string   "submission_number"
     t.string   "keywords"
-    t.datetime "disclose_at",                                             :null => false
-    t.datetime "created_at",                                              :null => false
-    t.datetime "updated_at",                                              :null => false
+    t.datetime "disclose_at",                                                   :null => false
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
     t.string   "corresponding_email"
-    t.boolean  "show_email",                           :default => false
+    t.boolean  "show_email",                                 :default => false
     t.binary   "institutions"
     t.string   "conference_tag"
     t.string   "external_link"
     t.string   "speech_language"
+    t.boolean  "show_abstract_to_everybody",                 :default => false
   end
 
   create_table "umin_rows", :force => true do |t|

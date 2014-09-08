@@ -270,7 +270,7 @@ class PresentationsController < ApplicationController
   # we can better ensure that an error in the view code
   # won't expose the abstract.
   def restrict_disclosure(presentation)
-    if cannot? :view_abstract, Presentation
+    if !presentation.show_abstract_to_everybody && cannot?(:view_abstract, Presentation)
       def presentation.abstract
         I18n.translate('presentations.not_logged_in')
       end
