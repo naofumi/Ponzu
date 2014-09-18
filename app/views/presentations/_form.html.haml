@@ -6,10 +6,14 @@
   %table
     %tr
       %th Session: 
-      %td= link_to @presentation.session.title, ksp(:edit_session_path, @presentation.session)
+      %td
+        = link_to @presentation.session.title, ksp(:edit_session_path, @presentation.session)
+        = f.text_field :session_id
     %tr
       %th Submission:
-      %td= link_to @presentation.submission.title, ksp(:edit_submission_path, @presentation.submission)
+      %td
+        = link_to @presentation.submission.title, ksp(:edit_submission_path, @presentation.submission)
+        = f.text_field :submission_id
     %tr
       %th Presentation Number
       %td= f.text_field :number
