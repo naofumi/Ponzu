@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140908022511) do
+ActiveRecord::Schema.define(:version => 20140918034145) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -300,7 +300,7 @@ ActiveRecord::Schema.define(:version => 20140908022511) do
     t.text     "en_abstract"
     t.integer  "presenting_author_id"
     t.string   "submission_number"
-    t.string   "keywords"
+    t.text     "keywords"
     t.datetime "disclose_at",                                                   :null => false
     t.datetime "created_at",                                                    :null => false
     t.datetime "updated_at",                                                    :null => false

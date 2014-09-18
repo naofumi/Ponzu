@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ponzu (1.2.3)
+    ponzu (1.2.6)
       acts_as_list
       authlogic
       awesome_nested_set (~> 2.1.6)
@@ -80,7 +80,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
-    domain_name (0.5.20)
+    domain_name (0.5.21)
       unf (>= 0.0.5, < 1.0.0)
     dynamic_form (1.1.4)
     erubis (2.7.0)
