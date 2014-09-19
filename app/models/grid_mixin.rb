@@ -71,6 +71,7 @@ module GridMixin
   # We test here based on distance.
   def is_consecutive?(grid_1, grid_2)
     return true if !grid_1 || !grid_2
+    return false if grid_1.group != grid_2.group
     (grid_1.x - grid_2.x)**2 + (grid_1.y - grid_2.y)**2 <= 1
   end
 
