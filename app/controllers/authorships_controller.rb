@@ -43,7 +43,8 @@ class AuthorshipsController < ApplicationController
 
   def drop_on_submission
     @submission = Submission.in_conference(current_conference).find(params[:authorship][:submission_id])
-    if (url = params[:data_transfer]['text/plain']) && url =~ /authors\/(\d+)/
+    if (url = params[:data_transfer]['text/plain'] || url = params[:data_transfer]['text/html']) && 
+       url =~ /authors\/(\d+)/
       @author = Author.in_conference(current_conference).find($1)
       @authorship = @submission.authorships.build(:author_id => @author.id)
     end
