@@ -219,6 +219,8 @@ KSSortableConstructor = () ->
     action = target.getAttribute('data-action')
     method = target.getAttribute('data-method') || 'post'
     params = []
+    if target.getAttribute('data-params')
+      params.push(target.getAttribute('data-params'));
     if event.dataTransfer.types
       params = params.concat ("data_transfer[#{type}]=#{encodeURIComponent(event.dataTransfer.getData(type))}" for type in event.dataTransfer.types)
 

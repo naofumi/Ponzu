@@ -86,11 +86,14 @@ class PresentationsController < ApplicationController
   # POST /presentations.json
   # Presentations will be created by drag-drop of sessions and presentations.
   def create
-    type_name = params[:presentation].delete(:type)
     @presentation = Presentation.new(params[:presentation])
-    @presentation.type = type_name.constantize.to_s #constantize will effectively sanitize the :type param
+    @session = @presentation.session
+
+    if type_name = params[:presentation].delete(:type)
+      @presentation.type = type_name.constantize.to_s #constantize will effectively sanitize the :type param
+    end
     @presentation.starts_at = @session.starts_at
-    if url = params[:data_transfer]['text/plain']
+    if url = params[:data_transfer]['text/plain'] || params[:data_transfer]['text/html']
       @presentation.submission =  if url =~ /submissions\/(\d+)/
                                     Submission.find($1)
                                   elsif url =~ /presentations\/(\d+)/
@@ -105,7 +108,7 @@ class PresentationsController < ApplicationController
         # format.html { redirect_to @presentation, notice: 'Presentation was successfully created.' }
         # format.json { render json: @presentation, status: :created, location: @presentation }
       else
-        flash[:error] = "Presentation failed to create"
+        flash[:error] = "Presentation failed to create<br>#{@presentation.errors.full_messages}"
         format.html { render :partial => 'list', :locals => {:presentations => @session.presentations}}
         # format.html { render action: "new" }
         # format.json { render json: @presentation.errors, status: :unprocessable_entity }
