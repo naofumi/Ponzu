@@ -67,13 +67,7 @@ class UsersController < ApplicationController
     else
       @user = current_user
     end
-    respond_to do |format|
-      format.html {
-        if request.xhr?
-          render :layout => false
-        end
-      }
-    end
+    respond_with @user
   end
 
   # POST /users

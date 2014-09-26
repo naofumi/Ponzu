@@ -28,7 +28,7 @@
         <td></td>
         <td>
           <%= f.text_field :author_id, :style => "width: 100px" %>
-          <%= link_to "[edit author]", ksp(:edit_author_path, author), :target => "author" %>
+          <%= link_to("[edit author]", ksp(:edit_author_path, author), :target => "author") if author %>
         </td>
       </tr>
       <tr>
