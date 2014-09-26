@@ -143,7 +143,7 @@ module DashboardHelper
         end
       },
       my_presentations: {
-        href: ksp(:my_presentations_path)
+        href: lambda {current_user ? ksp(:my_presentations_path) : "Javascript:alert('Must login to access my presentations')"}
       },
       my_likes: lambda {
         if galapagos?
@@ -151,9 +151,13 @@ module DashboardHelper
                                       :my_like_path, 
                                       current_conference.dates_for('time_table'))
         else
+          url = current_user ? 
+                  ksp(:my_like_path, 
+                         to_date_string(current_conference.closest_date_for('time_table', Time.zone.now))) :
+                  "Javascript:alert('Must login to access my Likes')"
+
           ios_button t("dashboard.grid_button_titles.my_likes"), 
-                     ksp(:my_like_path, 
-                         to_date_string(current_conference.closest_date_for('time_table', Time.zone.now))),
+                     url,
                      :my_likes
         end
       },
@@ -163,14 +167,18 @@ module DashboardHelper
                                       :my_schedule_like_path, 
                                       current_conference.dates_for('time_table'))
         else
+          url = current_user ? 
+                  ksp(:my_schedule_like_path, 
+                         to_date_string(current_conference.closest_date_for('time_table', Time.zone.now))) :
+                  "Javascript:alert('Must login to access my Schedule')"
+
           ios_button t("dashboard.grid_button_titles.my_schedule"), 
-                     ksp(:my_schedule_like_path, 
-                         to_date_string(current_conference.closest_date_for('time_table', Time.zone.now))),
+                     url,
                      :my_schedule
         end
       },
       my_votes: {
-        href: ksp(:my_votes_likes_path)
+        href: lambda {current_user ? ksp(:my_votes_likes_path) : "Javascript:alert('Must login to access my votes')"}
       },
       private_messages: {
         href: ksp(:threads_private_messages_path)
