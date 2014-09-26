@@ -12,9 +12,11 @@
     = ks_will_paginate
     = link_to "Gray users", ksp(users_path(:gray => 1))
     |
-    = link_to "Has Author", ksp(users_path(:has_author => 1))
+    = link_to "Confirm User-Author identity", ksp(users_path(:has_author => 1))
     |
-    = link_to "Has no Author", ksp(users_path(:has_no_author => 1))
+    = link_to "Find Authors for Users", ksp(users_path(:has_no_author => 1))
+    |
+    = link_to "Nayose Extreme Find All By", ksp(users_path(:nayose_extreme => 1))
     |
     = link_to "All users", ksp(users_path())
     %ul
@@ -34,8 +36,8 @@
         %th Submission
         %th{:width => 100} Jp name
         %th{:width => 100} En name
-        - if params[:has_no_author].blank?
-          %th cnt
+        - if params[:has_no_author].blank? && params[:nayose_extreme].blank?
+          %th Assoc users
           %th{:width => 100} Jp name
           %th{:width => 100} En name
         - else
@@ -54,14 +56,14 @@
           %td= user.submission_info
           %td{:class => name_same_class}= user.jp_name
           %td{:class => name_same_class}= user.en_name
-          - if params[:has_no_author].blank?
+          - if params[:has_no_author].blank? && params[:nayose_extreme].blank?
             %td{:class => name_same_class}= user.author && user.author.users.count
             %td{:class => name_same_class}= user.author && user.author.jp_name
             %td{:class => name_same_class}= user.author && user.author.en_name
           - else
             %td{:colspan => 3}
               - if Author.respond_to? :nayose_extreme_find_all_by
-                - (Author.nayose_extreme_find_authors_for_user(user)).each do |a|
+                - (Author.nayose_extreme_find_authors_for_user(user) - [user.author]).each do |a|
                   = link_to "#{a.en_name} (#{a.jp_name})", ksp(:edit_user_path, a)
               - else
                 Author.nayose_extreme_find_all_by not implemented. Maybe Nayose::Finders wasn't included into Author class.

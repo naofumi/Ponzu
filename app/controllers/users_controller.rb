@@ -29,8 +29,7 @@ class UsersController < ApplicationController
 
     if params[:has_author] == '1'
       @users = @users.includes(:author).where("authors.id IS NOT NULL")
-    end
-    if params[:has_no_author] == '1'
+    elsif params[:has_no_author] == '1'
       @users = @users.includes(:author).where("authors.id IS NULL")
     end
 

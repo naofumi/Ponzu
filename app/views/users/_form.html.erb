@@ -16,14 +16,20 @@
     <% author = @user.author %>
     <div class="field">
       <%= f.label :author_id %>: 
-      <%= f.text_field :author_id, :style => "width: 500px" %>
-      <%= link_to "link", ksp(author), :target => "author" %>
     </div>
     <table>
       <tr>
         <th></th>
         <th style="width:100px">User</th>
         <th>Author</th>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+        <td>
+          <%= f.text_field :author_id, :style => "width: 100px" %>
+          <%= link_to "[edit author]", ksp(:edit_author_path, author), :target => "author" %>
+        </td>
       </tr>
       <tr>
         <th>Jp name</th>
@@ -58,8 +64,8 @@
         <% (Author.nayose_extreme_find_authors_for_user(@user) - [author]).uniq.each do |author| %>
           <div style="border:solid 1px #888">
             <%= "#{author.id}: #{author.en_name} (#{author.jp_name})" %> 
-            <%= link_to "[edit author]", ksp(:edit_author_path, author) %> | 
-            <%= link_to "[assign this author to this user]", assign_author_user_path(@user, :author => author), :method => :put, :remote => true, :"data-ks-insert-response" => true %>
+            <%= link_to "[edit other author]", ksp(:edit_author_path, author), :target => "other_author" %> | 
+            <%= link_to "[assign this author to this user (replace)]", assign_author_user_path(@user, :author => author), :method => :put, :remote => true, :"data-ks-insert-response" => true %>
             <div style="margin-left:20px">
               <% author.unique_affiliation_combos.sort.each do |combo| %>
                 <%= combo %>
