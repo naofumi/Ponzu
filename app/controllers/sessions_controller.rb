@@ -25,11 +25,11 @@ class SessionsController < ApplicationController
   # For rails, I think that I simply have to uncomment in config/production.rb
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
   #
-  # We download different files based on locale
+  # We download different files based on locale unless `no_locale` parameter is set
   def download_pdf
     @session = Session.find(params[:id])
-    send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{@session.number}_#{I18n.locale}.pdf",
-              :filename => "#{conference_tag}_#{@session.number}_#{I18n.locale}.pdf",
+    send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{@session.number}#{locale_string}.pdf",
+              :filename => "#{conference_tag}_#{@session.number}#{locale_string}.pdf",
               :disposition => "inline")
   end
 
@@ -37,8 +37,8 @@ class SessionsController < ApplicationController
   # This is also locale aware
   def download_pdf_by_name
     name = params[:name].sub(/\W/, "_") # sanitize
-    send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{name}_#{I18n.locale}.pdf",
-              :filename => "#{conference_tag}_#{name}_#{I18n.locale}.pdf",
+    send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{name}#{locale_string}.pdf",
+              :filename => "#{conference_tag}_#{name}#{locale_string}.pdf",
               :disposition => "inline")    
   end
 
@@ -269,6 +269,14 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def locale_string
+    if params[:no_locale]
+      ""
+    else
+      "_#{I18n.locale}"
+    end
+  end
 
   def json_responses_for_session(session, exclude_paths)
     fragments = {}
