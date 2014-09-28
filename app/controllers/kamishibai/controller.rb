@@ -449,19 +449,22 @@ module Kamishibai
         begin
           # TODO: Try to preserve the argument format
           #       so that we can also handle partial renders
-          render "#{action}.s", options
+
+          # The options argument is modified
+          # in place in the render method.
+          # We therefore send a copy so that
+          # we can revert to the original options
+          # when we re-render.
+          render "#{action}.s", options.dup
         rescue ActionView::MissingTemplate
-          # The :template options is automatically set
-          # above to "#{action}.s". We need to explicitly
-          # revert it.
-          render "#{action}", options.merge(:template => action)
+          render "#{action}", options
         end
       elsif galapagos?
         begin
           render_sjis "#{action}.g"
         rescue ActionView::MissingTemplate
           set_utf_8_content_type
-          render "#{action}", options.merge(:template => action)
+          render "#{action}", options
         end
       else
         render "#{action}", options
