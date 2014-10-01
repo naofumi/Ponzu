@@ -198,6 +198,9 @@ module DashboardHelper
       settings: {
         href: lambda {current_user ? ksp(:settings_user_path, current_user) : "Javascript:alert('Must login to access user settings')"}
       },
+      questionnaire: {
+        href: lambda {current_user ? ksp(:questionnaires_path) : "Javascript:alert('Must login to access questionnaire')"}
+      },
       download: {
         href: "Javascript:KSSqlCache.initialize();KSCache.simpleBatchLoad('/docs/batch');"
       },

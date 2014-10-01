@@ -471,6 +471,7 @@ en:
       pdf_with_abstract: "All With Abst.<br />(8.7MB)"
       shimin: "市民講座<br />ランチョン<br />(0.4MB)"
       flags: "Flags"
+      questionnaire: "Questionnaires"
 
     admin_links:
       manage_conferences: Manage Conferences

@@ -49,6 +49,7 @@ class Ability
       can [:create, :destroy], MeetUpComment
       can [:new, :create, :threads, :conversation], PrivateMessage
       can [:delegate], Conference
+      can [:read, :answer, :results], Questionnaire
     end
 
     if user.role? :voter
@@ -67,6 +68,7 @@ class Ability
       can :clear, Kamishibai::Cache
       can [:update, :moderate], Submission
       can [:change_ad_category, :moderate], Presentation
+      can [:edit, :create, :destroy, :update], Questionnaire
     end
 
     if user.role? :user_moderator
