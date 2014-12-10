@@ -4,6 +4,7 @@ class PonzuController < ActionController::Base
   # Ponzu::MultiConference must be included first because
   # other filters use current_conference
   include Ponzu::MultiConference
+  include Ponzu::Authentication
   include Kamishibai::Controller
   include Kamishibai::DeviceSupport
   include Kamishibai::LocaleSupport
@@ -14,10 +15,8 @@ class PonzuController < ActionController::Base
 
   protect_from_forgery
 
-  helper_method :current_user
   before_filter :edit_name_if_generic
   before_filter :load_single_table_inheritance
-  # before_filter :require_login
 
   # TODO: We have to consider how to handle errors
   # unless false #Rails.configuration.consider_all_requests_local
@@ -58,22 +57,6 @@ class PonzuController < ActionController::Base
 
   def set_manifest
     Rails.application.config.use_manifest
-  end
-
-  def require_login
-    unless current_user
-      flash[:error] = "You must be logged in to use this system"
-      redirect_to login_path
-    end
-  end
-  
-  def current_user_session
-    return @current_user_session if defined?(@current_user_session)
-    @current_user_session = UserSession.find
-  end
-
-  def current_user
-    @current_user = current_user_session && current_user_session.record
   end
 
   def load_single_table_inheritance

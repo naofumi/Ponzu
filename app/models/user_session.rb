@@ -1,6 +1,7 @@
 class UserSession < Authlogic::Session::Base
 	attr_accessor :conference_confirm
 	validate :user_must_belong_to_conference_confirm
+  find_by_login_method :find_by_login_or_email_according_to_conference_setting
 
 	private
 
@@ -14,4 +15,5 @@ class UserSession < Authlogic::Session::Base
 			errors.add(:base, "User does not belong to conference #{conference_confirm.name}")
 		end
 	end
+
 end

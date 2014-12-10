@@ -1,23 +1,22 @@
 ja:
   authlogic:
     error_messages:
-      login_blank: can not be blank
-      login_not_found: is not valid
-      login_invalid: should use only letters, numbers, spaces, and .-_@ please.
-      consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded, account is disabled.
-      email_invalid: should look like an email address.
-      password_blank: can not be blank
-      password_invalid: is not valid
-      not_active: Your account is not active
-      not_confirmed: Your account is not confirmed
-      not_approved: Your account is not approved
-      no_authentication_details: You did not provide any details for authentication.
-      general_credentials_error: Login/Password combination is not valid
+      login_blank: "が空白です。"
+      login_not_found: "が無効です。"
+      login_invalid: "にはアルファベット・数字・半角空白・ピリオド・ハイフン・アットマーク以外使えません。"
+      consecutive_failed_logins_limit_exceeded: "ログインの失敗回数が規定を超えました。"
+      email_invalid: "は正しいアドレスではありません。"
+      password_blank: "が空白です。"
+      password_invalid: "が正しくありません。"
+      not_active: "あなたのアカウントは有効化されていません。"
+      not_confirmed: "あなたのアカウントは確認されていません。"
+      not_approved: "あなたのアカウントは許可されていません。"
+      no_authentication_details: "認証に必要な情報がありません。"
     models:
-      user_session: Login
+      user_session: "ログイン情報"
     attributes:
       user_session:
-        login: Registration ID
-        email: email
-        password: password
-        remember_me: remember me
+        login: "ログイン名"
+        email: "電子メール"
+        password: "パスワード"
+        remember_me: "ログイン情報を記憶"

@@ -1,3 +1,10 @@
+# Include this into evey object that should be managed seperately
+# for each conference. 
+#
+# 1. It ensures that :conference_tag is set as a database field.
+# 2. It also provides the :in_conference query scope.
+# 3. It provides :infer_conference_from so that the conference_tag 
+#    can be set automatically.
 module ConferenceRefer
   def self.included(base)
     base.extend ClassMethods

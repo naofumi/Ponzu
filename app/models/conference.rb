@@ -16,16 +16,9 @@ class Conference < ActiveRecord::Base
 
   attr_accessor :delegate
 
-  # We prefer to use Submissions.in_conference(current_conference)
-  # instead of current_conference.submissions in the controller.
-  # This allows us to use the same query regardless of object
-  #
-  # has_many :submissions, :inverse_of => :conference, :dependent => :restrict
-  # has_many :sessions, :inverse_of => :conference, :dependent => :restrict
-  # has_many :meet_ups, :inverse_of => :conference, :dependent => :restrict
-  # has_many :rooms, :inverse_of => :conference, :dependent => :restrict
-  # has_many :global_messages, :inverse_of => :conference, :dependent => :restrict
   include ConferenceDates
+
+  include Conference::ConferenceSpecificModules
 
   after_initialize :initialize_conference
 
@@ -58,7 +51,7 @@ class Conference < ActiveRecord::Base
   end
 
   # Instead of storing all configuration information in the database,
-  # we are thinking of moving stuff to YAML files in "/config/conferences/[conference_tag]".
+  # we are thinking of moving stuff to YAML files in "/config/conferences/[conference_tag].yml".
   # This is because we want flexible configuration without migrating the database.
   # Also, storing stuff that we won't change in the database is rather nonsense.
   def config(config_symbol)
@@ -69,12 +62,14 @@ class Conference < ActiveRecord::Base
     end
   end
 
+
   def config_hash
     @@config_hash ||= begin
       yaml_path = File.join(Rails.root, "config", "conferences.yml")
       Psych.load_file(yaml_path)
     end
   end
+
 
   private
 

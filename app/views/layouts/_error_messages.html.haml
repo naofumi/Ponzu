@@ -1,14 +1,15 @@
-- model_name = defined?(model_name) ? model_name : target.class.model_name.human
-- if target.errors.any?
-  #error_explanation
-    %h2
-      - if target.errors.count == 1
-        = t('activerecord.errors.template.header.one', 
-            :model => model_name)
-      - else
-        = t('activerecord.errors.template.header.other', 
-            :model => model_name, 
-            :count => target.errors.count)
-    %ul
-      - target.errors.full_messages.each do |msg|
-        %li= msg
+- if target
+  - model_name = defined?(model_name) ? model_name : target.class.model_name.human
+  - if target.errors.any?
+    #error_explanation
+      %h2
+        - if target.errors.count == 1
+          = t('activerecord.errors.template.header.one', 
+              :model => model_name)
+        - else
+          = t('activerecord.errors.template.header.other', 
+              :model => model_name, 
+              :count => target.errors.count)
+      %ul
+        - target.errors.full_messages.each do |msg|
+          %li= msg

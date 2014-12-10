@@ -73,6 +73,9 @@ class User < ActiveRecord::Base
   has_many  :meet_up_comments, :inverse_of => :user, :dependent => :restrict
 
   belongs_to  :author, :inverse_of => :users
+
+  has_many  :submissions, :dependent => :restrict, :inverse_of => :user
+
   # Fields which don't affect how user information is displayed to other users.
   # Updates to these fields will not touch #author and will not invalidate
   # the caches depending on #author.
@@ -82,7 +85,10 @@ class User < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :en_name, :if => Proc.new {|user| user.jp_name.blank? }
+  # Only validate user after a login ID has been assigned.
+  # Before that, they will only have :email and :password set.
+  validates_presence_of :en_name, 
+                        :if => Proc.new {|user| !user.login_not_set? && user.jp_name.blank? }
 
   before_destroy  :confirm_no_activity_before_destroy
   before_save     :set_registrant_whitelisted_by
@@ -96,33 +102,8 @@ class User < ActiveRecord::Base
   serialize_array :other_links
   serialize_single :other_attributes
   
-  acts_as_authentic do |c|
-    # upgrading crypto algorithms http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic/
-    c.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha512,
-    c.crypto_provider = Authlogic::CryptoProviders::SCrypt # the new default for Authlogic
-
-    # https://gist.github.com/436707/
-    
-    # c.merge_validates_format_of_login_field_options({:unless => :login_not_set?})
-    # c.merge_validates_length_of_login_field_options({:unless => :login_not_set?, :is => 7})
-    # c.merge_validates_uniqueness_of_login_field_options({:unless => :login_not_set?})
-    
-    c.merge_validates_length_of_email_field_options({:unless => :email_not_set?})
-    c.merge_validates_format_of_email_field_options({:unless => :email_not_set?})
-    # There seem to be cases where people are sharing email addresses. We
-    # cannot assume emails to be unique.
-    c.merge_validates_uniqueness_of_email_field_options({:unless => Proc.new{true}})
-    # c.merge_validates_uniqueness_of_email_field_options({:unless => :email_not_set?})
-    
-    # c.merge_validates_confirmation_of_password_field_options({:unless => :login_not_set?})
-    # c.merge_validates_length_of_password_field_options({:unless => :login_not_set?})
-    # c.merge_validates_length_of_password_confirmation_field_options({:unless => :login_not_set?})
-
-    # http://rdoc.info/github/binarylogic/authlogic/Authlogic/ActsAsAuthentic/ValidationsScope/Config
-    # Scope everything to #conference_tag
-    c.validations_scope = :conference_tag
-  end
-  
+  # Authentication and permission concerns (authlogic and CanCan)
+  include User::Authentication
 
   def flags
     result = []
@@ -170,173 +151,13 @@ class User < ActiveRecord::Base
 
   include ConferenceRefer
 
-  # TODO: Remove once we've migrated to conference_tag
-  def find_conference
-    Conference.find(conference_id)
-  end
-
-
-  def toggle_schedule(presentation)
-    raise "Deprecated"
-    l = likes.where(:presentation_id => presentation).first
-    l.update_attribute(:scheduled, !l.scheduled)
-  end
-
   # Nayose
   def mashed_up_affiliation
     if registrant && !registrant.affiliation.blank?
       registrant.affiliation
     end
   end
-  
-  # Mailboxer
-  def receipts_by_sender_type(sender_type)
-    raise "We should not be using this"
-    Receipt.where(:receiver_id => self.id).
-        where(:receiver_type => 'User').
-        includes(:message).
-        where(:notifications => {:sender_type => sender_type}).
-        order("notifications.created_at DESC")
-  end
-
-  # Mailboxer
-  def unread_receipts_count_by_sender_type(sender_type)
-    raise "We should not be using this"
-    Receipt.where(:receiver_id => self.id).
-        where(:receiver_type => 'User').
-        where(:read => false).
-        includes(:message).
-        where(:notifications => {:sender_type => sender_type}).
-        count()    
-  end
-  
-  # Mailboxer
-  def receipts_to_or_from_users
-    raise "We should not be using this"
-    @receipts_to_or_from_users ||= begin
-      result = {}
-      receipts = Receipt.where(:notifications => {:sender_type => 'User'}).
-                  includes(:message).
-                  where('receipts.receiver_id = ? OR notifications.sender_id = ?', self.id, self.id).
-                  where(:receiver_type => 'User').
-                  order("notifications.created_at DESC")
-      senders = User.find(receipts.map{|r| r.message.sender_id}.uniq)
-      receivers = User.find(receipts.map{|r| r.receiver_id}.uniq)
-
-      receipts.each do |r|
-        correnspondant = r.receiver_id == self.id ? 
-                            senders.detect{|s| s.id == r.message.sender_id} : 
-                            receivers.detect{|u| u.id == r.receiver_id}
-        next if correnspondant == self
-        result[correnspondant] ||= []
-        result[correnspondant] << r        
-      end
-      result
-    end
-  end
-
-  # Mailboxer
-  def receipts_to_or_from_user(user)
-    raise "We should not be using this"
-    Receipt.where(:notifications => {:sender_type => 'User'}).
-            includes(:message).
-            where('(receipts.receiver_id = ? OR notifications.sender_id = ?) AND ' + 
-                  '(receipts.receiver_id = ? OR notifications.sender_id = ?)', 
-                  self.id, self.id, 
-                  user.id, user.id).
-            where(:receiver_type => 'User').
-            order("notifications.created_at DESC")
-  end
-
-  # Mailboxer
-  def receipts_from_users
-    raise "We should not be using this"
-    @receipts_from_users ||= begin
-      result = {}
-
-      # We do this because we can't preload polymorphic associations
-      receipts = receipts_by_sender_type('User')
-      senders = MeetUp.find(receipts.map{|r| r.message.sender_id}.uniq)
-
-      receipts_by_sender_type('User').each do |r|
-        # sender = r.message.sender
-        sender = senders.detect{|s| s.id == r.message.sender_id}
-
-        result[sender] ||= []
-        result[sender] << r
-      end
-      result
-    end
-  end
-
-  # Mailboxer
-  def unread_receipts_from_users_count
-    raise "We should not be using this"
-    unread_receipts_count_by_sender_type('User')
-  end
-
-  # Mailboxer
-  def receipts_from_meet_ups
-    raise "We should not be using this"
-    @receipts_from_meet_ups ||= begin
-      result = {}
-
-      # We do this because we can't preload polymorphic associations
-      receipts = receipts_by_sender_type('MeetUp')
-      senders = MeetUp.find(receipts.map{|r| r.message.sender_id}.uniq)
-
-      receipts_by_sender_type('MeetUp').each do |r|
-        # sender = r.message.sender
-        sender = senders.detect{|s| s.id == r.message.sender_id}
-        result[sender] ||= []
-        result[sender] << r
-      end
-      result
-    end
-  end
-
-  # Mailboxer
-  def unread_receipts_from_meet_ups_count
-    raise "We should not be using this"
-    unread_receipts_count_by_sender_type('MeetUp')
-  end
-
-  # Mailboxer
-  def receipts_from_comments
-    raise "We should not be using this"
-  end
-
-
-  # Mailboxer
-  def receipts_from_presentations
-    raise "We should not be using this"
-    @receipts_from_presentations ||= receipts_by_sender_type('Presentation')
-  end
-
-  # Mailboxer
-  def mailboxer_email(object)
-    raise "We should not be using this"
-    # object is either a Message or Notification
-    # We can use this to select which notifications should
-    # be sent out to which address.
-    # https://github.com/ging/mailboxer
-    if Rails.env == "production"
-      if login_active? && !email.blank?
-        email
-      else
-        nil
-      end
-    elsif Rails.env == "development" || Rails.env == "development_nayose" ||
-          Rails.env == "staging"
-      nil
-      # "naofumi@castle104.com"
-    elsif Rails.env == "test"
-      nil
-    else
-      "naofumi@castle104.com"
-    end
-  end
-  
+    
   ############## FOR importing ##########
   
   
@@ -376,109 +197,7 @@ class User < ActiveRecord::Base
 
 
   ############# end for importing ##################
-  
-  # # === For automatic namesake whitelisting
-  # # If the user has a single affiliation string in all Umin records,
-  # # then we can confidently say that this is a single person.
-  # # Hence we automatically whitelist him/her.
-  # # Otherwise, the user requires manual whitelisting.
-  # def whitelist_if_consistent_affiliation
-  #   if unique_umin_name_and_affiliation_combos.size <= 1
-  #     self.whitelisted = true
-  #     self.whitelisted_by = 'auto'
-  #     self.whitelisted_at = Time.new
-  #     self.blacklisted = false
-  #     self.blacklisted_by = 'auto'
-  #     self.blacklisted_at = Time.new
-  #     self.save!
-  #   end
-  # end
-  
-  # === For automatic namesake whitelisting
-  # Automatically whitelist all User objects
-  # def self.auto_whitelist_all
-  #   i = 0
-  #   User.find_each do |u|
-  #     puts "auto_whitelisting #{i}th User with id #{u.id}"
-  #     u.whitelist_if_consistent_affiliation
-  #     i += 1
-  #   end
-  # end
-
-
-  # def blacklisted_by_user(status, user)
-  #   if status
-  #     self.blacklisted_by = user.name
-  #     self.blacklisted_at = Time.now
-  #   end
-  #   self[:blacklisted] = status
-  # end
-
-  # Copy registration_id_in_umin to login
-  # and email_in_umin to password, password_confirmation to activate
-  # login for user.
-  # Due to duplicate registration_ids, and the suspicion that the
-  # registration_ids are not accurate, we will only activate after
-  # we are sure.
-  # DEPRECATED!!! This is not how we login.
-  # def activate_login!
-  #   self.login = registration_id_in_umin
-  #   self.password = email_in_umin
-  #   self.password_confirmation = email_in_umin
-  #   save!
-  # end
-
-  # def activate_by!(args)
-  #   login_id = args[:login]
-  #   password = args[:password]
-  #   self.login = login_id
-  #   self.password = password
-  #   self.password_confirmation = password
-  #   save!
-  # end
-  
-  # def login_active?
-  #   login.blank? ? false : true
-  # end
-  
-  # registrant_whitelist_status
-  # Database is integer
-  # We return as symbols
-  def registrant_whitelist_status
-    case read_attribute(:registrant_whitelist_status)
-    when 0
-      :grey
-    when -1
-      :black
-    when 1
-      :white
-    else
-      raise "Registrant whitelist status value is not -1, 0, 1"
-    end
-  end
-
-  def registrant_whitelist_status=(status)
-    case status
-    when :grey
-      write_attribute(:registrant_whitelist_status, 0)
-    when :black
-      write_attribute(:registrant_whitelist_status, -1)
-    when :white
-      write_attribute(:registrant_whitelist_status, 1)
-    else
-      raise "Registrant whitelist status value is not :grey, :black, :white"
-    end
-    save!
-  end
-
-  def toggle_registrant_whitelist_status
-    current = registrant_whitelist_status
-    statuses = [:grey, :white, :black]
-    next_status = statuses[(statuses.index(current) + 1).modulo(3)]
-    self.registrant_whitelist_status = next_status
-    save!
-  end
-
+    
   def author_id=(string)
     if string =~ /authors\/(\d+)/
       self[:author_id] = $1
@@ -487,26 +206,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  ## Roles for CanCan
-  # add new roles on right end to preserve previous settings
-  ROLES = %w[admin user_moderator organizer voter sponsor]
-  
-  def roles=(roles)
-    self.roles_mask = (roles & ROLES).map{|r| 2**ROLES.index(r)}.sum
-  end
-  
-  def roles
-    ROLES.reject{|r| ((roles_mask || 0) & 2**ROLES.index(r)).zero?}
-  end
-  
-  def role?(role)
-    roles.include? role.to_s
-  end
-  
-  scope :with_role, lambda {|role|
-    role_query_mask = 2**User::ROLES.index(role)
-    where("roles_mask & ? != 0", role_query_mask)
-  }
 
   ## Other attributes
   def attribute_for(attribute_symbol)
@@ -518,12 +217,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
-  # Interface for mailboxer
-  def avatar
-    "default_avatar.png"
-  end
-  
   def thread_message
     "#{name}さんからのメッセージ"
   end
@@ -555,12 +248,44 @@ class User < ActiveRecord::Base
   def linkedin_url
     !linkedin_id.blank? ? "http://#{linkedin_id.sub(/^https?:\/\//, '')}" : nil
   end
-
-  private
     
   def email_not_set?
     email.blank?
   end
+
+  def login_not_set?
+    login.blank?
+  end
+
+  def registration_type
+    return attribute_for('registration_type')
+  end
+
+  def registration_type=(value)
+    my_other_attributes = self.other_attributes || {}
+    my_other_attributes['registration_type'] = value
+    self.other_attributes = my_other_attributes
+  end
+
+  def first_author_registration_number
+    return attribute_for('first_author_registration_number')
+  end
+
+  def first_author_registration_number=(value)
+    my_other_attributes = self.other_attributes
+    my_other_attributes['first_author_registration_number'] = value
+    self.other_attributes = my_other_attributes
+  end
+
+  def needs_first_author_registration_number?
+    ['co_author', 'presenter'].include?(self.registration_type)
+  end
+
+  def needs_submission?
+    ['first_author'].include?(self.registration_type)
+  end
+
+  private
 
   def confirm_no_activity_before_destroy
     # It's likely that this won't work because the associations will

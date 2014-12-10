@@ -22,15 +22,6 @@ Rails.application.routes.draw do
       put :update_institutions
     end
   end
-
-  resources :registrants do
-    member do
-      put :toggle_activation_whitelist
-    end
-    collection do
-      put :whitelist
-    end
-  end
   
   resources :umin_rows
 
@@ -98,8 +89,6 @@ Rails.application.routes.draw do
       get 'reply'
     end
   end
-
-  resources :presentation_groups
 
   resources :rooms do
     member do

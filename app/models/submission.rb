@@ -9,6 +9,17 @@ class Submission < ActiveRecord::Base
 
   has_many  :presentations, :inverse_of => :submission, :dependent => :destroy
 
+  # TODO: Strongly coupled to the existence of the RegistrationEngine.
+  #       Not a good idea
+  belongs_to  :submission_category_1, :class_name => "Registration::SubmissionCategory", 
+              :foreign_key => "registration_category_id_1", :inverse_of => :submissions_1
+
+  belongs_to  :submission_category_2, :class_name => "Registration::SubmissionCategory", 
+              :foreign_key => "registration_category_id_2", :inverse_of => :submissions_2
+
+  belongs_to  :submission_category_3, :class_name => "Registration::SubmissionCategory", 
+              :foreign_key => "registration_category_id_3", :inverse_of => :submissions_3
+
 
   # Apparently, Presentation.touch does not fire
   # after_save, and Presentation.save does not fire
@@ -23,12 +34,15 @@ class Submission < ActiveRecord::Base
   has_many    :authors, :through => :authorships, :inverse_of => :submissions
   has_many    :authorships, :dependent => :destroy, :inverse_of => :submission
 
+  belongs_to  :user, :inverse_of => :submissions
 
   locale_selective_reader :title, :ja => :jp_title, :en => :en_title
   locale_selective_reader :abstract, :ja => :jp_abstract, :en => :en_abstract
 
   validates_presence_of :submission_number
   validates_uniqueness_of :submission_number, :scope => :conference_tag
+
+  validates_presence_of :disclose_at
 
   include SimpleSerializer
   serialize_array :institutions, :class => "Institution", 
