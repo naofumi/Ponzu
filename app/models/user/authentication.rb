@@ -13,6 +13,14 @@ module User::Authentication
     # definition
     base.instance_eval do
       acts_as_authentic do |c|
+        # http://rdoc.info/github/binarylogic/authlogic/Authlogic/ActsAsAuthentic/ValidationsScope/Config
+        # Scope everything to #conference_tag
+        # This only seems to work on the configurations after
+        # validations_scope has been set, so we have to set it early.
+        # In fact, given that it's a bit finicky, we better set
+        # scope independently whenever we need it.
+        c.validations_scope = :conference_tag
+
         # upgrading crypto algorithms http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic/
         c.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha512,
         c.crypto_provider = Authlogic::CryptoProviders::SCrypt # the new default for Authlogic
@@ -43,15 +51,12 @@ module User::Authentication
         # cannot always assume emails to be unique. However, going forward,
         # we will assume that emails are unique.
         # c.merge_validates_uniqueness_of_email_field_options({:unless => Proc.new{true}})
-        c.merge_validates_uniqueness_of_email_field_options({:unless => :email_not_set?})
-        
+        c.merge_validates_uniqueness_of_email_field_options({:unless => :email_not_set?, scope: :conference_tag})
+
         # c.merge_validates_confirmation_of_password_field_options({:unless => :login_not_set?})
         # c.merge_validates_length_of_password_field_options({:unless => :login_not_set?})
         # c.merge_validates_length_of_password_confirmation_field_options({:unless => :login_not_set?})
 
-        # http://rdoc.info/github/binarylogic/authlogic/Authlogic/ActsAsAuthentic/ValidationsScope/Config
-        # Scope everything to #conference_tag
-        c.validations_scope = :conference_tag
       end
 
       ## Scope fo CanCan
@@ -60,6 +65,14 @@ module User::Authentication
         where("roles_mask & ? != 0", role_query_mask)
       }
 
+    end
+
+    def email_not_set?
+      email.blank?
+    end
+
+    def login_not_set?
+      login.blank?
     end
   end
   

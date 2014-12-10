@@ -249,14 +249,6 @@ class User < ActiveRecord::Base
     !linkedin_id.blank? ? "http://#{linkedin_id.sub(/^https?:\/\//, '')}" : nil
   end
     
-  def email_not_set?
-    email.blank?
-  end
-
-  def login_not_set?
-    login.blank?
-  end
-
   def registration_type
     return attribute_for('registration_type')
   end
