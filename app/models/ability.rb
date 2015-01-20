@@ -50,7 +50,6 @@ class Ability
       can [:new, :create, :threads, :conversation], PrivateMessage
       can [:delegate], Conference
       can [:read, :answer, :results], Questionnaire
-      can [:edit_user, :update_user, :edit_submission], SignIn
     end
 
     if user.role? :voter

@@ -15,6 +15,10 @@ ja:
         jp_name: "日本語の氏名"
         kana_name: "カタカナの氏名"
         email: "電子メールアドレス"
+        registration_type: "参加区分"
+        reception_attendance: "懇談会への参加"
+        payer_jp_name: "入金者氏名"
+        payer_kana_name: "入金者氏名（カタカナ）"
 
   error_messages:
     login_failed: "ログインに失敗しました。"
