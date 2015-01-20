@@ -22,9 +22,9 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = current_conference.user_sessions.new(params[:user_session])
     if @user_session.save
-      flash[:notice] = "Successfully logged in."
+      flash[:notice] = t("error_messages.login_succeeded")
     else
-      flash[:error] = "Failed to log in."
+      flash[:error] = t("error_messages.login_failed")
     end
     # Set the user_id in the cookie.
     # This normally runs as a :before_filter, but

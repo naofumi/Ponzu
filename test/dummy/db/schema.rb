@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140918034145) do
+ActiveRecord::Schema.define(:version => 20150119041225) do
 
   create_table "authors", :force => true do |t|
     t.string   "jp_name"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20140918034145) do
     t.integer  "author_id",                               :null => false
     t.integer  "submission_id",                           :null => false
     t.string   "conference_tag"
+    t.string   "email"
   end
 
   add_index "authorships", ["author_id"], :name => "index_authorships_on_author_id"
@@ -311,6 +312,7 @@ ActiveRecord::Schema.define(:version => 20140918034145) do
     t.string   "external_link"
     t.string   "speech_language"
     t.boolean  "show_abstract_to_everybody",                 :default => false
+    t.integer  "user_id"
   end
 
   create_table "umin_rows", :force => true do |t|
@@ -368,6 +370,9 @@ ActiveRecord::Schema.define(:version => 20140918034145) do
     t.boolean  "job_available"
     t.string   "submission_info"
     t.text     "other_attributes"
+    t.string   "type"
+    t.boolean  "registration_confirmed",      :default => false
+    t.datetime "registration_confirmed_at"
   end
 
   add_index "users", ["author_id"], :name => "index_users_on_author_id"

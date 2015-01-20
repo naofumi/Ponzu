@@ -1,4 +1,24 @@
 ja:
+  activerecord:
+    models:
+      user_session: "ログイン情報"
+      en_name: "英語氏名"
+      jp_name: "日本氏名"
+    attributes:
+      user_session:
+        login: "ログイン名"
+        email: "電子メール"
+        password: "パスワード"
+        remember_me: "ログイン情報を記憶"
+      user:
+        en_name: "英語の氏名"
+        jp_name: "日本語の氏名"
+        kana_name: "カタカナの氏名"
+        email: "電子メールアドレス"
+
+  error_messages:
+    login_failed: "ログインに失敗しました。"
+    login_succeeded: "ログインしました。"
   date:
     order:
       - :year
@@ -507,3 +527,8 @@ ja:
     hit_presentations: '"%{query}" matched %{hits} presentations'
     next: "Next page"
     previous: "Previous page"
+  registration:
+    user_sessions:
+      new:
+        show_password: パスワードを表示する
+        automatically_login_on_this_device: 次回から自動的にログインする

@@ -47,17 +47,20 @@
 # In 
 
 class User < ActiveRecord::Base
+  include SingleTableInheritanceMixin
+
   attr_accessible :en_name, :jp_name, :twitter_id, :facebook_id, :linkedin_id, 
                   :read_research_map_id, :other_links,
                   :en_affiliation, :jp_affiliation, :author_id,
-                  :email, :login, :password, :password_confirmation,
+                  :email, :email_confirmation, :login, :password, :password_confirmation,
                   :read_global_messages, :registration_id_in_umin, :email_in_umin,
                   :roles, :whitelisted_by, :whitelisted_at, :whitelisted,
                   :jp_profile, :en_profile, :email_notifications, 
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
                   :male_partner_search, :female_partner_search,
-                  :submission_info, :other_attributes
+                  :submission_info, :other_attributes, :registration_confirmed
+
   PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
                       last_login_at current_login_ip last_login_ip crypted_password
                       password_salt persistence_token perishable_token
@@ -76,6 +79,8 @@ class User < ActiveRecord::Base
 
   has_many  :submissions, :dependent => :restrict, :inverse_of => :user
 
+  before_save :update_registration_confirmed_at
+
   # Fields which don't affect how user information is displayed to other users.
   # Updates to these fields will not touch #author and will not invalidate
   # the caches depending on #author.
@@ -87,8 +92,12 @@ class User < ActiveRecord::Base
 
   # Only validate user after a login ID has been assigned.
   # Before that, they will only have :email and :password set.
+  # Because we want different validation rules for subclasses,
+  # we restrict it to the User class.
   validates_presence_of :en_name, 
-                        :if => Proc.new {|user| !user.login_not_set? && user.jp_name.blank? }
+                        :if => Proc.new {|user| user.class == User && user.jp_name.blank? }
+  validates :email, confirmation: true
+
 
   before_destroy  :confirm_no_activity_before_destroy
   before_save     :set_registrant_whitelisted_by
@@ -217,6 +226,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Set the attribute using self.other_attributes= so that
+  # it will become dirty and tagged for update
+  def set_attribute_for(attribute_symbol, value)
+    attribute_symbol = attribute_symbol.to_s
+
+    my_other_attributes = self.other_attributes || {}
+    my_other_attributes[attribute_symbol] = value
+    self.other_attributes = my_other_attributes
+  end
+
   def thread_message
     "#{name}さんからのメッセージ"
   end
@@ -249,34 +268,6 @@ class User < ActiveRecord::Base
     !linkedin_id.blank? ? "http://#{linkedin_id.sub(/^https?:\/\//, '')}" : nil
   end
     
-  def registration_type
-    return attribute_for('registration_type')
-  end
-
-  def registration_type=(value)
-    my_other_attributes = self.other_attributes || {}
-    my_other_attributes['registration_type'] = value
-    self.other_attributes = my_other_attributes
-  end
-
-  def first_author_registration_number
-    return attribute_for('first_author_registration_number')
-  end
-
-  def first_author_registration_number=(value)
-    my_other_attributes = self.other_attributes
-    my_other_attributes['first_author_registration_number'] = value
-    self.other_attributes = my_other_attributes
-  end
-
-  def needs_first_author_registration_number?
-    ['co_author', 'presenter'].include?(self.registration_type)
-  end
-
-  def needs_submission?
-    ['first_author'].include?(self.registration_type)
-  end
-
   private
 
   def confirm_no_activity_before_destroy
@@ -288,6 +279,12 @@ class User < ActiveRecord::Base
   def set_registrant_whitelisted_by
     if changed.include? 'registrant_whitelist_status'
       self.registrant_whitelisted_by = UserSession.find && UserSession.find.record.name
+    end
+  end
+
+  def update_registration_confirmed_at
+    if changed.include?("registration_confirmed") && registration_confirmed
+      self.registration_confirmed_at = Time.now
     end
   end
 end

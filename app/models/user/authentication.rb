@@ -86,10 +86,19 @@ module User::Authentication
   # If this returns false, you will not be able to log into this account.
   # (Authlogic feature).
   #
-  # We use this during sign-up because we won't activate unless email is confirmed.
+  # In the Registration Engine, we allow anybody to sign-up but only if they
+  # enter a valid email address. The email address is confirmed by sending them
+  # a perishable token. Users cannot login unless they first activate their account
+  # with the perishable token. 
+  #
+  # You can set whether or not you want to use this sign-up scheme in config/conferences.yml
   # http://www.rubydoc.info/github/binarylogic/authlogic/Authlogic/Session/MagicStates
   def confirmed?
-    email_confirmed
+    if conference.config(:email_confirmation_required)
+      email_confirmed
+    else
+      true
+    end
   end
 
 
@@ -107,17 +116,32 @@ module User::Authentication
   end
   
   module ClassMethods
+    # We have single_table_inheritance setup for the User object so
+    # this should automatically return the appropriate User subclass.
+    # However, we might have set up users before we created the User subclass
+    # in which case the `type` field will not have been set. In this
+    # case, we will not get the corrects subclass.
+    #
+    # To guard against these cases, we reset the type field and reload if necessary.
     def find_by_login_or_email_according_to_conference_setting(login)
       return nil if login.blank?
       if user = find_by_login(login)
-        return user
+        return reset_type_of_user_if_not_set(user)
       elsif (user = find_by_email(login)) && 
             user.conference.config(:allow_email_for_login)
-        # raise "SHIT #{find_by_email(login).conference}"
-        return user
+        return reset_type_of_user_if_not_set(user)
       else
         return nil
       end
+    end
+
+    def reset_type_of_user_if_not_set(user)
+      user_class = user.conference.user_class
+      if user_class != user.class
+        user.update_attribute("type", user_class.to_s)
+        user.reload
+      end
+      return user
     end
   end
 

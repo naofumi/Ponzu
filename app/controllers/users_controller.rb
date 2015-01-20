@@ -72,9 +72,15 @@ class UsersController < ApplicationController
 
   # POST /users
   # POST /users.json
+  #
+  # Users are not the same for each conference. The validation requirements
+  # are different, and in case of registration, they may also have
+  # different custom attributes. Therefore, each user should have a subclass
+  # if necessary.
   def create
     authorize! :create, User
-    @user = User.new(params[:user])
+
+    @user = current_conference.user_class.in_conference(current_conference).new(params[:user])
     @user.conference_confirm = current_conference
 
     if @user.save

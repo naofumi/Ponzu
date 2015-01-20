@@ -3,7 +3,7 @@
 class Submission < ActiveRecord::Base
   attr_accessible :disclose_at, :en_abstract, :en_title, :jp_abstract, :jp_title, 
                   :main_author_id, :presenting_author_id, :submission_number,
-                  :institutions, :keywords, :type, :external_link
+                  :institutions, :keywords, :type, :external_link, :confirmed
 
   before_destroy :confirm_absence_of_presentations_before_destroy
 
@@ -20,7 +20,6 @@ class Submission < ActiveRecord::Base
   belongs_to  :submission_category_3, :class_name => "Registration::SubmissionCategory", 
               :foreign_key => "registration_category_id_3", :inverse_of => :submissions_3
 
-
   # Apparently, Presentation.touch does not fire
   # after_save, and Presentation.save does not fire
   # after_touch. Pretty confusing.
@@ -33,6 +32,7 @@ class Submission < ActiveRecord::Base
 
   has_many    :authors, :through => :authorships, :inverse_of => :submissions
   has_many    :authorships, :dependent => :destroy, :inverse_of => :submission
+  accepts_nested_attributes_for :authorships, :reject_if => :all_blank, :allow_destroy => true
 
   belongs_to  :user, :inverse_of => :submissions
 
@@ -41,6 +41,11 @@ class Submission < ActiveRecord::Base
 
   validates_presence_of :submission_number
   validates_uniqueness_of :submission_number, :scope => :conference_tag
+
+  validate :must_have_title
+  validate :must_have_submission_category_1
+  validate :must_have_at_least_one_authorship
+  validate :must_have_at_least_one_institution
 
   validates_presence_of :disclose_at
 
@@ -116,4 +121,29 @@ class Submission < ActiveRecord::Base
       return false
     end
   end
+
+  def must_have_title
+    if title.blank?
+      errors.add(:en_title, :blank)
+    end
+  end
+
+  def must_have_submission_category_1
+    if submission_category_1.blank?
+      errors.add(:registration_category_id_1, :blank)
+    end
+  end
+
+  def must_have_at_least_one_authorship
+    if authorships.empty?
+      errors.add(:authorships, :empty)
+    end
+  end
+
+  def must_have_at_least_one_institution
+    if institutions.empty?
+      errors.add(:institutions, :empty)
+    end
+  end
+
 end

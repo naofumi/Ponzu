@@ -9,7 +9,7 @@ ja:
       password_blank: "が空白です。"
       password_invalid: "が正しくありません。"
       not_active: "あなたのアカウントは有効化されていません。"
-      not_confirmed: "あなたのアカウントは確認されていません。"
+      not_confirmed: "あなたのアカウントの電子メールアドレスは確認されていません。"
       not_approved: "あなたのアカウントは許可されていません。"
       no_authentication_details: "認証に必要な情報がありません。"
     models:

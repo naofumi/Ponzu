@@ -1,4 +1,21 @@
 en:
+  activerecord:
+    models:
+      user_session: "ログイン情報"
+    attributes:
+      user_session:
+        login: "ログイン名"
+        email: "電子メール"
+        password: "パスワード"
+        remember_me: "ログイン情報を記憶"
+      user:
+        en_name: "英語氏名"
+        jp_name: "日本氏名"
+        
+
+  error_messages:
+    login_failed: "Login failed."
+    login_succeeded: "Login succeeded."
   date:
     order:
       - :year
