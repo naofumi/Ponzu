@@ -4,6 +4,9 @@ ja:
       user_session: "ログイン情報"
       en_name: "英語氏名"
       jp_name: "日本氏名"
+      user: 参加者情報
+      submission: 登録演題英語後
+      authorship: 著者
     attributes:
       user_session:
         login: "ログイン名"
@@ -19,6 +22,22 @@ ja:
         reception_attendance: "懇談会への参加"
         payer_jp_name: "入金者氏名"
         payer_kana_name: "入金者氏名（カタカナ）"
+        password: パスワード
+        first_author_registration_number: 主著者のメールアドレス
+      submission:
+        en_title: タイトル
+        jp_title: タイトル
+        registration_category_id_1: 登録カテゴリー1
+        authorships: 演題の著者
+        institutions: 演題著者の所属
+      submission/authorships:
+        affiliations_string: 演題著者の所属番号
+        email: メールアドレス
+        en_name: "英語の氏名"
+        jp_name: "日本語の氏名"
+      authorship:
+        affiliations_string: 所属先番号
+
 
   error_messages:
     login_failed: "ログインに失敗しました。"

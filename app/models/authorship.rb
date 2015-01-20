@@ -161,7 +161,7 @@ class Authorship < ActiveRecord::Base
     institutions_count = submission.institutions.size
     affiliations.each do |affiliation|
       unless institutions_count >= affiliation && affiliation > 0
-        errors.add(:affiliations, "has value not included in institutions.")
+        errors.add(:affiliations_string, "は所属に含まれていない番号があります。")
         break
       end
     end

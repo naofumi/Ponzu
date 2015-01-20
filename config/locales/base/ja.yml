@@ -199,22 +199,3 @@ ja:
   activerecord:
     errors:
       <<: *errors
-    models:
-      user: 参加者情報
-      submission: 登録演題英語後
-      authorship: 著者
-    attributes:
-      user:
-        password: パスワード
-        first_author_registration_number: 主著者のメールアドレス
-      submission:
-        en_title: タイトル
-        jp_title: タイトル
-        registration_category_id_1: 登録カテゴリー1
-        authorships: 演題の著者
-        institutions: 演題著者の所属
-      submission/authorships:
-        affiliations_string: 演題著者の所属番号
-        email: メールアドレス
-      authorship:
-        affiliations_string: 所属先番号
