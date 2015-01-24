@@ -17,6 +17,7 @@ ja:
         en_name: "英語の氏名"
         jp_name: "日本語の氏名"
         kana_name: "カタカナの氏名"
+        jp_affiliation: "所属"
         email: "電子メールアドレス"
         registration_type: "参加区分"
         reception_attendance: "懇談会への参加"
