@@ -23,6 +23,7 @@ ja:
         payer_jp_name: "入金者氏名"
         payer_kana_name: "入金者氏名（カタカナ）"
         password: パスワード
+        password_confirmation: パスワード（確認）
         first_author_registration_number: 主著者のメールアドレス
       submission:
         en_title: タイトル
@@ -38,6 +39,10 @@ ja:
       authorship:
         affiliations_string: 所属先番号
 
+  errors:
+    # error messages for validation
+    messages:
+      invalid_password: "は半角英数字と半角記号を使ってください。"
 
   error_messages:
     login_failed: "ログインに失敗しました。"

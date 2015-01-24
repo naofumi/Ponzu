@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Isolated authentication and permission concerns from the User object
 #
 # Include into the User class
@@ -59,7 +60,18 @@ module User::Authentication
 
       end
 
-      ## Scope fo CanCan
+      # Validations that aren't provided by Authlogic
+      # http://stackoverflow.com/a/2391466
+      # We can't use the :has_no_credentials? check
+      # because it seems that Authlogic sets the crypted_password before
+      # regular validations are performed, and so :has_no_credentials?
+      # always returns false.
+      # Instead we :allow_blank and let Authlogic block blank passwords
+      # depending on :has_no_credentials?
+      validates_format_of :password, :with => /^[a-zA-Z0-9\x20-\x7E]+$/, :allow_blank => true, 
+                          :message => "は半角英数字と半角記号を使ってください。"
+
+      ## Scope for CanCan
       scope :with_role, lambda {|role|
         role_query_mask = 2**User::ROLES.index(role)
         where("roles_mask & ? != 0", role_query_mask)
