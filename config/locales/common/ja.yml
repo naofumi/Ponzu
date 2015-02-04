@@ -27,6 +27,7 @@ ja:
         password_confirmation: パスワード（確認）
         first_author_registration_number: 主著者のメールアドレス
         sponsor_name: 協賛企業名
+        with_poster: ポスター発表
       submission:
         en_title: タイトル
         jp_title: タイトル
