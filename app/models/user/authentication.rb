@@ -58,6 +58,7 @@ module User::Authentication
         # c.merge_validates_length_of_password_field_options({:unless => :login_not_set?})
         # c.merge_validates_length_of_password_confirmation_field_options({:unless => :login_not_set?})
 
+        c.perishable_token_valid_for(24.hours)
       end
 
       # Validations that aren't provided by Authlogic
