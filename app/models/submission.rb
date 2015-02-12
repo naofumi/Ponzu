@@ -188,7 +188,7 @@ class Submission < ActiveRecord::Base
         # Make sure we don't inadvertently change on a trivial change like updating timestamps
         next unless changed.include?(attribute.to_s)
         allowed_tags = conference.config(:allowed_tags_in_submission_abstract) || %w(b i u sup sub br)
-        allowed_attributes = current_conference.config(:allowed_attributes_in_submission_abstract) || %w(href)
+        allowed_attributes = conference.config(:allowed_attributes_in_submission_abstract) || %w(href)
         string = send(attribute)
         if string && (sanitized_string = ActionController::Base.helpers.sanitize(string, :tags => allowed_tags, :attributes => allowed_attributes))
           send("#{attribute}=", sanitized_string)
