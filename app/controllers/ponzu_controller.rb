@@ -17,6 +17,7 @@ class PonzuController < ActionController::Base
 
   before_filter :edit_name_if_generic
   before_filter :load_single_table_inheritance
+  before_filter :redirect_to_registration_on_configuration
 
   # TODO: We have to consider how to handle errors
   # unless false #Rails.configuration.consider_all_requests_local
@@ -44,6 +45,12 @@ class PonzuController < ActionController::Base
   protected
 
   private
+
+  def redirect_to_registration_on_configuration
+    if current_conference.config("redirect_to_registration")
+      redirect_to registration_path
+    end
+  end
 
   def edit_name_if_generic
     if current_user && 
