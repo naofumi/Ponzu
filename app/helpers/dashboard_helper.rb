@@ -54,6 +54,9 @@ module DashboardHelper
   # the value may be a Proc or lambda (something that responds to #call).
   def grid_buttons
     {
+      registration: {
+        href: registration_path
+      },
       welcome: {
         href: ksp(:docs_path, "#{conference_tag}/welcome")
       },
