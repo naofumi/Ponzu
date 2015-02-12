@@ -66,7 +66,7 @@ class Ability
       can [:likes_report, :votes_report], Like
       can :manage, GlobalMessage
       can :clear, Kamishibai::Cache
-      can [:update, :moderate, :read], Submission
+      can [:update, :moderate, :read, :download_csv], Submission
       can [:change_ad_category, :moderate], Presentation
       can [:edit, :create, :destroy, :update], Questionnaire
       can :manage, User
