@@ -41,7 +41,6 @@ class Authorship < ActiveRecord::Base
 
   before_save :create_author_if_absent
 
-  after_save :reset_whitelist_of_user
   after_save :sync_author_if_requested_and_only_authorship_on_author
 
   locale_selective_reader :name, :en => :en_name, :ja => :jp_name
@@ -95,16 +94,6 @@ class Authorship < ActiveRecord::Base
 
   private
 
-  def reset_whitelist_of_user
-    if changed.include?('submission_id') || 
-         changed.include?('author_id')
-      author.whitelisted = false
-      author.whitelisted_by = 'auto'
-      author.whitelisted_at = Time.now
-      author.save!
-    end
-  end
-
   # params[authorships][affiliations][] will return an
   # array of strings, but we need to convert them into integers.
   #
@@ -144,6 +133,8 @@ class Authorship < ActiveRecord::Base
       # only give it after saving an Authorship.
       a.save(:validate => false)
       self.author = a
+      # We need a reload so that author recognizes its Authorships
+      author.reload
     end
   end
 
@@ -169,7 +160,20 @@ class Authorship < ActiveRecord::Base
 
   def sync_author_if_requested_and_only_authorship_on_author
     if author && author.authorships.size == 1 && _sync_author_names
-      author.update_attributes(:en_name => en_name, :jp_name => jp_name)
+      # Inside a callback, it's better to not use stuff that
+      # triggers validations, etc. unless we're sure that we want to
+      # do it. 
+      # 1. `update_attributes!` will fire RecordInvalid exceptions but
+      #    these tend to be consumed in `transaction` blocks and will not
+      #    always be raised up to where we want them to be.
+      # 2. If we want to raise an exception, we should raise something explicit
+      #    and that will not be consumed in `transaction` blocks. These blocks
+      #    are lurking in may unexpected places.
+      # 3. If you are fiddling with an association, ActiveModel::Errors will
+      #    not automatically be set on the current object (but on the object you're working with).
+      #    Error handling becomes complicated.
+      author.update_column(:en_name, en_name)
+      author.update_column(:jp_name, jp_name)
     end
   end
 end
