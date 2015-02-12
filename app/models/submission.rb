@@ -1,9 +1,11 @@
 # encoding: utf-8
 
 class Submission < ActiveRecord::Base
+
   attr_accessible :disclose_at, :en_abstract, :en_title, :jp_abstract, :jp_title, 
                   :main_author_id, :presenting_author_id, :submission_number,
                   :institutions, :keywords, :type, :external_link, :confirmed
+  attr_accessor   :do_not_validate_title_abstract_lengths, :do_not_strip_unallowed_tags
 
   before_destroy :confirm_absence_of_presentations_before_destroy
 
@@ -19,6 +21,8 @@ class Submission < ActiveRecord::Base
 
   belongs_to  :submission_category_3, :class_name => "Registration::SubmissionCategory", 
               :foreign_key => "registration_category_id_3", :inverse_of => :submissions_3
+
+  before_save :strip_unallowed_html_tags
 
   # Apparently, Presentation.touch does not fire
   # after_save, and Presentation.save does not fire
@@ -48,6 +52,8 @@ class Submission < ActiveRecord::Base
   validate :must_have_at_least_one_institution
 
   validates_presence_of :disclose_at
+
+  validate :check_title_abstract_lengths
 
   include SimpleSerializer
   serialize_array :institutions, :class => "Institution", 
@@ -143,6 +149,51 @@ class Submission < ActiveRecord::Base
   def must_have_at_least_one_institution
     if institutions.empty?
       errors.add(:institutions, :empty)
+    end
+  end
+
+  def check_title_abstract_lengths
+    # In certain cases (e.g. Admin is entering the abstract for keynote speakers)
+    # we don't want this validation to be run.
+    # In these cases we can just set @do_not_validate_title_abstract_lengths
+    unless @do_not_validate_title_abstract_lengths
+      length_restrictions = conference.config("length_restrictions")
+      if configs = length_restrictions["submission"]
+        configs.each do |key, value|
+          # We don't want to validate on a trivial change like updating timestamps
+          next unless changed.include?(key.to_s)
+          string = send(key) || ""
+          html_stripped_string = ActionController::Base.helpers.strip_tags(string)
+          if value && html_stripped_string.size > value
+            errors.add(key, "が長すぎます")
+          end
+        end
+      end
+    end
+  end
+
+  def strip_unallowed_html_tags
+    unless @do_not_strip_unallowed_tags
+      [:en_title, :jp_title].each do |attribute|
+        # Make sure we don't inadvertently change on a trivial change like updating timestamps
+        next unless changed.include?(attribute.to_s)
+        allowed_tags = conference.config(:allowed_tags_in_submission_title) || %w(b i u sup sub)
+        string = send(attribute)
+        if string && (sanitized_string = ActionController::Base.helpers.sanitize(string, :tags => allowed_tags))
+          send("#{attribute}=", sanitized_string)
+        end
+      end
+
+      [:en_abstract, :jp_abstract].each do |attribute|
+        # Make sure we don't inadvertently change on a trivial change like updating timestamps
+        next unless changed.include?(attribute.to_s)
+        allowed_tags = conference.config(:allowed_tags_in_submission_abstract) || %w(b i u sup sub br)
+        allowed_attributes = current_conference.config(:allowed_attributes_in_submission_abstract) || %w(href)
+        string = send(attribute)
+        if string && (sanitized_string = ActionController::Base.helpers.sanitize(string, :tags => allowed_tags, :attributes => allowed_attributes))
+          send("#{attribute}=", sanitized_string)
+        end
+      end
     end
   end
 
