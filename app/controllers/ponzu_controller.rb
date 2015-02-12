@@ -46,8 +46,9 @@ class PonzuController < ActionController::Base
 
   private
 
+  # Admins will not be redirected
   def redirect_to_registration_on_configuration
-    if current_conference.config("redirect_to_registration")
+    if current_conference.config("redirect_to_registration") && cannot?(:manage, Conference)
       redirect_to registration_path
     end
   end
