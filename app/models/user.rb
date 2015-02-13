@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
                   :submission_info, :other_attributes, :registration_confirmed]
   ADMIN_ATTR_ACCESSIBLE = (DEFAULT_ATTR_ACCESSIBLE << :email_confirmed)
 
-  attr_accessible DEFAULT_ATTR_ACCESSIBLE
+  attr_accessible *DEFAULT_ATTR_ACCESSIBLE
   attr_accessible *ADMIN_ATTR_ACCESSIBLE, :as => :admin
 
   PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
