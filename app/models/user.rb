@@ -48,8 +48,7 @@
 
 class User < ActiveRecord::Base
   include SingleTableInheritanceMixin
-
-  attr_accessible :en_name, :jp_name, :twitter_id, :facebook_id, :linkedin_id, 
+  DEFAULT_ATTR_ACCESSIBLE = [:en_name, :jp_name, :twitter_id, :facebook_id, :linkedin_id, 
                   :read_research_map_id, :other_links,
                   :en_affiliation, :jp_affiliation, :author_id,
                   :email, :email_confirmation, :login, :password, :password_confirmation,
@@ -59,7 +58,11 @@ class User < ActiveRecord::Base
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
                   :male_partner_search, :female_partner_search,
-                  :submission_info, :other_attributes, :registration_confirmed
+                  :submission_info, :other_attributes, :registration_confirmed]
+  ADMIN_ATTR_ACCESSIBLE = (DEFAULT_ATTR_ACCESSIBLE << :email_confirmed)
+
+  attr_accessible DEFAULT_ATTR_ACCESSIBLE
+  attr_accessible *ADMIN_ATTR_ACCESSIBLE, :as => :admin
 
   PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
                       last_login_at current_login_ip last_login_ip crypted_password
