@@ -100,7 +100,6 @@ class User < ActiveRecord::Base
 
 
   before_destroy  :confirm_no_activity_before_destroy
-  before_save     :set_registrant_whitelisted_by
 
   locale_selective_reader :name, :en => :en_name, :ja => :jp_name
   locale_selective_reader :affiliation, :en => :en_affiliation, :ja => :jp_affiliation
@@ -274,12 +273,6 @@ class User < ActiveRecord::Base
     # It's likely that this won't work because the associations will
     # be destroyed before before_destroy is called. Hence
     # we set the restriction in the association definition :dependent => :restrict
-  end
-
-  def set_registrant_whitelisted_by
-    if changed.include? 'registrant_whitelist_status'
-      self.registrant_whitelisted_by = UserSession.find && UserSession.find.record.name
-    end
   end
 
   def update_registration_confirmed_at
