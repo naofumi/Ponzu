@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
                   :school_search, :acad_job_search, :corp_job_search,
                   :school_avail, :acad_job_avail, :corp_job_avail,
                   :male_partner_search, :female_partner_search,
-                  :submission_info, :other_attributes, :registration_confirmed
+                  :submission_info, :other_attributes, :registration_confirmed, :email_confirmed
 
   PERSONAL_FIELDS = %w(login_count failed_login_count last_request_at current_login_at
                       last_login_at current_login_ip last_login_ip crypted_password
