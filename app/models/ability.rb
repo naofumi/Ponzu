@@ -69,7 +69,7 @@ class Ability
       can [:update, :moderate, :read, :download_csv], Submission
       can [:change_ad_category, :moderate], Presentation
       can [:edit, :create, :destroy, :update], Questionnaire
-      can :manage, User
+      can [:edit, :create, :update], User
     end
 
     if user.role? :user_moderator
