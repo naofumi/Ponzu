@@ -30,8 +30,8 @@ class Authorship < ActiveRecord::Base
 
   # The email address is currently a dummy and we don't do anything with it.
   # It was introduced for NGS2015.
-  validates_presence_of :email
-  validates_format_of :email, :with => Authlogic::Regex.email
+  validates_presence_of :email, if: :require_email_in_authorships
+  validates_format_of :email, :with => Authlogic::Regex.email, if: :require_email_in_authorships
 
   validate :affiliation_institutes_are_set
 
@@ -175,6 +175,10 @@ class Authorship < ActiveRecord::Base
       author.update_column(:en_name, en_name)
       author.update_column(:jp_name, jp_name)
     end
+  end
+
+  def require_email_in_authorships
+    return !!conference.config('require_email_in_authorships')
   end
 end
 
