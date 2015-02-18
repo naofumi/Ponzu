@@ -34,6 +34,8 @@ class Authorship < ActiveRecord::Base
   validates_format_of :email, :with => Authlogic::Regex.email, if: :require_email_in_authorships
 
   validate :affiliation_institutes_are_set
+  validate :en_name_format
+  validate :jp_name_format
 
   before_validation :fill_conference_tag_if_nil
   before_save :fill_names_if_nil
@@ -158,20 +160,41 @@ class Authorship < ActiveRecord::Base
     end
   end
 
+  def en_name_format
+    if conference.config('validate_name_format_in_authorships')
+      if (en_name.present? && en_name !~ /^(?:\p{Latin}|[-\.,\(\) ])+$/)
+        errors.add(:en_name, "はアルファベット以外の文字が含まれまれています。")
+      end
+      if (en_name.present? && en_name !~ /[ ]/)
+        errors.add(:en_name, "はfirst nameとlast nameをスペースで区切ってください。")
+      end      
+    end
+  end
+
+  def jp_name_format
+    if conference.config(:validate_name_format_in_authorships)
+      if (jp_name.present? && jp_name !~ /[ 　]/)
+        errors.add(:jp_name, "は姓と名をスペースで区切ってください。")
+      end
+    end
+  end
+
   def sync_author_if_requested_and_only_authorship_on_author
     if author && author.authorships.size == 1 && _sync_author_names
-      # Inside a callback, it's better to not use stuff that
-      # triggers validations, etc. unless we're sure that we want to
-      # do it. 
-      # 1. `update_attributes!` will fire RecordInvalid exceptions but
-      #    these tend to be consumed in `transaction` blocks and will not
-      #    always be raised up to where we want them to be.
-      # 2. If we want to raise an exception, we should raise something explicit
-      #    and that will not be consumed in `transaction` blocks. These blocks
-      #    are lurking in may unexpected places.
-      # 3. If you are fiddling with an association, ActiveModel::Errors will
-      #    not automatically be set on the current object (but on the object you're working with).
-      #    Error handling becomes complicated.
+      # Inside a callback, you should be better use persistence
+      # methods that will always work. This is because they won't
+      # raise errors for you unless you are explicit.
+      #
+      # For example, using #save! in a callback will raise a RecordInvalid exception
+      # but if the record was saved with #save, then that will consume
+      # the RecordInvalid exception. You simply cannot expect the exception
+      # to bubble up reliably, so the best you can do is to add an ActiveModel::Errors,
+      # which can be a bit complicated in it's own right if we are doing nested stuff.
+      # 
+      # If we want to raise an error, raise something explicit. Otherwise,
+      # make sure that the callback won't fail.
+      #
+      # You could also test if the return value is nil, but that's not always good.
       author.update_column(:en_name, en_name)
       author.update_column(:jp_name, jp_name)
     end
