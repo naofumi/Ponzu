@@ -90,6 +90,13 @@ class Conference < ActiveRecord::Base
     end
   end
 
+  def support_email
+    if config(:support_email).present?
+      config(:support_email)
+    else
+      read_attribute(:support_email)
+    end
+  end
 
   private
 
