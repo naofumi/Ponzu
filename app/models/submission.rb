@@ -13,14 +13,16 @@ class Submission < ActiveRecord::Base
 
   # TODO: Strongly coupled to the existence of the RegistrationEngine.
   #       Not a good idea
-  belongs_to  :submission_category_1, :class_name => "Registration::SubmissionCategory", 
-              :foreign_key => "registration_category_id_1", :inverse_of => :submissions_1
+  if Kernel.const_defined?(:Registration)
+    belongs_to  :submission_category_1, :class_name => "Registration::SubmissionCategory", 
+                :foreign_key => "registration_category_id_1", :inverse_of => :submissions_1
 
-  belongs_to  :submission_category_2, :class_name => "Registration::SubmissionCategory", 
-              :foreign_key => "registration_category_id_2", :inverse_of => :submissions_2
+    belongs_to  :submission_category_2, :class_name => "Registration::SubmissionCategory", 
+                :foreign_key => "registration_category_id_2", :inverse_of => :submissions_2
 
-  belongs_to  :submission_category_3, :class_name => "Registration::SubmissionCategory", 
-              :foreign_key => "registration_category_id_3", :inverse_of => :submissions_3
+    belongs_to  :submission_category_3, :class_name => "Registration::SubmissionCategory", 
+                :foreign_key => "registration_category_id_3", :inverse_of => :submissions_3
+  end
 
   before_save :strip_unallowed_html_tags
 
@@ -47,7 +49,9 @@ class Submission < ActiveRecord::Base
   validates_uniqueness_of :submission_number, :scope => :conference_tag
 
   validate :must_have_title
-  validate :must_have_submission_category_1
+  if Kernel.const_defined?(:Registration)
+    validate :must_have_submission_category_1
+  end
   validate :must_have_at_least_one_authorship
   validate :must_have_at_least_one_institution
 

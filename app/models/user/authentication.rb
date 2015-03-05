@@ -107,7 +107,7 @@ module User::Authentication
   # You can set whether or not you want to use this sign-up scheme in config/conferences.yml
   # http://www.rubydoc.info/github/binarylogic/authlogic/Authlogic/Session/MagicStates
   def confirmed?
-    if conference.config(:email_confirmation_required)
+    if conference.config(:email_confirmation_required) && respond_to?(:email_confirmed)
       email_confirmed
     else
       true
