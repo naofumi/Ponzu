@@ -81,6 +81,7 @@ class SubmissionsController < ApplicationController
     @submission = Submission.in_conference(current_conference).
                              find(params[:id])
     verify_ownership(@submission)
+    @submission.do_not_validate_title_abstract_lengths = true
 
     if @submission.update_attributes(params[:submission])
       flash[:notice] = "Submission was successfully updated."
