@@ -1,0 +1,15 @@
+generic_conference:
+  registration_enabled: true
+  redirect_to_registration: true
+  default_locale: "ja"
+  allow_email_for_login: true
+  email_confirmation_required: true
+  allowed_tags_in_submission_title: "b i u sup sub"
+  allowed_tags_in_submission_abstract: "b i u sup sub br"
+  require_email_in_authorships: false
+  validate_name_format_in_authorships: true
+  length_restrictions:
+    submission:
+      en_title: 40
+      en_abstract: 420
+  support_email: "support_email_set_in_conferences_yml@mac.com"

@@ -25,4 +25,9 @@ class ConferenceTest < ActiveSupport::TestCase
 		             @conference.closest_date_for("meet_up", Time.zone.parse("2013-6-1"))
 
 	end
+
+	test "conferenece should read support_email from config" do
+		conference = conferences(:generic_conference)
+		assert_equal "support_email_set_in_conferences_yml@mac.com", conference.support_email
+	end
 end

@@ -38,6 +38,13 @@ class SubmissionTest < ActiveSupport::TestCase
     refute_equal s.jp_abstract, s.abstract
   end
 
+  test "should fail to persists on empty institutions" do
+    s = submissions(:generic_submission)
+    assert_raise ActiveRecord::RecordInvalid do
+      s.save!
+    end
+  end
+
   test "should persist institutions" do
     institutions = [Institution.new(:en_name => "en_name_1", :jp_name => "jp_name_1"),
                     Institution.new(:en_name => "en_name_2", :jp_name => "jp_name_2")]
@@ -53,7 +60,8 @@ class SubmissionTest < ActiveSupport::TestCase
   end
 
   test "should persist keywords" do
-    submission = submissions(:generic_submission)
+    submission = submission_with_institutions(:generic_submission)
+
     submission.keywords = ["hello", "kitty"]
     submission.save!
     submission.reload
@@ -75,9 +83,17 @@ class SubmissionTest < ActiveSupport::TestCase
   test "conference_tag must not be empty" do
     s = submissions(:generic_submission)
     s.conference_tag = nil
-    assert_raise ActiveRecord::RecordInvalid do
+    assert_raise ActiveRecord::RecordNotFound do
       s.save!
     end
+  end
+
+  def submission_with_institutions(base_submission_symbol)
+    institutions = [Institution.new(:en_name => "en_name_1", :jp_name => "jp_name_1"),
+                    Institution.new(:en_name => "en_name_2", :jp_name => "jp_name_2")]
+    submission = submissions(base_submission_symbol)
+    submission.institutions = institutions
+    submission
   end
 
 end
