@@ -49,7 +49,6 @@ class Ability
       can [:create, :destroy], MeetUpComment
       can [:new, :create, :threads, :conversation], PrivateMessage
       can [:delegate], Conference
-      can [:read, :answer, :results], Questionnaire
     end
 
     if user.role? :voter
