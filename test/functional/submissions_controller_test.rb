@@ -31,9 +31,10 @@ class SubmissionsControllerTest < ActionController::TestCase
       ks_ajax :post, :create, 
               submission: [:disclose_at, :en_abstract, :en_title, :jp_abstract, :jp_title, 
                   :main_author_id, :presenting_author_id, 
-                  :institutions, :keywords].inject({}){|memo, k| memo[k] = @submission.send(k); memo}.
+                  :institutions, :keyword].inject({}){|memo, k| memo[k] = @submission.send(k); memo}.
                   merge(:submission_number => 'new_submission_number')
 
+      assert_empty assigns(:submission).errors.messages
     end
 
     # Multi-conference
