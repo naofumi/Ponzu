@@ -168,6 +168,9 @@ class Submission < ActiveRecord::Base
           next unless changed.include?(key.to_s)
           string = send(key) || ""
           html_stripped_string = ActionController::Base.helpers.strip_tags(string)
+          # textareas in browsers may use two characters per linebreak.
+          # We don't want this.
+          html_stripped_string = html_stripped_string.gsub(/\r\n/, "\n")
           if value && html_stripped_string.size > value
             errors.add(key, "が長すぎます")
           end
