@@ -80,6 +80,7 @@ class User < ActiveRecord::Base
 
   belongs_to  :author, :inverse_of => :users
 
+  # These are submissions that the User submitted.
   has_many  :submissions, :dependent => :restrict, :inverse_of => :user
 
   before_save :update_registration_confirmed_at
@@ -279,8 +280,12 @@ class User < ActiveRecord::Base
   end
 
   def update_registration_confirmed_at
-    if (changed.include?("registration_confirmed") || new_record?) && registration_confirmed
-      self.registration_confirmed_at = Time.now
+    if registration_confirmed
+      if (changed.include?("registration_confirmed") || new_record?)
+        self.registration_confirmed_at = Time.now
+      end
+    else
+      self.registration_confirmed_at = nil
     end
   end
 end
