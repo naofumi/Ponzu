@@ -52,7 +52,7 @@ module User::Authentication
         # cannot always assume emails to be unique. However, going forward,
         # we will assume that emails are unique.
         # c.merge_validates_uniqueness_of_email_field_options({:unless => Proc.new{true}})
-        c.merge_validates_uniqueness_of_email_field_options({:unless => :email_not_set?, scope: :conference_tag})
+        c.merge_validates_uniqueness_of_email_field_options({:unless => "email_not_set? || !conference.config('allow_email_for_login')", scope: :conference_tag})
 
         # c.merge_validates_confirmation_of_password_field_options({:unless => :login_not_set?})
         # c.merge_validates_length_of_password_field_options({:unless => :login_not_set?})
