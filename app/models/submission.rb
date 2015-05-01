@@ -5,7 +5,8 @@ class Submission < ActiveRecord::Base
   attr_accessible :disclose_at, :en_abstract, :en_title, :jp_abstract, :jp_title, 
                   :main_author_id, :presenting_author_id, :submission_number,
                   :institutions, :keywords, :type, :external_link, :confirmed
-  attr_accessor   :do_not_validate_title_abstract_lengths, :do_not_strip_unallowed_tags
+  attr_accessor   :do_not_validate_title_abstract_lengths, :do_not_strip_unallowed_tags,
+                  :skip_authorships_and_institutions_validations
 
   before_destroy :confirm_absence_of_presentations_before_destroy
 
@@ -54,8 +55,8 @@ class Submission < ActiveRecord::Base
   if Kernel.const_defined?(:Registration)
     validate :must_have_submission_category_1, :unless => "batch_import || !conference.config('registration_enabled')"
   end
-  validate :must_have_at_least_one_authorship, :unless => "!persisted? || batch_import"
-  validate :must_have_at_least_one_institution, :unless => "!persisted?"
+  validate :must_have_at_least_one_authorship, :unless => "skip_authorships_and_institutions_validations || batch_import"
+  validate :must_have_at_least_one_institution, :unless => "skip_authorships_and_institutions_validations"
 
   validates_presence_of :disclose_at
 

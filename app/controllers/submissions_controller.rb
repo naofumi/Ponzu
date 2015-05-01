@@ -53,6 +53,7 @@ class SubmissionsController < ApplicationController
     @submission = Submission.new(params[:submission])
     verify_ownership(@submission)
     @submission.conference_confirm = current_conference
+    @submission.skip_authorships_and_institutions_validations
     # success = false
     Submission.transaction do
       begin
