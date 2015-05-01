@@ -47,12 +47,15 @@ class AuthorshipsController < ApplicationController
        url =~ /authors\/(\d+)/
       @author = Author.in_conference(current_conference).find($1)
       @authorship = @submission.authorships.build(:author_id => @author.id)
+      @authorship.skip_affiliations_validation = true
     end
+
     if @authorship && @authorship.save
       flash[:notice] = "Authorship was successfully created"
     else
       flash[:error] = "Failed to create Authorship"
     end
+
     respond_to do |format|
       format.html { 
         render :partial => "authorships/list", :locals => {:authorships => @submission.authorships.order(:position)}

@@ -13,6 +13,7 @@ class Authorship < ActiveRecord::Base
                   :submission_id, :author_id, 
                   :position, :affiliations, :is_presenting_author, :affiliations_yaml,
                   :_sync_author_names
+  attr_accessor :skip_affiliations_validation
 
   # `_sync_author_names` triggers the `sync_author_if_requested_and_only_authorship_on_author` method
   # which makes sure that the Author name and Authorship are in sync (but only if there is only one Authorship)
@@ -30,6 +31,7 @@ class Authorship < ActiveRecord::Base
   validates_presence_of :en_name
   validates_presence_of :affiliations_string, 
                         :unless => Proc.new{|authorship| 
+                                              authorship.skip_affiliations_validation == true ||
                                               authorship.author && (authorship.author.batch_import == true) ||
                                               authorship.submission && (authorship.submission.batch_import == true)
                                             }
