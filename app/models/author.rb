@@ -37,6 +37,8 @@ class Author < ActiveRecord::Base
   before_validation :assign_initial_authorship
   before_destroy :confirm_absence_of_authorships_before_destroy
 
+  include BatchImportMixin
+
   has_many  :users, :inverse_of => :author
   has_many  :authorships, :inverse_of => :author, :dependent => :destroy
   has_many  :submissions, :through => :authorships, :inverse_of => :authors

@@ -49,10 +49,12 @@ class Submission < ActiveRecord::Base
   validates_uniqueness_of :submission_number, :scope => :conference_tag
 
   validate :must_have_title
+
+  include BatchImportMixin
   if Kernel.const_defined?(:Registration)
-    validate :must_have_submission_category_1
+    validate :must_have_submission_category_1, :unless => :batch_import
   end
-  validate :must_have_at_least_one_authorship
+  validate :must_have_at_least_one_authorship, :unless => :batch_import
   validate :must_have_at_least_one_institution
 
   validates_presence_of :disclose_at
@@ -162,7 +164,7 @@ class Submission < ActiveRecord::Base
     # In these cases we can just set @do_not_validate_title_abstract_lengths
     unless @do_not_validate_title_abstract_lengths
       length_restrictions = conference.config("length_restrictions")
-      if configs = length_restrictions["submission"]
+      if length_restrictions && (configs = length_restrictions["submission"])
         configs.each do |key, value|
           # We don't want to validate on a trivial change like updating timestamps
           next unless changed.include?(key.to_s)

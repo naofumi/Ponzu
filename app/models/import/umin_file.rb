@@ -194,10 +194,11 @@ module Import
           # Nayose will be done when we import_authorships
           submission = Submission.in_conference(@conference).
                          find_by_submission_number(submission_number)
-
+          submission.batch_import = true
           # Create new objects
           a = Author.nayose_find_or_create(author, @conference){|a|
                        a.submissions = [submission]
+                       a.batch_import = true
                      }
           output_error_unless_persisted(a)
           if a.en_name.blank? && !author[:en_name].blank?
@@ -250,19 +251,31 @@ module Import
           # No depending object
           # Create new objects
           s = Submission.find_or_create_by_submission_number_and_conference_tag(
-             ur.submission_number, 
-             @conference.database_tag,
-             :disclose_at => ur.disclose_at,
-             :submission_number => ur.submission_number,
-             :en_title => ur.title_en,
-             :jp_title => ur.title_jp,
-             :jp_abstract => ur.jp_abstract,
-             :en_abstract => ur.en_abstract,
-             :institutions => ur.institutions.map{|i| Institution.new(:en_name => i[:en_name],
-                                                                      :jp_name => i[:jp_name])},
-             :keywords => ur.keywords) {|submission|
-            submission.conference_tag = @conference.database_tag
-          }
+                           ur.submission_number, 
+                           @conference.database_tag,
+                           :disclose_at => ur.disclose_at,
+                           :submission_number => ur.submission_number,
+                           :en_title => ur.title_en,
+                           :jp_title => ur.title_jp,
+                           :jp_abstract => ur.jp_abstract,
+                           :en_abstract => ur.en_abstract,
+                           :institutions => ur.institutions.map{|i| Institution.new(:en_name => i[:en_name],
+                                                                                    :jp_name => i[:jp_name])},
+                           :keywords => ur.keywords
+                          ) {|submission|
+                              submission.conference_tag = @conference.database_tag
+                              submission.batch_import = true
+                            }
+          # Reloading because sometimes we update our parser and we want to update Submission objects.
+          s.update_attributes :disclose_at => ur.disclose_at,
+                              :submission_number => ur.submission_number,
+                              :en_title => ur.title_en,
+                              :jp_title => ur.title_jp,
+                              :jp_abstract => ur.jp_abstract,
+                              :en_abstract => ur.en_abstract,
+                              :institutions => ur.institutions.map{|i| Institution.new(:en_name => i[:en_name],
+                                                                                       :jp_name => i[:jp_name])},
+                              :keywords => ur.keywords            
           output_error_unless_persisted(s)
         end
       end
@@ -290,6 +303,7 @@ module Import
             raise "No author in DB for en_name: #{author[:en_name].inspect}, jp_name: #{author[:jp_name].inspect}" unless author_obj
             # Create new objects
             as = Authorship.in_conference(@conference).find_or_create_by_author_id_and_submission_id(author_obj.id, submission_obj.id)
+            as.batch_import = true
             as.update_attributes!(:position => index + 1, # acts_as_list starts with position 1
                                   :is_presenting_author => author[:is_presenting_author],
                                   :en_name => author[:en_name],

@@ -24,9 +24,15 @@ class Authorship < ActiveRecord::Base
   
   acts_as_list :scope => :submission
 
+  include BatchImportMixin
+
   validates_presence_of :submission_id
   validates_presence_of :en_name
-  validates_presence_of :affiliations_string
+  validates_presence_of :affiliations_string, 
+                        :unless => Proc.new{|authorship| 
+                                              authorship.author && (authorship.author.batch_import == true) ||
+                                              authorship.submission && (authorship.submission.batch_import == true)
+                                            }
 
   # The email address is currently a dummy and we don't do anything with it.
   # It was introduced for NGS2015.
@@ -38,8 +44,8 @@ class Authorship < ActiveRecord::Base
   validate :jp_name_format
 
   before_validation :fill_conference_tag_if_nil
-  before_save :fill_names_if_nil
-  before_save :uniquify_affiliations
+  before_validation :fill_names_if_nil
+  before_validation :uniquify_affiliations
 
   before_save :create_author_if_absent
 
@@ -154,6 +160,9 @@ class Authorship < ActiveRecord::Base
     institutions_count = submission.institutions.size
     affiliations.each do |affiliation|
       unless institutions_count >= affiliation && affiliation > 0
+        if (batch_import || author && author.batch_import || submission && submission.batch_import)
+          raise "Bad affiliations_string for submission: #{submission.institutions.inspect} author: #{author.name} affiliations: #{affiliations.join(',')}"
+        end
         errors.add(:affiliations_string, "は所属に含まれていない番号があります。")
         break
       end

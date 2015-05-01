@@ -280,10 +280,8 @@ class User < ActiveRecord::Base
   end
 
   def update_registration_confirmed_at
-    if registration_confirmed
-      if (changed.include?("registration_confirmed") || new_record?)
-        self.registration_confirmed_at = Time.now
-      end
+    if registration_confirmed && !registration_confirmed_at
+      self.registration_confirmed_at = Time.now
     else
       self.registration_confirmed_at = nil
     end
