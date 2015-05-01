@@ -54,8 +54,8 @@ class Submission < ActiveRecord::Base
   if Kernel.const_defined?(:Registration)
     validate :must_have_submission_category_1, :unless => "batch_import || !conference.config('registration_enabled')"
   end
-  validate :must_have_at_least_one_authorship, :unless => :batch_import
-  validate :must_have_at_least_one_institution
+  validate :must_have_at_least_one_authorship, :unless => "!persisted? || batch_import"
+  validate :must_have_at_least_one_institution, :unless => "!persisted?"
 
   validates_presence_of :disclose_at
 
