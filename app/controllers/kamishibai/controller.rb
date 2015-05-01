@@ -472,7 +472,9 @@ module Kamishibai
     end
 
     def device_selective_redirect(*args)
-      if request.xhr?
+      if args[0] =~ /^https?:\/\// && request.xhr?
+        js_redirect args[0]
+      elsif request.xhr?
         js_redirect ksp(args[0])
       else
         redirect_to *args

@@ -220,6 +220,10 @@ function KSSupport() {
   // Redirect. Used from Rails controllers in response to an update or create
   // for POST-to-redirect CRUD patterns. Only reads the hash fragment.
   this.redirect = function(hash) {
+    if (hash.match(/^https?:\/\//)) {
+      location.replace(hash);
+      return;
+    }
     var currentHash = location.hash.replace(/^#/, '');
     var newHash = hash.replace(/^#/, '');
     if (currentHash == newHash) {
