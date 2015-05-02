@@ -22,7 +22,7 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/",
   json.id @presentation.id
   json.next_id @presentation.next.id if @presentation.next
   json.previous_id @presentation.previous.id if @presentation.previous
-  json.starts_at l(@presentation.starts_at, :format => :month_day_time)
+  json.starts_at presentation_starts_at_html(@presentation)
   json.cancel @presentation.cancel
   json.disclose_abstract @presentation.disclose_abstract
   json.same_submission @presentation.presentations_belonging_to_same_submission.map{|p| p.id}

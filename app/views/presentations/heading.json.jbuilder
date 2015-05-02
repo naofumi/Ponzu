@@ -6,7 +6,7 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/heading/", @p
   json.number @presentation.number
   json.title sanitize(@presentation.title) || ""
   json.id @presentation.id
-  json.starts_at l(@presentation.starts_at, :format => :month_day_time)
+  json.starts_at presentation_starts_at_html(@presentation)
   json.cancel @presentation.cancel
   json.authorships  @presentation.submission.authorships.order(:position).all,
                     :author_id, :is_presenting_author, :affiliations, :name

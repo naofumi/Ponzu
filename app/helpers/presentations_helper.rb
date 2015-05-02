@@ -100,6 +100,14 @@ module PresentationsHelper
                                     ksp(presentation.session.room), options)
   end
 
+  def presentation_starts_at_html(presentation)
+    if presentation.kind_of?(::Presentation::Poster) && (eval_string = current_conference.config('poster_time_eval_string'))
+      presentation.instance_eval(eval_string, __FILE__, __LINE__).html_safe
+    else
+      l(presentation.starts_at, :format => :month_day_time)
+    end
+  end
+
   private 
 
   def highlight_related_classes(author, highlight_authors, other_highlight_authors)
