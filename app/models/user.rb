@@ -282,7 +282,7 @@ class User < ActiveRecord::Base
   def update_registration_confirmed_at
     if registration_confirmed && !registration_confirmed_at
       self.registration_confirmed_at = Time.now
-    else
+    elsif !registration_confirmed_at
       self.registration_confirmed_at = nil
     end
   end
