@@ -236,8 +236,15 @@ class Author < ActiveRecord::Base
   end
 
   def assign_initial_submission
-    if !initial_submission.blank? && submissions.empty?
-      self.submissions = [Submission.find(initial_submission)]
+    # Instead of assigning a Submission object to
+    # self.submissions, we create an Authorship.
+    # This allows us to better controls auto-saving of
+    # associations and subsequent validations.
+    if !initial_submission.blank? && authorships.empty?
+      initial_submission_obj = Submission.find(initial_submission)
+      new_authorship = Authorship.new(author_id: id, submission_id: initial_submission_obj.id)
+      new_authorship.skip_affiliations_validation = true
+      self.authorships = [new_authorship]
     end
   end
 
