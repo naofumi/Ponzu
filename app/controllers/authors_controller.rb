@@ -75,7 +75,8 @@ class AuthorsController < ApplicationController
     if @author.save
       flash[:notice] = "Author was successfully created"
     else
-      flash[:error] = "Failed to create Author"
+      authorships_errors = @author.authorships.map{|as| as.errors.full_messages}.join(' ')
+      flash[:error] = "Failed to create Author #{@author.errors.full_messages} #{authorships_errors}"
     end
     respond_with @author, :success_action => :back
   end
@@ -89,7 +90,8 @@ class AuthorsController < ApplicationController
     if @author.update_attributes(params[:author])
       flash[:notice] = 'Author was successfully updated.'
     else
-      flash[:error] = "Failed to update Author"
+      authorships_errors = @author.authorships.map{|as| as.errors.full_messages}.join(' ')
+      flash[:error] = "Failed to update Author #{@author.errors.full_messages} #{authorships_errors}"
     end
     respond_with @author, :success_action => :back
   end

@@ -28,7 +28,7 @@ class Authorship < ActiveRecord::Base
   include BatchImportMixin
 
   validates_presence_of :submission_id
-  validates_presence_of :en_name
+  validate :name_is_set
   validates_presence_of :affiliations_string, 
                         :unless => Proc.new{|authorship| 
                                               authorship.skip_affiliations_validation == true ||
@@ -168,6 +168,12 @@ class Authorship < ActiveRecord::Base
         errors.add(:affiliations_string, "は所属に含まれていない番号があります。")
         break
       end
+    end
+  end
+
+  def name_is_set
+    if en_name.blank? && jp_name.blank?
+      errors.add(:en_name, "英語名もしくは日本語名は必須です。")
     end
   end
 
