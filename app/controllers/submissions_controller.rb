@@ -93,11 +93,12 @@ class SubmissionsController < ApplicationController
                              find(params[:id])
     verify_ownership(@submission)
     @submission.do_not_validate_title_abstract_lengths = true
+    @submission.do_not_validate_submission_categories = true
 
     if @submission.update_attributes(params[:submission])
       flash[:notice] = "Submission was successfully updated."
     else
-      flash[:error] = "Failed to update Submission."
+      flash[:error] = "Failed to update Submission. #{@submission.errors.full_messages}"
     end
 
     respond_with @submission, :success_action => :back
