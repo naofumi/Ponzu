@@ -1,4 +1,4 @@
-- labeled_hours = current_conference.timetable_hours
+- labeled_hours = current_conference.timetable_hours(@show_date)
 - entry_height_compensation = 5
 - now = @show_date.change(:hour => 8, :min => 0)
 - left = tt.left_position_for_time now

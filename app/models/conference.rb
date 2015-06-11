@@ -62,8 +62,13 @@ class Conference < ActiveRecord::Base
     end
   end
 
-  def timetable_hours
-    if !timetable_hour_labels.blank?
+  def timetable_hours(show_date = nil)
+    # raise config('timetable_hour_labels').inspect
+    if show_date &&
+       config('timetable_hour_labels').present? &&
+       (hour_labels = config('timetable_hour_labels')[show_date.strftime('hours_%Y%m%d')])
+      hour_labels
+    elsif timetable_hour_labels.present?
       JSON.parse(timetable_hour_labels)
     else
       [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
