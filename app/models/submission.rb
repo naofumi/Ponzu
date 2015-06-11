@@ -5,7 +5,9 @@ class Submission < ActiveRecord::Base
   attr_accessible :disclose_at, :en_abstract, :en_title, :jp_abstract, :jp_title, 
                   :main_author_id, :presenting_author_id, :submission_number,
                   :institutions, :keywords, :type, :external_link, :confirmed
-  attr_accessor   :do_not_validate_title_abstract_lengths, :do_not_strip_unallowed_tags,
+  attr_accessor   :do_not_validate_title_abstract_lengths, 
+                  :do_not_validate_submission_categories,
+                  :do_not_strip_unallowed_tags,
                   :skip_authorships_and_institutions_validations
 
   before_destroy :confirm_absence_of_presentations_before_destroy
@@ -142,7 +144,8 @@ class Submission < ActiveRecord::Base
   end
 
   def must_have_submission_category_1
-    if submission_category_1.blank?
+    if !@submission.do_not_validate_submission_categories && 
+       @submission_category_1.blank?
       errors.add(:registration_category_id_1, :blank)
     end
   end

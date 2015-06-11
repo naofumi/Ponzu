@@ -44,6 +44,8 @@ class SubmissionsController < ApplicationController
   def edit
     @submission = Submission.in_conference(current_conference).
                              find(params[:id])
+    @submission.do_not_validate_title_abstract_lengths = true
+    @submission.do_not_validate_submission_categories = true
     verify_ownership(@submission)
   end
 
@@ -54,6 +56,8 @@ class SubmissionsController < ApplicationController
     verify_ownership(@submission)
     @submission.conference_confirm = current_conference
     @submission.skip_authorships_and_institutions_validations = true
+    @submission.do_not_validate_title_abstract_lengths = true
+    @submission.do_not_validate_submission_categories = true
     # success = false
     Submission.transaction do
       begin
