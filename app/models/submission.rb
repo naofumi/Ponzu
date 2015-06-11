@@ -144,7 +144,7 @@ class Submission < ActiveRecord::Base
   end
 
   def must_have_submission_category_1
-    if !@submission.do_not_validate_submission_categories && 
+    if !@do_not_validate_submission_categories && 
        @submission_category_1.blank?
       errors.add(:registration_category_id_1, :blank)
     end

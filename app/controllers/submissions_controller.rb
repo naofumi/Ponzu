@@ -63,6 +63,7 @@ class SubmissionsController < ApplicationController
       begin
         @submission.save!
         @submission.reload
+
         if params[:session_id]
           session = Session.find(params[:session_id])
           @presentation = Presentation.create!(:session_id => session.id, 
@@ -71,9 +72,14 @@ class SubmissionsController < ApplicationController
         end    
         # success = true
         flash[:notice] = "Submission was successfully created."
-      rescue
+      rescue ActiveRecord::RecordInvalid
         # success = false
-        flash[:error] = "Failed to create submission."
+        if @submission.errors.any?
+          error_message = @submission.errors.full_messages
+        elsif @presentation && @presentation.errors.any?
+          error_message = @presentation.errors.full_messages
+        end
+        flash[:error] = "Failed to create submission. #{error_message}"
       end
     end
 
