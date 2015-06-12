@@ -1,8 +1,16 @@
 module TimeTableHelper
-  def timetable(options = {})
-    width_per_hour = options[:width_per_hour] || 60.0
-    height_per_entry = options[:height_per_entry] || 80.0
+  def timetable
     @timetable ||= begin
+      width_per_hour_conf = current_conference.config('timetable_dimensions') && 
+                            current_conference.config('timetable_dimensions')['width_per_hour']
+      height_per_entry_conf = current_conference.config('timetable_dimensions') && 
+                            current_conference.config('timetable_dimensions')['height_per_entry']
+
+
+      width_per_hour = width_per_hour_conf || 60.0
+      height_per_entry = height_per_entry_conf || 80.0
+
+
       @show_date ||= @session && @session.starts_at ||
                      @presentation && @presentation.starts_at ||
                      @like && @like.presentation.starts_at
@@ -24,10 +32,4 @@ module TimeTableHelper
   
   alias_method :tt, :timetable
   
-  def mobile_timetable
-    timetable(:width_per_hour => 60.0, :height_per_entry => 75.0)
-  end
-  
-  alias_method :mtt, :mobile_timetable
-
 end
