@@ -76,6 +76,11 @@ class TimeTable
   #
   # <tt>:header_height</tt>::
   #   This specifies the height of the header, which is where we put the hour labels.
+  #
+  # <tt>:time_on_vertical_axis</tt>::
+  #   This specifies whether the time will be shown on the horizontal axis (if false)
+  #   or on the vertical axis (if true). When this is set to true, the width and height
+  #   parameters all switch their meaning.
   def initialize(options)
     @width_per_hour = options[:width_per_hour]
     @height_per_entry = options[:height_per_entry]
@@ -87,6 +92,7 @@ class TimeTable
     @number_of_rooms = options[:number_of_rooms]
     @entry_horizontal_margin = options[:entry_horizontal_margin] || 0
     @entry_vertical_margin = options[:entry_vertical_margin] || 0
+    @time_on_vertical_axis = options[:time_on_vertical_axis]
   end
     
   def left_position_for_time(time)
@@ -99,6 +105,18 @@ class TimeTable
     end
   end
   
+  def room_label_width
+    unless @time_on_vertical_axis
+      @range_left_margins[0]
+    end
+  end
+
+  def room_label_height
+    if @time_on_vertical_axis
+      @range_left_margins[0]
+    end
+  end
+
   def range_left_position(range_index)
     margins = 0.upto(range_index).inject(0){|memo, i| memo + @range_left_margins[i]}
     widths = range_index > 0 ?
@@ -111,21 +129,21 @@ class TimeTable
     (range.max - range.min) * width_per_second
   end
 
-  def total_width
-    range_left_position(@range_set.count - 1) + width_of_range(@range_set.last)
-  end
-
   def row(row_number)
     left = 0
-    width = total_width
+    width = (@time_on_vertical_axis ? total_height : total_width)
     top = row_number * @height_per_entry + @header_height
     height = @height_per_entry
-    Dimensions.new(left, left + width, top, top + height, height, width)
+    unless @time_on_vertical_axis
+      Dimensions.new(left, left + width, top, top + height, height, width)
+    else      
+      Dimensions.new(top, top + height, left, left + width, width, height)
+    end
   end
 
   def row_css(row_number)
     r = row(row_number)
-    "position:absolute;left:#{r.left};top:#{r.top}px;height:#{r.height}px;width:#{r.width}px"
+    "position:absolute;left:#{r.left}px;top:#{r.top}px;height:#{r.height}px;width:#{r.width}px"
   end
 
   # Each entry in the timetable for each session
@@ -136,13 +154,23 @@ class TimeTable
     width = right - left
     height = options[:height] || @height_per_entry
 
-    top = options[:row] * height + @header_height + @entry_vertical_margin
-    return Dimensions.new(left + @entry_horizontal_margin, 
-                          left + width - @entry_horizontal_margin, 
-                          top + @entry_vertical_margin, 
-                          top + height - @entry_vertical_margin, 
-                          height - @entry_vertical_margin * 2, 
-                          width - @entry_horizontal_margin * 2)
+    top = options[:row] * height + @header_height
+    unless @time_on_vertical_axis
+      return Dimensions.new(left + @entry_horizontal_margin, 
+                            left + width - @entry_horizontal_margin, 
+                            top + @entry_vertical_margin, 
+                            top + height - @entry_vertical_margin, 
+                            height - @entry_vertical_margin * 2, 
+                            width - @entry_horizontal_margin * 2)
+    else
+      return Dimensions.new(
+                            top + @entry_vertical_margin, 
+                            top + height - @entry_vertical_margin, 
+                            left + @entry_horizontal_margin, 
+                            left + width - @entry_horizontal_margin,  
+                            width - @entry_horizontal_margin * 2,
+                            height - @entry_vertical_margin * 2)
+    end
   end
 
   def entry_css(options)
@@ -156,12 +184,16 @@ class TimeTable
     width = width_per_hour
     top = 0
     height = @header_height
-    Dimensions.new(left, left + width, top, top + height, height, width)
+    unless @time_on_vertical_axis
+      Dimensions.new(left, left + width, top, top + height, height, width)
+    else
+      Dimensions.new(top, top + height, left, left + width, width, height)
+    end
   end
 
   def header_css(time)
     h = header(time)
-    "top:#{h.top};left:#{h.left}px;width:#{h.width}px;height:#{h.height}px"
+    "top:#{h.top}px;left:#{h.left}px;width:#{h.width}px;height:#{h.height}px"
   end
   
   def width_per_hour
@@ -177,9 +209,43 @@ class TimeTable
   end
   
   def total_height
+    if @time_on_vertical_axis
+      total_width_when_time_on_horizontal_axis
+    else
+      total_height_when_time_on_horizontal_axis
+    end
+  end
+
+  def total_height_when_time_on_horizontal_axis
     @number_of_rooms * (@height_per_entry + @entry_vertical_margin) + @header_height
   end
-  
+
+  def total_width
+    if @time_on_vertical_axis
+      total_height_when_time_on_horizontal_axis
+    else
+      total_width_when_time_on_horizontal_axis
+    end
+  end
+
+  def total_width_when_time_on_horizontal_axis
+    range_left_position(@range_set.count - 1) + width_of_range(@range_set.last)
+  end
+
+  def presentation_tag_css(starts_at, ends_at, row_number)
+    default_duration = 20 #minutes
+    default_size = 10
+    d = entry(:starts_at => starts_at,
+                 :ends_at => ends_at || starts_at + default_duration * 60,
+                 :row => row_number)
+    unless @time_on_vertical_axis
+      "top:#{d[:top].to_i + d[:height].to_i - 18}px;left:#{d[:left].to_i + 1}px;width:#{d[:width].to_i}px;height:#{default_size}px;"
+    else
+      "top:#{d[:top].to_i + 1}px;left:#{d[:left].to_i + d[:width] - default_size - 2}px;width:10px;height:#{d[:height].to_i}px;"
+    end
+  end
+
+
   private
   
   def seconds_to_hours(seconds)
