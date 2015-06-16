@@ -69,6 +69,7 @@ class Ability
       can [:change_ad_category, :moderate], Presentation
       can [:edit, :create, :destroy, :update], Questionnaire
       can [:create, :update, :read, :see_other], User
+      can [:preview], Conference
       # can :manage, User
     end
 
