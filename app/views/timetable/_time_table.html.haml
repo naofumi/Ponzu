@@ -26,9 +26,12 @@
                 :id => "session_#{s.id}", :style => style_string,
                 :title => "#{s.starts_at.strftime('%H:%M')}-#{s.ends_at.strftime('%H:%M')}\n#{s.room.name}\n#{s.title}" do
       %div.time
-        = s.number
-        = "#{s.starts_at.strftime('%H:%M')}-#{s.ends_at.strftime('%H:%M')}"
-        = s.room.name
+        %span.number_header
+          = s.number
+        %span.time_header
+          = "#{s.starts_at.strftime('%H:%M')}-#{s.ends_at.strftime('%H:%M')}"
+        %span.room_header
+          = s.room.name
       %div.title
         = s.title.html_safe
   = ks_ajax_placeholder :id => "like_highlights_#{params[:id]}",
