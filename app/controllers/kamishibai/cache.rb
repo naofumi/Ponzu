@@ -38,7 +38,7 @@ module Kamishibai
     def invalidated_paths(object) # :doc:
       paths = if object.kind_of? Array
         object.map{|o| invalidated_paths(o).split(' ') }.flatten.uniq
-      elsif object.instance_of? User
+      elsif object.kind_of? User
         result = [user_path(object), settings_user_path(object)]
         result.push(author_path(object.author.id)) if object.author
         # Invalidate due to possible change in flags
@@ -54,21 +54,21 @@ module Kamishibai
           "list_highlights",
           "likes/(.+/)?my"
         ]
-      elsif object.instance_of? Comment
+      elsif object.kind_of? Comment
         base_string = "/presentations/#{object.presentation_id}"
         [
           "#{base_string}/comments"
         ]
-      elsif object.instance_of? Participation
+      elsif object.kind_of? Participation
         meet_up = object.meet_up
         [ meet_up_path(meet_up),
           meet_ups_path(:date => meet_up.starts_at.strftime('%Y-%m-%d')),
           meet_ups_ajax_dashboard_index_path,
           my_meet_ups_dashboard_index_path ]
-      elsif object.instance_of? MeetUp
+      elsif object.kind_of? MeetUp
         crud_paths(object) +
           [meet_ups_ajax_dashboard_index_path]
-      elsif object.instance_of? PrivateMessage
+      elsif object.kind_of? PrivateMessage
         [ "private_message" ]
       elsif object.kind_of? Presentation
         if object.persisted?
