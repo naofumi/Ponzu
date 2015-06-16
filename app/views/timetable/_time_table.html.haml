@@ -25,12 +25,11 @@
                                                s.type.parameterize.underscore], 
                 :id => "session_#{s.id}", :style => style_string,
                 :title => "#{s.starts_at.strftime('%H:%M')}-#{s.ends_at.strftime('%H:%M')}\n#{s.room.name}\n#{s.title}" do
-      %span.time
+      %div.time
         = s.number
         = "#{s.starts_at.strftime('%H:%M')}-#{s.ends_at.strftime('%H:%M')}"
         = s.room.name
-        %br/
-      %span.title
+      %div.title
         = s.title.html_safe
   = ks_ajax_placeholder :id => "like_highlights_#{params[:id]}",
                         :data => {:ajax => like_highlights_timetable_path(params[:id])}
