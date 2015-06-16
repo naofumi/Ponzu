@@ -3,8 +3,8 @@
     {{? it.type != 'session_ad'}}
       <div class="number">
         {{= it.number }}
-        {{? it.can_edit }}<a href="#!_/sessions/{{= it.id }}/edit">[edit]</a>{{?}}
       </div>
+      {{? it.can_edit }}<a href="#!_/sessions/{{= it.id }}/edit" style="float:left">[edit]</a>{{?}}
       <div class="time">
         <a href="#!_{{= it.poster_timetable_path }}" onclick="KSScrollMemory.set({href: {{= '/' + it.poster_timetable_path }}, elementId: 'session_{{= it.id }}'})" class="button icon clock">
           {{= it.starts_at }} - {{= it.ends_at }}
