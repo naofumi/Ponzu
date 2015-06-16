@@ -1,4 +1,4 @@
-<div class="program orals" data-container-ajax="/ponzu_frame" data-container="ponzu_frame" data-title="{{= it.head_title }}" id="session_detail_{{= it.id }}">
+<div class="program orals {{= it.type }}" data-container-ajax="/ponzu_frame" data-container="ponzu_frame" data-title="{{= it.head_title }}" id="session_detail_{{= it.id }}">
   <div class="panel session_header">
     {{? it.type != 'session_ad'}}
       <div class="number">
