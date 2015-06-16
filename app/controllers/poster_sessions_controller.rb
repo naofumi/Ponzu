@@ -23,8 +23,13 @@ class PosterSessionsController < ApplicationController
     date_string = params[:id] || raise("must set date for poster session show")
     @show_date = Time.parse(date_string)
     
-    @sessions = Session::Poster.in_conference(current_conference).
-                                all_in_day(@show_date).all
+    if current_conference.config('always_show_all_posters')
+      @sessions = Session::Poster.in_conference(current_conference).all
+    else
+      @sessions = Session::Poster.in_conference(current_conference).
+                                  all_in_day(@show_date).all
+    end
+
     respond_with @sessions
   end
 
@@ -32,8 +37,12 @@ class PosterSessionsController < ApplicationController
     date_string = params[:id] || raise("must set date for poster session show")
     @show_date = Time.parse(date_string)
     
-    @sessions = Session::Poster.in_conference(current_conference).
-                                all_in_day(@show_date).all
+    if current_conference.config('always_show_all_posters')
+      @sessions = Session::Poster.in_conference(current_conference).all
+    else
+      @sessions = Session::Poster.in_conference(current_conference).
+                                  all_in_day(@show_date).all
+    end
 
     # For galapagos, we render the "likes" indicators in the same request,
     # whereas for desktops and smartphones, we set the indicators in a
