@@ -5,7 +5,7 @@
 module User::Authentication
   ## Roles for CanCan
   # add new roles on right end to preserve previous settings
-  ROLES = %w[admin user_moderator organizer voter sponsor]
+  ROLES = %w[admin user_moderator organizer voter sponsor previewer]
 
   def self.included(base)
     base.extend ClassMethods
