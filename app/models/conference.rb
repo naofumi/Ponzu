@@ -87,10 +87,17 @@ class Conference < ActiveRecord::Base
     end
   end
 
-
   def config_hash
+    yaml_path = File.join(Rails.root, "config", "conferences.yml")
+
+    if Rails.env == "development" || Rails.env == "test"
+      @@config_reloader ||= ActiveSupport::FileUpdateChecker.new([yaml_path]) do
+        @@config_hash = nil
+      end
+      @@config_reloader.execute_if_updated
+    end
+
     @@config_hash ||= begin
-      yaml_path = File.join(Rails.root, "config", "conferences.yml")
       Psych.load_file(yaml_path)
     end
   end
