@@ -198,6 +198,7 @@ en:
       title: 'User Settings'
       title_for: "%{name}'s user settings"
       en_name: "English Name"
+      jp_name: "Japanese Name"
       email: "Email Address"
       twitter: "Twitter"
       facebook: "Facebook"
@@ -332,6 +333,7 @@ en:
     show:
       title: Show Like
   meet_ups:
+    name: "Yoruzemi"
     index:
       title: "Yoruzemi %{date}"
     show:

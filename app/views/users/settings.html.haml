@@ -6,7 +6,8 @@
                 :html => {'data-invalidates-keys' => invalidated_paths(@user),
                           'data-ks-insert-response' => true}) do |f|
       = render :partial => "layouts/error_messages", :locals => {:target => @user}
-      %h1= t '.title_for', :name => @user.name
+      .panel
+        %h1= t '.title_for', :name => @user.name
       .panel_title= t '.panel_titles.account_info'
       .panel
         .grid
@@ -34,7 +35,7 @@
             = f.text_field :en_name
         .grid
           .col-1-3
-            = f.label :jp_name, "Japanese Name"
+            = f.label :jp_name, t('.jp_name')
           .col-2-3
             = f.text_field :jp_name
       .panel_title= "Profile"

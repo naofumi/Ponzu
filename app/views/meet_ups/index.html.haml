@@ -16,12 +16,13 @@
     %ol#about_more{:style => "display:none"}
       = t('meet_ups.about_more').html_safe
     = link_to t('meet_ups.lets_make_a_new_yorusemi'), ksp(new_meet_up_path), :class => "big button icon add"
-  = ks_will_paginate
   - if @meet_ups.all.empty?
-    = t('meet_ups.empty_message')
+    .panel
+      = t('meet_ups.empty_message')
   - else
     .panel_title= t('meet_ups.panel_titles.list_of_yoruzemi')
     .panel.paneled_list.meet_ups
+      = ks_will_paginate
       - @meet_ups.each do |meet_up|
         = link_to ksp(url_for(meet_up)), 
                   :class => ['entry', (meet_up.participate?(current_user) ? "participate" : nil)].compact.join(' ') do

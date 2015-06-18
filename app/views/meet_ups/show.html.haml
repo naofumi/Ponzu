@@ -4,7 +4,7 @@
               ksp(:meet_ups_path, :date => to_date_string(@meet_up.starts_at)),
               :class => 'button arrowleft icon'
   .panel
-    %h1= "Yoruzemi: “#{@meet_up.title}”"
+    %h1= "#{t('meet_ups.name')}: “#{@meet_up.title}”"
     = link_to t('meet_ups.buttons.edit_button'), ksp(edit_meet_up_path(@meet_up)), :class => "button icon edit" if current_user == @meet_up.owner
     %dl.panel
       %dt= t('meet_ups.fields.starts_at_or_assembly_time')
