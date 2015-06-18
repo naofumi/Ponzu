@@ -36,7 +36,7 @@ class SessionsController < ApplicationController
   # names are sanitized
   # This is also locale aware
   def download_pdf_by_name
-    name = params[:name].sub(/\W/, "_") # sanitize
+    name = params[:name].sub(/\//, "_") # sanitize
     send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{name}#{locale_string}.pdf",
               :filename => "#{conference_tag}_#{name}#{locale_string}.pdf",
               :disposition => "inline")    
