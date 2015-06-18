@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
     @session = Session.find(params[:id])
     send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{@session.number}#{locale_string}.pdf",
               :filename => "#{conference_tag}_#{@session.number}#{locale_string}.pdf",
-              :disposition => "inline")
+              :disposition => "inline", :x_sendfile => true)
   end
 
   # names are sanitized
@@ -39,7 +39,7 @@ class SessionsController < ApplicationController
     name = params[:name].sub(/\//, "_") # sanitize
     send_file("#{Rails.root}/public/system/private_pdfs/#{conference_tag}/#{name}#{locale_string}.pdf",
               :filename => "#{conference_tag}_#{name}#{locale_string}.pdf",
-              :disposition => "inline")    
+              :disposition => "inline", :x_sendfile => true)    
   end
 
   def download_full_day_pdf
