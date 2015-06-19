@@ -96,6 +96,14 @@ en:
   user_sessions:
     new:
       title: Login
+    login_id: "Login ID"
+    email: "email"
+    password: "password"
+    show_password: "show password"
+    automatically_login_on_this_device: "automatically login on this browser"
+    contact_if_problems: "Please contact us if you have any problems."
+    login_button: "Login!"
+    use_without_logging_in: "Use without logging in"
 
   docs:
 

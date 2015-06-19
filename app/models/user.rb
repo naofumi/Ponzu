@@ -100,7 +100,7 @@ class User < ActiveRecord::Base
   # we restrict it to the User class.
   validates_presence_of :en_name, 
                         :if => Proc.new {|user| user.class == User && user.jp_name.blank? }
-  validates :email, confirmation: true
+  validates :email, confirmation: true # Confirmation only applies when email_confirmation is not nil
 
 
   before_destroy  :confirm_no_activity_before_destroy

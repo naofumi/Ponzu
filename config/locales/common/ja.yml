@@ -132,6 +132,14 @@ ja:
   user_sessions:
     new:
       title: Login
+    login_id: "ログインID"
+    email: "メールアドレス"
+    password: "パスワード"
+    show_password: "パスワードを表示"
+    automatically_login_on_this_device: "このブラウザでは自動的にログインする"
+    contact_if_problems: "ご不明な点がありましたら、下記よりご連絡ください。"
+    login_button: "ログインする"
+    use_without_logging_in: "ログインしないで使用する"
 
   docs:
 
