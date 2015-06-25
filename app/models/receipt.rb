@@ -79,7 +79,7 @@ class Receipt < ActiveRecord::Base
   scope :to_or_from_obj, lambda {|obj|
     join_other_receipts.
     where("other_receipts.receiver_id = ? AND other_receipts.receiver_type = ?", 
-          obj.id, obj.class.to_s)
+          obj.id, obj.class.model_name.to_s)
   }
   scope :to_or_from_type, lambda {|type|
     join_other_receipts.
