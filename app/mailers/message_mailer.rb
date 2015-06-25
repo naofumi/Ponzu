@@ -83,7 +83,7 @@ class MessageMailer < ActionMailer::Base
     if %w(test development).include? Rails.env
       "http://#{subdomain}.ponzu.local:3000"
     else
-      "http://#{subdomain}.castle104.com"
+      "https://#{subdomain}.castle104.com"
     end
     # Rails.configuration.message_mailer_bootstrap
   end
