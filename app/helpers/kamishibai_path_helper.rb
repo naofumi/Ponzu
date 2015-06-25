@@ -54,6 +54,9 @@ module KamishibaiPathHelper
     end
 
     if bootloader_path
+      if bootloader_path !~ /\/$/
+        bootloader_path .= "/"
+      end
       path_string = bootloader_path + path_string
     end
 
