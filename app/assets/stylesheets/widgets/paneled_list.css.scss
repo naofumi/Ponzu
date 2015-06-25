@@ -28,23 +28,27 @@
   > .count {
     position:absolute;
     top: 50%;
-    margin: -12px;
-    font-size: 16px;
     right: 40px;
-    border: solid 1px #ccc;
-    background-color: #eee;
-    padding: 3px 6px;
-    min-width: 24px;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 12px;
-    &.red {
-      border: solid 1px #bf343a;
-      background-color: #e75156;
-      color: #FFF;
-    }
   }
 }
+
+.count {
+  margin: -12px;
+  font-size: 16px;
+  border: solid 1px #ccc;
+  background-color: #eee;
+  padding: 3px 6px;
+  min-width: 24px;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  border-radius: 12px;
+  &.red {
+    border: solid 1px #bf343a;
+    background-color: #e75156;
+    color: #FFF;
+  }
+}
+
 
 // Good for a menu with one line for each item
 .paneled_list > ul, .page > ul, .left_column > ul {

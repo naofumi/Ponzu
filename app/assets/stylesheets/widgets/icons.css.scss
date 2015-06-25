@@ -159,3 +159,17 @@ $ios_icon_gloss: top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 5%, rgba(2
   &:after{right:11px;}
 }
 
+div#private_messages_badge {
+  width: 72px;
+  margin: 0 auto;
+  position: relative;
+  // margin-left: -50px;
+  // right:50%;
+  .count {
+    position:absolute;
+    z-index:100;
+    right: 0;
+    top: 0;
+  }
+}
+

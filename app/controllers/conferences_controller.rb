@@ -50,6 +50,8 @@ class ConferencesController < ApplicationController
     if current_conference.delegate
       @notifications = current_conference.delegate.notifications_for_user(current_user)
     end
+
+    @threads = current_user ? PrivateMessage.threads(current_user) : []
   end
 
   def delegate

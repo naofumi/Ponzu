@@ -11,7 +11,8 @@ module DashboardHelper
         link_to(title, path)).html_safe
     else
       link_to path do
-        (content_tag(:div, :class => "ios_icon #{bg_class}",
+        (content_tag(:div, "", :id => "#{bg_class}_badge") +
+         content_tag(:div, :class => "ios_icon #{bg_class}",
                      :style => style) {
            content_tag(:div, "", :class => "gloss")
          } + 

@@ -4,3 +4,7 @@
       %div{style:"padding:10px;border-radius: 10px;"}
         = @notifications.html_safe
 
+%div{id: "private_messages_badge"}
+  - if (count = @threads.inject(0){|memo, t| memo + t.unread_count}) > 0
+    .count.red
+      = count
