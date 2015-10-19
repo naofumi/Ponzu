@@ -103,7 +103,7 @@ class AuthorshipsController < ApplicationController
     Authorship.transaction do
       @authorships.each_with_index do |as, i|
         as.position = i + 1 # acts_as_list starts with position 1
-        as.save!
+        as.save!(validate: false)
       end
     end
     respond_to do |format|
