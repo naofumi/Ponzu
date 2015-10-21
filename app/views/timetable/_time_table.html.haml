@@ -12,7 +12,8 @@
     .row{:class => [cycle('dark', '')],
           :style => tt.row_css(i)}
       .room{:style => "height:100%;width:#{tt.room_label_width}px"}
-        %div() #{r.name}
+        %div= link_to r.name, ksp(room_path(r))
+        / %div() #{r.name}
   - @sessions.each_with_index do |s, i|
     - next unless @rooms.include?(s.room)
     - style_string = tt.entry_css(:starts_at => s.starts_at, 
