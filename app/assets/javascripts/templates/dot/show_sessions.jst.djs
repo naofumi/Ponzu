@@ -46,4 +46,5 @@
       </a>
     {{~}}
   </div>
+  {{? it.paginator}}{{= it.paginator }}{{?}}
 </div>
