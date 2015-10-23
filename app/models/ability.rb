@@ -25,7 +25,9 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
+  # We add the current_conference argument to allow conference specific
+  # abilities.
+  def initialize(user, current_conference = nil)
     user ||= User.new # guest user, not saved
 
     # guest user
@@ -39,7 +41,6 @@ class Ability
       can [:view_abstract], Presentation
       can [:download_pdf, :download_full_day_pdf, :download_full_pdf, :download_pdf_by_name], Session
     end
-
 
     if !user.new_record?
       # logged in user

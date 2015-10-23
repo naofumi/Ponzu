@@ -9,6 +9,14 @@ module Ponzu
       base.helper_method :current_user
     end
 
+    protected
+
+    # We override #current_ability defined in CanCan::ControllerAdditions
+    # in order to send current_conference
+    def current_ability
+      @ability ||= ::Ability.new(current_user, current_conference)
+    end
+
     private
 
     def current_user_session
