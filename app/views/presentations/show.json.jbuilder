@@ -1,4 +1,4 @@
-json.cache! ['v3', current_conference, I18n.locale, "/presentation/", 
+json.cache! ['v3', current_conference, I18n.locale, @presentation.session.force_en_locale, "/presentation/", 
              @presentation, !!current_user, current_user && current_user.roles] do
   @more_like_this = Sunspot.more_like_this(@presentation, Presentation){
                       with(:conference_tag).equal_to(current_conference.database_tag)
@@ -13,12 +13,16 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/",
     json.template "templates/dot/show_presentation"
     json.expiry (@expiry || Kamishibai::Cache::DEFAULT_EXPIRY)
   end
-  json.abstract (sanitize(@presentation.abstract) || "")
+  temporarily_force_en_locale(@presentation.session.force_en_locale) do
+    json.abstract (sanitize(@presentation.abstract) || "")
+  end
   json.external_link @presentation.submission.external_link
   json.number @presentation.number
   json.other_numbers (@presentation.submission.presentations - [@presentation]).map{|p| p.number}
-  json.header_title strip_tags(@presentation.title) || ""
-  json.title sanitize(@presentation.title) || ""
+  temporarily_force_en_locale(@presentation.session.force_en_locale) do
+    json.header_title strip_tags(@presentation.title) || ""
+    json.title sanitize(@presentation.title) || ""
+  end
   json.id @presentation.id
   json.next_id @presentation.next.id if @presentation.next
   json.previous_id @presentation.previous.id if @presentation.previous
@@ -51,10 +55,12 @@ json.cache! ['v3', current_conference, I18n.locale, "/presentation/",
     json.id session.id
     json.number session.number
   end
-  json.authorships  @presentation.submission.authorships.order(:position).all,
-                    :author_id, :is_presenting_author, :affiliations, :name
-  json.institutions @presentation.submission.institutions do |institution|
-    json.name institution.name
+  temporarily_force_en_locale(@presentation.session.force_en_locale) do
+    json.authorships  @presentation.submission.authorships.order(:position).all,
+                      :author_id, :is_presenting_author, :affiliations, :name
+    json.institutions @presentation.submission.institutions do |institution|
+      json.name institution.name
+    end
   end
   json.keywords @presentation.keywords.select{|k| !k.blank?}
 

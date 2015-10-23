@@ -79,10 +79,18 @@
     <%= f.check_box :show_text %>
     <%= f.label :show_text %>
   </div>
+  <div class="field">
+    <p>
+      学会によってはセッションごとに発表もしくは要旨の言語を決めているところがある。
+      そこでSubmissionが他言語であっても、このセッションに属するPresentationとして表示するときは英語に限定するように設定する。
+    </p>
+    <%= f.check_box :force_en_locale %>
+    <%= f.label :force_en_locale %>
+  </div>
 
 
 
-  <div class="actions">
+  <div class="actions" style="margin-top:30px">
     <%= f.submit %>
   </div>
 <% end %>

@@ -11,4 +11,19 @@ module I18nHelper
     end
     translate(*args)
   end
+
+  # Temporarily change the locale to 'en' if the condition argument is true.
+  # Use when there is a per session or per presentation policy to use
+  # a certain language to display a presentation, even when the session
+  # itself contains mulilingual data.
+  def temporarily_force_en_locale(condition = true)
+    if condition
+      locale_stash = I18n.locale
+      I18n.locale = 'en'
+      yield
+      I18n.locale = locale_stash
+    else
+      yield
+    end
+  end
 end
