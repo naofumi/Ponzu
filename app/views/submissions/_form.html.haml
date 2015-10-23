@@ -23,10 +23,12 @@
       = @submission.submission_number
   .field
     = f.label :en_title
+    (English)
     %br/
     = f.text_field :en_title
   .field
     = f.label :jp_title
+    (Japanese)
     %br/
     = f.text_field :jp_title
   .field
@@ -34,13 +36,15 @@
     %br/
     = f.text_field :external_link
   .field
-    = f.label :jp_abstract
-    %br/
-    = f.text_area :jp_abstract, :style => "height:300px"
-  .field
     = f.label :en_abstract
+    (English)
     %br/
     = f.text_area :en_abstract, :style => "height:300px"
+  .field
+    = f.label :jp_abstract
+    (Japanese)
+    %br/
+    = f.text_area :jp_abstract, :style => "height:300px"
   .field
     = f.label :keywords
     %br/
