@@ -35,6 +35,11 @@ class Ability
     can [:destroy], [UserSession]
     can :read, [Presentation, Session, Room]
     can [:notifications], Conference
+    if current_conference.config("guest_users_can_view_content")
+      can [:view_abstract], Presentation
+      can [:download_pdf, :download_full_day_pdf, :download_full_pdf, :download_pdf_by_name], Session
+    end
+
 
     if !user.new_record?
       # logged in user
