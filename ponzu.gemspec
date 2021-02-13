@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
 
   # There was a problem with the 0.3.11 version
   # so we downgraded it.
-  s.add_dependency 'mysql2', '= 0.3.10'
+  s.add_dependency 'mysql2', '= 0.3.21'
 
   s.add_dependency 'mechanize'
   s.add_dependency 'will_paginate'
